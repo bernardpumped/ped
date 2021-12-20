@@ -1,0 +1,70 @@
+# Compiled class file
+*.class
+
+# Log file
+*.log
+
+# BlueJ files
+*.ctxt
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+.dart_tool
+.idea
+!android
+android/*
+!android/app
+android/app/*
+!android/app/src
+android/app/src/*
+!android/app/src/debug/
+android/app/src/debug/*
+!android/app/src/debug/AndroidManifest.xml
+!android/app/src/main/
+android/app/src/main/*
+!android/app/src/main/AndroidManifest.xml
+!android/app/src/profile/
+android/app/src/profile/*
+!android/app/src/profile/AndroidManifest.xml
+build
+!ios/
+ios/*
+!ios/Runner
+ios/Runner/*
+!ios/Runner/Info.plist
+.metadata
+.packages
+*.iml
+.flutter-plugins
+.flutter-plugins-dependencies
+.gradle
+build.gradle
+gradle/
+gradlew
+gradlew.bat
+
+.DS_Store
+lib/.DS_Store
+lib/datasource/.DS_Store
+lib/datasource/local/.DS_Store
+lib/models/.DS_Store
+
+linux/
+web/
+bundle/
+bundle
+local.properties
+pubspec.lock
+pumped_end_device.iml
