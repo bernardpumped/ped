@@ -1,0 +1,385 @@
+/*
+ *     Copyright (c) 2021.
+ *     This file is part of Pumped End Device.
+ *
+ *     Pumped End Device is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     Pumped End Device is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with Pumped End Device.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:pumped_end_device/data/local/location/location_data_source.dart';
+import 'package:pumped_end_device/main.dart';
+import 'package:pumped_end_device/user-interface/tabs/fuel-stations/screens/datasource/remote/get_fuel_station_operating_hrs.dart';
+import 'package:pumped_end_device/user-interface/tabs/fuel-stations/screens/datasource/remote/model/request/get_fuel_station_operating_hrs_request.dart';
+import 'package:pumped_end_device/user-interface/tabs/fuel-stations/screens/datasource/remote/model/response/get_fuel_station_operating_hrs_response.dart';
+import 'package:pumped_end_device/user-interface/tabs/fuel-stations/data/model/operating_time_range.dart';
+import 'package:pumped_end_device/user-interface/tabs/fuel-stations/screens/datasource/remote/response-parser/get_fuel_station_operating_hrs_response_parser.dart';
+import 'package:pumped_end_device/user-interface/fonts_and_colors.dart';
+import 'package:pumped_end_device/user-interface/icon_codes.dart';
+import 'package:pumped_end_device/user-interface/tabs/fuel-stations/screens/fuel-station-details/widgets/favorite_fuel_station_bookmark.dart';
+import 'package:pumped_end_device/user-interface/tabs/fuel-stations/screens/fuel-station-details/widgets/horizontal_scroll_list_widget.dart';
+import 'package:pumped_end_device/user-interface/tabs/fuel-stations/screens/fuel-station-details/widgets/operating_hours_source_citation.dart';
+import 'package:pumped_end_device/user-interface/tabs/fuel-stations/screens/fuel-station-details/widgets/rate_widget.dart';
+import 'package:pumped_end_device/user-interface/tabs/fuel-stations/screens/fuel-station-details/widgets/update_button_widget.dart';
+import 'package:pumped_end_device/user-interface/tabs/fuel-stations/screens/widgets/directions_widget.dart';
+import 'package:pumped_end_device/user-interface/tabs/fuel-stations/screens/widgets/phone_widget.dart';
+import 'package:pumped_end_device/user-interface/widgets/pumped_icons.dart';
+import 'package:pumped_end_device/models/pumped/fuel_station.dart';
+import 'package:pumped_end_device/models/pumped/fuel_station_address.dart';
+import 'package:pumped_end_device/models/pumped/fuel_station_operating_hrs.dart';
+import 'package:pumped_end_device/models/pumped/operating_hours.dart';
+import 'package:pumped_end_device/util/data_utils.dart';
+import 'package:pumped_end_device/util/date_time_utils.dart';
+import 'package:pumped_end_device/util/log_util.dart';
+import 'package:sprintf/sprintf.dart';
+import 'package:uuid/uuid.dart';
+
+class OverviewTabWidget extends StatefulWidget {
+  final FuelStation _fuelStation;
+  final Function onUpdateResult;
+
+  OverviewTabWidget(this._fuelStation, this.onUpdateResult);
+
+  @override
+  _OverviewTabWidgetState createState() => _OverviewTabWidgetState();
+}
+
+class _OverviewTabWidgetState extends State<OverviewTabWidget> {
+  static const _TAG = 'OverviewTabWidget';
+  Future<GetFuelStationOperatingHrsResponse> _operatingHrsResponseFuture;
+
+  static const Color _secondaryIconColor = FontsAndColors.pumpedSecondaryIconColor;
+  static const Color _nonActionIconColor = FontsAndColors.pumpedNonActionableIconColor;
+
+  @override
+  void initState() {
+    super.initState();
+    this._operatingHrsResponseFuture = _getFuelStationOperatingHrsFuture();
+  }
+
+  Future<GetFuelStationOperatingHrsResponse> _getFuelStationOperatingHrsFuture() async {
+    try {
+      final GetFuelStationOperatingHrsRequest request = GetFuelStationOperatingHrsRequest(
+          requestUuid: Uuid().v1(),
+          fuelStationId: widget._fuelStation.stationId,
+          fuelStationSource: widget._fuelStation.getFuelStationSource());
+      return await GetFuelStationOperatingHrs(GetFuelStationOperatingHrsResponseParser()).execute(request);
+    } on Exception catch (e, s) {
+      LogUtil.debug(_TAG, 'Exception occurred while calling GetFuelStationOperatingHrsNew.execute $s');
+      return GetFuelStationOperatingHrsResponse(
+          'CALL-EXCEPTION', s.toString(), {}, DateTime.now().millisecondsSinceEpoch, null);
+    }
+  }
+
+  @override
+  Widget build(final BuildContext context) {
+    final FuelStation fuelStation = widget._fuelStation;
+    final FuelStationAddress fuelStationAddress = fuelStation.fuelStationAddress;
+    final bool phonePresent = fuelStationAddress.phone1 != null || fuelStationAddress.phone2 != null;
+    bool imgUrlsPresent = fuelStation.imgUrls != null && fuelStation.imgUrls.length > 0;
+    return Container(
+        decoration: BoxDecoration(color: FontsAndColors.pumpedBoxDecorationColor),
+        child: Column(children: <Widget>[
+          imgUrlsPresent
+              ? Container(
+                  margin: EdgeInsets.only(top: 7, bottom: 7), child: HorizontalScrollListWidget(fuelStation.imgUrls))
+              : SizedBox(width: 0),
+          imgUrlsPresent ? Divider(color: Colors.black45, indent: 15, endIndent: 15, height: 0) : SizedBox(width: 0),
+          _getActionBar(fuelStation),
+          Divider(color: Colors.black45, indent: 15, endIndent: 15, height: 0),
+          _getFuelStationAddressWidget(fuelStationAddress),
+          Divider(color: Colors.black45, indent: 15, endIndent: 15, height: 0),
+          _buildOperatingHourWidget(fuelStation),
+          Divider(color: Colors.black45, indent: 15, endIndent: 15, height: 0),
+          phonePresent ? _getPhoneNumberWidget(fuelStationAddress) : SizedBox(width: 0),
+          phonePresent ? Divider(color: Colors.black45, indent: 15, endIndent: 15, height: 0) : SizedBox(width: 0),
+          UpdateButtonWidget(fuelStation,
+              expandSuggestEdit: true, updateFuelStationDetailsScreenForChange: widget.onUpdateResult)
+        ]));
+  }
+
+  Widget _getActionBar(final FuelStation fuelStation) {
+    final String phone = DataUtils.isNotBlank(widget._fuelStation.fuelStationAddress.phone1)
+        ? fuelStation.fuelStationAddress.phone1
+        : fuelStation.fuelStationAddress.phone2;
+    return Container(
+        decoration: BoxDecoration(color: Colors.white),
+        padding: EdgeInsets.only(top: 10, bottom: 10),
+        margin: EdgeInsets.only(bottom: 5),
+        child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Padding(
+                  padding: EdgeInsets.only(left: 20, right: 15),
+                  child: DirectionsWidget(
+                      fuelStation.fuelStationAddress.latitude, fuelStation.fuelStationAddress.longitude, getIt.get<LocationDataSource>())),
+              (phone != null)
+                  ? Padding(padding: EdgeInsets.only(left: 15, right: 15), child: PhoneWidget(phone))
+                  : SizedBox(width: 0),
+              Padding(padding: EdgeInsets.only(left: 20, right: 15), child: RateWidget(fuelStation.fuelStationAddress)),
+              Padding(padding: EdgeInsets.only(left: 20, right: 15), child: FavoriteFuelStationBookmark(fuelStation))
+            ]));
+  }
+
+  static const _addressDetailsIcon = Icon(IconData(IconCodes.address_details_icon_code, fontFamily: 'MaterialIcons',
+      matchTextDirection: true), color: _nonActionIconColor, size: 30);
+
+  Container _getFuelStationAddressWidget(final FuelStationAddress fuelStationAddress) {
+    return Container(
+        padding: EdgeInsets.only(left: 10, right: 10),
+        decoration: BoxDecoration(color: Colors.white),
+        child: ListTile(
+            contentPadding: EdgeInsets.only(left: 10, right: 10, top: 2, bottom: 2),
+            // dense: true,
+            leading: _addressDetailsIcon,
+            title: _getFuelStationAddress(fuelStationAddress)));
+  }
+
+  static const _phoneIcon = Icon(IconData(IconCodes.phone_icon_code, fontFamily: 'MaterialIcons',
+      matchTextDirection: true), color: _nonActionIconColor, size: 30);
+
+  Widget _getPhoneNumberWidget(final FuelStationAddress fuelStationAddress) {
+    return Container(
+        padding: EdgeInsets.only(left: 10, right: 10),
+        decoration: BoxDecoration(color: Colors.white),
+        child: ListTile(
+            contentPadding: EdgeInsets.only(left: 10, right: 10),
+            leading: _phoneIcon,
+            title: _getPhone(fuelStationAddress)));
+  }
+
+  bool _operatingHoursExpanded = false;
+
+  static const _operatingTimeIcon = Icon(IconData(IconCodes.operating_time_icon_code, fontFamily: 'MaterialIcons',
+      matchTextDirection: true), color: _nonActionIconColor, size: 30);
+
+  Widget _buildOperatingHourWidget(final FuelStation fuelStation) {
+    return FutureBuilder<GetFuelStationOperatingHrsResponse>(
+        future: _operatingHrsResponseFuture,
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            LogUtil.debug(_TAG, 'Error ${snapshot.error.toString()}');
+            return Container(child: Text('Error Loading'));
+          } else if (snapshot.hasData) {
+            final GetFuelStationOperatingHrsResponse data = snapshot.data;
+            if (data.responseCode != 'SUCCESS') {
+              return ListTile(title: Text('Error Loading', style: TextStyle(color: Colors.red)));
+            } else {
+              fuelStation.fuelStationOperatingHrs = data.fuelStationOperatingHrs;
+              final FuelStationOperatingHrs fuelStationOperatingHrs = data.fuelStationOperatingHrs;
+              List<OperatingHours> weeklyOperatingHrs = fuelStationOperatingHrs.weeklyOperatingHrs;
+              if (weeklyOperatingHrs != null && weeklyOperatingHrs.length > 0) {
+                final theme = Theme.of(context).copyWith(dividerColor: Colors.transparent);
+                return Theme(
+                    data: theme,
+                    child: Container(
+                        padding: EdgeInsets.only(left: 5, right: 10),
+                        decoration: BoxDecoration(color: Colors.white),
+                        child: ExpansionTile(
+                            initiallyExpanded: false,
+                            leading: _operatingTimeIcon,
+                            title: _getOpenClosed(weeklyOperatingHrs),
+                            key: PageStorageKey<String>("open-close"),
+                            trailing: ExpandIcon(
+                                isExpanded: _operatingHoursExpanded,
+                                color: _secondaryIconColor,
+                                onPressed: (bool value) {
+                                  setState(() {});
+                                }),
+                            children: _buildColumnContent(weeklyOperatingHrs),
+                            onExpansionChanged: (expanded) {
+                              setState(() {
+                                _operatingHoursExpanded = expanded;
+                              });
+                            })));
+              } else {
+                return SizedBox(height: 0);
+              }
+            }
+          } else {
+            return ListTile(
+                leading: _operatingTimeIcon,
+                title: Text('Loading...'));
+          }
+        });
+  }
+
+  List<Widget> _buildColumnContent(final List<OperatingHours> weeklyOperatingHrs) {
+    final List<Widget> columnContent = [];
+    for (final OperatingHours dailyOperatingHrs in weeklyOperatingHrs) {
+      final String weekDay = DateTimeUtils.weekDayShortToLongName[dailyOperatingHrs.dayOfWeek];
+      final String content1 = '$weekDay';
+      String content2 = '';
+      if (DataUtils.isNotBlank(dailyOperatingHrs.operatingTimeRange)) {
+        switch (dailyOperatingHrs.operatingTimeRange) {
+          case OperatingTimeRange.ALWAYS_OPEN:
+            content2 = 'Open 24 Hours';
+            break;
+          case OperatingTimeRange.CLOSED:
+            content2 = 'Closed';
+            break;
+          default:
+            content2 = sprintf('%02d:%02d - %02d:%02d', [
+              dailyOperatingHrs.openingHrs,
+              dailyOperatingHrs.openingMins,
+              dailyOperatingHrs.closingHrs,
+              dailyOperatingHrs.closingMins
+            ]);
+            break;
+        }
+      } else {
+        content2 = '- - -';
+      }
+      columnContent.add(Padding(
+          padding: const EdgeInsets.only(left: 40, top: 10, bottom: 10, right: 40),
+          child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
+            Expanded(
+                flex: 4,
+                child: Text(content1,
+                    textAlign: TextAlign.start, style: new TextStyle(fontSize: 14.0, color: Colors.black87))),
+            Expanded(
+                flex: 6,
+                child: Text(content2,
+                    textAlign: TextAlign.center, style: new TextStyle(fontSize: 14.0, color: Colors.black87))),
+            Expanded(flex: 1, child: _getOperatingHoursSourceCitation(dailyOperatingHrs))
+          ])));
+    }
+    return columnContent;
+  }
+
+  GestureDetector _getOperatingHoursSourceCitation(final OperatingHours operatingHours) {
+    final Icon icon = operatingHours.operatingTimeSource == 'G'
+        ? PumpedIcons.googleSourceIcon_black54Size30
+        : PumpedIcons.crowdSourceIcon_black54Size30;
+    return GestureDetector(
+        onTap: () {
+          showCupertinoDialog(
+              context: context,
+              builder: (context) => OperatingHoursSourceCitation(operatingHours, widget._fuelStation));
+        },
+        child: icon);
+  }
+
+  Widget _getFuelStationAddress(final FuelStationAddress fuelStationAddress) {
+    return Text(
+        '${fuelStationAddress.addressLine1}, ${fuelStationAddress.locality} '
+        '${fuelStationAddress.state} ${fuelStationAddress.zip}',
+        maxLines: 2,
+        overflow: TextOverflow.ellipsis,
+        style:
+            TextStyle(fontSize: 15, fontWeight: FontWeight.w400, color: Colors.black87, fontFamily: 'SF-Pro-Display'));
+  }
+
+  static TextStyle _redStyle = TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.red);
+  static TextStyle _blackStyle = TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.black87);
+
+  Widget _getOpenClosed(final List<OperatingHours> weeklyOperatingHrs) {
+    final String currentWeekDay = DateTimeUtils.weekDayIntToShortName[DateTime.now().weekday];
+    final OperatingHours currentDayOperatingHrs = _getOperatingHrsForDay(weeklyOperatingHrs, currentWeekDay);
+    int currentDayOpeningHrs = currentDayOperatingHrs != null ? currentDayOperatingHrs.openingHrs : null;
+    int currentDayOpeningMins = currentDayOperatingHrs != null ? currentDayOperatingHrs.openingMins : null;
+    int currentDayClosingHrs = currentDayOperatingHrs != null ? currentDayOperatingHrs.closingHrs : null;
+    int currentDayClosingMins = currentDayOperatingHrs != null ? currentDayOperatingHrs.closingMins : null;
+    if (currentDayOperatingHrs != null && OperatingTimeRange.ALWAYS_OPEN == currentDayOperatingHrs.operatingTimeRange) {
+      currentDayOpeningHrs = 0;
+      currentDayOpeningMins = 0;
+      currentDayClosingHrs = 23;
+      currentDayClosingMins = 59;
+    }
+    int currentHours = DateTime.now().hour;
+    int currentMin = DateTime.now().minute;
+    String currentStatus;
+    String nextEventStatus;
+    TextStyle currentStatusStyle;
+    TextStyle nextEventStyle;
+
+    if ((currentDayOpeningHrs != null &&
+            currentDayOpeningMins != null &&
+            currentDayClosingHrs != null &&
+            currentDayClosingMins != null) &&
+        (currentHours > currentDayOpeningHrs && currentHours < currentDayClosingHrs ||
+            currentHours == currentDayOpeningHrs && currentHours < currentDayClosingHrs ||
+            currentHours == currentDayClosingHrs && currentMin < currentDayClosingMins)) {
+      if (OperatingTimeRange.ALWAYS_OPEN == currentDayOperatingHrs.operatingTimeRange) {
+        currentStatus = 'Open 24 Hours';
+        currentStatusStyle = _blackStyle;
+        nextEventStatus = '';
+        nextEventStyle = _blackStyle;
+      } else {
+        currentStatus = 'Now Open. ';
+        currentStatusStyle = _blackStyle;
+        nextEventStatus = 'Closes at $currentDayClosingHrs: $currentDayClosingMins';
+        nextEventStyle = _redStyle;
+      }
+    } else {
+      currentStatus = 'Closed. ';
+      currentStatusStyle = _redStyle;
+      final OperatingHours nextDayOperatingHrs = _getOperatingHrsForNextDay(weeklyOperatingHrs, currentWeekDay);
+      if (nextDayOperatingHrs != null) {
+        int nextDayOpeningHrs = nextDayOperatingHrs.openingHrs;
+        int nextDayOpeningMins = nextDayOperatingHrs.openingMins;
+        if (currentDayOperatingHrs != null &&
+            OperatingTimeRange.ALWAYS_OPEN == currentDayOperatingHrs.operatingTimeRange) {
+          nextDayOpeningHrs = 0;
+          nextDayOpeningMins = 0;
+        }
+        if (nextDayOpeningHrs != null && nextDayOpeningMins != null) {
+          nextEventStatus = sprintf('Opens %s %02d:%02d',
+              [nextDayOperatingHrs.dayOfWeek, nextDayOperatingHrs.openingHrs, nextDayOperatingHrs.openingMins]);
+        } else {
+          nextEventStatus = 'Opens ${nextDayOperatingHrs.dayOfWeek}';
+        }
+        nextEventStyle = _blackStyle;
+      } else {
+        nextEventStatus = 'Not known';
+        nextEventStyle = _redStyle;
+      }
+    }
+    return Container(
+        child: !_operatingHoursExpanded
+            ? RichText(
+                textAlign: TextAlign.left,
+                text: TextSpan(children: [
+                  TextSpan(text: currentStatus, style: currentStatusStyle),
+                  TextSpan(text: nextEventStatus, style: nextEventStyle)
+                ]))
+            : Text(currentStatus, style: currentStatusStyle));
+  }
+
+  Widget _getPhone(final FuelStationAddress fuelStationAddress) {
+    final String phone = fuelStationAddress.phone1 != null ? fuelStationAddress.phone1 : fuelStationAddress.phone2;
+    return Text(phone, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.black87));
+  }
+
+  OperatingHours _getOperatingHrsForDay(final List<OperatingHours> weeklyOperatingHrs, final String currentWeekDay) {
+    for (final OperatingHours operatingHours in weeklyOperatingHrs) {
+      if (operatingHours.dayOfWeek == currentWeekDay) {
+        return operatingHours;
+      }
+    }
+    return null;
+  }
+
+  OperatingHours _getOperatingHrsForNextDay(
+      final List<OperatingHours> weeklyOperatingHrs, final String currentWeekDay) {
+    String day = currentWeekDay;
+    OperatingHours operatingHours;
+    do {
+      day = DateTimeUtils.getNextDay(day);
+      operatingHours = _getOperatingHrsForDay(weeklyOperatingHrs, day);
+    } while (day != currentWeekDay && operatingHours == null);
+    return operatingHours;
+  }
+}
