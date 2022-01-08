@@ -38,6 +38,7 @@ android/app/src/main/*
 !android/app/src/profile/
 android/app/src/profile/*
 !android/app/src/profile/AndroidManifest.xml
+!android/AndroidManifest.xml
 build
 !ios/
 ios/*
@@ -68,4 +69,4 @@ bundle
 local.properties
 pubspec.lock
 pumped_end_device.iml
-desktop.ini
+test/widget_test.dart
