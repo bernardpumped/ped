@@ -16,17 +16,16 @@
  *     along with Pumped End Device.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class HorizontalScrollListWidget extends StatelessWidget {
   final List<String> _imageUrls;
 
-  HorizontalScrollListWidget(this._imageUrls);
+  const HorizontalScrollListWidget(this._imageUrls, {Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
         height: 150.0,
         child: ListView.builder(
             itemBuilder: (context, index) {
@@ -38,7 +37,7 @@ class HorizontalScrollListWidget extends StatelessWidget {
 
   Padding _buildImageView(final String imgUrl) {
     return Padding(
-        padding: EdgeInsets.only(left: 5),
+        padding: const EdgeInsets.only(left: 5),
         child: Container(
             decoration: BoxDecoration(
                 shape: BoxShape.rectangle,

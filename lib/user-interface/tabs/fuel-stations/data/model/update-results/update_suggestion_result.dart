@@ -21,7 +21,7 @@ import 'package:pumped_end_device/user-interface/tabs/fuel-stations/data/model/u
 
 class UpdateSuggestionResponse extends UpdateFuelStationDetailsResult {
   UpdateSuggestionResponse(final bool isUpdateSuccessful, final int updateEpoch)
-      : super(UpdateFuelStationDetailType.SUGGEST_EDIT, isUpdateSuccessful, updateEpoch);
+      : super(UpdateFuelStationDetailType.suggestEdit, isUpdateSuccessful, updateEpoch);
 
   String suggestion;
 }

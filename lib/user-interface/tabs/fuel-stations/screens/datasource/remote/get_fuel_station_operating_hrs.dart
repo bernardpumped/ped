@@ -34,6 +34,6 @@ class GetFuelStationOperatingHrs
 
   @override
   String getUrl(final GetFuelStationOperatingHrsRequest request) {
-    return '/getFuelStationDetails' + '?' + request.toQueryString();
+    return '/getFuelStationDetails' '?' + request.toQueryString();
   }
 }

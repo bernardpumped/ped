@@ -16,14 +16,15 @@
  *     along with Pumped End Device.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'package:flutter_test/flutter_test.dart';
-import 'package:pumped_end_device/data/local/location/geo_location_wrapper.dart';
+import 'dart:convert' as convert;
 
-void main() {
-  // Other methods in geo_location_wrapper and just wrapper on
-  test('Get the distance between latitude/longitude pair', (){
-    // ignore: unnecessary_new
-    final GeoLocationWrapper wrapper = new GeoLocationWrapper();
-    expect(wrapper.distanceBetween(-33.86, 151.20, -31.94, 141.46), 934703.8606759851);
-  });
+import 'package:pumped_end_device/user-interface/tabs/settings/screens/datasource/remote/model/response/get_backend_metadata_response.dart';
+import 'package:pumped_end_device/data/remote/response-parser/response_parser.dart';
+
+class GetBackendMetadataResponseParser extends ResponseParser<GetBackendMetadataResponse> {
+  @override
+  GetBackendMetadataResponse parseResponse(final String response) {
+    final Map<String, dynamic> responseJson = convert.jsonDecode(response);
+    return GetBackendMetadataResponse.fromJson(responseJson);
+  }
 }

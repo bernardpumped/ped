@@ -24,12 +24,12 @@ import 'package:rating_bar/rating_bar.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class WidgetUtils {
-  static const _TAG = 'WidgetUtils';
+  static const _tag = 'WidgetUtils';
 
   static Widget getTabHeaderWidget(
       final BuildContext context, final String title) {
     return Padding(
-        padding: EdgeInsets.only(top: 10, bottom: 10, left: 10),
+        padding: const EdgeInsets.only(top: 10, bottom: 10, left: 10),
         child: Text(title,
             style: TextStyle(
                 fontSize: 18,
@@ -59,7 +59,7 @@ class WidgetUtils {
             filledColor: Colors.orangeAccent,
             halfFilledColor: Colors.orangeAccent,
             size: size)
-        : SizedBox(width: 0);
+        : const SizedBox(width: 0);
   }
 
   static Widget getActionIconCircular(final Icon icon, final String description,
@@ -69,7 +69,7 @@ class WidgetUtils {
         onTap: onTap,
         child: Column(children: <Widget>[
           CircleAvatar(child: icon, backgroundColor: backgroundColor),
-          SizedBox(height: 7),
+          const SizedBox(height: 7),
           Text(description,
               style: TextStyle(color: textColor, fontSize: 12),
               textAlign: TextAlign.center)
@@ -85,13 +85,13 @@ class WidgetUtils {
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(25.0), color: color),
       child: Text(message,
-          style: TextStyle(color: Colors.white), textAlign: TextAlign.center),
+          style: const TextStyle(color: Colors.white), textAlign: TextAlign.center),
     );
     fToast.removeQueuedCustomToasts();
     fToast.showToast(
         child: toast,
         gravity: ToastGravity.BOTTOM,
-        toastDuration: Duration(seconds: 3));
+        toastDuration: const Duration(seconds: 3));
   }
 
   static void launchCaller(
@@ -101,11 +101,11 @@ class WidgetUtils {
       if (await canLaunch(phoneUrl)) {
         await launch(phoneUrl);
       } else {
-        LogUtil.debug(_TAG, 'Could not launch $phoneUrl');
+        LogUtil.debug(_tag, 'Could not launch $phoneUrl');
         onFailureFunction.call();
       }
     } on Exception catch (e) {
-      LogUtil.debug(_TAG, 'Exception invoking phoneUrl $phoneUrl $e');
+      LogUtil.debug(_tag, 'Exception invoking phoneUrl $phoneUrl $e');
       onFailureFunction.call();
     }
   }
@@ -134,7 +134,7 @@ class WidgetUtils {
     final Color foreGroundColor = Colors.white,
     final double borderRadius}) {
     return ElevatedButton(onPressed: onPressed,
-        child: Padding(child: child, padding: EdgeInsets.only(left: 15, right: 15)),
+        child: Padding(child: child, padding: const EdgeInsets.only(left: 15, right: 15)),
         style: ButtonStyle(
           foregroundColor: MaterialStateProperty.all(foreGroundColor),
           backgroundColor:
@@ -153,7 +153,7 @@ class WidgetUtils {
       final double borderRadius}) {
     return TextButton(
         onPressed: onPressed,
-        child: Padding(child: child, padding: EdgeInsets.only(left: 15, right: 15)),
+        child: Padding(child: child, padding: const EdgeInsets.only(left: 15, right: 15)),
         style: ButtonStyle(
           foregroundColor: MaterialStateProperty.all(foreGroundColor),
           backgroundColor:

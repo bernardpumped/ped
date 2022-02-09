@@ -35,16 +35,18 @@ import 'package:pumped_end_device/util/log_util.dart';
 class FuelStationDetailsScreen extends StatefulWidget {
   static const routeName = '/fuelStationDetails';
 
+  const FuelStationDetailsScreen({Key key}) : super(key: key);
+
   @override
   _FuelStationDetailsScreenState createState() => _FuelStationDetailsScreenState();
 }
 
 class _FuelStationDetailsScreenState extends State<FuelStationDetailsScreen> {
-  static const _TAG = 'FuelStationDetailsScreenIos';
+  static const _tag = 'FuelStationDetailsScreenIos';
   static const _fuelPricesTabHeader = "FUEL PRICES";
   static const _promotionsTabHeader = "OFFERS";
   static const _overviewTabHeader = "CONTACT";
-  final FuelStationUpdateMergeUtil _fuelStationUpdateMergeUtil = new FuelStationUpdateMergeUtil();
+  final FuelStationUpdateMergeUtil _fuelStationUpdateMergeUtil = FuelStationUpdateMergeUtil();
 
   final List<String> _tabs = [_fuelPricesTabHeader, _promotionsTabHeader, _overviewTabHeader];
   int _selectedTabIndex = 0;
@@ -52,7 +54,7 @@ class _FuelStationDetailsScreenState extends State<FuelStationDetailsScreen> {
 
   void onUpdateResult(final FuelStation fuelStation, final UpdateFuelStationDetailsResult updateFuelQuoteResult) {
     if (updateFuelQuoteResult != null) {
-      LogUtil.debug(_TAG,
+      LogUtil.debug(_tag,
           'onUpdateResult :: Received response from edit screen : ${updateFuelQuoteResult.updateFuelStationDetailType}');
       setState(() {
         _fuelStationUpdateMergeUtil.mergeFuelStationUpdateResult(fuelStation, updateFuelQuoteResult);
@@ -63,7 +65,7 @@ class _FuelStationDetailsScreenState extends State<FuelStationDetailsScreen> {
 
   @override
   Widget build(final BuildContext context) {
-    LogUtil.debug(_TAG, 'Details screen built again');
+    LogUtil.debug(_tag, 'Details screen built again');
     final FuelStationDetailsParam param = ModalRoute.of(context).settings.arguments;
     final FuelStation fuelStation = param.fuelStation;
     return WillPopScope(
@@ -74,7 +76,7 @@ class _FuelStationDetailsScreenState extends State<FuelStationDetailsScreen> {
         return false;
       },
       child: Scaffold(
-          appBar: CupertinoNavigationBar(middle: ApplicationTitleTextWidget(), automaticallyImplyLeading: true),
+          appBar: const CupertinoNavigationBar(middle: ApplicationTitleTextWidget(), automaticallyImplyLeading: true),
           body: DefaultTabController(
               length: _tabs.length,
               child: NestedScrollView(
@@ -101,13 +103,13 @@ class _FuelStationDetailsScreenState extends State<FuelStationDetailsScreen> {
                               indicatorColor: Colors.indigoAccent,
                               labelColor: Colors.indigo,
                               unselectedLabelColor: Colors.black54,
-                              labelPadding: EdgeInsets.only(left: 5, right: 5),
-                              labelStyle: TextStyle(fontSize: 14),
+                              labelPadding: const EdgeInsets.only(left: 5, right: 5),
+                              labelStyle: const TextStyle(fontSize: 14),
                               tabs: _tabs.map((tabName) {
                                 return Tab(
                                     child: Text(tabName,
                                         overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(fontFamily: 'SF-Pro-Display')));
+                                        style: const TextStyle(fontFamily: 'SF-Pro-Display')));
                               }).toList())))
                     ];
                   },
@@ -118,7 +120,7 @@ class _FuelStationDetailsScreenState extends State<FuelStationDetailsScreen> {
   }
 
   Widget _getChildTabContent(final FuelStation fuelStation, final String tabName) {
-    var promotions;
+    dynamic promotions;
     Widget tabWidget;
     switch (tabName) {
       case _overviewTabHeader:
@@ -128,7 +130,7 @@ class _FuelStationDetailsScreenState extends State<FuelStationDetailsScreen> {
         tabWidget = FuelPricesTabWidget(fuelStation, onUpdateResult);
         break;
       case _promotionsTabHeader:
-        tabWidget = promotions == null ? NoPromotionsWidget() : PromotionsTabWidget();
+        tabWidget = promotions == null ? const NoPromotionsWidget() : const PromotionsTabWidget();
         break;
     }
     return tabWidget;
@@ -147,7 +149,7 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
 
   @override
   Widget build(final BuildContext context, final double shrinkOffset, final bool overlapsContent) {
-    return new Container(decoration: BoxDecoration(color: Colors.white), child: _tabBar);
+    return Container(decoration: const BoxDecoration(color: Colors.white), child: _tabBar);
   }
 
   @override

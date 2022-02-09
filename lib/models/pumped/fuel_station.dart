@@ -74,7 +74,7 @@ class FuelStation {
       this.distanceUnit});
 
   Set<String> fuelQuoteSources() {
-    if (fuelTypeFuelQuoteMap != null && fuelTypeFuelQuoteMap.length > 0) {
+    if (fuelTypeFuelQuoteMap != null && fuelTypeFuelQuoteMap.isNotEmpty) {
       return fuelTypeFuelQuoteMap.values.map((fq) => fq.fuelQuoteSourceName).where((source) => source != 'C').toSet();
     }
     return {};

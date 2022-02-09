@@ -16,7 +16,6 @@
  *     along with Pumped End Device.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pumped_end_device/data/local/dao/update_history_dao.dart';
 import 'package:pumped_end_device/data/local/model/fuel_authority_price_metadata.dart';
@@ -49,16 +48,16 @@ class EditFuelPriceWidget extends StatefulWidget {
   final Function _setStateFunction;
   final Icon _leadingWidgetIcon;
 
-  EditFuelPriceWidget(this._fuelStation, this._titleText, this._setStateFunction, this._widgetExpanded, this._widgetKey,
-      this._leadingWidgetIcon);
+  const EditFuelPriceWidget(this._fuelStation, this._titleText, this._setStateFunction, this._widgetExpanded, this._widgetKey,
+      this._leadingWidgetIcon, {Key key}) : super(key: key);
 
   @override
   _EditFuelPriceWidgetState createState() => _EditFuelPriceWidgetState();
 }
 
 class _EditFuelPriceWidgetState extends State<EditFuelPriceWidget> {
-  static const _TAG = 'EditFuelPriceWidget';
-  final EditFuelPriceUtils _editFuelPriceUtils = new EditFuelPriceUtils();
+  static const _tag = 'EditFuelPriceWidget';
+  final EditFuelPriceUtils _editFuelPriceUtils = EditFuelPriceUtils();
 
   Future<EditFuelPriceWidgetData> _editFuelPriceWidgetDataFuture;
   Map<String, FuelQuote> fuelTypeFuelQuote = {};
@@ -78,13 +77,13 @@ class _EditFuelPriceWidgetState extends State<EditFuelPriceWidget> {
     });
     final theme = Theme.of(context).copyWith(backgroundColor: Colors.white);
     final title =
-        Text(widget._titleText, style: TextStyle(fontSize: 16, color: Colors.black87, fontWeight: FontWeight.w500));
+        Text(widget._titleText, style: const TextStyle(fontSize: 16, color: Colors.black87, fontWeight: FontWeight.w500));
     return FutureBuilder<EditFuelPriceWidgetData>(
       future: _editFuelPriceWidgetDataFuture,
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          LogUtil.debug(_TAG, 'Error loading EditFuelPriceWidgetData ${snapshot.error}');
-          return Theme(data: theme, child: Center(child: Text('Error Loading fuel-types')));
+          LogUtil.debug(_tag, 'Error loading EditFuelPriceWidgetData ${snapshot.error}');
+          return Theme(data: theme, child: const Center(child: Text('Error Loading fuel-types')));
         } else if (snapshot.hasData) {
           final EditFuelPriceWidgetData editFuelPriceWidgetData = snapshot.data;
           return Theme(
@@ -101,7 +100,7 @@ class _EditFuelPriceWidgetState extends State<EditFuelPriceWidget> {
                     });
                   }));
         } else {
-          return Theme(data: theme, child: Center(child: Text('Loading')));
+          return Theme(data: theme, child: const Center(child: Text('Loading')));
         }
       },
     );
@@ -113,19 +112,21 @@ class _EditFuelPriceWidgetState extends State<EditFuelPriceWidget> {
   List<Widget> _editFuelTypePriceWidget(final EditFuelPriceWidgetData editFuelPriceWidgetData) {
     final List<FuelType> fuelTypesForMarketRegion = editFuelPriceWidgetData.fuelTypesForMarketRegion;
     final Map<String, FuelType> allowedFuelTypesMap = {};
-    fuelTypesForMarketRegion.forEach((fuelType) {
+    for (var fuelType in fuelTypesForMarketRegion) {
       allowedFuelTypesMap.putIfAbsent(fuelType.fuelType, () => fuelType);
-    });
+    }
     final Map<String, FuelAuthorityPriceMetadata> fuelTypePriceMetadata = {};
     final List<FuelAuthorityPriceMetadata> priceMetadata = editFuelPriceWidgetData.fuelAuthorityPriceMetadata;
     if (priceMetadata != null) {
-      priceMetadata.forEach((element) => fuelTypePriceMetadata.putIfAbsent(element.fuelType, () => element));
+      for (var element in priceMetadata) {
+        fuelTypePriceMetadata.putIfAbsent(element.fuelType, () => element);
+      }
     }
     final List<FuelQuote> fuelTypeFuelQuotes = widget._fuelStation.fuelQuotes();
     _sortFuelQuotes(fuelTypeFuelQuotes);
     final List<Widget> children = [];
 
-    fuelTypeFuelQuotes.forEach((fuelQuote) {
+    for (var fuelQuote in fuelTypeFuelQuotes) {
       String fuelType = fuelQuote.fuelType;
       TextEditingController fuelPriceEditingController;
       if (fuelQuote.fuelQuoteSource != 'F') {
@@ -143,9 +144,9 @@ class _EditFuelPriceWidgetState extends State<EditFuelPriceWidget> {
           currencyValueFormat: editFuelPriceWidgetData.currencyValueFormat,
           fuelAuthorityPriceMetadata: fuelTypePriceMetadata[fuelType],
           fuelPriceEditingController: fuelPriceEditingController));
-    });
+    }
     children.add(Padding(
-        padding: EdgeInsets.only(top: 10, bottom: 15),
+        padding: const EdgeInsets.only(top: 10, bottom: 15),
         child: SaveUndoButtonWidget(
             onSave: onSave,
             onCancel: onCancel,
@@ -179,18 +180,18 @@ class _EditFuelPriceWidgetState extends State<EditFuelPriceWidget> {
         updatedPrices.putIfAbsent(oldFuelQuote.fuelType, () => newQuoteValue);
       }
     });
-    if (updatedFuelQuotes.length > 0) {
+    if (updatedFuelQuotes.isNotEmpty) {
       final List<FuelQuoteVo> updatedFuelQuoteVos = [];
-      updatedFuelQuotes.forEach((updatedFuelQuotes) {
+      for (var updatedFuelQuotes in updatedFuelQuotes) {
         updatedFuelQuoteVos.add(FuelQuoteVo.getFuelQuoteVo(updatedFuelQuotes));
-      });
+      }
       final AlterFuelQuotesRequest request = AlterFuelQuotesRequest(
           fuelStationId: widget._fuelStation.stationId,
           fuelStationSource: widget._fuelStation.isFaStation ? "F" : "G",
           fuelQuoteVos: updatedFuelQuoteVos,
           oauthToken: 'my-dummy-oauth-token',
           oauthTokenSecret: 'my-dummy-oauth-token-secret',
-          uuid: Uuid().v1(),
+          uuid: const Uuid().v1(),
           identityProvider: 'FIREBASE',
           oauthValidatorType: 'FIREBASE');
       AlterFuelQuotesResponse response;
@@ -198,7 +199,7 @@ class _EditFuelPriceWidgetState extends State<EditFuelPriceWidget> {
         _lockInputs();
         response = await PostFuelQuotesUpdate(AlterFuelQuotesResponseParser()).execute(request);
       } on Exception catch (e, s) {
-        LogUtil.debug(_TAG, 'Exception occurred while calling PostFuelQuotesUpdate.execute $s');
+        LogUtil.debug(_tag, 'Exception occurred while calling PostFuelQuotesUpdate.execute $s');
         response = AlterFuelQuotesResponse(
             responseCode: 'CALL-EXCEPTION',
             responseDetails: s.toString(),
@@ -215,7 +216,7 @@ class _EditFuelPriceWidgetState extends State<EditFuelPriceWidget> {
         _unlockInputs();
       }
       final int insertRecordResult = await _persistUpdateHistory(response, request, originalPrices, updatedPrices);
-      LogUtil.debug(_TAG, 'UpdateHistory inserted for :: UpdateFuelPrices :: result $insertRecordResult');
+      LogUtil.debug(_tag, 'UpdateHistory inserted for :: UpdateFuelPrices :: result $insertRecordResult');
       if (response.responseCode == 'SUCCESS') {
         // TODO show appropriate message here.
         WidgetUtils.showToastMessage(
@@ -230,13 +231,13 @@ class _EditFuelPriceWidgetState extends State<EditFuelPriceWidget> {
 
   Future<int> _persistUpdateHistory(final AlterFuelQuotesResponse response, final AlterFuelQuotesRequest request,
       final Map<String, dynamic> originalPrices, final Map<String, dynamic> updatedPrices) async {
-    final UpdateHistory updateHistory = new UpdateHistory(
+    final UpdateHistory updateHistory = UpdateHistory(
         updateHistoryId: request.uuid,
         fuelStationId: request.fuelStationId,
         fuelStation: widget._fuelStation.fuelStationName,
         fuelStationSource: request.fuelStationSource,
         updateEpoch: response.updateEpoch,
-        updateType: UpdateType.PRICE.updateTypeName,
+        updateType: UpdateType.price.updateTypeName,
         responseCode: response.responseCode,
         originalValues: originalPrices,
         updateValues: updatedPrices,
@@ -260,12 +261,12 @@ class _EditFuelPriceWidgetState extends State<EditFuelPriceWidget> {
         changedFuelQuotes.remove(fuelType);
       }
     }
-    if (changedFuelQuotes.length > 0 && !onValueChanged) {
+    if (changedFuelQuotes.isNotEmpty && !onValueChanged) {
       setState(() {
         onValueChanged = true;
       });
     } else {
-      if (changedFuelQuotes.length == 0 && onValueChanged) {
+      if (changedFuelQuotes.isEmpty && onValueChanged) {
         setState(() {
           onValueChanged = false;
         });
@@ -297,12 +298,12 @@ class _EditFuelPriceWidgetState extends State<EditFuelPriceWidget> {
 
   UpdateFuelQuoteResult _getUpdateResponse(final AlterFuelQuotesResponse response,
       final Map<String, dynamic> originalPrices, final Map<String, dynamic> updatedPrices) {
-    return new UpdateFuelQuoteResult(
+    return UpdateFuelQuoteResult(
         isUpdateSuccessful: response.successfulUpdate,
         updateEpoch: response.updateEpoch,
-        originalValues: originalPrices != null ? originalPrices : {},
-        updateValues: updatedPrices != null ? updatedPrices : {},
-        invalidArguments: response.invalidArguments != null ? response.invalidArguments : {},
-        recordLevelExceptionCodes: response.updateResult != null ? response.updateResult : {});
+        originalValues: originalPrices ?? {},
+        updateValues: updatedPrices ?? {},
+        invalidArguments: response.invalidArguments ?? {},
+        recordLevelExceptionCodes: response.updateResult ?? {});
   }
 }

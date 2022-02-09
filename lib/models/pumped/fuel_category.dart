@@ -38,7 +38,7 @@ class FuelCategory {
       var allowedFuelTypesJson = data['allowed_fuel_types'] as List;
       allowedFuelTypesSet = allowedFuelTypesJson.map((i) => FuelType.fromJson(i)).toSet();
     }
-    return new FuelCategory(
+    return FuelCategory(
         categoryId: data['category_id'],
         categoryName: data['category_name'],
         defaultFuelType: FuelType.fromJson(data['default_fuel_type']),
@@ -46,7 +46,7 @@ class FuelCategory {
   }
 
   Map<String, dynamic> toJson() {
-    var allowedFuelTypesSetStr;
+    List<Map<String, dynamic>> allowedFuelTypesSetStr;
     if (allowedFuelTypes != null && allowedFuelTypes.isNotEmpty) {
       allowedFuelTypesSetStr = allowedFuelTypes.map((i) => i.toJson()).toList();
     }
@@ -59,7 +59,9 @@ class FuelCategory {
     return map;
   }
 
-  bool operator ==(o) => o is FuelCategory && o.categoryId == categoryId;
+  @override
+  bool operator ==(other) => other is FuelCategory && other.categoryId == categoryId;
 
+  @override
   int get hashCode => categoryId.hashCode;
 }

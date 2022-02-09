@@ -34,7 +34,7 @@ import 'package:pumped_end_device/util/log_util.dart';
 import 'package:uuid/uuid.dart';
 
 class FavoriteFuelStationsService {
-  static const _TAG = 'FavoriteFuelStationsService';
+  static const _tag = 'FavoriteFuelStationsService';
 
   final LocationDataSource _locationDataSource;
 
@@ -42,28 +42,28 @@ class FavoriteFuelStationsService {
 
 
   Future<FavoriteFuelStations> getFuelStations() async {
-    final FavoriteFuelStations favFuelStationsScreenData = new FavoriteFuelStations();
+    final FavoriteFuelStations favFuelStationsScreenData = FavoriteFuelStations();
     try {
       final GetLocationResult locationResult =
             await _locationDataSource.getLocationData(thread: 'favoriteFuelStations');
       final LocationInitResultCode code = locationResult.locationInitResultCode;
-      LogUtil.debug(_TAG, 'fetchFavoriteFuelStations::code : ${code.toString()}');
-      if (code == LocationInitResultCode.PERMISSION_DENIED) {
+      LogUtil.debug(_tag, 'fetchFavoriteFuelStations::code : ${code.toString()}');
+      if (code == LocationInitResultCode.permissionDenied) {
         favFuelStationsScreenData.locationSearchSuccessful = false;
         favFuelStationsScreenData.locationErrorReason = 'Location Permission denied';
-      } else if (code == LocationInitResultCode.LOCATION_SERVICE_DISABLED) {
+      } else if (code == LocationInitResultCode.locationServiceDisabled) {
         favFuelStationsScreenData.locationSearchSuccessful = false;
         favFuelStationsScreenData.locationErrorReason = 'Location Service is disabled';
       } else {
         final GeoLocationData locationData = await locationResult.geoLocationData;
-        LogUtil.debug(_TAG,
+        LogUtil.debug(_tag,
             'fetchFavoriteFuelStations:: latitude : ${locationData.latitude}, longitude : ${locationData.longitude}');
         final List<FavoriteFuelStation> allFavoriteFuelStations =
             await FavoriteFuelStationsDao.instance.getAllFavoriteFuelStations();
         favFuelStationsScreenData.latitude = locationData.latitude;
         favFuelStationsScreenData.longitude = locationData.longitude;
-        if (allFavoriteFuelStations != null && allFavoriteFuelStations.length > 0) {
-          LogUtil.debug(_TAG, 'Found ${allFavoriteFuelStations.length} fuel stations');
+        if (allFavoriteFuelStations != null && allFavoriteFuelStations.isNotEmpty) {
+          LogUtil.debug(_tag, 'Found ${allFavoriteFuelStations.length} fuel stations');
           final List<int> fuelStationIds = allFavoriteFuelStations
               .where((favFuelStation) => favFuelStation.fuelStationSource == 'G')
               .map((e) => e.favoriteFuelStationId)
@@ -73,15 +73,15 @@ class FavoriteFuelStationsService {
               .map((e) => e.favoriteFuelStationId)
               .toList();
           if (fuelStationIds.isEmpty && fuelAuthStationIds.isEmpty) {
-            LogUtil.debug(_TAG, 'No favorite fuelStations found');
+            LogUtil.debug(_tag, 'No favorite fuelStations found');
             favFuelStationsScreenData.fuelStations = [];
             return favFuelStationsScreenData;
           } else {
-            LogUtil.debug(_TAG,
+            LogUtil.debug(_tag,
                 'FuelStationIds : ${fuelStationIds.length} and FuelAuthorityStationIds : ${fuelAuthStationIds.length}');
             final String weekDay = DateTimeUtils.weekDayIntToShortName[DateTime.now().weekday];
             final GetFuelStationDetailsBatchRequest request = GetFuelStationDetailsBatchRequest(
-                requestUuid: Uuid().v1(),
+                requestUuid: const Uuid().v1(),
                 fuelStationIds: fuelStationIds,
                 fuelAuthorityStationIds: fuelAuthStationIds,
                 latitude: locationData.latitude,
@@ -94,13 +94,13 @@ class FavoriteFuelStationsService {
             return favFuelStationsScreenData;
           }
         } else {
-          LogUtil.debug(_TAG, 'No Favorite fuel stations found');
+          LogUtil.debug(_tag, 'No Favorite fuel stations found');
         }
       }
     } catch (e, s) {
       favFuelStationsScreenData.responseCode = 'FAILURE';
       favFuelStationsScreenData.responseDetails = 'Failed while retrieving the geolocation';
-      LogUtil.debug(_TAG, 'Exceptions occurred while fetching favorite fuel stations $s');
+      LogUtil.debug(_tag, 'Exceptions occurred while fetching favorite fuel stations $s');
     }
     return Future.value(favFuelStationsScreenData);
   }
@@ -110,12 +110,11 @@ class FavoriteFuelStationsService {
     try {
       final MarketRegionZoneConfiguration marketRegionZoneConfiguration =
           await MarketRegionZoneConfigDao.instance.getMarketRegionZoneConfiguration();
-      return GetFuelStationDetailsBatch(GetFuelStationDetailsBatchResponseParser(marketRegionZoneConfiguration != null
-              ? marketRegionZoneConfiguration.marketRegionConfig.fuelAuthorityId
-              : null))
+      return GetFuelStationDetailsBatch(GetFuelStationDetailsBatchResponseParser(
+              marketRegionZoneConfiguration?.marketRegionConfig?.fuelAuthorityId))
           .execute(request);
     } on Exception catch (e) {
-      LogUtil.debug(_TAG, 'Exception happened in _fetchFavoriteFuelStations $e');
+      LogUtil.debug(_tag, 'Exception happened in _fetchFavoriteFuelStations $e');
       return GetFuelStationDetailsBatchResponse(
           'FAILURE', 'Error loading data for favorite fuel station', null, DateTime.now().millisecondsSinceEpoch, []);
     }

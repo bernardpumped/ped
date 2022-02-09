@@ -23,20 +23,20 @@ import 'package:pumped_end_device/util/log_util.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class EmailWidget extends StatelessWidget {
-  static const _TAG = 'EmailWidget';
+  static const _tag = 'EmailWidget';
   final String emailAddress;
   final String emailSubject;
   final String emailBody;
 
-  EmailWidget({this.emailAddress, this.emailSubject, this.emailBody});
+  const EmailWidget({Key key, this.emailAddress, this.emailSubject, this.emailBody}) : super(key: key);
 
   @override
   Widget build(final BuildContext context) {
     return WidgetUtils.getRoundedElevatedButton(
-        child: Row(children: [
+        child: Row(children: const [
           Text('Email', style: TextStyle(color: Colors.white)),
           SizedBox(width: 10),
-          PumpedIcons.emailIcon_whiteSize24
+          PumpedIcons.emailIconWhiteSize24
         ]),
         onPressed: () {
           _sendEmail(() {
@@ -53,11 +53,11 @@ class EmailWidget extends StatelessWidget {
       if (await canLaunch(emailUrl)) {
         await launch(emailUrl);
       } else {
-        LogUtil.debug(_TAG, 'Cannot send email $emailUrl');
+        LogUtil.debug(_tag, 'Cannot send email $emailUrl');
         function.call();
       }
     } on Exception catch (e) {
-      LogUtil.debug(_TAG, 'Exception invoking emailUrl $emailUrl $e');
+      LogUtil.debug(_tag, 'Exception invoking emailUrl $emailUrl $e');
       function.call();
     }
   }

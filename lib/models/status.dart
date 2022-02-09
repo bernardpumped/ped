@@ -16,14 +16,14 @@
  *     along with Pumped End Device.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-enum Status { open, closed, opening_soon, closing_soon, unknown, open24Hrs }
+enum Status { open, closed, openingSoon, closingSoon, unknown, open24Hrs }
 
 extension FuelStationStatus on Status {
   static const _statusName = {
     Status.open: 'Open',
     Status.closed: 'Closed',
-    Status.opening_soon: 'Opening Soon',
-    Status.closing_soon: 'Closing Soon',
+    Status.openingSoon: 'Opening Soon',
+    Status.closingSoon: 'Closing Soon',
     Status.open24Hrs: 'Open 24 Hrs',
     Status.unknown: 'unknown'
   };
@@ -31,8 +31,8 @@ extension FuelStationStatus on Status {
   static const _statusStr = {
     Status.open: 'OPEN',
     Status.closed: 'CLOSED',
-    Status.opening_soon: 'OPENING_SOON',
-    Status.closing_soon: 'CLOSING_SOON',
+    Status.openingSoon: 'OPENING_SOON',
+    Status.closingSoon: 'CLOSING_SOON',
     Status.open24Hrs: 'OPEN_24_HRS',
     Status.unknown: 'UNKNOWN'
   };
@@ -44,8 +44,8 @@ extension FuelStationStatus on Status {
     switch(statusStr) {
       case 'OPEN': return Status.open;
       case 'CLOSED': return Status.closed;
-      case 'OPENING_SOON': return Status.opening_soon;
-      case 'CLOSING_SOON': return Status.closing_soon;
+      case 'OPENING_SOON': return Status.openingSoon;
+      case 'CLOSING_SOON': return Status.closingSoon;
       case 'OPEN_24_HRS': return Status.open24Hrs;
       case 'UNKNOWN': return Status.unknown;
       default: return Status.unknown;

@@ -28,9 +28,9 @@ class FuelStationDetailsCollapsedHeader extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     return Row(children: [
-      ImageWidget(imageUrl: fuelStation.merchantLogoUrl, width: 50, height: 50, padding: EdgeInsets.only(right: 15)),
+      ImageWidget(imageUrl: fuelStation.merchantLogoUrl, width: 50, height: 50, padding: const EdgeInsets.only(right: 15)),
       Text(fuelStation.fuelStationName + ' ' + fuelStation.fuelStationAddress.locality,
-          style: TextStyle(fontSize: 19, color: Colors.black87, fontFamily: 'SF-Pro-Display'))
+          style: const TextStyle(fontSize: 19, color: Colors.black87, fontFamily: 'SF-Pro-Display'))
     ]);
   }
 }

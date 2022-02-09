@@ -16,18 +16,18 @@
  *     along with Pumped End Device.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-enum FuelStationDetailsAttributes { STATION_BASIC_DETAILS, MERCHANT_DETAILS, QUOTES, OPERATING_TIMES }
+enum FuelStationDetailsAttributes { stationBasicDetails, merchantDetails, quotes, operatingTimes }
 
 extension FuelStationDetailsAttributesExtension on FuelStationDetailsAttributes {
   static String _value(final FuelStationDetailsAttributes value) {
     switch (value) {
-      case FuelStationDetailsAttributes.OPERATING_TIMES:
+      case FuelStationDetailsAttributes.operatingTimes:
         return 'OPERATING_TIMES';
-      case FuelStationDetailsAttributes.MERCHANT_DETAILS:
+      case FuelStationDetailsAttributes.merchantDetails:
         return 'MERCHANT_DETAILS';
-      case FuelStationDetailsAttributes.QUOTES:
+      case FuelStationDetailsAttributes.quotes:
         return 'QUOTES';
-      case FuelStationDetailsAttributes.STATION_BASIC_DETAILS:
+      case FuelStationDetailsAttributes.stationBasicDetails:
         return 'STATION_BASIC_DETAILS';
     }
     return null;

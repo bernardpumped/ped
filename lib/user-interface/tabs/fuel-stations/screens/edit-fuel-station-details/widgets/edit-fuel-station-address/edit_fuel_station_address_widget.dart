@@ -16,7 +16,6 @@
  *     along with Pumped End Device.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pumped_end_device/data/local/dao/update_history_dao.dart';
 import 'package:pumped_end_device/user-interface/tabs/fuel-stations/screens/edit-fuel-station-details/datasource/remote/post_end_device_fuel_station_update.dart';
@@ -47,15 +46,15 @@ class EditFuelStationAddressWidget extends StatefulWidget {
   final int _fuelStationId;
   final String _fuelStationSource;
 
-  EditFuelStationAddressWidget(this.setStateFunction, this.isWidgetExpanded, this._fuelStationAddress,
-      this._fuelStationId, this.stationName, this._fuelStationSource);
+  const EditFuelStationAddressWidget(this.setStateFunction, this.isWidgetExpanded, this._fuelStationAddress,
+      this._fuelStationId, this.stationName, this._fuelStationSource, {Key key}) : super(key: key);
 
   @override
   _EditFuelStationAddressWidgetState createState() => _EditFuelStationAddressWidgetState();
 }
 
 class _EditFuelStationAddressWidgetState extends State<EditFuelStationAddressWidget> {
-  static const _TAG = 'EditFuelStationAddressWidget';
+  static const _tag = 'EditFuelStationAddressWidget';
 
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
@@ -85,7 +84,7 @@ class _EditFuelStationAddressWidgetState extends State<EditFuelStationAddressWid
     _enteredZip = widget._fuelStationAddress.zip;
   }
 
-  static const addressDetailsIcon = const Icon(IconData(IconCodes.address_details_icon_code, fontFamily: 'MaterialIcons', matchTextDirection: true),
+  static const addressDetailsIcon = Icon(IconData(IconCodes.addressDetailsIconCode, fontFamily: 'MaterialIcons', matchTextDirection: true),
       color: FontsAndColors.pumpedNonActionableIconColor, size: 30);
 
   @override
@@ -117,29 +116,29 @@ class _EditFuelStationAddressWidgetState extends State<EditFuelStationAddressWid
   }
 
   void onSaveOperation() async {
-    var uuid = Uuid();
+    var uuid = const Uuid();
     final Map<String, dynamic> updatePathAndValues = {};
     final Map<String, dynamic> originalPathAndValues = {};
     List<String> invalidInputs = [];
     _recordChanges(_enteredName, widget._fuelStationAddress.contactName, originalPathAndValues, updatePathAndValues,
-        UpdatableAddressComponents.STATION_NAME, invalidInputs);
+        UpdatableAddressComponents.stationName, invalidInputs);
     _recordChanges(_enteredAddress, widget._fuelStationAddress.addressLine1, originalPathAndValues, updatePathAndValues,
-        UpdatableAddressComponents.ADDRESS_LINE, invalidInputs);
+        UpdatableAddressComponents.addressLine, invalidInputs);
     _recordChanges(_enteredLocality, widget._fuelStationAddress.locality, originalPathAndValues, updatePathAndValues,
-        UpdatableAddressComponents.LOCALITY, invalidInputs);
+        UpdatableAddressComponents.locality, invalidInputs);
     _recordChanges(_enteredRegion, widget._fuelStationAddress.region, originalPathAndValues, updatePathAndValues,
-        UpdatableAddressComponents.REGION, invalidInputs);
+        UpdatableAddressComponents.region, invalidInputs);
     _recordChanges(_enteredState, widget._fuelStationAddress.state, originalPathAndValues, updatePathAndValues,
-        UpdatableAddressComponents.STATE, invalidInputs);
+        UpdatableAddressComponents.state, invalidInputs);
     _recordChanges(_enteredZip, widget._fuelStationAddress.zip, originalPathAndValues, updatePathAndValues,
-        UpdatableAddressComponents.ZIP, invalidInputs);
-    if (invalidInputs.length > 0) {
+        UpdatableAddressComponents.zip, invalidInputs);
+    if (invalidInputs.isNotEmpty) {
       setState(() {});
       final String invalidInputMsg = invalidInputs.join(', ');
       WidgetUtils.showToastMessage(context, invalidInputMsg, Colors.red);
       return;
     } else {
-      if (updatePathAndValues.length > 0) {
+      if (updatePathAndValues.isNotEmpty) {
         final EndDeviceUpdateFuelStationRequest request = EndDeviceUpdateFuelStationRequest(
             updatePathAndValues: updatePathAndValues,
             uuid: uuid.v1(),
@@ -153,7 +152,7 @@ class _EditFuelStationAddressWidgetState extends State<EditFuelStationAddressWid
           _lockInputs();
           response = await PostEndDeviceFuelStationUpdate(EndDeviceUpdateFuelStationResponseParser()).execute(request);
         } on Exception catch (e, s) {
-          LogUtil.debug(_TAG, 'Exception occurred while calling PostEndDeviceFuelStationUpdate.execute $s');
+          LogUtil.debug(_tag, 'Exception occurred while calling PostEndDeviceFuelStationUpdate.execute $s');
           response = EndDeviceUpdateFuelStationResponse(
               responseCode: 'CALL-EXCEPTION',
               responseDetails: s.toString(),
@@ -172,7 +171,7 @@ class _EditFuelStationAddressWidgetState extends State<EditFuelStationAddressWid
 
         final int persistUpdateHistoryResult = await _persistUpdateHistory(request, response, originalPathAndValues);
         LogUtil.debug(
-            _TAG, 'endDeviceUpdateFuelStation::updateAddress::persistenceResult : $persistUpdateHistoryResult');
+            _tag, 'endDeviceUpdateFuelStation::updateAddress::persistenceResult : $persistUpdateHistoryResult');
         if (response.responseCode == 'SUCCESS') {
           WidgetUtils.showToastMessage(
               context, 'Updated Address Details notified to pumped team', Theme.of(context).primaryColor);
@@ -187,13 +186,13 @@ class _EditFuelStationAddressWidgetState extends State<EditFuelStationAddressWid
 
   Future<int> _persistUpdateHistory(final EndDeviceUpdateFuelStationRequest request,
       final EndDeviceUpdateFuelStationResponse response, final Map<String, dynamic> originalPathAndValues) {
-    final UpdateHistory updateHistory = new UpdateHistory(
+    final UpdateHistory updateHistory = UpdateHistory(
         updateHistoryId: request.uuid,
         fuelStationId: request.fuelStationId,
         fuelStation: widget.stationName,
         fuelStationSource: request.fuelStationSource,
         updateEpoch: response.updateEpoch,
-        updateType: UpdateType.ADDRESS_DETAILS.updateTypeName,
+        updateType: UpdateType.addressDetails.updateTypeName,
         responseCode: response.responseCode,
         originalValues: originalPathAndValues,
         updateValues: request.updatePathAndValues,
@@ -206,17 +205,17 @@ class _EditFuelStationAddressWidgetState extends State<EditFuelStationAddressWid
 
   List<Widget> _editAddressExpansionTileWidgetTree() {
     List<Widget> columnContent = [];
-    columnContent.add(EditFuelStationAddressLineItem('Name', UpdatableAddressComponents.STATION_NAME,
+    columnContent.add(EditFuelStationAddressLineItem('Name', UpdatableAddressComponents.stationName,
         widget._fuelStationAddress.contactName, _nameController, _backendUpdateInProgress, _onValueChangeListener));
-    columnContent.add(EditFuelStationAddressLineItem('Address', UpdatableAddressComponents.ADDRESS_LINE,
+    columnContent.add(EditFuelStationAddressLineItem('Address', UpdatableAddressComponents.addressLine,
         widget._fuelStationAddress.addressLine1, _addressController, _backendUpdateInProgress, _onValueChangeListener));
-    columnContent.add(EditFuelStationAddressLineItem('Locality', UpdatableAddressComponents.LOCALITY,
+    columnContent.add(EditFuelStationAddressLineItem('Locality', UpdatableAddressComponents.locality,
         widget._fuelStationAddress.locality, _localityController, _backendUpdateInProgress, _onValueChangeListener));
-    columnContent.add(EditFuelStationAddressLineItem('Region', UpdatableAddressComponents.REGION,
+    columnContent.add(EditFuelStationAddressLineItem('Region', UpdatableAddressComponents.region,
         widget._fuelStationAddress.region, _regionController, _backendUpdateInProgress, _onValueChangeListener));
-    columnContent.add(EditFuelStationAddressLineItem('State', UpdatableAddressComponents.STATE,
+    columnContent.add(EditFuelStationAddressLineItem('State', UpdatableAddressComponents.state,
         widget._fuelStationAddress.state, _stateController, _backendUpdateInProgress, _onValueChangeListener));
-    columnContent.add(EditFuelStationAddressLineItem('Zip', UpdatableAddressComponents.ZIP,
+    columnContent.add(EditFuelStationAddressLineItem('Zip', UpdatableAddressComponents.zip,
         widget._fuelStationAddress.region, _zipController, _backendUpdateInProgress, _onValueChangeListener));
 
     columnContent.add(SaveUndoButtonWidget(
@@ -232,22 +231,22 @@ class _EditFuelStationAddressWidgetState extends State<EditFuelStationAddressWid
       final String addressComponentType, final String enteredValue, final String originalValue) {
     if (DataUtils.isNotBlank(enteredValue) || enteredValue == originalValue) {
       switch (addressComponentType) {
-        case UpdatableAddressComponents.STATION_NAME:
+        case UpdatableAddressComponents.stationName:
           _enteredName = enteredValue;
           break;
-        case UpdatableAddressComponents.ADDRESS_LINE:
+        case UpdatableAddressComponents.addressLine:
           _enteredAddress = enteredValue;
           break;
-        case UpdatableAddressComponents.LOCALITY:
+        case UpdatableAddressComponents.locality:
           _enteredLocality = enteredValue;
           break;
-        case UpdatableAddressComponents.REGION:
+        case UpdatableAddressComponents.region:
           _enteredRegion = enteredValue;
           break;
-        case UpdatableAddressComponents.STATE:
+        case UpdatableAddressComponents.state:
           _enteredState = enteredValue;
           break;
-        case UpdatableAddressComponents.ZIP:
+        case UpdatableAddressComponents.zip:
           _enteredZip = enteredValue;
           break;
       }
@@ -303,8 +302,8 @@ class _EditFuelStationAddressWidgetState extends State<EditFuelStationAddressWid
 
   UpdateAddressDetailsResult _getUpdateResponse(final EndDeviceUpdateFuelStationRequest request,
       final EndDeviceUpdateFuelStationResponse response, final Map<String, dynamic> originalPathAndValues) {
-    return new UpdateAddressDetailsResult(response.successfulUpdate, response.updateEpoch,
-        addressComponentUpdateStatus: response.updateResult != null ? response.updateResult : {},
-        addressComponentNewValue: request.updatePathAndValues != null ? request.updatePathAndValues : {});
+    return UpdateAddressDetailsResult(response.successfulUpdate, response.updateEpoch,
+        addressComponentUpdateStatus: response.updateResult ?? {},
+        addressComponentNewValue: request.updatePathAndValues ?? {});
   }
 }

@@ -43,23 +43,23 @@ class SuggestEditWidget extends StatefulWidget {
   final String fuelStationSource;
   final String fuelStationName;
 
-  const SuggestEditWidget(
-      this.setStateFunction, this.isWidgetExpanded, this.fuelStationId, this.fuelStationName, this.fuelStationSource);
+   const SuggestEditWidget(
+      this.setStateFunction, this.isWidgetExpanded, this.fuelStationId, this.fuelStationName, this.fuelStationSource, {Key key}) : super(key: key);
 
   @override
   _SuggestEditWidgetState createState() => _SuggestEditWidgetState();
 }
 
 class _SuggestEditWidgetState extends State<SuggestEditWidget> {
-  static const _TAG = 'SuggestEditWidget';
-  final TextEditingController _suggestEditTextEditingController = new TextEditingController();
+  static const _tag = 'SuggestEditWidget';
+  final TextEditingController _suggestEditTextEditingController = TextEditingController();
   bool _onValueChanged = false;
   bool _backendUpdateInProgress = false;
   bool _inputSuggestionValid = true;
 
   String _suggestion;
 
-  static const suggestEditIcon = const Icon(IconData(IconCodes.suggest_edit_icon_code, fontFamily: 'MaterialIcons', matchTextDirection: true),
+  static const suggestEditIcon = Icon(IconData(IconCodes.suggestEditIconCode, fontFamily: 'MaterialIcons', matchTextDirection: true),
       color: FontsAndColors.pumpedNonActionableIconColor, size: 30);
 
   @override
@@ -80,19 +80,19 @@ class _SuggestEditWidgetState extends State<SuggestEditWidget> {
   List<Widget> _suggestEditExpansionTileWidgetTree() {
     return [
       Container(
-          margin: EdgeInsets.only(left: 20, right: 20),
-          padding: EdgeInsets.only(bottom: 10),
+          margin: const EdgeInsets.only(left: 20, right: 20),
+          padding: const EdgeInsets.only(bottom: 10),
           child: TextField(
               controller: _suggestEditTextEditingController,
               textInputAction: TextInputAction.newline,
               keyboardType: TextInputType.multiline,
-              key: PageStorageKey("suggest-edit-text-field"),
+              key: const PageStorageKey("suggest-edit-text-field"),
               enabled: !_backendUpdateInProgress,
               maxLines: 5,
               onChanged: _onChangeListener,
               decoration: InputDecoration(
                   border: OutlineInputBorder(
-                      borderSide: new BorderSide(color: _inputSuggestionValid ? Colors.black45 : Colors.red)),
+                      borderSide: BorderSide(color: _inputSuggestionValid ? Colors.black45 : Colors.red)),
                   hintText: 'Enter your suggestion'))),
       SaveUndoButtonWidget(
           onSave: onSaveOperation,
@@ -127,8 +127,8 @@ class _SuggestEditWidgetState extends State<SuggestEditWidget> {
       WidgetUtils.showToastMessage(context, 'No Valid suggestion provided', Colors.red);
       return;
     }
-    var uuid = Uuid();
-    final SuggestEditRequest request = new SuggestEditRequest(
+    var uuid = const Uuid();
+    final SuggestEditRequest request = SuggestEditRequest(
         identityProvider: 'FIREBASE',
         oauthToken: 'dummy-token',
         oauthTokenSecret: 'dummy-token-secret',
@@ -141,7 +141,7 @@ class _SuggestEditWidgetState extends State<SuggestEditWidget> {
       lockInputs();
       response = await PostSuggestEdit(SuggestEditResponseParser()).execute(request);
     } on Exception catch (e, s) {
-      LogUtil.debug(_TAG, 'Exception occurred while calling PostSuggestEdit.execute $s');
+      LogUtil.debug(_tag, 'Exception occurred while calling PostSuggestEdit.execute $s');
       response = SuggestEditResponse(
           responseCode: 'CALL-EXCEPTION',
           responseDetails: s.toString(),
@@ -158,7 +158,7 @@ class _SuggestEditWidgetState extends State<SuggestEditWidget> {
       unlockInputs();
     }
     final int persistUpdateHistoryResult = await _persistUpdateHistory(request, response);
-    LogUtil.debug(_TAG, 'SuggestEdit : persistUpdateHistory : result $persistUpdateHistoryResult');
+    LogUtil.debug(_tag, 'SuggestEdit : persistUpdateHistory : result $persistUpdateHistoryResult');
     if (response.responseCode == 'SUCCESS') {
       WidgetUtils.showToastMessage(
           context, 'Successfully notified pumped team for suggestion', Theme.of(context).primaryColor);
@@ -168,20 +168,20 @@ class _SuggestEditWidgetState extends State<SuggestEditWidget> {
         });
       }
     } else {
-      LogUtil.debug(_TAG, 'Error persisting suggestion ${response.responseCode}');
+      LogUtil.debug(_tag, 'Error persisting suggestion ${response.responseCode}');
       WidgetUtils.showToastMessage(context, 'Error notifying pumped team', Theme.of(context).primaryColor);
     }
     Navigator.pop(context, _getUpdateResponse(request, response));
   }
 
   Future<int> _persistUpdateHistory(final SuggestEditRequest request, final SuggestEditResponse response) {
-    final UpdateHistory updateHistory = new UpdateHistory(
+    final UpdateHistory updateHistory = UpdateHistory(
         updateHistoryId: request.uuid,
         fuelStationId: request.fuelStationId,
         fuelStation: widget.fuelStationName,
         fuelStationSource: request.fuelStationSource,
         updateEpoch: response.updateEpoch,
-        updateType: UpdateType.SUGGEST_EDIT.updateTypeName,
+        updateType: UpdateType.suggestEdit.updateTypeName,
         responseCode: response.responseCode,
         originalValues: {UpdateTypeAttributes.suggestion: ''},
         updateValues: {UpdateTypeAttributes.suggestion: request.suggestion},
@@ -202,14 +202,14 @@ class _SuggestEditWidgetState extends State<SuggestEditWidget> {
   }
 
   void lockInputs() {
-    LogUtil.debug(_TAG, 'locking the inputs');
+    LogUtil.debug(_tag, 'locking the inputs');
     setState(() {
       _backendUpdateInProgress = true;
     });
   }
 
   void unlockInputs() {
-    LogUtil.debug(_TAG, 'unlocking the inputs');
+    LogUtil.debug(_tag, 'unlocking the inputs');
     _suggestEditTextEditingController.clear();
     _inputSuggestionValid = true;
     setState(() {

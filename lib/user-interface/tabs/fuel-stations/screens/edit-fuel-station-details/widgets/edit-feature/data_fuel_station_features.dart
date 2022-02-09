@@ -20,105 +20,105 @@ import 'package:flutter/material.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station_feature.dart';
 
 class DataFuelStationFeatures {
-  static const _black54Size30_evIcon = Icon(IconData(0xe56d, fontFamily: 'MaterialIcons', matchTextDirection: true), color: Colors.black54, size: 30);
-  static const _black54Size30_hotelIcon = Icon(IconData(0xe53a, fontFamily: 'MaterialIcons', matchTextDirection: true), color: Colors.black54, size: 30);
-  static const _black54Size30_localAtm = Icon(IconData(0xe53e, fontFamily: 'MaterialIcons', matchTextDirection: true), color: Colors.black54, size: 30);
-  static const _black54Size30_localCafe = Icon(IconData(0xe541, fontFamily: 'MaterialIcons', matchTextDirection: true), color: Colors.black54, size: 30);
-  static const _black54Size30_localCarWash = Icon(IconData(0xe542, fontFamily: 'MaterialIcons', matchTextDirection: true), color: Colors.black54, size: 30);
-  static const _black54Size30_localConvStore = Icon(IconData(0xe543, fontFamily: 'MaterialIcons', matchTextDirection: true), color: Colors.black54, size: 30);
-  static const _black54Size30_localDining = Icon(IconData(0xe556, fontFamily: 'MaterialIcons', matchTextDirection: true), color: Colors.black54, size: 30);
-  static const _black54Size30_localGrocery = Icon(IconData(0xe547, fontFamily: 'MaterialIcons', matchTextDirection: true), color: Colors.black54, size: 30);
-  static const _black54Size30_localHotel = Icon(IconData(0xe549, fontFamily: 'MaterialIcons', matchTextDirection: true), color: Colors.black54, size: 30);
-  static const _black54Size30_localLaundryServ = Icon(IconData(0xe54a, fontFamily: 'MaterialIcons', matchTextDirection: true), color: Colors.black54, size: 30);
-  static const _black54Size30_localMall = Icon(IconData(0xe54c, fontFamily: 'MaterialIcons', matchTextDirection: true), color: Colors.black54, size: 30);
-  static const _black54Size30_localPharmacy = Icon(IconData(0xe550, fontFamily: 'MaterialIcons', matchTextDirection: true), color: Colors.black54, size: 30);
-  static const _black54Size30_localPostOffice = Icon(IconData(0xe554, fontFamily: 'MaterialIcons', matchTextDirection: true), color: Colors.black54, size: 30);
-  static const _black54Size30_localPizza = Icon(IconData(0xe552, fontFamily: 'MaterialIcons', matchTextDirection: true), color: Colors.black54, size: 30);
+  static const _black54Size30EvIcon = Icon(IconData(0xe56d, fontFamily: 'MaterialIcons', matchTextDirection: true), color: Colors.black54, size: 30);
+  static const _black54Size30HotelIcon = Icon(IconData(0xe53a, fontFamily: 'MaterialIcons', matchTextDirection: true), color: Colors.black54, size: 30);
+  static const _black54Size30LocalAtm = Icon(IconData(0xe53e, fontFamily: 'MaterialIcons', matchTextDirection: true), color: Colors.black54, size: 30);
+  static const _black54Size30LocalCafe = Icon(IconData(0xe541, fontFamily: 'MaterialIcons', matchTextDirection: true), color: Colors.black54, size: 30);
+  static const _black54Size30LocalCarWash = Icon(IconData(0xe542, fontFamily: 'MaterialIcons', matchTextDirection: true), color: Colors.black54, size: 30);
+  static const _black54Size30LocalConvStore = Icon(IconData(0xe543, fontFamily: 'MaterialIcons', matchTextDirection: true), color: Colors.black54, size: 30);
+  static const _black54Size30LocalDining = Icon(IconData(0xe556, fontFamily: 'MaterialIcons', matchTextDirection: true), color: Colors.black54, size: 30);
+  static const _black54Size30LocalGrocery = Icon(IconData(0xe547, fontFamily: 'MaterialIcons', matchTextDirection: true), color: Colors.black54, size: 30);
+  static const _black54Size30LocalHotel = Icon(IconData(0xe549, fontFamily: 'MaterialIcons', matchTextDirection: true), color: Colors.black54, size: 30);
+  static const _black54Size30LocalLaundryServ = Icon(IconData(0xe54a, fontFamily: 'MaterialIcons', matchTextDirection: true), color: Colors.black54, size: 30);
+  static const _black54Size30LocalMall = Icon(IconData(0xe54c, fontFamily: 'MaterialIcons', matchTextDirection: true), color: Colors.black54, size: 30);
+  static const _black54Size30LocalPharmacy = Icon(IconData(0xe550, fontFamily: 'MaterialIcons', matchTextDirection: true), color: Colors.black54, size: 30);
+  static const _black54Size30LocalPostOffice = Icon(IconData(0xe554, fontFamily: 'MaterialIcons', matchTextDirection: true), color: Colors.black54, size: 30);
+  static const _black54Size30LocalPizza = Icon(IconData(0xe552, fontFamily: 'MaterialIcons', matchTextDirection: true), color: Colors.black54, size: 30);
 
   static final List<FuelStationFeature> fuelStationFeatures = [
     FuelStationFeature(
         featureType: 'ev_station',
         featureName: 'EV Station',
         iconType: 'MaterialIcon',
-        icon: _black54Size30_evIcon,
+        icon: _black54Size30EvIcon,
         selected: true),
     FuelStationFeature(
         featureType: 'hotel',
         featureName: 'Guest Room',
         iconType: 'MaterialIcon',
-        icon: _black54Size30_hotelIcon,
+        icon: _black54Size30HotelIcon,
         selected: false),
     FuelStationFeature(
         featureType: 'local_atm',
         featureName: 'ATM',
         iconType: 'MaterialIcon',
-        icon: _black54Size30_localAtm,
+        icon: _black54Size30LocalAtm,
         selected: true),
     FuelStationFeature(
         featureType: 'local_cafe',
         featureName: 'Cafe',
         iconType: 'MaterialIcon',
-        icon: _black54Size30_localCafe,
+        icon: _black54Size30LocalCafe,
         selected: false),
     FuelStationFeature(
         featureType: 'local_car_wash',
         featureName: 'Car Wash',
         iconType: 'MaterialIcon',
-        icon: _black54Size30_localCarWash,
+        icon: _black54Size30LocalCarWash,
         selected: true),
     FuelStationFeature(
         featureType: 'local_convenience_store',
         featureName: 'Convenience Store',
         iconType: 'MaterialIcon',
-        icon: _black54Size30_localConvStore,
+        icon: _black54Size30LocalConvStore,
         selected: false),
     FuelStationFeature(
         featureType: 'local_dining',
         featureName: 'Dining',
         iconType: 'MaterialIcon',
-        icon: _black54Size30_localDining,
+        icon: _black54Size30LocalDining,
         selected: true),
     FuelStationFeature(
         featureType: 'local_grocery_store',
         featureName: 'Grocery',
         iconType: 'MaterialIcon',
-        icon: _black54Size30_localGrocery,
+        icon: _black54Size30LocalGrocery,
         selected: false),
     FuelStationFeature(
         featureType: 'local_hotel',
         featureName: 'Dining',
         iconType: 'MaterialIcon',
-        icon: _black54Size30_localHotel,
+        icon: _black54Size30LocalHotel,
         selected: true),
     FuelStationFeature(
         featureType: 'local_laundry_service',
         featureName: 'Laundry Service',
         iconType: 'MaterialIcon',
-        icon: _black54Size30_localLaundryServ,
+        icon: _black54Size30LocalLaundryServ,
         selected: false),
     FuelStationFeature(
         featureType: 'local_mall',
         featureName: 'Mall',
         iconType: 'MaterialIcon',
-        icon: _black54Size30_localMall,
+        icon: _black54Size30LocalMall,
         selected: true),
     FuelStationFeature(
         featureType: 'local_pharmacy',
         featureName: 'Pharmacy',
         iconType: 'MaterialIcon',
-        icon: _black54Size30_localPharmacy,
+        icon: _black54Size30LocalPharmacy,
         selected: false),
     FuelStationFeature(
         featureType: 'local_post_office',
         featureName: 'Post Office',
         iconType: 'MaterialIcon',
-        icon: _black54Size30_localPostOffice,
+        icon: _black54Size30LocalPostOffice,
         selected: true),
     FuelStationFeature(
         featureType: 'local_pizza',
         featureName: 'Pizza',
         iconType: 'MaterialIcon',
-        icon: _black54Size30_localPizza,
+        icon: _black54Size30LocalPizza,
         selected: false),
   ];
 }

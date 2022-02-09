@@ -33,8 +33,8 @@ import 'package:pumped_end_device/util/log_util.dart';
 import 'package:uuid/uuid.dart';
 
 class EditFuelPriceUtils {
-  static const _TAG = 'EditFuelStationDetailsScreenUtils';
-  static final MarketRegionZoneConfigUtils _marketRegionZoneConfigUtils = new MarketRegionZoneConfigUtils();
+  static const _tag = 'EditFuelStationDetailsScreenUtils';
+  static final MarketRegionZoneConfigUtils _marketRegionZoneConfigUtils = MarketRegionZoneConfigUtils();
 
   Future<EditFuelPriceWidgetData> editFuelPriceWidgetData() async {
     final MarketRegionZoneConfiguration marketRegionZoneConfiguration =
@@ -43,7 +43,7 @@ class EditFuelPriceUtils {
         await _getLatestFuelAuthorityPriceMetadata(marketRegionZoneConfiguration.marketRegionConfig.fuelAuthorityId);
     final currencyValueFormat = marketRegionZoneConfiguration.marketRegionConfig.currencyValueFormat;
     final List<FuelType> fuelTypesForMarketRegion = await _marketRegionZoneConfigUtils.getFuelTypesForMarketRegion();
-    return new EditFuelPriceWidgetData(metadataForFuelAuthority, fuelTypesForMarketRegion, currencyValueFormat);
+    return EditFuelPriceWidgetData(metadataForFuelAuthority, fuelTypesForMarketRegion, currencyValueFormat);
   }
 
   Future<List<FuelAuthorityPriceMetadata>> _getLatestFuelAuthorityPriceMetadata(final String authorityId) async {
@@ -53,25 +53,24 @@ class EditFuelPriceUtils {
       final List<FuelAuthorityPriceMetadata> currentMetadata =
           await FuelAuthorityPriceMetadataDao.instance.getFuelAuthorityPriceMetadata(authorityId);
       final GetFuelAuthorityPriceMetadataRequest request =
-          GetFuelAuthorityPriceMetadataRequest(requestUuid: Uuid().v1(), authorityId: authorityId);
+          GetFuelAuthorityPriceMetadataRequest(requestUuid: const Uuid().v1(), authorityId: authorityId);
       if (currentMetadata != null && currentMetadata.isNotEmpty) {
         // Assumption is all these marketRegionZoneConfigVersions will be same
         final List<String> marketRegionZoneConfigVersion =
             currentMetadata.map((e) => e.marketRegionZoneConfigVersion).toList();
         LogUtil.debug(
-            _TAG,
-            'MarketRegionZoneConfiguration.version ${config.version} ' +
-                ' and FuelAuthorityPriceMetadata.version ${marketRegionZoneConfigVersion[0]}');
+            _tag,
+            'MarketRegionZoneConfiguration.version ${config.version} ' ' and FuelAuthorityPriceMetadata.version ${marketRegionZoneConfigVersion[0]}');
         if (marketRegionZoneConfigVersion[0] != config.version) {
           LogUtil.debug(
-              _TAG, 'Current metadata exists but version is different from market region zone config. Querying');
+              _tag, 'Current metadata exists but version is different from market region zone config. Querying');
           // MarketRegionZoneConfig has changed. Chances are there is new metadata on server. Querying.
           GetFuelAuthorityPriceMetaDataResponse response;
           try {
             response =
                 await GetFuelAuthorityPriceMetaData(GetFuelAuthorityPriceMetaDataResponseParser()).execute(request);
           } on Exception catch (e, s) {
-            LogUtil.debug(_TAG, 'Exception occurred while calling GetFuelAuthorityPriceMetaDataNew.execute $s');
+            LogUtil.debug(_tag, 'Exception occurred while calling GetFuelAuthorityPriceMetaDataNew.execute $s');
             response = GetFuelAuthorityPriceMetaDataResponse(
                 'CALL-EXCEPTION', s.toString(), {}, DateTime.now().millisecondsSinceEpoch, request.authorityId, []);
           }
@@ -82,13 +81,13 @@ class EditFuelPriceUtils {
           return currentMetadata;
         }
       } else {
-        LogUtil.debug(_TAG, 'Current metadata does not exist. Querying.');
+        LogUtil.debug(_tag, 'Current metadata does not exist. Querying.');
         GetFuelAuthorityPriceMetaDataResponse response;
         try {
           response =
               await GetFuelAuthorityPriceMetaData(GetFuelAuthorityPriceMetaDataResponseParser()).execute(request);
         } on Exception catch (e, s) {
-          LogUtil.debug(_TAG, 'Exception occurred while calling GetFuelAuthorityPriceMetaDataNew.execute $s');
+          LogUtil.debug(_tag, 'Exception occurred while calling GetFuelAuthorityPriceMetaDataNew.execute $s');
           response = GetFuelAuthorityPriceMetaDataResponse(
               'CALL-EXCEPTION', s.toString(), {}, DateTime.now().millisecondsSinceEpoch, request.authorityId, []);
         }
@@ -99,7 +98,7 @@ class EditFuelPriceUtils {
         Config being null here is a problem, as the config should get populated as soon as application is loaded
       */
       var message = 'Error processing getLatestFuelAuthorityPriceMetadata as MarketRegionZoneConfig is not present';
-      LogUtil.debug(_TAG, message);
+      LogUtil.debug(_tag, message);
       throw PumpedException(message);
     }
   }
@@ -110,20 +109,19 @@ class EditFuelPriceUtils {
       for (final FuelAuthorityPriceMetadata currentMetadatum in currentMetadata) {
         final int deleteResult =
             await FuelAuthorityPriceMetadataDao.instance.deleteFuelAuthorityPriceMetadata(currentMetadatum);
-        LogUtil.debug(_TAG,
+        LogUtil.debug(_tag,
             'Delete result for metadata : ${currentMetadatum.fuelAuthority}-${currentMetadatum.fuelType} is $deleteResult');
       }
       final List<FuelAuthorityPriceMetadata> latestMetadata = _transform(response.metadata, authorityId, version);
       for (final FuelAuthorityPriceMetadata latestMetadatum in latestMetadata) {
         final int insertResult =
             await FuelAuthorityPriceMetadataDao.instance.insertFuelAuthorityPriceMetadata(latestMetadatum);
-        LogUtil.debug(_TAG, 'FuelAuthorityPriceMetadata successfully inserted $insertResult');
+        LogUtil.debug(_tag, 'FuelAuthorityPriceMetadata successfully inserted $insertResult');
       }
       return latestMetadata;
     } else {
-      var message = 'Proper response not received from server response code : ${response.responseCode} ' +
-          'and isEmpty ? ${response.metadata.isEmpty}';
-      LogUtil.debug(_TAG, message);
+      var message = 'Proper response not received from server response code : ${response.responseCode} ' 'and isEmpty ? ${response.metadata.isEmpty}';
+      LogUtil.debug(_tag, message);
       return Future.value(List.empty());
       // throw PumpedException(message);
     }

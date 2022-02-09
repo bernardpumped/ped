@@ -16,11 +16,11 @@
  *     along with Pumped End Device.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-enum SortOrder { CHEAPEST_CLOSEST, CLOSEST_CHEAPEST }
+enum SortOrder { cheapestClosest, closestCheapest }
 
 extension QuoteSortOrder on SortOrder {
-  static const _sortOrderName = {SortOrder.CHEAPEST_CLOSEST: 'Cheapest Closest', SortOrder.CLOSEST_CHEAPEST: 'Closest Cheapest'};
-  static const _sortOrderStr = {SortOrder.CHEAPEST_CLOSEST: 'CHEAPEST_CLOSEST', SortOrder.CLOSEST_CHEAPEST: 'CLOSEST_CHEAPEST'};
+  static const _sortOrderName = {SortOrder.cheapestClosest: 'Cheapest Closest', SortOrder.closestCheapest: 'Closest Cheapest'};
+  static const _sortOrderStr = {SortOrder.cheapestClosest: 'CHEAPEST_CLOSEST', SortOrder.closestCheapest: 'CLOSEST_CHEAPEST'};
 
   String get sortOrderName => _sortOrderName[this];
   String get sortOrderStr => _sortOrderStr[this];
@@ -28,10 +28,10 @@ extension QuoteSortOrder on SortOrder {
   static SortOrder getSortOrder(String sortOrderStr) {
     switch (sortOrderStr) {
       case 'CHEAPEST_CLOSEST': {
-        return SortOrder.CHEAPEST_CLOSEST;
+        return SortOrder.cheapestClosest;
       }
       case 'CLOSEST_CHEAPEST': {
-        return SortOrder.CLOSEST_CHEAPEST;
+        return SortOrder.closestCheapest;
       }
       default: {
         return null;

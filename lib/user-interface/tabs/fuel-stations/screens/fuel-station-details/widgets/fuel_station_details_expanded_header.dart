@@ -18,7 +18,6 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:pumped_end_device/user-interface/fonts_and_colors.dart';
 import 'package:pumped_end_device/user-interface/icon_codes.dart';
 import 'package:pumped_end_device/user-interface/tabs/fuel-stations/screens/edit-fuel-station-details/widgets/common/image_widget.dart';
@@ -29,8 +28,8 @@ import 'package:pumped_end_device/models/pumped/fuel_station.dart';
 import 'package:pumped_end_device/util/data_utils.dart';
 
 class FuelStationDetailsExpandedHeader extends StatelessWidget {
-  static Color _fuelStationDetailsColors = FontsAndColors.pumpedFuelStationDetailsColor;
-  static const _distanceIcon = Icon(IconData(IconCodes.distance_icon_code, fontFamily: 'MaterialIcons', matchTextDirection: true),
+  static const Color _fuelStationDetailsColors = FontsAndColors.pumpedFuelStationDetailsColor;
+  static const _distanceIcon = Icon(IconData(IconCodes.distanceIconCode, fontFamily: 'MaterialIcons', matchTextDirection: true),
       color: Colors.black87, size: 18);
 
   final FuelStation fuelStation;
@@ -40,24 +39,24 @@ class FuelStationDetailsExpandedHeader extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     return Container(
-        padding: EdgeInsets.only(left: 20, right: 20, top: 10),
+        padding: const EdgeInsets.only(left: 20, right: 20, top: 10),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
           Row(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 ImageWidget(
-                    imageUrl: fuelStation.merchantLogoUrl, width: 75, height: 75, padding: EdgeInsets.only(right: 20)),
+                    imageUrl: fuelStation.merchantLogoUrl, width: 75, height: 75, padding: const EdgeInsets.only(right: 20)),
                 Expanded(
                     child: Column(
                         mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                      Padding(padding: EdgeInsets.only(bottom: 5), child: _getFuelStationName(fuelStation)),
-                      Padding(padding: EdgeInsets.only(bottom: 5), child: _getDistanceWidget(fuelStation)),
+                      Padding(padding: const EdgeInsets.only(bottom: 5), child: _getFuelStationName(fuelStation)),
+                      Padding(padding: const EdgeInsets.only(bottom: 5), child: _getDistanceWidget(fuelStation)),
                       Padding(
-                          padding: EdgeInsets.only(bottom: 5),
+                          padding: const EdgeInsets.only(bottom: 5),
                           child: _getFuelAuthorityQuotePublisher(fuelStation, context)),
                       _getRatingWidget(fuelStation)
                     ]))
@@ -67,7 +66,7 @@ class FuelStationDetailsExpandedHeader extends StatelessWidget {
 
   Widget _getFuelStationName(final FuelStation fuelStation) {
     return Text(fuelStation.fuelStationName + ' ' + fuelStation.fuelStationAddress.locality,
-        style: TextStyle(fontSize: 19, color: Colors.black87, fontWeight: FontWeight.w500),
+        style: const TextStyle(fontSize: 19, color: Colors.black87, fontWeight: FontWeight.w500),
         overflow: TextOverflow.ellipsis);
   }
 
@@ -78,15 +77,15 @@ class FuelStationDetailsExpandedHeader extends StatelessWidget {
           .where((fq) => fq.fuelQuoteSource != null && fq.fuelQuoteSource != 'C')
           .map((fq) => fq.fuelQuoteSourceName)
           .toList();
-      if (publishers != null && publishers.length > 0) {
+      if (publishers != null && publishers.isNotEmpty) {
         return Row(children: [
           Text('Fuel Price Source ${publishers[0]}',
-              style: TextStyle(fontSize: 15, color: Colors.black87, fontWeight: FontWeight.w500)),
+              style: const TextStyle(fontSize: 15, color: Colors.black87, fontWeight: FontWeight.w500)),
           _getFuelStationSourceCitationIcon(publishers, context, fuelStation)
         ]);
       }
     }
-    return SizedBox(width: 0);
+    return const SizedBox(width: 0);
   }
 
   Widget _getFuelStationSourceCitationIcon(
@@ -97,30 +96,30 @@ class FuelStationDetailsExpandedHeader extends StatelessWidget {
             showCupertinoDialog(
                 context: context, builder: (context) => FuelStationSourceCitation(fuelStation: fuelStation));
           },
-          child: PumpedIcons.faSourceIcon_black54Size20); // Info icon
+          child: PumpedIcons.faSourceIconBlack54Size20); // Info icon
     } else {
-      return SizedBox(width: 0);
+      return const SizedBox(width: 0);
     }
   }
 
   Widget _getDistanceWidget(final FuelStation fuelStation) {
     return Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
-      Text('Petrol Station', style: TextStyle(fontSize: 14, color: _fuelStationDetailsColors)),
-      SizedBox(width: 10),
+      const Text('Petrol Station', style: TextStyle(fontSize: 14, color: _fuelStationDetailsColors)),
+      const SizedBox(width: 10),
       _distanceIcon, // drive_eta icon
-      Text(' ${DataUtils.toPrecision(fuelStation.distance, 2)} km', style: TextStyle(color: _fuelStationDetailsColors))
+      Text(' ${DataUtils.toPrecision(fuelStation.distance, 2)} km', style: const TextStyle(color: _fuelStationDetailsColors))
     ]);
   }
 
   SingleChildRenderObjectWidget _getRatingWidget(final FuelStation fuelStation) {
     return fuelStation.rating != null
         ? Padding(
-            padding: EdgeInsets.only(bottom: 3),
+            padding: const EdgeInsets.only(bottom: 3),
             child: Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
-              Text(' ${fuelStation.rating}', style: TextStyle(fontSize: 14, color: _fuelStationDetailsColors)),
-              SizedBox(width: 3),
+              Text(' ${fuelStation.rating}', style: const TextStyle(fontSize: 14, color: _fuelStationDetailsColors)),
+              const SizedBox(width: 3),
               WidgetUtils.getRating(fuelStation.rating, 16)
             ]))
-        : SizedBox(width: 0);
+        : const SizedBox(width: 0);
   }
 }

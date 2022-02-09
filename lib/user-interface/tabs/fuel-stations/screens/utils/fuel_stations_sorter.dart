@@ -21,7 +21,7 @@ import 'package:pumped_end_device/models/pumped/fuel_station.dart';
 
 class FuelStationsSorter {
   void sortFuelStations(final List<FuelStation> fuelStations, final String fuelType, final int sortOrder) {
-    if (fuelStations == null || fuelStations.length == 0) {
+    if (fuelStations == null || fuelStations.isEmpty) {
       return;
     }
     fuelStations.sort((fs1, fs2) {
@@ -111,5 +111,5 @@ class FuelStationsSorter {
     return quoteVal1.compareTo(quoteVal2);
   }
 
-  static int _compareNames(fs1, fs2) => fs1.fuelStationName.compareTo(fs2.fuelStationName);
+  static int _compareNames(fs1, fs2) => fs1.fuelStationName.toLowerCase().compareTo(fs2.fuelStationName.toLowerCase());
 }

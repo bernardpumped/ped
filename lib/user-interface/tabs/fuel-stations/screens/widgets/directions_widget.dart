@@ -30,16 +30,16 @@ import 'package:pumped_end_device/util/log_util.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DirectionsWidget extends StatelessWidget {
-  static const _TAG = 'DirectionsWidget';
+  static const _tag = 'DirectionsWidget';
   static const _expandedViewButtonIconColor = Colors.white;
   static const _expandedViewSecondaryIconColor = FontsAndColors.pumpedSecondaryIconColor;
   final double _dLat;
   final double _dLng;
   final LocationDataSource _locationDataSource;
 
-  const DirectionsWidget(this._dLat, this._dLng, this._locationDataSource);
+  const DirectionsWidget(this._dLat, this._dLng, this._locationDataSource, {Key key}) : super(key: key);
 
-  static const directionsIcon = const Icon(IconData(IconCodes.directions_icon_code, fontFamily: 'MaterialIcons'), color: _expandedViewButtonIconColor);
+  static const directionsIcon = Icon(IconData(IconCodes.directionsIconCode, fontFamily: 'MaterialIcons'), color: _expandedViewButtonIconColor);
 
   @override
   Widget build(final BuildContext context) {
@@ -48,19 +48,19 @@ class DirectionsWidget extends StatelessWidget {
           final GetLocationResult locationResult = await _locationDataSource.getLocationData();
       final LocationInitResultCode resultCode = locationResult.locationInitResultCode;
       switch (resultCode) {
-        case LocationInitResultCode.LOCATION_SERVICE_DISABLED:
+        case LocationInitResultCode.locationServiceDisabled:
           WidgetUtils.buildSnackBar(context, 'Location Service is disabled', 2, '', () {});
           break;
-        case LocationInitResultCode.PERMISSION_DENIED:
+        case LocationInitResultCode.permissionDenied:
           WidgetUtils.buildSnackBar(context, 'Location Permission denied', 2, '', () {});
           break;
-        case LocationInitResultCode.NOT_FOUND:
+        case LocationInitResultCode.notFound:
           WidgetUtils.buildSnackBar(context, 'Location Not Found', 2, '', () {});
           break;
-        case LocationInitResultCode.FAILURE:
+        case LocationInitResultCode.failure:
           WidgetUtils.buildSnackBar(context, 'Location Failure', 2, '', () {});
           break;
-        case LocationInitResultCode.SUCCESS:
+        case LocationInitResultCode.success:
           {
             final GeoLocationData geoLocationData = await locationResult.geoLocationData;
             final sLat = geoLocationData.latitude;
@@ -80,10 +80,10 @@ class DirectionsWidget extends StatelessWidget {
       final Future<bool> appleMapsLaunchedFuture = _launchAppleMaps(slat, slng, dlat, dlng);
       appleMapsLaunchedFuture.then((appleMapsLaunched) {
         if (!appleMapsLaunched) {
-          LogUtil.debug(_TAG, 'Could not launch apple maps');
+          LogUtil.debug(_tag, 'Could not launch apple maps');
           launchGoogleOrWaze(slat, slng, dlat, dlng, function);
         } else {
-          LogUtil.debug(_TAG, 'Apple Maps successfully launched');
+          LogUtil.debug(_tag, 'Apple Maps successfully launched');
         }
       }, onError: (e) => function.call());
     } else {
@@ -95,18 +95,18 @@ class DirectionsWidget extends StatelessWidget {
     final Future<bool> googleMapsLaunchedFuture = _launchGoogleMaps(slat, slng, dlat, dlng);
     googleMapsLaunchedFuture.then((googleMapsLaunched) {
       if (!googleMapsLaunched) {
-        LogUtil.debug(_TAG, 'Could not launch Google Maps');
+        LogUtil.debug(_tag, 'Could not launch Google Maps');
         final Future<bool> wazeMapsLaunchedFuture = _launchWazeMaps(slat, slng, dlat, dlng);
         wazeMapsLaunchedFuture.then((wazeMapsLaunched) {
           if (!wazeMapsLaunched) {
             function.call();
-            LogUtil.debug(_TAG, 'No suitable Maps app launched on device');
+            LogUtil.debug(_tag, 'No suitable Maps app launched on device');
           } else {
-            LogUtil.debug(_TAG, 'Waze launched successful');
+            LogUtil.debug(_tag, 'Waze launched successful');
           }
         });
       } else {
-        LogUtil.debug(_TAG, 'Google Maps launched successfully');
+        LogUtil.debug(_tag, 'Google Maps launched successfully');
       }
     }, onError: (e) => function.call());
   }
@@ -144,22 +144,20 @@ class DirectionsWidget extends StatelessWidget {
     if (!Platform.isIOS) return false;
     var urlAppleMaps = 'http://maps.apple.com/maps?saddr=$slat,$slng&daddr=$dlat,$dlng';
     if (await canLaunch(urlAppleMaps)) {
-      final bool nativeAppLaunchSucceeded = await launch(
-        urlAppleMaps,
-        forceSafariVC: false,
-        universalLinksOnly: true,
-      );
-      LogUtil.debug(_TAG, 'Native launch for apple map successful $nativeAppLaunchSucceeded');
+
+      LogUtil.debug(_tag, 'Attempting native launch of apple maps');
+      final bool nativeAppLaunchSucceeded = await launch(urlAppleMaps, forceSafariVC: false, universalLinksOnly: true);
+      LogUtil.debug(_tag, 'Native launch for apple map successful $nativeAppLaunchSucceeded');
+
       bool nonNativeAppLaunchSucceeded = false;
       if (!nativeAppLaunchSucceeded) {
-        nonNativeAppLaunchSucceeded = await launch(
-          urlAppleMaps,
-          forceSafariVC: true,
-        );
+        LogUtil.debug(_tag, 'Attempting non-native launch of apple maps');
+        nonNativeAppLaunchSucceeded = await launch(urlAppleMaps, forceSafariVC: true);
+        LogUtil.debug(_tag, 'Non-Native launch for apple map successful $nonNativeAppLaunchSucceeded');
       }
       return nativeAppLaunchSucceeded || nonNativeAppLaunchSucceeded;
     } else {
-      LogUtil.debug(_TAG, 'Could not launch $urlAppleMaps');
+      LogUtil.debug(_tag, 'Could not launch $urlAppleMaps');
       return false;
     }
   }

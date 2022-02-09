@@ -31,9 +31,9 @@ void main() {
       }
     });
     ft.test('verify the text on fuel stations screen', () async {
-      SerializableFinder message = find.text("My sample text should be present");
+      SerializableFinder message = find.text("Pumped");
       await driver.waitFor(message);
-      ft.expect(await driver.getText(message), "My sample text should be present");
+      ft.expect(await driver.getText(message), "Pumped");
     });
   });
 }

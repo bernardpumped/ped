@@ -22,7 +22,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
 class LocationServiceSubscription {
-  static const _TAG = 'LocationServiceSubscription';
+  static const _tag = 'LocationServiceSubscription';
 
   final StreamSubscription<Position> _positionSubscription;
 
@@ -30,9 +30,9 @@ class LocationServiceSubscription {
   
   void cancel(final Function whenCompleteFunction) {
     if (_positionSubscription != null) {
-      this._positionSubscription.cancel().whenComplete(() => whenCompleteFunction);
+      _positionSubscription.cancel().whenComplete(() => whenCompleteFunction);
     } else {
-      LogUtil.debug(_TAG, "LocationDataSubscription is null. Cannot cancel");
+      LogUtil.debug(_tag, "LocationDataSubscription is null. Cannot cancel");
     }
   }
 }

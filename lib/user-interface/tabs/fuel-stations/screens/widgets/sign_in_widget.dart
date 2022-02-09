@@ -16,7 +16,6 @@
  *     along with Pumped End Device.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/button_list.dart';
 import 'package:flutter_signin_button/button_view.dart';
@@ -28,6 +27,8 @@ class SignInWidget extends StatelessWidget {
   static const String title = "Sign In";
   static const String description = "Please authenticate yourself, before proceeding ahead";
   static const String buttonText = "Cancel";
+
+  const SignInWidget({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -44,34 +45,34 @@ class SignInWidget extends StatelessWidget {
   Widget _dialogContent(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
-        padding: EdgeInsets.only(top: padding, bottom: padding, left: padding, right: padding),
-        margin: EdgeInsets.only(top: avatarRadius),
-        decoration: new BoxDecoration(
+        padding: const EdgeInsets.only(top: padding, bottom: padding, left: padding, right: padding),
+        margin: const EdgeInsets.only(top: avatarRadius),
+        decoration: BoxDecoration(
           color: Colors.white,
           shape: BoxShape.rectangle,
           borderRadius: BorderRadius.circular(padding),
-          boxShadow: [
-            BoxShadow(color: Colors.black26, blurRadius: 10.0, offset: const Offset(0.0, 10.0)),
+          boxShadow: const [
+            BoxShadow(color: Colors.black26, blurRadius: 10.0, offset: Offset(0.0, 10.0)),
           ],
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Image(
+            const Image(
                 image: AssetImage('assets/images/ic_pumped_black_text.png'), width: 100, height: 86, fit: BoxFit.fill),
-            SizedBox(height: 16.0),
-            Text(title, style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.w700)),
-            SizedBox(height: 16.0),
-            Text(description, textAlign: TextAlign.center, style: TextStyle(fontSize: 16.0)),
-            SizedBox(height: 24.0),
+            const SizedBox(height: 16.0),
+            const Text(title, style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.w700)),
+            const SizedBox(height: 16.0),
+            const Text(description, textAlign: TextAlign.center, style: TextStyle(fontSize: 16.0)),
+            const SizedBox(height: 24.0),
             SignInButton(Buttons.GoogleDark, onPressed: () {
               _onButtonPressed(context, 'Google (dark)');
             }),
-            Divider(),
+            const Divider(),
             SignInButton(Buttons.Facebook, onPressed: () {
               _onButtonPressed(context, 'Facebook');
             }),
-            Divider(),
+            const Divider(),
             SignInButton(Buttons.Twitter, text: "Use Twitter", onPressed: () {
               _onButtonPressed(context, 'Twitter');
             }),
@@ -81,7 +82,7 @@ class SignInWidget extends StatelessWidget {
                     onPressed: () {
                       Navigator.of(context).pop(false);
                     },
-                    child: Text(buttonText, style: TextStyle(color: Colors.black)))),
+                    child: const Text(buttonText, style: TextStyle(color: Colors.black)))),
           ],
         ),
       ),

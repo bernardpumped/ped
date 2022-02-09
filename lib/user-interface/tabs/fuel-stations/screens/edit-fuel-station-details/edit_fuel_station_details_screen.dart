@@ -36,6 +36,8 @@ import 'package:pumped_end_device/models/pumped/fuel_station_address.dart';
 class EditFuelStationDetails extends StatefulWidget {
   static const routeName = '/editFuelStationDetails';
 
+  const EditFuelStationDetails({Key key}) : super(key: key);
+
   @override
   _EditFuelStationDetailsState createState() {
     return _EditFuelStationDetailsState();
@@ -64,7 +66,7 @@ class _EditFuelStationDetailsState extends State<EditFuelStationDetails> {
     lazyLoadOperatingHrs = params.lazyLoadOperatingHrs;
 
     return Scaffold(
-        appBar: CupertinoNavigationBar(middle: ApplicationTitleTextWidget(), automaticallyImplyLeading: true),
+        appBar: const CupertinoNavigationBar(middle: ApplicationTitleTextWidget(), automaticallyImplyLeading: true),
         body: GestureDetector(
             onTap: () {
               final FocusScopeNode currentFocus = FocusScope.of(context);
@@ -95,18 +97,18 @@ class _EditFuelStationDetailsState extends State<EditFuelStationDetails> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           _header('Fuel Prices cents per litre'),
-          Divider(color: Colors.black45, indent: 15, endIndent: 15, height: 0),
+          const Divider(color: Colors.black45, indent: 15, endIndent: 15, height: 0),
           _buildFuelPricesTile(fuelStation),
           _header('Station Details'),
-          Divider(color: Colors.black45, indent: 15, endIndent: 15, height: 0),
+          const Divider(color: Colors.black45, indent: 15, endIndent: 15, height: 0),
           _buildFuelStationFeatureTile(fuelStation),
-          Divider(color: Colors.black45, indent: 15, endIndent: 15, height: 0),
+          const Divider(color: Colors.black45, indent: 15, endIndent: 15, height: 0),
           _buildOperatingHourTile(fuelStation),
-          Divider(color: Colors.black45, indent: 15, endIndent: 15, height: 0),
+          const Divider(color: Colors.black45, indent: 15, endIndent: 15, height: 0),
           _buildPhoneNumberTile(fuelStation),
-          Divider(color: Colors.black45, indent: 15, endIndent: 15, height: 0),
+          const Divider(color: Colors.black45, indent: 15, endIndent: 15, height: 0),
           _buildAddressDetailsTile(fuelStation),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           _header('Suggest an Edit'),
           _buildSuggestEditTile(fuelStation)
         ]);
@@ -115,26 +117,25 @@ class _EditFuelStationDetailsState extends State<EditFuelStationDetails> {
   Container _header(final title) {
     return Container(
         width: double.infinity,
-        decoration: BoxDecoration(color: FontsAndColors.pumpedBoxDecorationColor),
-        padding: EdgeInsets.only(left: 30, top: 15, bottom: 15, right: 30),
-        child: Container(
-            child: Text(title,
-                textAlign: TextAlign.left,
-                style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600, color: Colors.black87))));
+        decoration: const BoxDecoration(color: FontsAndColors.pumpedBoxDecorationColor),
+        padding: const EdgeInsets.only(left: 30, top: 15, bottom: 15, right: 30),
+        child: Text(title,
+            textAlign: TextAlign.left,
+            style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w600, color: Colors.black87)));
   }
 
-  static const featuresIcon = Icon(IconData(IconCodes.features_icon_code, fontFamily: 'MaterialIcons', matchTextDirection: true),
+  static const featuresIcon = Icon(IconData(IconCodes.featuresIconCode, fontFamily: 'MaterialIcons', matchTextDirection: true),
       color: FontsAndColors.pumpedNonActionableIconColor, size: 30);
 
   Widget _buildFuelStationFeatureTile(final FuelStation fuelStation) {
     var setStateFunction = (expanded) {
       fuelStationFeaturesExpanded = expanded;
     };
-    return new EditFuelStationFeatureWidget('Fuel Station Features', 'fuel-station-features', fuelStation,
+    return EditFuelStationFeatureWidget('Fuel Station Features', 'fuel-station-features', fuelStation,
         fuelStation.getFuelStationSource(), () => fuelStationFeaturesExpanded, setStateFunction, featuresIcon);
   }
 
-  static const editFuelPriceIcon = const Icon(IconData(IconCodes.fuel_price_icon_code, fontFamily: 'MaterialIcons'),
+  static const editFuelPriceIcon = Icon(IconData(IconCodes.fuelPriceIconCode, fontFamily: 'MaterialIcons'),
       color: FontsAndColors.pumpedNonActionableIconColor, size: 30);
 
   Widget _buildFuelPricesTile(final FuelStation fuelStation) {
@@ -176,32 +177,32 @@ class _EditFuelStationDetailsState extends State<EditFuelStationDetails> {
         fuelStation.fuelStationName);
   }
 
-  static const _operatingTimeIcon = Icon(IconData(IconCodes.operating_time_icon_code, fontFamily: 'MaterialIcons'),
+  static const _operatingTimeIcon = Icon(IconData(IconCodes.operatingTimeIconCode, fontFamily: 'MaterialIcons'),
       color: FontsAndColors.pumpedNonActionableIconColor, size: 30);
 
   Widget _buildOperatingHourTile(final FuelStation fuelStation) {
     var setStateFunction = (expanded) {
       operatingHoursExpanded = expanded;
     };
-    return new EditOperatingTimeWidget(fuelStation, 'Operating Hours', setStateFunction, () => operatingHoursExpanded,
+    return EditOperatingTimeWidget(fuelStation, 'Operating Hours', setStateFunction, () => operatingHoursExpanded,
         "open-close", _operatingTimeIcon, true, lazyLoadOperatingHrs);
   }
 
   Widget _getPageTitle(final FuelStation fuelStation) {
     return Container(
-        padding: EdgeInsets.only(top: 5, bottom: 5),
-        decoration: BoxDecoration(color: Colors.white),
+        padding: const EdgeInsets.only(top: 5, bottom: 5),
+        decoration: const BoxDecoration(color: Colors.white),
         child: Row(children: <Widget>[
           ImageWidget(
               imageUrl: fuelStation.merchantLogoUrl,
               width: 70,
               height: 60,
-              padding: EdgeInsets.only(top: 5, bottom: 5, left: 10, right: 10)),
+              padding: const EdgeInsets.only(top: 5, bottom: 5, left: 10, right: 10)),
           Expanded(
               child: Text('${fuelStation.fuelStationName} ${fuelStation.fuelStationAddress.locality}',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontSize: 18, fontWeight: FontWeight.w600, color: Colors.black87, fontFamily: 'SF-Pro-Display'),
                   textAlign: TextAlign.start))
         ]));
@@ -209,29 +210,29 @@ class _EditFuelStationDetailsState extends State<EditFuelStationDetails> {
 
   Widget _getPageTitleExpanded(final FuelStation fuelStation) {
     return Container(
-        padding: EdgeInsets.only(top: 5, bottom: 5),
-        decoration: BoxDecoration(color: Colors.white),
+        padding: const EdgeInsets.only(top: 5, bottom: 5),
+        decoration: const BoxDecoration(color: Colors.white),
         child: Row(children: <Widget>[
           ImageWidget(
               imageUrl: fuelStation.merchantLogoUrl,
               width: 70,
               height: 60,
-              padding: EdgeInsets.only(top: 5, bottom: 5, left: 10, right: 10)),
+              padding: const EdgeInsets.only(top: 5, bottom: 5, left: 10, right: 10)),
           Expanded(
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                Text('${fuelStation.fuelStationName}',
+                Text(fuelStation.fuelStationName,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 18, fontWeight: FontWeight.w600, color: Colors.black87, fontFamily: 'SF-Pro-Display'),
                     textAlign: TextAlign.start),
                 Text('${fuelStation.fuelStationAddress.addressLine1}  ${fuelStation.fuelStationAddress.locality}',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 15, fontWeight: FontWeight.w600, color: Colors.grey, fontFamily: 'SF-Pro-Display'),
                     textAlign: TextAlign.start)
               ]))

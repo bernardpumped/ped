@@ -19,21 +19,21 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:pumped_end_device/user-interface/tabs/about/screen/datasource/remote/get_backend_metadata.dart';
-import 'package:pumped_end_device/user-interface/tabs/about/screen/datasource/remote/model/response/get_backend_metadata_response.dart';
-import 'package:pumped_end_device/user-interface/tabs/about/screen/datasource/remote/response-parser/get_backend_metadata_response_parser.dart';
+import 'package:pumped_end_device/user-interface/tabs/settings/screens/datasource/remote/get_backend_metadata.dart';
+import 'package:pumped_end_device/user-interface/tabs/settings/screens/datasource/remote/model/response/get_backend_metadata_response.dart';
+import 'package:pumped_end_device/user-interface/tabs/settings/screens/datasource/remote/response-parser/get_backend_metadata_response_parser.dart';
 import 'package:pumped_end_device/user-interface/fonts_and_colors.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
 class ServerVersionWidget extends StatefulWidget {
-  ServerVersionWidget({Key key}) : super(key: key);
+  const ServerVersionWidget({Key key}) : super(key: key);
 
   @override
   _ServerVersionWidgetState createState() => _ServerVersionWidgetState();
 }
 
 class _ServerVersionWidgetState extends State<ServerVersionWidget> {
-  static const _TAG = 'ServerVersionWidget';
+  static const _tag = 'ServerVersionWidget';
   Future<GetBackendMetadataResponse> _backendMetadataResponseFuture;
 
   @override
@@ -62,7 +62,7 @@ class _ServerVersionWidgetState extends State<ServerVersionWidget> {
           }
           return ListTile(
               title: Text(displayText,
-                  style: TextStyle(fontSize: FontsAndColors.largeFontSize, color: FontsAndColors.blackTextColor),
+                  style: const TextStyle(fontSize: FontsAndColors.largeFontSize, color: FontsAndColors.blackTextColor),
                   textAlign: TextAlign.center));
         });
   }
@@ -70,9 +70,9 @@ class _ServerVersionWidgetState extends State<ServerVersionWidget> {
   Future<GetBackendMetadataResponse> _getBackendMetadata() async {
     GetBackendMetadataResponse response;
     try {
-      response = await new GetBackendMetadata(new GetBackendMetadataResponseParser()).execute(null);
+      response = await GetBackendMetadata(GetBackendMetadataResponseParser()).execute(null);
     } on Exception catch (e, s) {
-      LogUtil.debug(_TAG, 'Exception happened while making call GetBackendMetadata $s');
+      LogUtil.debug(_tag, 'Exception happened while making call GetBackendMetadata $s');
       response = GetBackendMetadataResponse("CALL-EXCEPTION", s.toString(), {}, DateTime.now().millisecondsSinceEpoch);
     }
     return response;

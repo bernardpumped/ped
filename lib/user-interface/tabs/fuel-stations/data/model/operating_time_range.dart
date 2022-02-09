@@ -20,19 +20,19 @@ import 'package:pumped_end_device/models/pumped/operating_hours.dart';
 import 'package:sprintf/sprintf.dart';
 
 class OperatingTimeRange {
-  static const ALWAYS_OPEN = 'ALWAYS_OPEN';
-  static const CLOSED = 'CLOSED';
-  static const HAS_CLOSING_HOURS = 'HAS_CLOSING_HOURS';
+  static const alwaysOpen = 'ALWAYS_OPEN';
+  static const closed = 'CLOSED';
+  static const hasClosingHours = 'HAS_CLOSING_HOURS';
 
   static String getStringRepresentation(final OperatingHours operatingHours) {
     if (operatingHours != null) {
-      if (ALWAYS_OPEN == operatingHours.operatingTimeRange) {
+      if (alwaysOpen == operatingHours.operatingTimeRange) {
         return "Always Open";
       }
-      if (CLOSED == operatingHours.operatingTimeRange) {
+      if (closed == operatingHours.operatingTimeRange) {
         return "Closed";
       }
-      if (HAS_CLOSING_HOURS == operatingHours.operatingTimeRange) {
+      if (hasClosingHours == operatingHours.operatingTimeRange) {
         return _getTimeRange(operatingHours);
       }
     }

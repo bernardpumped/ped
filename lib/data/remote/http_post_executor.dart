@@ -39,12 +39,10 @@ abstract class HttpPostExecutor<I extends Request, O extends Response> {
   final int timeOutInMills;
   Function onTimeOutFunction;
 
-  HttpPostExecutor(this.tag, this.responseParser, {this.timeOutInMills: defaultTimeOut, this.onTimeOutFunction}) {
-    if (onTimeOutFunction == null) {
-      onTimeOutFunction = () {
+  HttpPostExecutor(this.tag, this.responseParser, {this.timeOutInMills = defaultTimeOut, this.onTimeOutFunction}) {
+    onTimeOutFunction ??= () {
         LogUtil.debug(tag, 'Timeout happened');
       };
-    }
   }
 
   Future<O> execute(final I request) async {

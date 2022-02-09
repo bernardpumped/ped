@@ -19,7 +19,7 @@
 import 'package:flutter/material.dart';
 
 class PromotionsTabWidget extends StatefulWidget {
-  PromotionsTabWidget ( {Key key} ) : super( key: key );
+  const PromotionsTabWidget ( {Key key} ) : super( key: key );
 
   @override
   _PromotionsTabWidgetState createState ( ) => _PromotionsTabWidgetState ( );
@@ -28,6 +28,6 @@ class PromotionsTabWidget extends StatefulWidget {
 class _PromotionsTabWidgetState extends State<PromotionsTabWidget> {
   @override
   Widget build ( BuildContext context ) {
-    return Container (child: Center(child: Text("Promotions"),), );
+    return const Center(child: Text("Promotions"),);
   }
 }

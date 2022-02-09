@@ -17,16 +17,16 @@
  */
 
 class FuelQuoteUpdateExceptionCodes {
-  static const UPDATE_FREQ_EXCEEDED = 'UPDATE_FREQ_EXCEEDED';
-  static const PRICE_NOT_IN_RANGE = 'PRICE_NOT_IN_RANGE';
-  static const VERSION_MIS_MATCH = 'VERSION_MIS_MATCH';
-  static const PRICE_NOT_CHANGED = 'PRICE_NOT_CHANGED';
-  static const FUEL_MEASURE_NOT_CONFIGURED_FOR_MARKET_REGION = 'FUEL_MEASURE_NOT_CONFIGURED_FOR_MARKET_REGION';
-  static const FUEL_PRICE_NOT_CONFIGURED_FOR_MARKET_REGION = 'FUEL_PRICE_NOT_CONFIGURED_FOR_MARKET_REGION';
-  static const FUEL_TYPE_NOT_CONFIGURED_FOR_MARKET_REGION = 'FUEL_TYPE_NOT_CONFIGURED_FOR_MARKET_REGION';
-  static const INVALID_PARAM_FOR_FUEL_QUOTE = 'INVALID_PARAM_FOR_FUEL_QUOTE';
-  static const UPDATING_FUEL_QUOTES_OF_MULTIPLE_STATIONS = 'UPDATING_FUEL_QUOTES_OF_MULTIPLE_STATIONS';
-  static const NO_FUEL_QUOTES_PROVIDED = 'NO_FUEL_QUOTES_PROVIDED';
-  static const FUEL_QUOTE_FUEL_AUTHORITY_SOURCE = 'FUEL_QUOTE_FUEL_AUTHORITY_SOURCE';
-  static const FUEL_QUOTE_MERCHANT_SOURCE = 'FUEL_QUOTE_MERCHANT_SOURCE';
+  static const updateFreqExceeded = 'UPDATE_FREQ_EXCEEDED';
+  static const priceNotInRange = 'PRICE_NOT_IN_RANGE';
+  static const versionMismatch = 'VERSION_MIS_MATCH';
+  static const priceNotChanged = 'PRICE_NOT_CHANGED';
+  static const fuelMeasureNotConfiguredForMarketRegion = 'FUEL_MEASURE_NOT_CONFIGURED_FOR_MARKET_REGION';
+  static const fuelPriceNotConfiguredForMarketRegion = 'FUEL_PRICE_NOT_CONFIGURED_FOR_MARKET_REGION';
+  static const fuelTypeNotConfiguredForMarketRegion = 'FUEL_TYPE_NOT_CONFIGURED_FOR_MARKET_REGION';
+  static const invalidParamForFuelQuote = 'INVALID_PARAM_FOR_FUEL_QUOTE';
+  static const updatingFuelQuoteOfMultipleStations = 'UPDATING_FUEL_QUOTES_OF_MULTIPLE_STATIONS';
+  static const noFuelQuotesProvided = 'NO_FUEL_QUOTES_PROVIDED';
+  static const fuelQuoteFuelAuthoritySource = 'FUEL_QUOTE_FUEL_AUTHORITY_SOURCE';
+  static const fuelQuoteMerchantSource = 'FUEL_QUOTE_MERCHANT_SOURCE';
 }

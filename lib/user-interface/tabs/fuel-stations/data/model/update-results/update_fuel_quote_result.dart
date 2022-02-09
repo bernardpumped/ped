@@ -28,7 +28,7 @@ class UpdateFuelQuoteResult extends UpdateFuelStationDetailsResult {
       @required this.updateValues,
       this.invalidArguments,
       @required this.recordLevelExceptionCodes})
-      : super(UpdateFuelStationDetailType.FUEL_PRICE, isUpdateSuccessful, updateEpoch);
+      : super(UpdateFuelStationDetailType.fuelPrice, isUpdateSuccessful, updateEpoch);
 
   final Map<String, dynamic> originalValues;
   final Map<String, dynamic> updateValues;

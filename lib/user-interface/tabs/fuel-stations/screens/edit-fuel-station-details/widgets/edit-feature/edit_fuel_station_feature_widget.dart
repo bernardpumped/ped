@@ -42,15 +42,15 @@ class EditFuelStationFeatureWidget extends StatefulWidget {
   final Function _setStateFunction;
   final Icon _leadingWidgetIcon;
 
-  EditFuelStationFeatureWidget(this._titleText, this._widgetKey, this._fuelStation,
-      this._fuelStationSource, this._widgetExpanded, this._setStateFunction, this._leadingWidgetIcon);
+  const EditFuelStationFeatureWidget(this._titleText, this._widgetKey, this._fuelStation,
+      this._fuelStationSource, this._widgetExpanded, this._setStateFunction, this._leadingWidgetIcon, {Key key}) : super(key: key);
 
   @override
   _EditFuelStationFeatureWidgetState createState() => _EditFuelStationFeatureWidgetState();
 }
 
 class _EditFuelStationFeatureWidgetState extends State<EditFuelStationFeatureWidget> {
-  static const _TAG = 'EditFuelStationFeatureWidget';
+  static const _tag = 'EditFuelStationFeatureWidget';
   final Map<String, bool> referenceFeatureSelectedMap = {};
   final Map<String, bool> featureSelectStatusMap = {};
   Map<String, bool> updatedFeatureSelectStatusMap = {};
@@ -66,17 +66,17 @@ class _EditFuelStationFeatureWidgetState extends State<EditFuelStationFeatureWid
   void _copySelectionStatus() {
     featureSelectStatusMap.clear();
     final List<FuelStationFeature> fuelStationFeatures = DataFuelStationFeatures.fuelStationFeatures;
-    fuelStationFeatures.forEach((fsf) {
+    for (var fsf in fuelStationFeatures) {
       referenceFeatureSelectedMap.putIfAbsent(fsf.featureType, () => fsf.selected);
       featureSelectStatusMap.putIfAbsent(fsf.featureType, () => fsf.selected);
-    });
+    }
   }
 
   @override
   Widget build(final BuildContext context) {
     final theme = Theme.of(context).copyWith(backgroundColor: Colors.white);
     var title =
-        Text(widget._titleText, style: TextStyle(fontSize: 16, color: Colors.black87, fontWeight: FontWeight.w500));
+        Text(widget._titleText, style: const TextStyle(fontSize: 16, color: Colors.black87, fontWeight: FontWeight.w500));
     return Theme(
         data: theme,
         child: ExpansionTile(
@@ -87,7 +87,7 @@ class _EditFuelStationFeatureWidgetState extends State<EditFuelStationFeatureWid
             children: [
               _getFuelStationFeatures(),
               Padding(
-                  padding: EdgeInsets.only(bottom: 15),
+                  padding: const EdgeInsets.only(bottom: 15),
                   child: SaveUndoButtonWidget(
                       onCancel: onUndoOperation, onSave: onSaveOperation, onValueChange: _onValueChanged))
             ],
@@ -101,11 +101,11 @@ class _EditFuelStationFeatureWidgetState extends State<EditFuelStationFeatureWid
   _getFuelStationFeatures() {
     final List<FuelStationFeature> fuelStationFeatures = DataFuelStationFeatures.fuelStationFeatures;
     return Container(
-      decoration: BoxDecoration(color: Color(0x33eeeeee)),
+      decoration: const BoxDecoration(color: Color(0x33eeeeee)),
       height: 190,
-      padding: EdgeInsets.only(left: 15, right: 15, top: 5, bottom: 20),
+      padding: const EdgeInsets.only(left: 15, right: 15, top: 5, bottom: 20),
       child: GridView.count(
-          key: PageStorageKey<String>('fuel-station-features'),
+          key: const PageStorageKey<String>('fuel-station-features'),
           crossAxisCount: 3,
           scrollDirection: Axis.horizontal,
           childAspectRatio: .4,
@@ -153,7 +153,7 @@ class _EditFuelStationFeatureWidgetState extends State<EditFuelStationFeatureWid
         activeColor: Colors.white);
     return Card(
         child: Container(
-            padding: EdgeInsets.all(7),
+            padding: const EdgeInsets.all(7),
             child: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
               Expanded(
                   flex: 3,
@@ -162,18 +162,18 @@ class _EditFuelStationFeatureWidgetState extends State<EditFuelStationFeatureWid
               Expanded(
                   flex: 5,
                   child: Text(fuelStationFeature.featureName,
-                      overflow: TextOverflow.ellipsis, style: TextStyle(color: Colors.black87))),
+                      overflow: TextOverflow.ellipsis, style: const TextStyle(color: Colors.black87))),
               Expanded(flex: 2, child: featureCheckBox)
             ])));
   }
 
   void onSaveOperation() async {
-    if (updatedFeatureSelectStatusMap.length > 0) {
+    if (updatedFeatureSelectStatusMap.isNotEmpty) {
       final List<String> enabledFeatures =
           updatedFeatureSelectStatusMap.entries.where((element) => element.value).map((e) => e.key).toList();
       final List<String> disabledFeatures =
           updatedFeatureSelectStatusMap.entries.where((element) => !element.value).map((e) => e.key).toList();
-      final Uuid uuid = Uuid();
+      const Uuid uuid = Uuid();
       final EndDeviceUpdateFuelStationFeatureRequest request = EndDeviceUpdateFuelStationFeatureRequest(
           uuid: uuid.v1(),
           fuelStationId: widget._fuelStation.stationId,
@@ -188,7 +188,7 @@ class _EditFuelStationFeatureWidgetState extends State<EditFuelStationFeatureWid
         response = await PostEndDeviceFuelStationFeatureUpdate(EndDeviceUpdateFuelStationFeatureResponseParser())
             .execute(request);
       } on Exception catch (e, s) {
-        LogUtil.debug(_TAG, 'Exception occurred while calling PostEndDeviceFuelStationFeatureUpdate.execute $s');
+        LogUtil.debug(_tag, 'Exception occurred while calling PostEndDeviceFuelStationFeatureUpdate.execute $s');
         response = EndDeviceUpdateFuelStationFeatureResponse(
             responseCode: 'CALL-EXCEPTION',
             responseDetails: s.toString(),
@@ -203,7 +203,7 @@ class _EditFuelStationFeatureWidgetState extends State<EditFuelStationFeatureWid
             successfulUpdate: false);
       }
       final int persistUpdateHistoryResult = await _persistUpdateHistory(request, response);
-      LogUtil.debug(_TAG,
+      LogUtil.debug(_tag,
           'endDeviceUpdateFuelStation::updateFuelStationFeature::persistenceResult : $persistUpdateHistoryResult');
       if (response.responseCode == 'SUCCESS') {
         WidgetUtils.showToastMessage(
@@ -226,14 +226,14 @@ class _EditFuelStationFeatureWidgetState extends State<EditFuelStationFeatureWid
       final EndDeviceUpdateFuelStationFeatureResponse response) {
     final Map<String, bool> originalValues = {};
     final Map<String, bool> updatedValues = {};
-    request.disabledFeatures.forEach((featureType) {
+    for (var featureType in request.disabledFeatures) {
       originalValues.putIfAbsent(featureType, () => true);
       updatedValues.putIfAbsent(featureType, () => false);
-    });
-    request.enabledFeatures.forEach((featureType) {
+    }
+    for (var featureType in request.enabledFeatures) {
       originalValues.putIfAbsent(featureType, () => false);
       updatedValues.putIfAbsent(featureType, () => true);
-    });
+    }
 
     final UpdateHistory updateHistory = UpdateHistory(
         updateHistoryId: request.uuid,
@@ -241,7 +241,7 @@ class _EditFuelStationFeatureWidgetState extends State<EditFuelStationFeatureWid
         fuelStation: widget._fuelStation.fuelStationName,
         fuelStationSource: request.fuelStationSource,
         updateEpoch: response.updateEpoch,
-        updateType: UpdateType.FUEL_STATION_FEATURES.updateTypeName,
+        updateType: UpdateType.fuelStationFeatures.updateTypeName,
         responseCode: response.responseCode,
         originalValues: originalValues,
         updateValues: updatedValues,

@@ -21,39 +21,39 @@ import 'package:pumped_end_device/models/update_history.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
 class UpdateHistoryDao {
-  static const _TAG = 'UpdateHistoryDao';
-  static const _COLLECTION_UPDATE_HISTORY = 'pumped_update_history';
+  static const _tag = 'UpdateHistoryDao';
+  static const _collectionUpdateHistory = 'pumped_update_history';
 
   static final UpdateHistoryDao instance = UpdateHistoryDao._();
   UpdateHistoryDao._();
 
   Future<dynamic> deleteUpdateHistory() async {
     final db = Localstore.instance;
-    final Map<String, dynamic> records = await db.collection(_COLLECTION_UPDATE_HISTORY).get();
-    if (records != null && records.length > 0) {
-      LogUtil.debug(_TAG, 'Number of UpdateHistory records found : ${records.length}');
+    final Map<String, dynamic> records = await db.collection(_collectionUpdateHistory).get();
+    if (records != null && records.isNotEmpty) {
+      LogUtil.debug(_tag, 'Number of UpdateHistory records found : ${records.length}');
       for (var record in records.entries) {
         var updateHistoryRecordId = record.value['update_history_id'];
-        LogUtil.debug(_TAG, 'Deleting UpdateHistory record with id $updateHistoryRecordId');
-        db.collection(_COLLECTION_UPDATE_HISTORY).doc(updateHistoryRecordId).delete();
+        LogUtil.debug(_tag, 'Deleting UpdateHistory record with id $updateHistoryRecordId');
+        db.collection(_collectionUpdateHistory).doc(updateHistoryRecordId).delete();
       }
     }
   }
 
   Future<dynamic> insertUpdateHistory(final UpdateHistory updateHistory) async {
     final db = Localstore.instance;
-    LogUtil.debug(_TAG, 'Inserting update-history with id ${updateHistory.updateHistoryId}');
-    db.collection(_COLLECTION_UPDATE_HISTORY).doc(updateHistory.updateHistoryId).set(updateHistory.toMap());
+    LogUtil.debug(_tag, 'Inserting update-history with id ${updateHistory.updateHistoryId}');
+    db.collection(_collectionUpdateHistory).doc(updateHistory.updateHistoryId).set(updateHistory.toMap());
   }
 
   Future<List<UpdateHistory>> getAllUpdateHistory() async {
     final db = Localstore.instance;
     List<UpdateHistory> allUpdateHistory = [];
-    final Map<String, dynamic> records = await db.collection(_COLLECTION_UPDATE_HISTORY).get();
-    if (records != null && records.length > 0) {
-      LogUtil.debug(_TAG, 'Number of UpdateHistory records found : ${records.length}');
+    final Map<String, dynamic> records = await db.collection(_collectionUpdateHistory).get();
+    if (records != null && records.isNotEmpty) {
+      LogUtil.debug(_tag, 'Number of UpdateHistory records found : ${records.length}');
       for (var record in records.entries) {
-        final Map<String, dynamic> data = await db.collection(_COLLECTION_UPDATE_HISTORY).doc(record.value['update_history_id']).get();
+        final Map<String, dynamic> data = await db.collection(_collectionUpdateHistory).doc(record.value['update_history_id']).get();
         allUpdateHistory.add(UpdateHistory.fromMap(data));
       }
     }

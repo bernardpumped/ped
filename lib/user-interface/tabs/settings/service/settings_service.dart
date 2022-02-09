@@ -27,12 +27,12 @@ import 'package:pumped_end_device/models/quote_sort_order.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
 class SettingsService {
-  static const _TAG = 'SettingsService';
+  static const _tag = 'SettingsService';
 
   Future<int> insertSettings(final num searchRadius, final num numSearchResults, final FuelCategory defaultFuelCategory,
       final FuelType defaultFuelType, final String defaultSearchCriteria, int version) {
-    final UserConfiguration userConfiguration = new UserConfiguration(
-        id: UserConfiguration.DEFAULT_USER_CONFIG_ID,
+    final UserConfiguration userConfiguration = UserConfiguration(
+        id: UserConfiguration.defaultUserConfigId,
         version: version,
         searchRadius: searchRadius,
         numSearchResults: numSearchResults,
@@ -45,7 +45,7 @@ class SettingsService {
   }
 
   Future<DropDownValues<FuelCategory>> fuelCategoryDropdownValues() async {
-    final DropDownValues<FuelCategory> dropDownValues = new DropDownValues();
+    final DropDownValues<FuelCategory> dropDownValues = DropDownValues();
     final MarketRegionZoneConfigDao marketRegionZoneConfigDao = MarketRegionZoneConfigDao.instance;
     final MarketRegionZoneConfiguration marketRegionZoneConfig =
         await marketRegionZoneConfigDao.getMarketRegionZoneConfiguration();
@@ -56,7 +56,7 @@ class SettingsService {
       FuelCategory userDefaultFuelCategory;
       final UserConfigurationDao userConfigurationDao = UserConfigurationDao.instance;
       final UserConfiguration userConfiguration = await userConfigurationDao
-          .getUserConfiguration(UserConfiguration.DEFAULT_USER_CONFIG_ID);
+          .getUserConfiguration(UserConfiguration.defaultUserConfigId);
       if (userConfiguration != null) {
         userDefaultFuelCategory = userConfiguration.defaultFuelCategory;
       }
@@ -71,13 +71,13 @@ class SettingsService {
   }
 
   Future<DropDownValues<FuelType>> fuelTypeDropdownValues(final FuelCategory selectedFuelCat) async {
-    final DropDownValues<FuelType> dropDownValues = new DropDownValues();
+    final DropDownValues<FuelType> dropDownValues = DropDownValues();
     FuelCategory fuelCategory;
     FuelCategory userDefaultFuelCategory;
     FuelType userDefaultFuelType;
     final UserConfigurationDao userConfigurationDao = UserConfigurationDao.instance;
     final UserConfiguration userConfiguration = await userConfigurationDao
-        .getUserConfiguration(UserConfiguration.DEFAULT_USER_CONFIG_ID);
+        .getUserConfiguration(UserConfiguration.defaultUserConfigId);
     if (userConfiguration != null) {
       userDefaultFuelCategory = userConfiguration.defaultFuelCategory;
       userDefaultFuelType = userConfiguration.defaultFuelType;
@@ -94,7 +94,7 @@ class SettingsService {
         fuelCategories = marketRegionZoneConfig.marketRegionConfig.allowedFuelCategories.toList();
         marketRegionFuelCategory = marketRegionZoneConfig.marketRegionConfig.defaultFuelCategory;
       } else {
-        LogUtil.debug(_TAG, 'fuelTypeDropdownValues::MarketRegionZoneConfig is null');
+        LogUtil.debug(_tag, 'fuelTypeDropdownValues::MarketRegionZoneConfig is null');
       }
       if (marketRegionFuelCategory != null && userDefaultFuelCategory != null) {
         final int selectedCategoryIndex =
@@ -115,11 +115,11 @@ class SettingsService {
   }
 
   Future<DropDownValues<SortOrder>> sortOrderDropdownValues() async {
-    final DropDownValues<SortOrder> dropDownValues = new DropDownValues();
+    final DropDownValues<SortOrder> dropDownValues = DropDownValues();
     dropDownValues.values = SortOrder.values.toList();
     final UserConfigurationDao userConfigurationDao = UserConfigurationDao.instance;
     final UserConfiguration userConfiguration = await userConfigurationDao
-        .getUserConfiguration(UserConfiguration.DEFAULT_USER_CONFIG_ID);
+        .getUserConfiguration(UserConfiguration.defaultUserConfigId);
     if (userConfiguration != null) {
       dropDownValues.selectedIndex =
           _getSortOrderSelectedIndex(dropDownValues.values, userConfiguration.searchCriteria);
@@ -144,13 +144,13 @@ class SettingsService {
     final MarketRegionZoneConfiguration marketRegionZoneConfig =
         await marketRegionZoneConfigDao.getMarketRegionZoneConfiguration();
 
-    final DropDownValues<num> dropDownValues = new DropDownValues();
+    final DropDownValues<num> dropDownValues = DropDownValues();
 
     if (marketRegionZoneConfig != null) {
       dropDownValues.values = _getEntries(maxEntries, marketRegionZoneConfig.marketRegionConfig.searchRange);
       final UserConfiguration userConfiguration = await userConfigurationDao
-          .getUserConfiguration(UserConfiguration.DEFAULT_USER_CONFIG_ID);
-      final userVal = userConfiguration == null ? null : userConfiguration.searchRadius;
+          .getUserConfiguration(UserConfiguration.defaultUserConfigId);
+      final userVal = userConfiguration?.searchRadius;
       dropDownValues.selectedIndex = _getSelectedIndex(userVal, dropDownValues.values);
     } else {
       // This condition should never happen.
@@ -166,13 +166,13 @@ class SettingsService {
     final MarketRegionZoneConfiguration marketRegionZoneConfig =
         await marketRegionZoneConfigDao.getMarketRegionZoneConfiguration();
 
-    final DropDownValues<num> dropDownValues = new DropDownValues();
+    final DropDownValues<num> dropDownValues = DropDownValues();
 
     if (marketRegionZoneConfig != null) {
       dropDownValues.values = _getEntries(maxEntries, marketRegionZoneConfig.marketRegionConfig.maxNumberOfResults);
       final UserConfiguration userConfiguration = await userConfigurationDao
-          .getUserConfiguration(UserConfiguration.DEFAULT_USER_CONFIG_ID);
-      final userVal = userConfiguration == null ? null : userConfiguration.numSearchResults;
+          .getUserConfiguration(UserConfiguration.defaultUserConfigId);
+      final userVal = userConfiguration?.numSearchResults;
       dropDownValues.selectedIndex = _getSelectedIndex(userVal, dropDownValues.values);
     } else {
       // This else part should never happen
@@ -184,7 +184,7 @@ class SettingsService {
   int _getSelectedFuelCategoryIndex(final List<FuelCategory> allowedFuelCategories,
       final FuelCategory marketRegionDefaultFuelCategory, final FuelCategory userDefaultFuelCategory, int count) {
     final FuelCategory selectedFuelCategory =
-        userDefaultFuelCategory != null ? userDefaultFuelCategory : marketRegionDefaultFuelCategory;
+        userDefaultFuelCategory ?? marketRegionDefaultFuelCategory;
     for (int i = 0; i < allowedFuelCategories.length; i++) {
       if (allowedFuelCategories[i] == selectedFuelCategory) {
         return i;
@@ -240,7 +240,7 @@ class SettingsService {
 
   static int _getSelectedIndex(num userVal, List<num> entries) {
     int selectedIndex = 0;
-    if (userVal == null || entries.length == 0) {
+    if (userVal == null || entries.isEmpty) {
       selectedIndex = 0;
     } else {
       for (int i = 0; i < entries.length; i++) {

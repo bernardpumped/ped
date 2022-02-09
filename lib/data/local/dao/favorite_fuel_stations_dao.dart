@@ -21,10 +21,10 @@ import 'package:pumped_end_device/data/local/model/favorite_fuel_station.dart';
 
 class FavoriteFuelStationsDao {
 
-  static const _COLLECTION_FAVORITE_FUEL_STATIONS_G = 'pumped_favorite_stations-G';
-  static const _COLLECTION_FAVORITE_FUEL_STATIONS_F = 'pumped_favorite_stations-F';
-  static const _FFS_ATTRIB_FUEL_STATION_ID = 'fuel_station_id';
-  static const _FFS_ATTRIB_FUEL_STATION_SOURCE = 'fuel_station_source';
+  static const _collectionFavoriteFuelStationsG = 'pumped_favorite_stations-G';
+  static const _collectionFavoriteFuelStationsF = 'pumped_favorite_stations-F';
+  static const _ffsAttribFuelStationId = 'fuel_station_id';
+  static const _ffsAttribFuelStationSource = 'fuel_station_source';
 
   static final FavoriteFuelStationsDao instance = FavoriteFuelStationsDao._();
 
@@ -35,8 +35,8 @@ class FavoriteFuelStationsDao {
     db.collection(_getCollectionName(favoriteFuelStation.fuelStationSource))
       .doc(favoriteFuelStation.favoriteFuelStationId.toString())
       .set({
-        _FFS_ATTRIB_FUEL_STATION_ID : favoriteFuelStation.favoriteFuelStationId,
-        _FFS_ATTRIB_FUEL_STATION_SOURCE : favoriteFuelStation.fuelStationSource
+        _ffsAttribFuelStationId : favoriteFuelStation.favoriteFuelStationId,
+        _ffsAttribFuelStationSource : favoriteFuelStation.fuelStationSource
       });
   }
 
@@ -58,20 +58,20 @@ class FavoriteFuelStationsDao {
   Future<List<FavoriteFuelStation>> getAllFavoriteFuelStations() async {
     final db = Localstore.instance;
     final List<FavoriteFuelStation> favoriteFuelStations = [];
-    var gItems = await db.collection(_COLLECTION_FAVORITE_FUEL_STATIONS_G).get();
+    var gItems = await db.collection(_collectionFavoriteFuelStationsG).get();
     if (gItems != null) {
       for (var gItem in gItems.entries) {
-        favoriteFuelStations.add(new FavoriteFuelStation(
-            favoriteFuelStationId: gItem.value[_FFS_ATTRIB_FUEL_STATION_ID],
-            fuelStationSource: gItem.value[_FFS_ATTRIB_FUEL_STATION_SOURCE]));
+        favoriteFuelStations.add(FavoriteFuelStation(
+            favoriteFuelStationId: gItem.value[_ffsAttribFuelStationId],
+            fuelStationSource: gItem.value[_ffsAttribFuelStationSource]));
       }
     }
-    var fItems = await db.collection(_COLLECTION_FAVORITE_FUEL_STATIONS_F).get();
+    var fItems = await db.collection(_collectionFavoriteFuelStationsF).get();
     if (fItems != null) {
       for (var fItem in fItems.entries) {
-        favoriteFuelStations.add(new FavoriteFuelStation(
-            favoriteFuelStationId: fItem.value[_FFS_ATTRIB_FUEL_STATION_ID],
-            fuelStationSource: fItem.value[_FFS_ATTRIB_FUEL_STATION_SOURCE]));
+        favoriteFuelStations.add(FavoriteFuelStation(
+            favoriteFuelStationId: fItem.value[_ffsAttribFuelStationId],
+            fuelStationSource: fItem.value[_ffsAttribFuelStationSource]));
       }
     }
     return favoriteFuelStations;
@@ -80,18 +80,18 @@ class FavoriteFuelStationsDao {
   Future<int> dropFavoriteFuelStations() async {
     final db = Localstore.instance;
     int deletedItems = 0;
-    var gItems = await db.collection(_COLLECTION_FAVORITE_FUEL_STATIONS_G).get();
+    var gItems = await db.collection(_collectionFavoriteFuelStationsG).get();
     if (gItems != null) {
       for (var gItem in gItems.entries) {
-        var deleteResult = await _deleteFavoriteFuelStation(gItem.value[_FFS_ATTRIB_FUEL_STATION_ID], gItem.value[_FFS_ATTRIB_FUEL_STATION_SOURCE]);
+        var deleteResult = await _deleteFavoriteFuelStation(gItem.value[_ffsAttribFuelStationId], gItem.value[_ffsAttribFuelStationSource]);
         deletedItems += (deleteResult != null ? 1 : 0);
       }
     }
 
-    var fItems = await db.collection(_COLLECTION_FAVORITE_FUEL_STATIONS_F).get();
+    var fItems = await db.collection(_collectionFavoriteFuelStationsF).get();
     if (fItems != null) {
       for (var fItem in fItems.entries) {
-        var deleteResult = await _deleteFavoriteFuelStation(fItem.value[_FFS_ATTRIB_FUEL_STATION_ID], fItem.value[_FFS_ATTRIB_FUEL_STATION_SOURCE]);
+        var deleteResult = await _deleteFavoriteFuelStation(fItem.value[_ffsAttribFuelStationId], fItem.value[_ffsAttribFuelStationSource]);
         deletedItems += (deleteResult != null ? 1 : 0);
       }
     }
@@ -100,9 +100,9 @@ class FavoriteFuelStationsDao {
 
   String _getCollectionName(final String fuelStationSource) {
     if (fuelStationSource == 'G') {
-      return _COLLECTION_FAVORITE_FUEL_STATIONS_G;
+      return _collectionFavoriteFuelStationsG;
     } else if (fuelStationSource == 'F') {
-      return _COLLECTION_FAVORITE_FUEL_STATIONS_F;
+      return _collectionFavoriteFuelStationsF;
     } else {
       throw Exception('Invalid fuelStationSource $fuelStationSource');
     }

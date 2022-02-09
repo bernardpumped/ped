@@ -41,6 +41,7 @@ class AlterOperatingTimeRequest extends Request {
       this.identityProvider})
       : super(uuid);
 
+  @override
   Map<String, dynamic> toJson() => {
         'uuid': uuid,
         'fuelStationId': fuelStationId,

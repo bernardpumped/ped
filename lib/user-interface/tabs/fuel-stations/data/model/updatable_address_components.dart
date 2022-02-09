@@ -17,12 +17,12 @@
  */
 
 class UpdatableAddressComponents {
-  static const STATION_NAME = 'stationName';
-  static const ADDRESS_LINE = 'addressLine';
-  static const LOCALITY = 'locality';
-  static const REGION = 'region';
-  static const STATE = 'state';
-  static const ZIP = 'zip';
-  static const PHONE1 = 'phone1';
-  static const PHONE2 = 'phone2';
+  static const stationName = 'stationName';
+  static const addressLine = 'addressLine';
+  static const locality = 'locality';
+  static const region = 'region';
+  static const state = 'state';
+  static const zip = 'zip';
+  static const phone1 = 'phone1';
+  static const phone2 = 'phone2';
 }

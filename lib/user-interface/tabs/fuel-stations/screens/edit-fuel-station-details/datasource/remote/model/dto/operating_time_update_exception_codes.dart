@@ -17,15 +17,15 @@
  */
 
 class OperatingTimeUpdateExceptionCodes {
-  static const TIME_NOT_IN_RANGE = 'TIME_NOT_IN_RANGE';
-  static const VERSION_MIS_MATCH = 'VERSION_MIS_MATCH';
-  static const TIME_NOT_CHANGED = 'TIME_NOT_CHANGED';
-  static const INVALID_PARAM_FOR_OPERATING_TIME = 'INVALID_PARAM_FOR_OPERATING_TIME';
-  static const UPDATING_OPERATING_TIME_FOR_MULTIPLE_FUEL_STATIONS =
+  static const timeNotInRange = 'TIME_NOT_IN_RANGE';
+  static const versionMismatch = 'VERSION_MIS_MATCH';
+  static const timeNotChanged = 'TIME_NOT_CHANGED';
+  static const invalidParamForOperatingTime = 'INVALID_PARAM_FOR_OPERATING_TIME';
+  static const updatingOperatingTimeForMultipleFuelStations =
       'UPDATING_OPERATING_TIME_FOR_MULTIPLE_FUEL_STATIONS';
-  static const NO_OPERATING_TIMES_PROVIDED = 'NO_OPERATING_TIMES_PROVIDED';
-  static const OPERATING_TIME_NOT_CROWD_SOURCED = 'OPERATING_TIME_NOT_CROWD_SOURCED';
-  static const OPERATING_TIME_FUEL_AUTHORITY_SOURCE = 'OPERATING_TIME_FUEL_AUTHORITY_SOURCE';
-  static const OPERATING_TIME_GOOGLE_SOURCE = 'OPERATING_TIME_GOOGLE_SOURCE';
-  static const OPERATING_TIME_MERCHANT_SOURCE = 'OPERATING_TIME_MERCHANT_SOURCE';
+  static const noOperatingTimesProvided = 'NO_OPERATING_TIMES_PROVIDED';
+  static const operatingTimeNotCrowdSourced = 'OPERATING_TIME_NOT_CROWD_SOURCED';
+  static const operatingTimeFuelAuthoritySource = 'OPERATING_TIME_FUEL_AUTHORITY_SOURCE';
+  static const operatingTimeGoogleSource = 'OPERATING_TIME_GOOGLE_SOURCE';
+  static const operatingTimeMerchantSource = 'OPERATING_TIME_MERCHANT_SOURCE';
 }

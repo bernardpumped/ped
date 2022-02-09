@@ -36,6 +36,8 @@ import 'package:pumped_end_device/util/log_util.dart';
 class CustomizeSearchSettingsScreen extends StatefulWidget {
   static const routeName = '/customizeSearchSettings';
 
+  const CustomizeSearchSettingsScreen({Key key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
     return _CustomizeSearchSettingsScreenState();
@@ -44,12 +46,12 @@ class CustomizeSearchSettingsScreen extends StatefulWidget {
 
 class _CustomizeSearchSettingsScreenState
     extends State<CustomizeSearchSettingsScreen> {
-  static const _TAG = '_CustomizeSearchSettingsScreenIosState';
+  static const _tag = '_CustomizeSearchSettingsScreenIosState';
   static const _unselectedValInt = -1;
   static const _unselectedValDouble = -1.0;
 
   final List<String> searchCriteria = ["Cheapest Closest", "Closest Cheapest"];
-  final SettingsService _settingsDataSource = new SettingsService();
+  final SettingsService _settingsDataSource = SettingsService();
 
   num _searchRadiusSelectedValue = _unselectedValDouble;
   num _searchResultsCountSelectedValue = _unselectedValInt;
@@ -72,7 +74,7 @@ class _CustomizeSearchSettingsScreenState
         _settingsDataSource.fuelTypeDropdownValues(_fuelCategorySelectedValue);
     _sortOrderDropdownValues = _settingsDataSource.sortOrderDropdownValues();
     _userSettingsVersionFuture = UserConfigurationDao.instance
-        .getUserConfigurationVersion(UserConfiguration.DEFAULT_USER_CONFIG_ID);
+        .getUserConfigurationVersion(UserConfiguration.defaultUserConfigId);
   }
 
   @override
@@ -83,31 +85,31 @@ class _CustomizeSearchSettingsScreenState
   @override
   Widget build(final BuildContext context) {
     return Scaffold(
-        appBar: CupertinoNavigationBar(
+        appBar: const CupertinoNavigationBar(
             middle: ApplicationTitleTextWidget(),
             automaticallyImplyLeading: true),
         body: Container(
             width: double.infinity,
-            padding: EdgeInsets.only(right: 15, bottom: 15, left: 10),
+            padding: const EdgeInsets.only(right: 15, bottom: 15, left: 10),
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Padding(
-                      padding: EdgeInsets.only(top: 5),
+                      padding: const EdgeInsets.only(top: 5),
                       child: WidgetUtils.getTabHeaderWidget(
                           context, 'Customize search')),
                   Expanded(
                       child: ListView(children: <Widget>[
                     _numberOfSearchResultsListTile(),
-                    Divider(color: Colors.black87, height: 1),
+                    const Divider(color: Colors.black87, height: 1),
                     _fuelCategoriesListTile(),
-                    Divider(color: Colors.black87, height: 1),
+                    const Divider(color: Colors.black87, height: 1),
                     _fuelTypeListTile(),
-                    Divider(color: Colors.black87, height: 1),
+                    const Divider(color: Colors.black87, height: 1),
                     _searchRadiusListTile(),
-                    Divider(color: Colors.black87, height: 1),
+                    const Divider(color: Colors.black87, height: 1),
                     _searchCriteriaListTile(),
-                    Divider(color: Colors.black87, height: 1),
+                    const Divider(color: Colors.black87, height: 1),
                     _getButtonRow(context),
                     _getVersionNumberRow()
                   ]))
@@ -116,13 +118,13 @@ class _CustomizeSearchSettingsScreenState
 
   Widget _getButtonRow(final BuildContext context) {
     return Padding(
-        padding: EdgeInsets.only(top: 20),
+        padding: const EdgeInsets.only(top: 20),
         child: Row(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
           WidgetUtils.getRoundedElevatedButton(
               backgroundColor: Theme.of(context).primaryColor,
               foreGroundColor: Colors.white,
               borderRadius: 18.0,
-              child: Text("Save"),
+              child: const Text("Save"),
               onPressed: () {
                 if (_userSettingsVersion >= 1) {
                   _userSettingsVersion = _userSettingsVersion + 1;
@@ -141,7 +143,7 @@ class _CustomizeSearchSettingsScreenState
                         Theme.of(context).primaryColor);
                     Navigator.of(context).pop();
                   }, onError: (error, s) {
-                    LogUtil.debug(_TAG, 'Failed Persistence Result $s');
+                    LogUtil.debug(_tag, 'Failed Persistence Result $s');
                     WidgetUtils.showToastMessage(
                         context,
                         'Error updating search settings',
@@ -159,29 +161,28 @@ class _CustomizeSearchSettingsScreenState
 
   Widget _getVersionNumberRow() {
     return Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-      Container(
-          child: FutureBuilder<int>(
-              future: _userSettingsVersionFuture,
-              builder: (context, snapshot) {
-                if (snapshot.hasError) {
-                  _userSettingsVersion = -1;
-                  LogUtil.debug(
-                      _TAG, '_getVersionNumberRow::${snapshot.error}');
-                  return Text('Error loading the settings',
-                      style: TextStyle(color: Colors.red, fontSize: 13));
-                } else if (snapshot.hasData) {
-                  _userSettingsVersion = snapshot.data;
-                  return Text('Version : $_userSettingsVersion',
-                      style: TextStyle(color: Colors.black87, fontSize: 13));
-                } else {
-                  return Text('Loading');
-                }
-              }))
+      FutureBuilder<int>(
+          future: _userSettingsVersionFuture,
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              _userSettingsVersion = -1;
+              LogUtil.debug(
+                  _tag, '_getVersionNumberRow::${snapshot.error}');
+              return const Text('Error loading the settings',
+                  style: TextStyle(color: Colors.red, fontSize: 13));
+            } else if (snapshot.hasData) {
+              _userSettingsVersion = snapshot.data;
+              return Text('Version : $_userSettingsVersion',
+                  style: const TextStyle(color: Colors.black87, fontSize: 13));
+            } else {
+              return const Text('Loading');
+            }
+          })
     ]);
   }
 
-  static const _searchCriteriaIcon = const Icon(
-      IconData(IconCodes.search_criteria_icon_code,
+  static const _searchCriteriaIcon = Icon(
+      IconData(IconCodes.searchCriteriaIconCode,
           fontFamily: 'MaterialIcons', matchTextDirection: true),
       color: Colors.black54,
       size: 30);
@@ -189,14 +190,12 @@ class _CustomizeSearchSettingsScreenState
   ListTile _searchCriteriaListTile() {
     return ListTile(
         leading: _searchCriteriaIcon, // compare icon
-        contentPadding: EdgeInsets.only(left: 5),
+        contentPadding: const EdgeInsets.only(left: 5),
         dense: false,
         isThreeLine: true,
-        title: Container(
-            child: Text("Search Criteria", style: TextStyle(fontSize: 14))),
-        subtitle: Container(
-            child: Text("Prefer Price or distance",
-                style: TextStyle(fontSize: 13))),
+        title: const Text("Search Criteria", style: TextStyle(fontSize: 14)),
+        subtitle: const Text("Prefer Price or distance",
+            style: TextStyle(fontSize: 13)),
         trailing: DropdownButtonHideUnderline(child: _sortOrderDropdown()));
   }
 
@@ -205,19 +204,17 @@ class _CustomizeSearchSettingsScreenState
       future: _sortOrderDropdownValues,
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          LogUtil.debug(_TAG,
+          LogUtil.debug(_tag,
               '_sortOrderDropdown::_sortOrderDropdownValues error ${snapshot.error}');
-          return Container(child: Text('Error loading'));
+          return const Text('Error loading');
         } else if (snapshot.hasData) {
           final DropDownValues<SortOrder> dropDownValues = snapshot.data;
-          _sortOrderSelectedVal = _sortOrderSelectedVal == null
-              ? dropDownValues.values[dropDownValues.selectedIndex]
-              : _sortOrderSelectedVal;
+          _sortOrderSelectedVal = _sortOrderSelectedVal ?? dropDownValues.values[dropDownValues.selectedIndex];
           return DropdownButton<SortOrder>(
             value: _sortOrderSelectedVal,
-            icon: Icon(Icons.keyboard_arrow_down),
+            icon: const Icon(Icons.keyboard_arrow_down),
             iconSize: 20,
-            style: TextStyle(color: Colors.black),
+            style: const TextStyle(color: Colors.black),
             onChanged: (SortOrder newValue) {
               setState(() {
                 _sortOrderSelectedVal = newValue;
@@ -228,18 +225,18 @@ class _CustomizeSearchSettingsScreenState
               return DropdownMenuItem<SortOrder>(
                   value: sortOrder,
                   child: Text(sortOrder.sortOrderName,
-                      style: TextStyle(fontSize: 14)));
+                      style: const TextStyle(fontSize: 14)));
             }).toList(),
           );
         } else {
-          return Container(child: Text('No Values'));
+          return const Text('No Values');
         }
       },
     );
   }
 
   static const _searchRadiusIcon = Icon(
-      IconData(IconCodes.search_radius_icon_code,
+      IconData(IconCodes.searchRadiusIconCode,
           fontFamily: 'MaterialIcons', matchTextDirection: true),
       color: Colors.black54,
       size: 30);
@@ -247,14 +244,12 @@ class _CustomizeSearchSettingsScreenState
   ListTile _searchRadiusListTile() {
     return ListTile(
         leading: _searchRadiusIcon, // explore icon
-        contentPadding: EdgeInsets.only(left: 5),
+        contentPadding: const EdgeInsets.only(left: 5),
         dense: false,
         isThreeLine: true,
-        title: Container(
-            child: Text("Search Radius", style: TextStyle(fontSize: 14))),
-        subtitle: Container(
-            child: Text("Maximum distance around your location to search",
-                style: TextStyle(fontSize: 13))),
+        title: const Text("Search Radius", style: TextStyle(fontSize: 14)),
+        subtitle: const Text("Maximum distance around your location to search",
+            style: TextStyle(fontSize: 13)),
         trailing: DropdownButtonHideUnderline(
             child: _getSearchRadiusDropDown(
                 _settingsDataSource.searchRadiusDropDownValues(5))));
@@ -262,15 +257,14 @@ class _CustomizeSearchSettingsScreenState
 
   ListTile _fuelTypeListTile() {
     return ListTile(
-        leading: PumpedIcons.fuelTypesIcon_black54Size30,
-        contentPadding: EdgeInsets.only(left: 5),
+        leading: PumpedIcons.fuelTypesIconBlack54Size30,
+        contentPadding: const EdgeInsets.only(left: 5),
         dense: false,
         isThreeLine: true,
         title:
-            Container(child: Text("Fuel Type", style: TextStyle(fontSize: 14))),
-        subtitle: Container(
-            child: Text("Search Result are filtered by fuel type",
-                style: TextStyle(fontSize: 13))),
+            const Text("Fuel Type", style: TextStyle(fontSize: 14)),
+        subtitle: const Text("Search Result are filtered by fuel type",
+            style: TextStyle(fontSize: 13)),
         trailing: DropdownButtonHideUnderline(child: _getFuelTypeDropdown()));
   }
 
@@ -279,20 +273,20 @@ class _CustomizeSearchSettingsScreenState
         future: _fuelTypeDropdownValues,
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            LogUtil.debug(_TAG,
+            LogUtil.debug(_tag,
                 '_getFuelTypeDropdown::_fuelTypeDropdownValues error ${snapshot.error}');
-            return Container(child: Text('Error loading'));
+            return const Text('Error loading');
           } else if (snapshot.hasData) {
             final DropDownValues<FuelType> dropDownValues = snapshot.data;
             if (snapshot.data.noDataFound) {
-              return Container(child: Text('No Data'));
+              return const Text('No Data');
             } else {
               _fuelTypeSelectedValue = __fuelTypeSelectedValue(dropDownValues);
               return DropdownButton<FuelType>(
                 value: _fuelTypeSelectedValue,
-                icon: Icon(Icons.keyboard_arrow_down),
+                icon: const Icon(Icons.keyboard_arrow_down),
                 iconSize: 20,
-                style: TextStyle(color: Colors.black),
+                style: const TextStyle(color: Colors.black),
                 onChanged: (FuelType newValue) {
                   setState(() {
                     _fuelTypeSelectedValue = newValue;
@@ -303,13 +297,13 @@ class _CustomizeSearchSettingsScreenState
                   return DropdownMenuItem<FuelType>(
                       value: value,
                       child:
-                          Text(value.fuelName, style: TextStyle(fontSize: 14)));
+                          Text(value.fuelName, style: const TextStyle(fontSize: 14)));
                 }).toList(),
               );
             }
           } else {
-            LogUtil.debug(_TAG, 'No values found from fuelTypeFuture');
-            return Container(child: Text('Loading'));
+            LogUtil.debug(_tag, 'No values found from fuelTypeFuture');
+            return const Text('Loading');
           }
         });
   }
@@ -326,15 +320,13 @@ class _CustomizeSearchSettingsScreenState
 
   ListTile _fuelCategoriesListTile() {
     return ListTile(
-        leading: PumpedIcons.fuelCategoriesIcon_black54Size30, // Category
-        contentPadding: EdgeInsets.only(left: 5),
+        leading: PumpedIcons.fuelCategoriesIconBlack54Size30, // Category
+        contentPadding: const EdgeInsets.only(left: 5),
         dense: false,
         isThreeLine: true,
-        title: Container(
-            child: Text("Fuel Category", style: TextStyle(fontSize: 14))),
-        subtitle: Container(
-            child: Text("Fuel types are grouped into fuel categories",
-                style: TextStyle(fontSize: 13))),
+        title: const Text("Fuel Category", style: TextStyle(fontSize: 14)),
+        subtitle: const Text("Fuel types are grouped into fuel categories",
+            style: TextStyle(fontSize: 13)),
         trailing: DropdownButtonHideUnderline(child: _fuelCategoryDropdown()));
   }
 
@@ -343,22 +335,20 @@ class _CustomizeSearchSettingsScreenState
       future: _fuelCategoryDropdownValues,
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          LogUtil.debug(_TAG,
+          LogUtil.debug(_tag,
               '_fuelCategoryDropdown _fuelCategoryDropdownValues error ${snapshot.error}');
-          return Container(child: Text('Error loading'));
+          return const Text('Error loading');
         } else if (snapshot.hasData) {
           if (snapshot.data.noDataFound) {
-            return Container(child: Text('No values'));
+            return const Text('No values');
           } else {
             final DropDownValues<FuelCategory> dropDownValues = snapshot.data;
-            _fuelCategorySelectedValue = _fuelCategorySelectedValue == null
-                ? dropDownValues.values[dropDownValues.selectedIndex]
-                : _fuelCategorySelectedValue;
+            _fuelCategorySelectedValue = _fuelCategorySelectedValue ?? dropDownValues.values[dropDownValues.selectedIndex];
             return DropdownButton<FuelCategory>(
               value: _fuelCategorySelectedValue,
-              icon: Icon(Icons.keyboard_arrow_down),
+              icon: const Icon(Icons.keyboard_arrow_down),
               iconSize: 20,
-              style: TextStyle(color: Colors.black),
+              style: const TextStyle(color: Colors.black),
               onChanged: (FuelCategory newValue) {
                 setState(() {
                   _fuelTypeSelectedValue = null;
@@ -372,21 +362,21 @@ class _CustomizeSearchSettingsScreenState
                 return DropdownMenuItem<FuelCategory>(
                   value: value,
                   child:
-                      Text(value.categoryName, style: TextStyle(fontSize: 14)),
+                      Text(value.categoryName, style: const TextStyle(fontSize: 14)),
                 );
               }).toList(),
             );
           }
         } else {
-          LogUtil.debug(_TAG, 'No value found in fuelCategoryFuture');
-          return Container(child: Text('Loading'));
+          LogUtil.debug(_tag, 'No value found in fuelCategoryFuture');
+          return const Text('Loading');
         }
       },
     );
   }
 
-  static const _numSearchResultsIcon = const Icon(
-      IconData(IconCodes.number_of_search_results,
+  static const _numSearchResultsIcon = Icon(
+      IconData(IconCodes.numberOfSearchResults,
           fontFamily: 'MaterialIcons', matchTextDirection: true),
       color: Colors.black54,
       size: 30);
@@ -394,13 +384,11 @@ class _CustomizeSearchSettingsScreenState
   ListTile _numberOfSearchResultsListTile() {
     return ListTile(
         leading: _numSearchResultsIcon,
-        contentPadding: EdgeInsets.only(left: 5),
-        title: Container(
-            child: Text("Number of Search Results",
-                style: TextStyle(fontSize: 14))),
-        subtitle: Container(
-            child: Text("Cheapest closest fuel station around your location",
-                style: TextStyle(fontSize: 13))),
+        contentPadding: const EdgeInsets.only(left: 5),
+        title: const Text("Number of Search Results",
+            style: TextStyle(fontSize: 14)),
+        subtitle: const Text("Cheapest closest fuel station around your location",
+            style: TextStyle(fontSize: 13)),
         dense: false,
         isThreeLine: true,
         trailing: DropdownButtonHideUnderline(
@@ -410,13 +398,13 @@ class _CustomizeSearchSettingsScreenState
 
   FutureBuilder<DropDownValues<num>> _getSearchResultsCountDropDown(
       final Future<DropDownValues<num>> dropDownValues) {
-    return new FutureBuilder<DropDownValues<num>>(
+    return FutureBuilder<DropDownValues<num>>(
         future: dropDownValues, //
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            LogUtil.debug(_TAG,
+            LogUtil.debug(_tag,
                 'Error getting values from searchResultsCountFuture ${snapshot.error}');
-            return Container(child: Text('Error loading'));
+            return const Text('Error loading');
           } else if (snapshot.hasData) {
             final DropDownValues<num> dropDownValues = snapshot.data;
             _searchResultsCountSelectedValue =
@@ -425,9 +413,9 @@ class _CustomizeSearchSettingsScreenState
                     : _searchResultsCountSelectedValue;
             return DropdownButton<num>(
               value: _searchResultsCountSelectedValue,
-              icon: Icon(Icons.keyboard_arrow_down),
+              icon: const Icon(Icons.keyboard_arrow_down),
               iconSize: 20,
-              style: TextStyle(color: Colors.black),
+              style: const TextStyle(color: Colors.black),
               onChanged: (num newValue) {
                 setState(() {
                   _searchResultsCountSelectedValue = newValue;
@@ -437,26 +425,26 @@ class _CustomizeSearchSettingsScreenState
                   dropDownValues.values.map<DropdownMenuItem<num>>((num value) {
                 return DropdownMenuItem<num>(
                   value: value,
-                  child: Text(value.toString(), style: TextStyle(fontSize: 14)),
+                  child: Text(value.toString(), style: const TextStyle(fontSize: 14)),
                 );
               }).toList(),
             );
           } else {
-            LogUtil.debug(_TAG, 'No values found in searchResultCountFuture');
-            return Container(child: Text('No values'));
+            LogUtil.debug(_tag, 'No values found in searchResultCountFuture');
+            return const Text('No values');
           }
         });
   }
 
   FutureBuilder<DropDownValues<num>> _getSearchRadiusDropDown(
       final Future<DropDownValues<num>> dropDownValues) {
-    return new FutureBuilder<DropDownValues<num>>(
+    return FutureBuilder<DropDownValues<num>>(
         future: dropDownValues, //
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            LogUtil.debug(_TAG,
+            LogUtil.debug(_tag,
                 '_getSearchRadiusDropDown::dropDownValues error ${snapshot.error}');
-            return Container(child: Text('Error loading'));
+            return const Text('Error loading');
           } else if (snapshot.hasData) {
             final DropDownValues<num> dropDownValues = snapshot.data;
             _searchRadiusSelectedValue =
@@ -465,9 +453,9 @@ class _CustomizeSearchSettingsScreenState
                     : _searchRadiusSelectedValue;
             return DropdownButton<num>(
               value: _searchRadiusSelectedValue,
-              icon: Icon(Icons.keyboard_arrow_down),
+              icon: const Icon(Icons.keyboard_arrow_down),
               iconSize: 20,
-              style: TextStyle(color: Colors.black),
+              style: const TextStyle(color: Colors.black),
               onChanged: (num newValue) {
                 setState(() {
                   _searchRadiusSelectedValue = newValue;
@@ -477,13 +465,13 @@ class _CustomizeSearchSettingsScreenState
                   dropDownValues.values.map<DropdownMenuItem<num>>((num value) {
                 return DropdownMenuItem<num>(
                   value: value,
-                  child: Text(value.toString(), style: TextStyle(fontSize: 14)),
+                  child: Text(value.toString(), style: const TextStyle(fontSize: 14)),
                 );
               }).toList(),
             );
           } else {
-            LogUtil.debug(_TAG, 'No value found in searchRadiusFuture');
-            return Container(child: Text('No values'));
+            LogUtil.debug(_tag, 'No value found in searchRadiusFuture');
+            return const Text('No values');
           }
         });
   }

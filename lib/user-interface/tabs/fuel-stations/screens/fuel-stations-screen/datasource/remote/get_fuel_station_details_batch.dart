@@ -28,13 +28,13 @@ class GetFuelStationDetailsBatch
 
   @override
   String getUrl(final GetFuelStationDetailsBatchRequest request) {
-    String url = '/getFuelStationDetailsBatch' + '?';
+    String url = '/enddevice/getFuelStationDetailsBatch' '?';
     String param1;
-    if (request.fuelStationIds != null && request.fuelStationIds.length > 0) {
+    if (request.fuelStationIds != null && request.fuelStationIds.isNotEmpty) {
       param1 = 'fuelStationId=' + request.fuelStationIds.join('&fuelStationId=');
     }
     String param2;
-    if (request.fuelAuthorityStationIds != null && request.fuelAuthorityStationIds.length > 0) {
+    if (request.fuelAuthorityStationIds != null && request.fuelAuthorityStationIds.isNotEmpty) {
       param2 = 'fuelAuthorityStationId=' + request.fuelAuthorityStationIds.join('&fuelAuthorityStationId=');
     }
     if (param1 != null) {
@@ -47,7 +47,7 @@ class GetFuelStationDetailsBatch
         url = url + param2;
       }
     }
-    return '$url&latitude=${request.latitude}&longitude=${request.longitude}&dayOfWeek=${request.dayOfWeek}';
+    return '$url&lat=${request.latitude}&lng=${request.longitude}&dayOfWeek=${request.dayOfWeek}';
   }
 
   @override

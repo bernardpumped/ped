@@ -34,8 +34,8 @@ class FuelStationListWidget extends StatefulWidget {
   final FuelType _selectedFuelType;
   final int sortOrder;
 
-  FuelStationListWidget(
-      this._scrollController, this._fuelStations, this._expandedChildren, this._selectedFuelType, this.sortOrder);
+  const FuelStationListWidget(
+      this._scrollController, this._fuelStations, this._expandedChildren, this._selectedFuelType, this.sortOrder, {Key key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -44,8 +44,8 @@ class FuelStationListWidget extends StatefulWidget {
 }
 
 class _FuelStationListWidgetState extends State<FuelStationListWidget> with TickerProviderStateMixin {
-  static const _TAG = 'FuelStationListWidget';
-  final FuelStationsSorter _fuelStationsSorter = new FuelStationsSorter();
+  static const _tag = 'FuelStationListWidget';
+  final FuelStationsSorter _fuelStationsSorter = FuelStationsSorter();
   int currentExpandedIndex = -1;
 
   void changeStateOfRow(int index) {
@@ -65,9 +65,9 @@ class _FuelStationListWidgetState extends State<FuelStationListWidget> with Tick
 
   @override
   void initState() {
-    collapsedAnimationController = AnimationController(vsync: this, duration: Duration(milliseconds: 1000));
+    collapsedAnimationController = AnimationController(vsync: this, duration: const Duration(milliseconds: 1000));
     collapsedAnimation = Tween(begin: 0.0, end: 1.0).animate(collapsedAnimationController);
-    expandedAnimationController = AnimationController(vsync: this, duration: Duration(milliseconds: 1000));
+    expandedAnimationController = AnimationController(vsync: this, duration: const Duration(milliseconds: 1000));
     expandedAnimation = Tween(begin: 0.0, end: 1.0).animate(expandedAnimationController);
     super.initState();
   }
@@ -85,7 +85,7 @@ class _FuelStationListWidgetState extends State<FuelStationListWidget> with Tick
     return ImplicitlyAnimatedList<FuelStation>(
         // To provide scrolling behavior to lists
         // which are smaller than screen size.
-        physics: AlwaysScrollableScrollPhysics(),
+        physics: const AlwaysScrollableScrollPhysics(),
         controller: widget._scrollController,
         items: widget._fuelStations,
         areItemsTheSame: (a, b) {
@@ -93,7 +93,7 @@ class _FuelStationListWidgetState extends State<FuelStationListWidget> with Tick
         },
         itemBuilder: (context, animation, item, index) {
           if (widget._fuelStations != null && index > (widget._fuelStations.length - 1)) {
-            return SizedBox(height: 0);
+            return const SizedBox(height: 0);
           }
           final bool expanded = widget._expandedChildren[index];
           final FuelStation fuelStation = widget._fuelStations[index];
@@ -126,17 +126,17 @@ class _FuelStationListWidgetState extends State<FuelStationListWidget> with Tick
 
   void rebuildTriggerOnDataUpdate() {
     setState(() {
-      LogUtil.debug(_TAG, 'Triggering rebuild');
+      LogUtil.debug(_tag, 'Triggering rebuild');
       _goToElement(0, widget._fuelStations.length);
     });
   }
 
   void _goToElement(final int index, final int totalElements) {
-    // 115 is the height of collapsed container
+    // 155 is the height of collapsed container
     // index of 6th element is 5
     // 280 is the height of expanded container.
-    double scrollToOffset = (115.0 * index);
-    double totalHeight = 115.0 * totalElements;
+    double scrollToOffset = (155.0 * index);
+    double totalHeight = 155.0 * totalElements;
     if (scrollToOffset + 280 > totalHeight) {
       scrollToOffset = totalHeight - 280;
     }

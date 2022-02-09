@@ -31,7 +31,7 @@ class MarketRegionZoneConfiguration {
     @required this.version,
   });
 
-  factory MarketRegionZoneConfiguration.fromJson(final Map<String, dynamic> data) => new MarketRegionZoneConfiguration(
+  factory MarketRegionZoneConfiguration.fromJson(final Map<String, dynamic> data) => MarketRegionZoneConfiguration(
         zoneConfig: ZoneConfig.fromJson(data['zone_config']),
         marketRegionConfig: MarketRegionConfig.fromJson(data['market_region_config']),
         version: data['version']

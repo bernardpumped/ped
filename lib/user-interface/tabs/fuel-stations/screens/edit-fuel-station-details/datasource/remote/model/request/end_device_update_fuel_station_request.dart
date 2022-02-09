@@ -36,6 +36,7 @@ class EndDeviceUpdateFuelStationRequest extends Request {
       this.fuelStationSource})
       : super(uuid);
 
+  @override
   Map<String, dynamic> toJson() => {
         'uuid': uuid,
         'identityProvider': identityProvider,

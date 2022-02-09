@@ -22,7 +22,7 @@ import 'package:pumped_end_device/user-interface/tabs/fuel-stations/data/model/u
 class UpdateAddressDetailsResult extends UpdateFuelStationDetailsResult {
   UpdateAddressDetailsResult(final bool isUpdateSuccessful, final int updateEpoch,
       {this.addressComponentUpdateStatus, this.addressComponentNewValue})
-      : super(UpdateFuelStationDetailType.ADDRESS_DETAILS, isUpdateSuccessful, updateEpoch);
+      : super(UpdateFuelStationDetailType.addressDetails, isUpdateSuccessful, updateEpoch);
   final Map<String, dynamic> addressComponentUpdateStatus;
   final Map<String, dynamic> addressComponentNewValue;
 }

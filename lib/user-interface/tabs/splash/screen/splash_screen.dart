@@ -29,17 +29,17 @@ import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
 class SplashScreen extends StatefulWidget {
-  SplashScreen({Key key}) : super(key: key);
+  const SplashScreen({Key key}) : super(key: key);
 
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  static const _TAG = 'SplashScreen';
-  static const _locationIcon = const Icon(IconData(IconCodes.location_detected_icon_code, fontFamily: 'MaterialIcons'), color: Colors.white);
-  static const _checkIcon = const Icon(IconData(IconCodes.done_icon_code, fontFamily: 'MaterialIcons'), color: Colors.white);
-  static const _localGasIcon = const Icon(IconData(IconCodes.find_fuel_station_icon_code, fontFamily: 'MaterialIcons'), color: Colors.white);
+  static const _tag = 'SplashScreen';
+  static const _locationIcon = Icon(IconData(IconCodes.locationDetectedIconCode, fontFamily: 'MaterialIcons'), color: Colors.white);
+  static const _checkIcon = Icon(IconData(IconCodes.doneIconCode, fontFamily: 'MaterialIcons'), color: Colors.white);
+  static const _localGasIcon = Icon(IconData(IconCodes.findFuelStationIconCode, fontFamily: 'MaterialIcons'), color: Colors.white);
 
   bool _locationDetectionTriggered = false;
   bool _checkingPumpedAvailabilityTextVisible = false;
@@ -51,7 +51,7 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
   }
 
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(final BuildContext context) {
@@ -66,53 +66,53 @@ class _SplashScreenState extends State<SplashScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Image(image: AssetImage('assets/images/ic_splash.png'), width: 153, height: 133, fit: BoxFit.fill),
-                  SizedBox(height: 30),
-                  Center(
+                  const Image(image: AssetImage('assets/images/ic_splash.png'), width: 153, height: 133, fit: BoxFit.fill),
+                  const SizedBox(height: 30),
+                  const Center(
                       child: Text('Your friendly \n neighbourhood fuel finder',
                           textAlign: TextAlign.center,
                           style: TextStyle(fontSize: 22, color: Colors.white, fontWeight: FontWeight.w500))),
                   Container(
-                      margin: EdgeInsets.only(top: 20),
+                      margin: const EdgeInsets.only(top: 20),
                       width: 150,
                       child: CupertinoTheme(
                           data: CupertinoTheme.of(context).copyWith(brightness: Brightness.dark),
-                          child: CupertinoActivityIndicator(radius: 20))),
-                  SizedBox(height: 100),
+                          child: const CupertinoActivityIndicator(radius: 20))),
+                  const SizedBox(height: 100),
                   Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
                     AnimatedOpacity(
                         opacity: _locationDetectionTriggered ? 1.0 : 0.0,
-                        duration: Duration(milliseconds: 500),
+                        duration: const Duration(milliseconds: 500),
                         child: Padding(
                             padding: EdgeInsets.only(left: widthOfScaffold / 2 - 135, right: 5), child: _locationIcon)),
                     AnimatedOpacity(
                         opacity: _locationDetectionTriggered ? 1.0 : 0.0,
-                        duration: Duration(milliseconds: 500),
-                        child: Container(
+                        duration: const Duration(milliseconds: 500),
+                        child: const SizedBox(
                             width: 200,
                             child: Text('Detecting Location', style: TextStyle(fontSize: 16, color: Colors.white)))),
                     AnimatedOpacity(
                         opacity: _detectingLocationIconVisible ? 1.0 : 0.0,
-                        duration: Duration(milliseconds: 500),
+                        duration: const Duration(milliseconds: 500),
                         child: _checkIcon)
                   ]),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
                     AnimatedOpacity(
                         opacity: _checkingPumpedAvailabilityIconVisible ? 1.0 : 0.0,
-                        duration: Duration(milliseconds: 500),
+                        duration: const Duration(milliseconds: 500),
                         child: Padding(
                             padding: EdgeInsets.only(left: widthOfScaffold / 2 - 135, right: 7), child: _localGasIcon)),
                     AnimatedOpacity(
                         opacity: _checkingPumpedAvailabilityIconVisible ? 1.0 : 0.0,
-                        duration: Duration(milliseconds: 500),
-                        child: Container(
+                        duration: const Duration(milliseconds: 500),
+                        child: const SizedBox(
                             width: 200,
                             child:
                                 Text('Fetching Fuel Stations', style: TextStyle(fontSize: 16, color: Colors.white)))),
                     AnimatedOpacity(
                         opacity: _checkingPumpedAvailabilityTextVisible ? 1.0 : 0.0,
-                        duration: Duration(milliseconds: 500),
+                        duration: const Duration(milliseconds: 500),
                         child: _checkIcon)
                   ])
                 ])));
@@ -128,23 +128,23 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void _getLocationFromOnDeviceLocationService() {
-    final Future<GetLocationResult> getLocationDataFuture = getIt.get<LocationDataSource>().getLocationData();
+    final Future<GetLocationResult> getLocationDataFuture = getIt.get<LocationDataSource>(instanceName: locationDataSourceInstanceName).getLocationData();
     getLocationDataFuture.then((locationResult) {
       final LocationInitResultCode code = locationResult.locationInitResultCode;
       switch (code) {
-        case LocationInitResultCode.LOCATION_SERVICE_DISABLED:
+        case LocationInitResultCode.locationServiceDisabled:
           ScaffoldMessenger.of(context).showSnackBar(WidgetUtils.buildSnackBar(context, 'Location Service is disabled', 2, '', () {}));
           break;
-        case LocationInitResultCode.PERMISSION_DENIED:
+        case LocationInitResultCode.permissionDenied:
           ScaffoldMessenger.of(context).showSnackBar(WidgetUtils.buildSnackBar(context, 'Location Service is disabled', 2, '', () {}));
           break;
-        case LocationInitResultCode.NOT_FOUND:
+        case LocationInitResultCode.notFound:
           WidgetUtils.buildSnackBar(context, 'Location Not Found', 2, '', () {});
           break;
-        case LocationInitResultCode.FAILURE:
+        case LocationInitResultCode.failure:
           WidgetUtils.buildSnackBar(context, 'Location Failure', 2, '', () {});
           break;
-        case LocationInitResultCode.SUCCESS:
+        case LocationInitResultCode.success:
           _takeActionOnLocation(locationResult);
           break;
       }
@@ -154,7 +154,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void _takeActionOnLocation(final GetLocationResult locationResult) {
     final Future<GeoLocationData> locationDataFuture = locationResult.geoLocationData;
     locationDataFuture.then((locationData) {
-      LogUtil.debug(_TAG, 'latitude : ${locationData.latitude}, longitude : ${locationData.longitude}');
+      LogUtil.debug(_tag, 'latitude : ${locationData.latitude}, longitude : ${locationData.longitude}');
       setState(() {
         _detectingLocationIconVisible = true;
       });
@@ -176,7 +176,7 @@ class _SplashScreenState extends State<SplashScreen> {
         Navigator.pushReplacementNamed(context, PumpedBaseTabView.routeName);
       });
     }, onError: (error) {
-      LogUtil.error(_TAG, 'Error happened on detecting location : $error');
+      LogUtil.error(_tag, 'Error happened on detecting location : $error');
     });
   }
 }

@@ -25,11 +25,11 @@ import 'package:pumped_end_device/models/pumped/operating_hours.dart';
 class OperatingHoursSourceCitation extends StatelessWidget {
   static const _padding = 15.0;
   static const _margin = 30.0;
-  static const _pumped_message = 'If Operating hours are incorrect please let us know';
+  static const _pumpedMessage = 'If Operating hours are incorrect please let us know';
   final OperatingHours _operatingHours;
   final FuelStation _fuelStation;
 
-  const OperatingHoursSourceCitation(this._operatingHours, this._fuelStation);
+   const OperatingHoursSourceCitation(this._operatingHours, this._fuelStation, {Key key}) : super(key: key);
 
   @override
   Widget build(final BuildContext context) {
@@ -47,17 +47,17 @@ class OperatingHoursSourceCitation extends StatelessWidget {
     if (operatingTimeSource == 'G' || operatingTimeSource == 'C') {
       child = _getOperatingHrsSourceMessage(context, operatingTimeSource);
     } else {
-      child = SizedBox(height: 0);
+      child = const SizedBox(height: 0);
     }
     return SingleChildScrollView(
         child: Container(
-            padding: EdgeInsets.all(_padding),
-            margin: EdgeInsets.only(top: _margin),
-            decoration: new BoxDecoration(
+            padding: const EdgeInsets.all(_padding),
+            margin: const EdgeInsets.only(top: _margin),
+            decoration: BoxDecoration(
                 color: Colors.white,
                 shape: BoxShape.rectangle,
                 borderRadius: BorderRadius.circular(_padding),
-                boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 10.0, offset: const Offset(0.0, 10.0))]),
+                boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 10.0, offset: Offset(0.0, 10.0))]),
             child: child));
   }
 
@@ -71,30 +71,30 @@ class OperatingHoursSourceCitation extends StatelessWidget {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: <Widget>[
       Padding(
           padding: const EdgeInsets.only(top: 15, bottom: 10),
-          child: Text(sourceMessage, style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w600, color: Colors.black87))),
-      Divider(color: Colors.black54, height: 1),
-      Padding(padding: EdgeInsets.only(bottom: 10, top: 10), child: _getAdminContactMessage()),
-      Divider(color: Colors.black54, height: 1),
+          child: Text(sourceMessage, style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.w600, color: Colors.black87))),
+      const Divider(color: Colors.black54, height: 1),
+      Padding(padding: const EdgeInsets.only(bottom: 10, top: 10), child: _getAdminContactMessage()),
+      const Divider(color: Colors.black54, height: 1),
       _getOkActionButton(context)
     ]);
   }
 
   Text _getAdminContactMessage() {
-    return Text(_pumped_message,
+    return const Text(_pumpedMessage,
         textAlign: TextAlign.start, style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w400, color: Colors.red));
   }
 
   Row _getOkActionButton(final BuildContext context) {
     return Row(children: [
       WidgetUtils.getRoundedElevatedButton(
-          child: Text('Cancel'),
+          child: const Text('Cancel'),
           foreGroundColor: Colors.white,
           backgroundColor: Theme.of(context).primaryColor,
           borderRadius: 10.0,
           onPressed: () {
             Navigator.pop(context);
           }),
-      SizedBox(width: 10),
+      const SizedBox(width: 10),
       EmailWidget(emailBody: _getEmailBody(), emailSubject: _getEmailSubject(), emailAddress: 'bernard@pumpedfuel.com')
     ], mainAxisAlignment: MainAxisAlignment.spaceEvenly);
   }
@@ -104,7 +104,7 @@ class OperatingHoursSourceCitation extends StatelessWidget {
   }
 
   String _getEmailBody() {
-    return 'For the fuelStation ${_fuelStation.fuelStationName} [${_fuelStation.stationId} | ${_fuelStation.getFuelStationSource()}],' +
+    return 'For the fuelStation ${_fuelStation.fuelStationName} [${_fuelStation.stationId} | ${_fuelStation.getFuelStationSource()}],'
         'we have found incorrect Operating Hours ${_operatingHours.operatingTimeRange} for fuel ${_operatingHours.dayOfWeek}';
   }
 }

@@ -16,7 +16,6 @@
  *     along with Pumped End Device.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pumped_end_device/user-interface/tabs/fuel-stations/data/params/fuel_type_switcher_response_params.dart';
 import 'package:pumped_end_device/user-interface/tabs/settings/service/settings_service.dart';
@@ -30,7 +29,7 @@ class FuelTypeSwitcher extends StatefulWidget {
   final FuelCategory selectedFuelCategory;
   final FuelType selectedFuelType;
 
-  FuelTypeSwitcher(this.selectedFuelType, this.selectedFuelCategory);
+  const FuelTypeSwitcher(this.selectedFuelType, this.selectedFuelCategory, {Key key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -39,14 +38,14 @@ class FuelTypeSwitcher extends StatefulWidget {
 }
 
 class _FuelTypeSwitcher extends State<FuelTypeSwitcher> {
-  static const _TAG = 'FuelTypeSwitcher';
+  static const _tag = 'FuelTypeSwitcher';
   static const padding = 15.0;
   static const avatarRadius = 66.0;
   static const subTitle = "Switch Fuel Types";
   static const okButtonText = "Ok";
   static const cancelButtonText = "Cancel";
 
-  final SettingsService _settingsDataSource = new SettingsService();
+  final SettingsService _settingsDataSource = SettingsService();
 
   Future<DropDownValues<FuelCategory>> _fuelCategoryDropdownValues;
   FuelCategory _fuelCategorySelectedValue;
@@ -73,42 +72,42 @@ class _FuelTypeSwitcher extends State<FuelTypeSwitcher> {
 
   Widget _dialogContent(final BuildContext context) {
     return Container(
-        padding: EdgeInsets.only(top: padding, bottom: padding, left: padding, right: padding),
-        margin: EdgeInsets.only(top: avatarRadius),
-        decoration: new BoxDecoration(
+        padding: const EdgeInsets.only(top: padding, bottom: padding, left: padding, right: padding),
+        margin: const EdgeInsets.only(top: avatarRadius),
+        decoration: BoxDecoration(
             color: Colors.white,
             shape: BoxShape.rectangle,
             borderRadius: BorderRadius.circular(padding),
-            boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 10.0, offset: const Offset(0.0, 10.0))]),
+            boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 10.0, offset: Offset(0.0, 10.0))]),
         child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-          Padding(
+          const Padding(
               padding: EdgeInsets.only(top: 15, bottom: 15),
               child: Text(subTitle,
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold, color: Colors.black87))),
-          Divider(color: Colors.black54, height: 1),
+          const Divider(color: Colors.black54, height: 1),
           SizedBox(
               height: 50,
               child: Row(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
-                    PumpedIcons.fuelCategoriesIcon_black54Size30,
-                    Padding(
+                    PumpedIcons.fuelCategoriesIconBlack54Size30,
+                    const Padding(
                         padding: EdgeInsets.only(left: 12, right: 12),
                         child: Text("Category", style: TextStyle(fontSize: 16))),
                     DropdownButtonHideUnderline(child: _fuelCategoryDropdown())
                   ])),
-          Divider(color: Colors.black54, height: 1),
+          const Divider(color: Colors.black54, height: 1),
           SizedBox(
               height: 50,
               child: Row(mainAxisAlignment: MainAxisAlignment.start, mainAxisSize: MainAxisSize.max, children: <Widget>[
-                PumpedIcons.fuelTypesIcon_black54Size30,
-                Padding(
+                PumpedIcons.fuelTypesIconBlack54Size30,
+                const Padding(
                     padding: EdgeInsets.only(left: 12, right: 12), child: Text("Type", style: TextStyle(fontSize: 16))),
                 DropdownButtonHideUnderline(child: _getFuelTypeDropdown())
               ])),
-          Divider(color: Colors.black54, height: 1),
+          const Divider(color: Colors.black54, height: 1),
           _getButtonRow()
         ]));
   }
@@ -118,19 +117,19 @@ class _FuelTypeSwitcher extends State<FuelTypeSwitcher> {
         future: _fuelTypeDropdownValues,
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            LogUtil.debug(_TAG, 'Error loading ${snapshot.error}');
-            return Container(child: Text('Error loading'));
+            LogUtil.debug(_tag, 'Error loading ${snapshot.error}');
+            return const Text('Error loading');
           } else if (snapshot.hasData) {
             if (snapshot.data.noDataFound) {
-              return Container(child: Text('No data found'));
+              return const Text('No data found');
             } else {
               final DropDownValues<FuelType> dropDownValues = snapshot.data;
               _fuelTypeSelectedValue = __fuelTypeSelectedValue(dropDownValues);
               return DropdownButton<FuelType>(
                 value: _fuelTypeSelectedValue,
-                icon: Icon(Icons.keyboard_arrow_down),
+                icon: const Icon(Icons.keyboard_arrow_down),
                 iconSize: 20,
-                style: TextStyle(color: Colors.black),
+                style: const TextStyle(color: Colors.black),
                 onChanged: (FuelType newValue) {
                   setState(() {
                     _fuelTypeSelectedValue = newValue;
@@ -139,12 +138,12 @@ class _FuelTypeSwitcher extends State<FuelTypeSwitcher> {
                 items: dropDownValues.values.map<DropdownMenuItem<FuelType>>((FuelType value) {
                   return DropdownMenuItem<FuelType>(
                       value: value,
-                      child: Text(value.fuelName, style: TextStyle(fontSize: 14), textAlign: TextAlign.end));
+                      child: Text(value.fuelName, style: const TextStyle(fontSize: 14), textAlign: TextAlign.end));
                 }).toList(),
               );
             }
           } else {
-            return Container(child: Text('Loading...'));
+            return const Text('Loading...');
           }
         });
   }
@@ -162,18 +161,16 @@ class _FuelTypeSwitcher extends State<FuelTypeSwitcher> {
         future: _fuelCategoryDropdownValues,
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            LogUtil.debug(_TAG, 'Error loading ${snapshot.error}');
-            return Container(child: Text('Error loading'));
+            LogUtil.debug(_tag, 'Error loading ${snapshot.error}');
+            return const Text('Error loading');
           } else if (snapshot.hasData) {
             final DropDownValues<FuelCategory> dropDownValues = snapshot.data;
-            _fuelCategorySelectedValue = _fuelCategorySelectedValue == null
-                ? dropDownValues.values[dropDownValues.selectedIndex]
-                : _fuelCategorySelectedValue;
+            _fuelCategorySelectedValue = _fuelCategorySelectedValue ?? dropDownValues.values[dropDownValues.selectedIndex];
             return DropdownButton<FuelCategory>(
               value: _fuelCategorySelectedValue,
-              icon: Icon(Icons.keyboard_arrow_down),
+              icon: const Icon(Icons.keyboard_arrow_down),
               iconSize: 20,
-              style: TextStyle(color: Colors.black),
+              style: const TextStyle(color: Colors.black),
               onChanged: (FuelCategory newValue) {
                 setState(() {
                   _fuelTypeSelectedValue = null;
@@ -183,25 +180,25 @@ class _FuelTypeSwitcher extends State<FuelTypeSwitcher> {
               },
               items: dropDownValues.values.map<DropdownMenuItem<FuelCategory>>((FuelCategory value) {
                 return DropdownMenuItem<FuelCategory>(
-                    value: value, child: Text(value.categoryName, style: TextStyle(fontSize: 14)));
+                    value: value, child: Text(value.categoryName, style: const TextStyle(fontSize: 14)));
               }).toList(),
             );
           } else {
-            return Container(child: Text('Loading...'));
+            return const Text('Loading...');
           }
         });
   }
 
   Widget _getButtonRow() {
     return Container(
-        padding: EdgeInsets.only(left: 10, right: 10),
+        padding: const EdgeInsets.only(left: 10, right: 10),
         child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               TextButton(
-                child: Text(cancelButtonText),
+                child: const Text(cancelButtonText),
                 onPressed: () {
                   Navigator.pop(context);
                 },
@@ -209,7 +206,7 @@ class _FuelTypeSwitcher extends State<FuelTypeSwitcher> {
               ),
               TextButton(
                   style: ButtonStyle(foregroundColor: MaterialStateProperty.all(Colors.black)),
-                  child: Text(okButtonText),
+                  child: const Text(okButtonText),
                   onPressed: () {
                     Navigator.pop(
                         context,

@@ -31,10 +31,8 @@ class FuelStationDetailsResponseParseUtils {
       final String stationIdStr = me.key;
       final Map<String, dynamic> fuelStationJsonVal = me.value;
       final bool activeItemPromotions =
-          fuelStationJsonVal['activeItemPromotions'] != null ? fuelStationJsonVal['activeItemPromotions'] : false;
-      final bool activeAutoServicePromotions = fuelStationJsonVal['activeAutoServicePromotions'] != null
-          ? fuelStationJsonVal['activeAutoServicePromotions']
-          : false;
+          fuelStationJsonVal['activeItemPromotions'] ?? false;
+      final bool activeAutoServicePromotions = fuelStationJsonVal['activeAutoServicePromotions'] ?? false;
       final List<FuelQuote> fuelQuotes = stationIdFuelQuotes[stationIdStr];
       final bool holidayToday = fuelStationJsonVal['holidayToday'];
       final OperatingHours operatingHours =

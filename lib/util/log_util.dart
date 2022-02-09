@@ -16,28 +16,30 @@
  *     along with Pumped End Device.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-class LogUtil {
-  static const DEBUG = 1;
-  static const INFO = 2;
-  static const ERROR = 3;
+import 'package:flutter/foundation.dart';
 
-  static const logLevel = DEBUG;
+class LogUtil {
+  static const _debug = 1;
+  static const _info = 2;
+  static const _error = 3;
+
+  static const _logLevel = _debug;
 
   static void debug(final String tag, final String logStatement) {
-    if (DEBUG >= logLevel) {
-      print('DEBUG: ' + tag + ':' + logStatement);
+    if (_debug >= _logLevel) {
+      debugPrint('[${DateTime.now()}]: DEBUG: $tag : $logStatement');
     }
   }
 
   static void info(final String tag, final String logStatement) {
-    if (INFO >= logLevel) {
-      print('INFO: ' + tag + ':' + logStatement);
+    if (_info >= _logLevel) {
+      debugPrint('[${DateTime.now()}]: INFO: $tag : $logStatement');
     }
   }
 
   static void error(final String tag, final String logStatement) {
-    if (ERROR >= logLevel) {
-      print('ERROR: ' + tag + ':' + logStatement);
+    if (_error >= _logLevel) {
+      debugPrint('[${DateTime.now()}]: ERROR: $tag : $logStatement');
     }
   }
 }

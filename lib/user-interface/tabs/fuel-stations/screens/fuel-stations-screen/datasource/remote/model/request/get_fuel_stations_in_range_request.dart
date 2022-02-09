@@ -49,7 +49,7 @@ class GetFuelStationsInRangeParams extends Request {
 
   factory GetFuelStationsInRangeParams.get(final FuelStationSearchConfig config, final double lat, final double lng,
       final String day, final bool searchIncrementally, final bool excludeVetoFuelStations) {
-    return new GetFuelStationsInRangeParams(
+    return GetFuelStationsInRangeParams(
         lat: lat,
         lng: lng,
         range: config.range,
@@ -64,8 +64,8 @@ class GetFuelStationsInRangeParams extends Request {
   }
 
   String toQueryString() {
-    return 'lat=$lat&lng=$lng&range=$range&unit=$unit&fuelType=$fuelType&' +
-        'numResults=$numResults&sortOrder=$quoteSortOrder&searchIncrementally=$searchIncrementally&' +
+    return 'lat=$lat&lng=$lng&range=$range&unit=$unit&fuelType=$fuelType&'
+        'numResults=$numResults&sortOrder=$quoteSortOrder&searchIncrementally=$searchIncrementally&'
         'dayOfWeek=$dayOfWeek&clientConfigVersion=$clientConfigVersion&excludeVetoFuelStations=$excludeVetoFuelStations';
   }
 
