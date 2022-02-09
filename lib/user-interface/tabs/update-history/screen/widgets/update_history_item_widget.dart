@@ -31,14 +31,14 @@ import 'package:pumped_end_device/models/update_history.dart';
 
 class UpdateHistoryItemWidget extends StatefulWidget {
   final UpdateHistory updateHistory;
-  UpdateHistoryItemWidget(this.updateHistory);
+  const UpdateHistoryItemWidget(this.updateHistory, {Key key}) : super(key: key);
 
   @override
   _UpdateHistoryItemWidgetState createState() => _UpdateHistoryItemWidgetState();
 }
 
 class _UpdateHistoryItemWidgetState extends State<UpdateHistoryItemWidget> {
-  var updateDateFormatter = new DateFormat('dd-MMM-yyyy HH:mm');
+  var updateDateFormatter = DateFormat('dd-MMM-yyyy HH:mm');
 
   @override
   Widget build(final BuildContext context) {
@@ -56,7 +56,7 @@ class _UpdateHistoryItemWidgetState extends State<UpdateHistoryItemWidget> {
       color: UpdateHistoryItemWidgetColors.updateCardBackgroundColor,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)),
       child: Container(
-        padding: EdgeInsets.only(left: 5, right: 5, top: 10, bottom: 10),
+        padding: const EdgeInsets.only(left: 5, right: 5, top: 10, bottom: 10),
         child: Column(children: [
           Row(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -68,16 +68,16 @@ class _UpdateHistoryItemWidgetState extends State<UpdateHistoryItemWidget> {
                 Expanded(
                     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
                       Padding(
-                          padding: EdgeInsets.only(left: 10, bottom: 6),
+                          padding: const EdgeInsets.only(left: 10, bottom: 6),
                           child: Text(fuelStation,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.w600,
                                   color: UpdateHistoryItemWidgetColors.stationNameColor))),
                       Padding(
-                          padding: EdgeInsets.only(left: 10, bottom: 5),
-                          child: Text("${updateDateFormatter.format(dateTime)}",
-                              style: TextStyle(fontSize: 16, color: UpdateHistoryItemWidgetColors.updateDateIconColor)))
+                          padding: const EdgeInsets.only(left: 10, bottom: 5),
+                          child: Text(updateDateFormatter.format(dateTime),
+                              style: const TextStyle(fontSize: 16, color: UpdateHistoryItemWidgetColors.updateDateIconColor)))
                     ]),
                     flex: 10),
                 Expanded(child: updateStatusIconCode, flex: 2)
@@ -88,36 +88,36 @@ class _UpdateHistoryItemWidgetState extends State<UpdateHistoryItemWidget> {
     );
   }
 
-  static const _operatingTimeUpdateIcon = const Icon(IconData(IconCodes.operating_time_icon_code,
+  static const _operatingTimeUpdateIcon = Icon(IconData(IconCodes.operatingTimeIconCode,
       fontFamily: 'MaterialIcons', matchTextDirection: true), color: UpdateHistoryItemWidgetColors.updateTypeIconColor, size: 35);
-  static const _fuelPriceUpdateIcon = const Icon(IconData(IconCodes.fuel_price_icon_code,
+  static const _fuelPriceUpdateIcon = Icon(IconData(IconCodes.fuelPriceIconCode,
       fontFamily: 'MaterialIcons', matchTextDirection: true), color: UpdateHistoryItemWidgetColors.updateTypeIconColor, size: 35);
-  static const _suggestEditIcon = const Icon(IconData(IconCodes.suggest_edit_icon_code,
+  static const _suggestEditIcon = Icon(IconData(IconCodes.suggestEditIconCode,
       fontFamily: 'MaterialIcons', matchTextDirection: true), color: UpdateHistoryItemWidgetColors.updateTypeIconColor, size: 35);
-  static const _phoneNumUpdateIcon = const Icon(IconData(IconCodes.phone_icon_code,
+  static const _phoneNumUpdateIcon = Icon(IconData(IconCodes.phoneIconCode,
       fontFamily: 'MaterialIcons', matchTextDirection: true), color: UpdateHistoryItemWidgetColors.updateTypeIconColor, size: 35);
-  static const _featuresUpdateIcon = const Icon(IconData(IconCodes.features_icon_code,
+  static const _featuresUpdateIcon = Icon(IconData(IconCodes.featuresIconCode,
       fontFamily: 'MaterialIcons', matchTextDirection: true), color: UpdateHistoryItemWidgetColors.updateTypeIconColor, size: 35);
-  static const _addressUpdateIcon = const Icon(IconData(IconCodes.address_details_icon_code,
+  static const _addressUpdateIcon = Icon(IconData(IconCodes.addressDetailsIconCode,
       fontFamily: 'MaterialIcons', matchTextDirection: true), color: UpdateHistoryItemWidgetColors.updateTypeIconColor, size: 35);
 
-  static const _successUpdateStatusIcon = const Icon(IconData(IconCodes.success_icon_code,
+  static const _successUpdateStatusIcon = Icon(IconData(IconCodes.successIconCode,
       fontFamily: 'MaterialIcons', matchTextDirection: true), color: UpdateHistoryItemWidgetColors.updateTypeIconColor, size: 35);
-  static const _inProgressUpdateStatusIcon = const Icon(IconData(IconCodes.in_progress_icon_code,
+  static const _inProgressUpdateStatusIcon = Icon(IconData(IconCodes.inProgressIconCode,
       fontFamily: 'MaterialIcons', matchTextDirection: true), color: UpdateHistoryItemWidgetColors.updateTypeIconColor, size: 35);
-  static const _failedUpdateStatusIcon = const Icon(IconData(IconCodes.failed_icon_code,
+  static const _failedUpdateStatusIcon = Icon(IconData(IconCodes.failedIconCode,
       fontFamily: 'MaterialIcons', matchTextDirection: true), color: UpdateHistoryItemWidgetColors.updateTypeIconColor, size: 35);
 
   Icon _getUpdateTypeIcon(final String updateType) {
-    if (updateType == UpdateType.OPERATING_TIME.updateTypeName) {
+    if (updateType == UpdateType.operatingTime.updateTypeName) {
       return _operatingTimeUpdateIcon;
-    } else if (updateType == UpdateType.PRICE.updateTypeName) {
+    } else if (updateType == UpdateType.price.updateTypeName) {
       return _fuelPriceUpdateIcon;
-    } else if (updateType == UpdateType.SUGGEST_EDIT.updateTypeName) {
+    } else if (updateType == UpdateType.suggestEdit.updateTypeName) {
       return _suggestEditIcon;
-    } else if (updateType == UpdateType.PHONE_NUMBER.updateTypeName) {
+    } else if (updateType == UpdateType.phoneNumber.updateTypeName) {
       return _phoneNumUpdateIcon;
-    } else if (updateType == UpdateType.FUEL_STATION_FEATURES.updateTypeName) {
+    } else if (updateType == UpdateType.fuelStationFeatures.updateTypeName) {
       return _featuresUpdateIcon;
     } else {
       return _addressUpdateIcon;
@@ -134,35 +134,35 @@ class _UpdateHistoryItemWidgetState extends State<UpdateHistoryItemWidget> {
     originalValues.forEach((originalValueType, originalValue) {
       var updateValue = updateValues[originalValueType];
       var recordLevelExceptions = recordLevelExceptionCodes != null ? recordLevelExceptionCodes[originalValueType] : [];
-      if (updateType == UpdateType.OPERATING_TIME.updateTypeName) {
+      if (updateType == UpdateType.operatingTime.updateTypeName) {
         children.add(UpdateHistoryUpdateOperatingTimeItemWidget(
             valueType: originalValueType,
             originalValue: originalValue,
             updateValue: updateValue,
             recordLevelException: recordLevelExceptions,
             serverExceptions: invalidArguments));
-      } else if (updateType == UpdateType.PRICE.updateTypeName) {
+      } else if (updateType == UpdateType.price.updateTypeName) {
         children.add(UpdateHistoryUpdateFuelQuoteItem(
             valueType: originalValueType,
             originalValue: originalValue,
             updateValue: updateValue,
             recordLevelExceptions: recordLevelExceptions,
             serverExceptions: invalidArguments));
-      } else if (updateType == UpdateType.SUGGEST_EDIT.updateTypeName) {
+      } else if (updateType == UpdateType.suggestEdit.updateTypeName) {
         children.add(UpdateHistorySuggestEditItem(
             valueType: originalValueType,
             originalValue: originalValue,
             updateValue: updateValue,
             recordLevelExceptions: recordLevelExceptions,
             serverExceptions: invalidArguments));
-      } else if (updateType == UpdateType.PHONE_NUMBER.updateTypeName) {
+      } else if (updateType == UpdateType.phoneNumber.updateTypeName) {
         children.add(UpdateHistoryUpdatePhoneNumberItemWidget(
             valueType: originalValueType,
             originalValue: originalValue,
             updateValue: updateValue,
             recordLevelExceptions: recordLevelExceptions,
             serverExceptions: invalidArguments));
-      } else if (updateType == UpdateType.FUEL_STATION_FEATURES.updateTypeName) {
+      } else if (updateType == UpdateType.fuelStationFeatures.updateTypeName) {
         children.add(UpdateHistoryUpdateFuelStationFeatureItemWidget(
             valueType: originalValueType,
             originalValue: originalValue,

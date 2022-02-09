@@ -26,9 +26,9 @@ import 'location/location_service_subscription.dart';
 import 'model/market_region_zone_config.dart';
 
 class LocationUtils {
-  static const _TAG = 'LocationUtils';
+  static const _tag = 'LocationUtils';
 
-  LocationDataSource _locationDataSource;
+  final LocationDataSource _locationDataSource;
 
   LocationUtils(this._locationDataSource);
 
@@ -38,11 +38,11 @@ class LocationUtils {
     if (config != null) {
       final double minDistanceInMetres = config.zoneConfig.minDistanceLocationUpdates;
       final int minTimeLocationUpdates = config.zoneConfig.minTimeLocationUpdates * 1000;
-      LogUtil.debug(_TAG, 'minDistanceInMetres : $minDistanceInMetres minTimeLocationUpdates $minTimeLocationUpdates');
+      LogUtil.debug(_tag, 'minDistanceInMetres : $minDistanceInMetres minTimeLocationUpdates $minTimeLocationUpdates');
       return _locationDataSource.updateLocationSettings(
           minTimeLocationUpdates, minDistanceInMetres, onLocationChangeListener);
     } else {
-      LogUtil.error(_TAG, 'Could not configure locationService as marketRegion not found in db');
+      LogUtil.error(_tag, 'Could not configure locationService as marketRegion not found in db');
       return null;
     }
   }

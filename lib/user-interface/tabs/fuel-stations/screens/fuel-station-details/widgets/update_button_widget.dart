@@ -26,13 +26,13 @@ import 'package:pumped_end_device/models/pumped/fuel_station.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
 class UpdateButtonWidget extends StatelessWidget {
-  static const _TAG = 'UpdateButtonWidget';
+  static const _tag = 'UpdateButtonWidget';
 
-  static const _editIcon = Icon(IconData(IconCodes.edit_icon_code,
+  static const _editIcon = Icon(IconData(IconCodes.editIconCode,
       fontFamily: 'MaterialIcons', matchTextDirection: true),
       color: FontsAndColors.pumpedNonActionableIconColor, size: 25);
 
-  static const _moreIcon = Icon(IconData(IconCodes.navigate_next_icon_code,
+  static const _moreIcon = Icon(IconData(IconCodes.navigateNextIconCode,
       fontFamily: 'MaterialIcons', matchTextDirection: true),
       color: FontsAndColors.pumpedSecondaryIconColor, size: 25);
 
@@ -44,26 +44,26 @@ class UpdateButtonWidget extends StatelessWidget {
   final Function updateFuelStationDetailsScreenForChange;
 
   const UpdateButtonWidget(this.fuelStation,
-      {this.addressDetailsExpanded: false,
-      this.fuelPricesExpanded: false,
-      this.expandSuggestEdit: false,
-      this.updateFuelStationDetailsScreenForChange});
+      {Key key, this.addressDetailsExpanded = false,
+      this.fuelPricesExpanded = false,
+      this.expandSuggestEdit = false,
+      this.updateFuelStationDetailsScreenForChange}) : super(key: key);
 
   @override
   Widget build(final BuildContext context) {
     return Container(
-        padding: EdgeInsets.only(left: 10, right: 10),
-        decoration: BoxDecoration(color: Colors.white),
+        padding: const EdgeInsets.only(left: 10, right: 10),
+        decoration: const BoxDecoration(color: Colors.white),
         child: ListTile(
             onTap: () {
               final Future<bool> signInDialogOutput =
-                  showDialog<bool>(context: context, builder: (context) => SignInWidget());
+                  showDialog<bool>(context: context, builder: (context) => const SignInWidget());
               signInDialogOutput.then(
                   (output) => _handleLogin(
                       context, output, fuelStation, addressDetailsExpanded, fuelPricesExpanded, expandSuggestEdit),
-                  onError: (errorOutput) => print('error output'));
+                  onError: (errorOutput) => LogUtil.debug(_tag, 'error output'));
             },
-            contentPadding: EdgeInsets.only(left: 10, right: 10),
+            contentPadding: const EdgeInsets.only(left: 10, right: 10),
             dense: true,
             isThreeLine: false,
             leading: _editIcon,
@@ -83,10 +83,10 @@ class UpdateButtonWidget extends StatelessWidget {
               expandSuggestEdit: expandSuggestEdit,
               expandAddressDetails: addressDetailsExpanded));
       if (updateFuelStationDetailsScreenForChange != null) {
-        LogUtil.debug(_TAG, 'updateFuelStationDetailsScreenForChange is not null, calling...');
+        LogUtil.debug(_tag, 'updateFuelStationDetailsScreenForChange is not null, calling...');
         updateFuelStationDetailsScreenForChange(fuelStation, result);
       } else {
-        LogUtil.debug(_TAG, 'updateFuelStationDetailsScreenForChange is null');
+        LogUtil.debug(_tag, 'updateFuelStationDetailsScreenForChange is null');
       }
     } else {
       // show signIn failure dialog.
@@ -94,11 +94,11 @@ class UpdateButtonWidget extends StatelessWidget {
   }
 
   Widget _getUpdateDetailsSubtitle() {
-    return Text('In case information is missing or incorrect', maxLines: 2, overflow: TextOverflow.ellipsis);
+    return const Text('In case information is missing or incorrect', maxLines: 2, overflow: TextOverflow.ellipsis);
   }
 
   Widget _getUpdateDetailsTitle() {
-    return Text('Update Station Details',
+    return const Text('Update Station Details',
         maxLines: 2,
         overflow: TextOverflow.ellipsis,
         style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.black87));

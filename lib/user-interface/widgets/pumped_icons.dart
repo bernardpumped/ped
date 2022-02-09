@@ -16,34 +16,33 @@
  *     along with Pumped End Device.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../icon_codes.dart';
 
 class PumpedIcons {
-  static const emailIcon_whiteSize24 = const Icon(IconData(IconCodes.email_icon_code, fontFamily: 'MaterialIcons'), color: Colors.white, size: 24);
+  static const emailIconWhiteSize24 = Icon(IconData(IconCodes.emailIconCode, fontFamily: 'MaterialIcons'), color: Colors.white, size: 24);
 
-  static const faSourceIcon_black54Size30 = const Icon(IconData(IconCodes.fa_source_icon_code, fontFamily: 'MaterialIcons'), color: Colors.black54, size: 30);
-  static const faSourceIcon_black54Size24 = const Icon(IconData(IconCodes.fa_source_icon_code, fontFamily: 'MaterialIcons'), color: Colors.black54, size: 24);
-  static const faSourceIcon_black54Size20 = const Icon(IconData(IconCodes.fa_source_icon_code, fontFamily: 'MaterialIcons'), color: Colors.black54, size: 20);
+  static const faSourceIconBlack54Size30 = Icon(IconData(IconCodes.faSourceIconCode, fontFamily: 'MaterialIcons'), color: Colors.black54, size: 30);
+  static const faSourceIconBlack54Size24 = Icon(IconData(IconCodes.faSourceIconCode, fontFamily: 'MaterialIcons'), color: Colors.black54, size: 24);
+  static const faSourceIconBlack54Size20 = Icon(IconData(IconCodes.faSourceIconCode, fontFamily: 'MaterialIcons'), color: Colors.black54, size: 20);
 
-  static const crowdSourceIcon_black54Size30 = const Icon(IconData(IconCodes.crowd_source_icon_code, fontFamily: 'MaterialIcons'), color: Colors.black54, size: 30);
-  static const crowdSourceIcon_black54Size24 = const Icon(IconData(IconCodes.crowd_source_icon_code, fontFamily: 'MaterialIcons'), color: Colors.black54, size: 24);
+  static const crowdSourceIconBlack54Size30 = Icon(IconData(IconCodes.crowdSourceIconCode, fontFamily: 'MaterialIcons'), color: Colors.black54, size: 30);
+  static const crowdSourceIconBlack54Size24 = Icon(IconData(IconCodes.crowdSourceIconCode, fontFamily: 'MaterialIcons'), color: Colors.black54, size: 24);
 
-  static const googleSourceIcon_black54Size30 = const Icon(IconData(IconCodes.google_source_icon_code, fontFamily: 'MaterialIcons'), color: Colors.black54, size: 24);
+  static const googleSourceIconBlack54Size30 = Icon(IconData(IconCodes.googleSourceIconCode, fontFamily: 'MaterialIcons'), color: Colors.black54, size: 24);
 
-  static const settingsIcon_black54Size30 = const Icon(IconData(IconCodes.settings_icon_code, fontFamily: 'MaterialIcons', matchTextDirection: true), color: Colors.black54, size: 30);
-  static const settingsIcon_black54Size24 = const Icon(IconData(IconCodes.settings_icon_code, fontFamily: 'MaterialIcons', matchTextDirection: true), color: Colors.black54, size: 24);
-  static const settingsTabIcon_size30 = const Icon(IconData(IconCodes.settings_icon_code, fontFamily: 'MaterialIcons', matchTextDirection: true), size: 30);
+  static const settingsIconBlack54Size30 = Icon(IconData(IconCodes.settingsIconCode, fontFamily: 'MaterialIcons', matchTextDirection: true), color: Colors.black54, size: 30);
+  static const settingsIconBlack54Size24 = Icon(IconData(IconCodes.settingsIconCode, fontFamily: 'MaterialIcons', matchTextDirection: true), color: Colors.black54, size: 24);
+  static const settingsTabIconSize30 = Icon(IconData(IconCodes.settingsIconCode, fontFamily: 'MaterialIcons', matchTextDirection: true), size: 30);
 
-  static const undoIcon_black87Size30 =  const Icon(IconData(IconCodes.undo_icon_code, fontFamily: 'MaterialIcons', matchTextDirection: true), color: Colors.black54, size: 30);
+  static const undoIconBlack87Size30 =  Icon(IconData(IconCodes.undoIconCode, fontFamily: 'MaterialIcons', matchTextDirection: true), color: Colors.black54, size: 30);
 
-  static const searchTabIcon_size30 =  const Icon(IconData(IconCodes.fuel_station_search_tab_icon_code, fontFamily: 'MaterialIcons', matchTextDirection: true), size: 30);
-  static const updateHistoryTabIcon_size30 =  const Icon(IconData(IconCodes.update_history_icon_code, fontFamily: 'MaterialIcons', matchTextDirection: true), size: 30);
-  static const aboutTabIcon_size30 =  const Icon(IconData(IconCodes.about_icon_code, fontFamily: 'MaterialIcons', matchTextDirection: true), size: 30);
+  static const searchTabIconSize30 =  Icon(IconData(IconCodes.fuelStationSearchTabIconCode, fontFamily: 'MaterialIcons', matchTextDirection: true), size: 30);
+  static const updateHistoryTabIconSize30 =  Icon(IconData(IconCodes.updateHistoryIconCode, fontFamily: 'MaterialIcons', matchTextDirection: true), size: 30);
+  static const aboutTabIconSize30 =  Icon(IconData(IconCodes.aboutIconCode, fontFamily: 'MaterialIcons', matchTextDirection: true), size: 30);
 
-  static const fuelTypesIcon_black54Size30 = const Icon(IconData(IconCodes.fuel_type_icon_code, fontFamily: 'MaterialIcons', matchTextDirection: true), color: Colors.black54, size: 30);
-  static const fuelCategoriesIcon_black54Size30 = const Icon(IconData(IconCodes.fuel_categories_icon_code, fontFamily: 'MaterialIcons', matchTextDirection: true), color: Colors.black54, size: 30);
+  static const fuelTypesIconBlack54Size30 = Icon(IconData(IconCodes.fuelTypeIconCode, fontFamily: 'MaterialIcons', matchTextDirection: true), color: Colors.black54, size: 30);
+  static const fuelCategoriesIconBlack54Size30 = Icon(IconData(IconCodes.fuelCategoriesIconCode, fontFamily: 'MaterialIcons', matchTextDirection: true), color: Colors.black54, size: 30);
 
 }

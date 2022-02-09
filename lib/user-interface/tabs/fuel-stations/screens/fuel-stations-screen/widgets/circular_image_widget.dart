@@ -18,7 +18,6 @@
 
 import 'dart:math';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class CircularImageWidget extends StatelessWidget {
@@ -30,23 +29,23 @@ class CircularImageWidget extends StatelessWidget {
   final Color color;
   final double marginWidth;
 
-  CircularImageWidget(
-      {@required this.imagePath,
+  const CircularImageWidget(
+      {Key key, @required this.imagePath,
       @required this.isNetworkImage,
       @required this.width,
       @required this.height,
       this.margin = 0,
       this.color = Colors.deepPurple,
-      this.marginWidth = 1});
+      this.marginWidth = 1}) : super(key: key);
 
   @override
   Widget build(final BuildContext context) {
     final double innerCircleRadius = sqrt(width * width + height * height) / 2;
-    return new Container(
+    return Container(
         margin: EdgeInsets.all(margin),
         width: width,
         height: height,
-        decoration: new BoxDecoration(
+        decoration: BoxDecoration(
             shape: BoxShape.circle, border: Border.all(color: color, width: marginWidth), color: Colors.white),
         alignment: Alignment.center,
         child: Container(

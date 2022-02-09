@@ -31,57 +31,57 @@ import 'location_access_result_code.dart';
 import 'location_service_subscription.dart';
 
 class LocationDataSource {
-  static const _TAG = "LocationDataSource";
-  GeoLocationWrapper _geoLocationWrapper;
-  PlatformWrapper _platformWrapper;
+  static const _tag = "LocationDataSource";
+  final GeoLocationWrapper _geoLocationWrapper;
+  final PlatformWrapper _platformWrapper;
 
   LocationDataSource(this._geoLocationWrapper, this._platformWrapper);
 
   Future<GetLocationResult> getLocationData({String thread = 'default'}) async {
     if (!_platformWrapper.deviceIsBrowser() && _platformWrapper.platformIsLinux()) {
-      return Future.value(GetLocationResult(LocationInitResultCode.SUCCESS,
+      return Future.value(GetLocationResult(LocationInitResultCode.success,
           Future.value(GeoLocationData(
-            latitude: Places.FISHBURNER_SYDNEY.latitude,
-            longitude: Places.FISHBURNER_SYDNEY.longitude,
+            latitude: Places.fishBurnerSydney.latitude,
+            longitude: Places.fishBurnerSydney.longitude,
             altitude: 0,
           ))));
     }
-    LogUtil.debug(_TAG, "Checking Location Service Enabled");
+    LogUtil.debug(_tag, "Checking Location Service Enabled");
     bool serviceEnabled = await _geoLocationWrapper.isLocationServiceEnabled();
-    LogUtil.debug(_TAG, "Location Service is Enabled ? ${serviceEnabled}");
+    LogUtil.debug(_tag, "Location Service is Enabled ? $serviceEnabled");
     if (!serviceEnabled) {
-      return Future.value(GetLocationResult(LocationInitResultCode.LOCATION_SERVICE_DISABLED, null));
+      return Future.value(GetLocationResult(LocationInitResultCode.locationServiceDisabled, null));
     }
 
     LocationPermission permission = await _geoLocationWrapper.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await _geoLocationWrapper.requestPermission();
       if (permission == LocationPermission.denied) {
-        return Future.value(GetLocationResult(LocationInitResultCode.PERMISSION_DENIED, null));
+        return Future.value(GetLocationResult(LocationInitResultCode.permissionDenied, null));
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
-      return Future.value(GetLocationResult(LocationInitResultCode.PERMISSION_DENIED, null));
+      return Future.value(GetLocationResult(LocationInitResultCode.permissionDenied, null));
     }
 
     try {
       final Position position = await _geoLocationWrapper.getCurrentPosition();
       if (position == null) {
-        return Future.value(GetLocationResult(LocationInitResultCode.NOT_FOUND, null));
+        return Future.value(GetLocationResult(LocationInitResultCode.notFound, null));
       }
-      LogUtil.debug(_TAG, "Location found as : $position");
+      LogUtil.debug(_tag, "Location found as : $position");
       if (kIsWeb) {
-        LogUtil.debug(_TAG, 'Returning from kIsWeb');
-        return Future.value(GetLocationResult(LocationInitResultCode.SUCCESS,
+        LogUtil.debug(_tag, 'Returning from kIsWeb');
+        return Future.value(GetLocationResult(LocationInitResultCode.success,
             Future.value(GeoLocationData(
-              latitude: Places.FISHBURNER_SYDNEY.latitude,
-              longitude: Places.FISHBURNER_SYDNEY.longitude,
+              latitude: Places.fishBurnerSydney.latitude,
+              longitude: Places.fishBurnerSydney.longitude,
               altitude: 0,
             ))));
       } else {
-        LogUtil.debug(_TAG, 'Returning from !kIsWeb');
-        return Future.value(GetLocationResult(LocationInitResultCode.SUCCESS,
+        LogUtil.debug(_tag, 'Returning from !kIsWeb');
+        return Future.value(GetLocationResult(LocationInitResultCode.success,
             Future.value(GeoLocationData(
               latitude: position.latitude,
               longitude: position.longitude,
@@ -89,7 +89,7 @@ class LocationDataSource {
             ))));
       }
     } catch (e) {
-      return Future.value(GetLocationResult(LocationInitResultCode.FAILURE, null));
+      return Future.value(GetLocationResult(LocationInitResultCode.failure, null));
     }
   }
 
@@ -97,13 +97,12 @@ class LocationDataSource {
       final double distance, final Function listenerFunction) async {
       final StreamSubscription<Position> positionSubscription = _geoLocationWrapper.getPositionStream(interval, distance)
         .listen((Position position) {
-            print(position == null ? 'Unknown' : position.latitude.toString() + ', ' + position.longitude.toString());
             if (kIsWeb) {
-              listenerFunction(Places.FISHBURNER_SYDNEY.latitude, Places.FISHBURNER_SYDNEY.longitude);
+              listenerFunction(Places.fishBurnerSydney.latitude, Places.fishBurnerSydney.longitude);
             } else {
               listenerFunction(position.latitude, position.longitude);
             }
           });
-      return new LocationServiceSubscription(positionSubscription);
+      return LocationServiceSubscription(positionSubscription);
   }
 }

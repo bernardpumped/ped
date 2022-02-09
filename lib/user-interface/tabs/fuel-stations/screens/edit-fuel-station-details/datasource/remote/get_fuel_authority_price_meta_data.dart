@@ -26,6 +26,7 @@ class GetFuelAuthorityPriceMetaData
   GetFuelAuthorityPriceMetaData(GetFuelAuthorityPriceMetaDataResponseParser responseParser)
       : super(responseParser, 'GetFuelAuthorityPriceMetaData');
 
+  @override
   String getUrl(final GetFuelAuthorityPriceMetadataRequest request) {
     return '/marketRegion/getFuelAuthorityPriceMetaData?authorityId=' + request.authorityId;
   }

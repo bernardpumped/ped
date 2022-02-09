@@ -27,12 +27,13 @@ import 'package:pumped_end_device/util/date_time_utils.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
 class GetFuelStationOperatingHrsResponseParser extends ResponseParser<GetFuelStationOperatingHrsResponse> {
-  static const _TAG = 'GetFuelStationOperatingHrsResponseParser';
+  static const _tag = 'GetFuelStationOperatingHrsResponseParser';
 
+  @override
   GetFuelStationOperatingHrsResponse parseResponse(final String response) {
     final Map<String, dynamic> responseJson = convert.jsonDecode(response);
     final String responseCode = responseJson['responseCode'];
-    LogUtil.debug(_TAG, 'Response Code : $responseCode');
+    LogUtil.debug(_tag, 'Response Code : $responseCode');
     final Map<String, dynamic> invalidArguments = responseJson['invalidArguments'];
     final int responseEpoch = responseJson['responseEpoch'];
     final String responseDetails = responseJson['responseDetails'];

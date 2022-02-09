@@ -67,7 +67,7 @@ class FuelAuthorityPriceMetadata {
         'alternate_pos': alternatePos
       };
 
-  factory FuelAuthorityPriceMetadata.fromMap(final Map<String, dynamic> data) => new FuelAuthorityPriceMetadata(
+  factory FuelAuthorityPriceMetadata.fromMap(final Map<String, dynamic> data) => FuelAuthorityPriceMetadata(
       fuelAuthority: data['fuel_authority'],
       fuelType: data['fuel_type'],
       fuelMeasure: data['fuel_measure'],

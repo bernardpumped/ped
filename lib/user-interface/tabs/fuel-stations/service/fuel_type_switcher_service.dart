@@ -29,10 +29,10 @@ import 'package:pumped_end_device/models/pumped/market_region_config.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
 class FuelTypeSwitcherService {
-  static const _TAG = 'FuelTypeSwitcherService';
+  static const _tag = 'FuelTypeSwitcherService';
 
   void addFuelTypeSwitcherDataToStream(final StreamController<FuelTypeSwitcherData> streamController) async {
-    final FuelTypeSwitcherData fuelTypeSwitcherData = new FuelTypeSwitcherData();
+    final FuelTypeSwitcherData fuelTypeSwitcherData = FuelTypeSwitcherData();
     try {
       final FuelCategory fuelCategory = await _getDefaultFuelCategory();
       fuelTypeSwitcherData.defaultFuelCategory = fuelCategory;
@@ -41,11 +41,11 @@ class FuelTypeSwitcherService {
       fuelTypeSwitcherData.defaultFuelType = fuelType;
 
       final int userSettingsVersion = await UserConfigurationDao.instance
-          .getUserConfigurationVersion(UserConfiguration.DEFAULT_USER_CONFIG_ID);
+          .getUserConfigurationVersion(UserConfiguration.defaultUserConfigId);
       fuelTypeSwitcherData.userSettingsVersion = userSettingsVersion;
     } catch (error, s) {
       fuelTypeSwitcherData.failureReason = 'Error fetching the defaultFuelCategory / defaultFuelType $s';
-      LogUtil.debug(_TAG, 'Error fetching the defaultFuelCategory / defaultFuelType $s');
+      LogUtil.debug(_tag, 'Error fetching the defaultFuelCategory / defaultFuelType $s');
     }
     fuelTypeSwitcherData.hasFailed = fuelTypeSwitcherData.defaultFuelCategory == null ||
         fuelTypeSwitcherData.defaultFuelType == null ||
@@ -57,7 +57,7 @@ class FuelTypeSwitcherService {
     final MarketRegionZoneConfiguration marketRegionZoneConfig =
         await MarketRegionZoneConfigDao.instance.getMarketRegionZoneConfiguration();
     final UserConfiguration userConfiguration = await UserConfigurationDao.instance
-        .getUserConfiguration(UserConfiguration.DEFAULT_USER_CONFIG_ID);
+        .getUserConfiguration(UserConfiguration.defaultUserConfigId);
     if (userConfiguration != null) {
       return _getFuelCategory(marketRegionZoneConfig, userConfiguration);
     } else {
@@ -65,7 +65,7 @@ class FuelTypeSwitcherService {
         return marketRegionZoneConfig.marketRegionConfig.defaultFuelCategory;
       }
     }
-    LogUtil.debug(_TAG,
+    LogUtil.debug(_tag,
         '_getDefaultFuelCategory::neither marketRegion nor userConfiguration fuelCategory found. Returning as null');
     return null;
   }
@@ -74,9 +74,9 @@ class FuelTypeSwitcherService {
     final MarketRegionZoneConfiguration marketRegionZoneConfig =
         await MarketRegionZoneConfigDao.instance.getMarketRegionZoneConfiguration();
     final UserConfiguration userConfiguration = await UserConfigurationDao.instance
-        .getUserConfiguration(UserConfiguration.DEFAULT_USER_CONFIG_ID);
+        .getUserConfiguration(UserConfiguration.defaultUserConfigId);
     return _getDefaultFuelTypeForMarketRegionAndUserConfig(
-        marketRegionZoneConfig != null ? marketRegionZoneConfig.marketRegionConfig : null, userConfiguration);
+        marketRegionZoneConfig?.marketRegionConfig, userConfiguration);
   }
 
   FuelType _getDefaultFuelTypeForMarketRegionAndUserConfig(
@@ -97,7 +97,7 @@ class FuelTypeSwitcherService {
     if (marketRegionZoneConfig != null) {
       allFuelCategories = marketRegionZoneConfig.marketRegionConfig.allowedFuelCategories.toList();
     } else {
-      LogUtil.debug(_TAG, 'getFuelCategory::marketRegionZoneConfig found as null, and so is allFuelCategories');
+      LogUtil.debug(_tag, 'getFuelCategory::marketRegionZoneConfig found as null, and so is allFuelCategories');
     }
     for (final FuelCategory fuelCategory in allFuelCategories) {
       if (fuelCategory == userFuelCategory) {

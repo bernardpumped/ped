@@ -22,7 +22,7 @@ import 'package:pumped_end_device/models/pumped/fuel_category.dart';
 
 class UserConfiguration {
 
-  static const DEFAULT_USER_CONFIG_ID = 'default-user-config-id';
+  static const defaultUserConfigId = 'default-user-config-id';
 
   final String id;
   final int version;
@@ -53,7 +53,7 @@ class UserConfiguration {
   factory UserConfiguration.fromMap(final Map<String, dynamic> data) => UserConfiguration.fromJson(data);
 
   factory UserConfiguration.fromJson(final Map<String, dynamic> data) {
-    return new UserConfiguration(
+    return UserConfiguration(
         numSearchResults: data['num_search_results'],
         defaultFuelType: FuelType.fromJson(data['default_fuel_type']),
         defaultFuelCategory: FuelCategory.fromJson(data['default_fuel_category']),

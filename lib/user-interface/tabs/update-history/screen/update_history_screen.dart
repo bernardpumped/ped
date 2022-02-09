@@ -26,6 +26,8 @@ import 'package:pumped_end_device/models/update_history.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
 class UpdateHistoryScreen extends StatefulWidget {
+  const UpdateHistoryScreen({Key key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
     return _UpdateHistoryScreenState();
@@ -43,13 +45,13 @@ class _UpdateHistoryScreenState extends State<UpdateHistoryScreen> {
   @override
   Widget build(final BuildContext context) {
     return Scaffold(
-        appBar: CupertinoNavigationBar(middle: ApplicationTitleTextWidget()),
+        appBar: const CupertinoNavigationBar(middle: ApplicationTitleTextWidget()),
         body: Container(
             width: double.infinity,
-            padding: EdgeInsets.only(right: 5, bottom: 5, left: 5),
+            padding: const EdgeInsets.only(right: 5, bottom: 5, left: 5),
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
               Padding(
-                  padding: EdgeInsets.only(left: 5, right: 5),
+                  padding: const EdgeInsets.only(left: 5, right: 5),
                   child: WidgetUtils.getTabHeaderWidget(context, "Update History")),
               Expanded(
                   child: FutureBuilder<List<UpdateHistory>>(
@@ -68,31 +70,30 @@ class _UpdateHistoryScreenState extends State<UpdateHistoryScreen> {
                           LogUtil.debug('updateHistory', 'Error happened ${snapshot.error}');
                           return RefreshIndicator(
                               color: Colors.blue,
-                              child: Center(child: Text('Error Loading Update History')),
+                              child: const Center(child: Text('Error Loading Update History')),
                               onRefresh: () async {
                                 setState(() {
                                   updateHistoryFuture = UpdateHistoryDao.instance.getAllUpdateHistory();
                                 });
                               });
                         } else {
-                          return CircularProgressIndicator();
+                          return const CircularProgressIndicator();
                         }
                       }))
             ])));
   }
 
   Widget _getUpdateHistoryItemList(final List<UpdateHistory> updateHistories) {
-    if (updateHistories != null && updateHistories.length > 0) {
+    if (updateHistories != null && updateHistories.isNotEmpty) {
       return ListView.builder(
           itemCount: updateHistories.length,
           itemBuilder: (context, index) {
             return UpdateHistoryItemWidget(updateHistories[index]);
           });
     } else {
-      return Container(
-          child: ListView(children: <Widget>[
+      return ListView(children: const <Widget>[
         Center(child: Text('No Update History Found', style: TextStyle(fontSize: 18, color: Colors.black87)))
-      ]));
+      ]);
     }
   }
 }

@@ -16,7 +16,6 @@
  *     along with Pumped End Device.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pumped_end_device/data/local/location/location_data_source.dart';
@@ -43,14 +42,14 @@ class FuelStationListItemExpandedWidget extends StatefulWidget {
   final FuelStation _fuelStation;
   final FuelType _selectedFuelType;
   final Function _triggerHomeScreenRebuild;
-  FuelStationListItemExpandedWidget(this._fuelStation, this._selectedFuelType, this._triggerHomeScreenRebuild);
+  const FuelStationListItemExpandedWidget(this._fuelStation, this._selectedFuelType, this._triggerHomeScreenRebuild, {Key key}) : super(key: key);
 
   @override
   _FuelStationListItemExpandedWidgetState createState() => _FuelStationListItemExpandedWidgetState();
 }
 
 class _FuelStationListItemExpandedWidgetState extends State<FuelStationListItemExpandedWidget> {
-  static const _TAG = 'FuelStationListItemExpandedWidgetIos';
+  static const _tag = 'FuelStationListItemExpandedWidgetIos';
   static const Color _expandedViewBackGroundColor = Colors.white;
   static const Color _expandedViewPrimaryTextColor = Colors.black87;
   static const Color _expandedViewPrimaryIconColor = Colors.black54;
@@ -58,33 +57,33 @@ class _FuelStationListItemExpandedWidgetState extends State<FuelStationListItemE
   static const Color _expandedViewSecondaryIconColor = FontsAndColors.pumpedSecondaryIconColor;
   static const Color _expandedViewSecondaryTextColor = Colors.black54;
 
-  final FuelStationUpdateMergeUtil _fuelStationUpdateMergeUtil = new FuelStationUpdateMergeUtil();
+  final FuelStationUpdateMergeUtil _fuelStationUpdateMergeUtil = FuelStationUpdateMergeUtil();
 
   @override
   Widget build(final BuildContext context) {
     final FuelQuote selectedFuelQuote = widget._fuelStation.fuelTypeFuelQuoteMap[widget._selectedFuelType.fuelType];
-    var formatter = new DateFormat('dd-MMM hh:mm');
+    var formatter = DateFormat('dd-MMM hh:mm');
     final Set<String> fuelQuoteSources = widget._fuelStation.fuelQuoteSources();
     final String fuelQuoteSourcesStr = fuelQuoteSources.join(" ");
     return Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        margin: EdgeInsets.only(top: 0, left: 0, right: 0, bottom: 5),
+        margin: const EdgeInsets.only(top: 0, left: 0, right: 0, bottom: 5),
         color: _expandedViewBackGroundColor,
         child: Container(
-            decoration: BoxDecoration(color: Colors.lightBlue[50], borderRadius: BorderRadius.all(Radius.circular(10))),
-            padding: EdgeInsets.all(15),
+            decoration: BoxDecoration(color: Colors.lightBlue[50], borderRadius: const BorderRadius.all(Radius.circular(10))),
+            padding: const EdgeInsets.all(15),
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   _getFuelStationImgNameAddressWidget(),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   _getDistanceStatusRatingRow(context),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
                   _getFuelQuoteDetailsRow(selectedFuelQuote, formatter, fuelQuoteSourcesStr, context),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
                   _getMoreDetailsDirectionsCallRow(context),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
                   _getPromosColumn(),
                   _getServicesDetailsColumn()
                 ])));
@@ -96,11 +95,11 @@ class _FuelStationListItemExpandedWidgetState extends State<FuelStationListItemE
           ? Expanded(
               flex: 1,
               child: getRowTextItem('${DataUtils.toPrecision(widget._fuelStation.distance, 2)} km', 'Distance'))
-          : SizedBox(width: 0),
+          : const SizedBox(width: 0),
       Expanded(flex: 1, child: _getFuelStationStatusWidget(context)),
       widget._fuelStation.rating != null
           ? Expanded(flex: 1, child: getRowTextItem('${widget._fuelStation.rating}', 'Rating'))
-          : SizedBox(width: 0)
+          : const SizedBox(width: 0)
     ]);
   }
 
@@ -111,7 +110,7 @@ class _FuelStationListItemExpandedWidgetState extends State<FuelStationListItemE
         children: <Widget>[
           CircularImageWidget(
               width: 70, height: 70, isNetworkImage: true, imagePath: widget._fuelStation.merchantLogoUrl, margin: 3),
-          SizedBox(width: 10),
+          const SizedBox(width: 10),
           Flexible(
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -120,17 +119,17 @@ class _FuelStationListItemExpandedWidgetState extends State<FuelStationListItemE
                 Text(widget._fuelStation.fuelStationName,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(color: _expandedViewPrimaryTextColor, fontSize: 16, fontWeight: FontWeight.w500)),
-                SizedBox(height: 8),
+                    style: const TextStyle(color: _expandedViewPrimaryTextColor, fontSize: 16, fontWeight: FontWeight.w500)),
+                const SizedBox(height: 8),
                 Text(
                     '${widget._fuelStation.fuelStationAddress.addressLine1}, ${widget._fuelStation.fuelStationAddress.locality} '
                     '${widget._fuelStation.fuelStationAddress.state} ${widget._fuelStation.fuelStationAddress.zip}',
-                    style: TextStyle(color: _expandedViewPrimaryTextColor, fontSize: 13))
+                    style: const TextStyle(color: _expandedViewPrimaryTextColor, fontSize: 13))
               ]))
         ]);
   }
 
-  static const moreDetailsIcon = const Icon(IconData(58370, fontFamily: 'MaterialIcons'), color: _expandedViewButtonIconColor);
+  static const moreDetailsIcon = Icon(IconData(58370, fontFamily: 'MaterialIcons'), color: _expandedViewButtonIconColor);
 
   Row _getMoreDetailsDirectionsCallRow(BuildContext context) {
     return Row(
@@ -141,19 +140,19 @@ class _FuelStationListItemExpandedWidgetState extends State<FuelStationListItemE
             _expandedViewSecondaryIconColor, onTap: () async {
             var homeScreenRefreshNeeded = await Navigator.pushNamed(context, FuelStationDetailsScreen.routeName,
                 arguments: FuelStationDetailsParam(widget._fuelStation));
-            LogUtil.debug(_TAG, 'Rebuild screen $homeScreenRefreshNeeded');
+            LogUtil.debug(_tag, 'Rebuild screen $homeScreenRefreshNeeded');
             if (homeScreenRefreshNeeded) {
               widget._triggerHomeScreenRebuild();
             }
           }), // more_horiz icon
           DirectionsWidget(
-              widget._fuelStation.fuelStationAddress.latitude, widget._fuelStation.fuelStationAddress.longitude, getIt.get<LocationDataSource>()),
+              widget._fuelStation.fuelStationAddress.latitude, widget._fuelStation.fuelStationAddress.longitude, getIt.get<LocationDataSource>(instanceName: locationDataSourceInstanceName)),
           (DataUtils.isNotBlank(widget._fuelStation.fuelStationAddress.phone1) ||
                   DataUtils.isNotBlank(widget._fuelStation.fuelStationAddress.phone2))
               ? PhoneWidget(DataUtils.isNotBlank(widget._fuelStation.fuelStationAddress.phone1)
                   ? widget._fuelStation.fuelStationAddress.phone1
                   : widget._fuelStation.fuelStationAddress.phone2)
-              : SizedBox(width: 0)
+              : const SizedBox(width: 0)
         ]);
   }
 
@@ -165,11 +164,11 @@ class _FuelStationListItemExpandedWidgetState extends State<FuelStationListItemE
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
                 Expanded(flex: 1, child: getRowTextItem('${selectedFuelQuote.quoteValue}', 'Price')),
-                Expanded(flex: 1, child: getRowTextItem('${selectedFuelQuote.fuelQuoteSourceName}', 'Price Source')),
+                Expanded(flex: 1, child: getRowTextItem(selectedFuelQuote.fuelQuoteSourceName, 'Price Source')),
                 Expanded(
                     flex: 1,
                     child: getRowTextItem(
-                        '${_getPublishDateFormatted(formatter, selectedFuelQuote.publishDate)}', 'Last Update'))
+                        _getPublishDateFormatted(formatter, selectedFuelQuote.publishDate), 'Last Update'))
               ])
         : Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -179,8 +178,8 @@ class _FuelStationListItemExpandedWidgetState extends State<FuelStationListItemE
                     ? Expanded(
                         flex: 1,
                         child: getRowTextItem(
-                            fuelQuoteSourcesStr == null ? 'Pumped' : fuelQuoteSourcesStr, 'Station Source'))
-                    : SizedBox(width: 0),
+                            fuelQuoteSourcesStr ?? 'Pumped', 'Station Source'))
+                    : const SizedBox(width: 0),
                 Expanded(
                     flex: 1,
                     child: GestureDetector(
@@ -194,7 +193,7 @@ class _FuelStationListItemExpandedWidgetState extends State<FuelStationListItemE
                           if (updateResult != null) {
                             _handleUpdateResult(updateResult);
                           } else {
-                            LogUtil.debug(_TAG, 'UpdateResult is null');
+                            LogUtil.debug(_tag, 'UpdateResult is null');
                           }
                         }))
               ]);
@@ -215,10 +214,10 @@ class _FuelStationListItemExpandedWidgetState extends State<FuelStationListItemE
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
                 Container(
-                  margin: EdgeInsets.only(left: 15),
-                  child: Text('Services', style: TextStyle(color: _expandedViewPrimaryTextColor, fontSize: 16)),
+                  margin: const EdgeInsets.only(left: 15),
+                  child: const Text('Services', style: TextStyle(color: _expandedViewPrimaryTextColor, fontSize: 16)),
                 ),
-                SizedBox(height: 5),
+                const SizedBox(height: 5),
                 Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -229,7 +228,7 @@ class _FuelStationListItemExpandedWidgetState extends State<FuelStationListItemE
                       Expanded(flex: 1, child: getRowIconItem2(_service4Icon, 'ATM')),
                     ])
               ])
-        : SizedBox(width: 0);
+        : const SizedBox(width: 0);
   }
 
   RenderObjectWidget _getPromosColumn() {
@@ -239,10 +238,10 @@ class _FuelStationListItemExpandedWidgetState extends State<FuelStationListItemE
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
                 Container(
-                  margin: EdgeInsets.only(left: 15),
-                  child: Text('Offers', style: TextStyle(color: _expandedViewPrimaryTextColor, fontSize: 16)),
+                  margin: const EdgeInsets.only(left: 15),
+                  child: const Text('Offers', style: TextStyle(color: _expandedViewPrimaryTextColor, fontSize: 16)),
                 ),
-                SizedBox(height: 5),
+                const SizedBox(height: 5),
                 Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -252,7 +251,7 @@ class _FuelStationListItemExpandedWidgetState extends State<FuelStationListItemE
                       Expanded(flex: 1, child: getRowIconItem2(_service7Icon, 'Convenience\nStore'))
                     ])
               ])
-        : SizedBox(width: 0);
+        : const SizedBox(width: 0);
   }
 
   String _getPublishDateFormatted(final DateFormat formatter, final int epochSeconds) {
@@ -275,7 +274,7 @@ class _FuelStationListItemExpandedWidgetState extends State<FuelStationListItemE
             if (updateResult != null) {
               _handleUpdateResult(updateResult);
             } else {
-              LogUtil.debug(_TAG, 'UpdateResult is null');
+              LogUtil.debug(_tag, 'UpdateResult is null');
             }
           });
     }
@@ -285,9 +284,9 @@ class _FuelStationListItemExpandedWidgetState extends State<FuelStationListItemE
   Widget getRowIconItem2(final Icon icon, final String description) {
     return Column(children: <Widget>[
       icon,
-      SizedBox(height: 5),
+      const SizedBox(height: 5),
       Text(description,
-          style: TextStyle(color: _expandedViewSecondaryTextColor, fontSize: 13), textAlign: TextAlign.center)
+          style: const TextStyle(color: _expandedViewSecondaryTextColor, fontSize: 13), textAlign: TextAlign.center)
     ]);
   }
 
@@ -295,14 +294,14 @@ class _FuelStationListItemExpandedWidgetState extends State<FuelStationListItemE
     return Column(children: <Widget>[
       Text(text,
           style: TextStyle(
-              color: color == null ? _expandedViewPrimaryTextColor : color, fontSize: 14, fontWeight: FontWeight.w500)),
-      SizedBox(height: 5),
-      Text(description, style: TextStyle(color: _expandedViewSecondaryTextColor, fontSize: 13))
+              color: color ?? _expandedViewPrimaryTextColor, fontSize: 14, fontWeight: FontWeight.w500)),
+      const SizedBox(height: 5),
+      Text(description, style: const TextStyle(color: _expandedViewSecondaryTextColor, fontSize: 13))
     ]);
   }
 
   void _handleUpdateResult(final UpdateFuelStationDetailsResult updateResult) {
-    LogUtil.debug(_TAG, 'Update Result found : ${updateResult.isUpdateSuccessful}');
+    LogUtil.debug(_tag, 'Update Result found : ${updateResult.isUpdateSuccessful}');
     setState(() {
       _fuelStationUpdateMergeUtil.mergeFuelStationUpdateResult(widget._fuelStation, updateResult);
     });

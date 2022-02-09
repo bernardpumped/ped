@@ -25,9 +25,9 @@ import 'package:pumped_end_device/user-interface/tabs/update-history/screen/widg
 import 'package:pumped_end_device/models/pumped/operating_hours.dart';
 
 class UpdateHistoryUpdateOperatingTimeItemWidget extends StatelessWidget {
-  final valueType;
-  final originalValue;
-  final updateValue;
+  final String valueType;
+  final dynamic originalValue;
+  final dynamic updateValue;
   final Map<String, dynamic> serverExceptions;
   final List<dynamic> recordLevelException;
 
@@ -50,13 +50,13 @@ class UpdateHistoryUpdateOperatingTimeItemWidget extends StatelessWidget {
     final String updateResult = _getUpdateResult();
     return Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
-        margin: EdgeInsets.all(2),
+        margin: const EdgeInsets.all(2),
         color: UpdateHistoryItemWidgetColors.updateItemColor,
         child: Container(
-            padding: EdgeInsets.all(5),
+            padding: const EdgeInsets.all(5),
             child: Column(children: <Widget>[
               Row(children: <Widget>[
-                Expanded(
+                const Expanded(
                     flex: 1,
                     child: Padding(
                         padding: EdgeInsets.only(top: 4, bottom: 4, left: 12),
@@ -68,12 +68,12 @@ class UpdateHistoryUpdateOperatingTimeItemWidget extends StatelessWidget {
                 Expanded(
                     flex: 1,
                     child: Padding(
-                        padding: EdgeInsets.all(4),
+                        padding: const EdgeInsets.all(4),
                         child: Text(dayOfWeek,
-                            style: TextStyle(fontSize: 15, color: UpdateHistoryItemWidgetColors.updateValuesTxtColor))))
+                            style: const TextStyle(fontSize: 15, color: UpdateHistoryItemWidgetColors.updateValuesTxtColor))))
               ]),
               Row(children: <Widget>[
-                Expanded(
+                const Expanded(
                     flex: 1,
                     child: Padding(
                         padding: EdgeInsets.only(top: 4, bottom: 4, left: 12),
@@ -85,12 +85,12 @@ class UpdateHistoryUpdateOperatingTimeItemWidget extends StatelessWidget {
                 Expanded(
                     flex: 1,
                     child: Padding(
-                        padding: EdgeInsets.all(4),
-                        child: Text('$originalTimeRange',
-                            style: TextStyle(fontSize: 15, color: UpdateHistoryItemWidgetColors.updateValuesTxtColor))))
+                        padding: const EdgeInsets.all(4),
+                        child: Text(originalTimeRange,
+                            style: const TextStyle(fontSize: 15, color: UpdateHistoryItemWidgetColors.updateValuesTxtColor))))
               ]),
               Row(children: <Widget>[
-                Expanded(
+                const Expanded(
                     flex: 1,
                     child: Padding(
                         padding: EdgeInsets.only(top: 4, bottom: 4, left: 12),
@@ -102,12 +102,12 @@ class UpdateHistoryUpdateOperatingTimeItemWidget extends StatelessWidget {
                 Expanded(
                     flex: 1,
                     child: Padding(
-                        padding: EdgeInsets.all(4),
-                        child: Text('$updatedTimeRange',
-                            style: TextStyle(fontSize: 15, color: UpdateHistoryItemWidgetColors.updateValuesTxtColor))))
+                        padding: const EdgeInsets.all(4),
+                        child: Text(updatedTimeRange,
+                            style: const TextStyle(fontSize: 15, color: UpdateHistoryItemWidgetColors.updateValuesTxtColor))))
               ]),
               Row(children: <Widget>[
-                Expanded(
+                const Expanded(
                     flex: 1,
                     child: Padding(
                         padding: EdgeInsets.only(top: 4, bottom: 4, left: 12),
@@ -119,14 +119,14 @@ class UpdateHistoryUpdateOperatingTimeItemWidget extends StatelessWidget {
                 Expanded(
                     flex: 1,
                     child: Padding(
-                        padding: EdgeInsets.all(4),
-                        child: Text('$updateResult',
+                        padding: const EdgeInsets.all(4),
+                        child: Text(updateResult,
                             maxLines: 3,
-                            style: TextStyle(fontSize: 15, color: UpdateHistoryItemWidgetColors.updateStatusTxtColor))))
+                            style: const TextStyle(fontSize: 15, color: UpdateHistoryItemWidgetColors.updateStatusTxtColor))))
               ]),
               _getUpdateResult() == 'Failed'
                   ? Row(children: <Widget>[
-                      Expanded(
+                      const Expanded(
                           flex: 1,
                           child: Padding(
                               padding: EdgeInsets.only(top: 4, bottom: 4, left: 12),
@@ -138,19 +138,19 @@ class UpdateHistoryUpdateOperatingTimeItemWidget extends StatelessWidget {
                       Expanded(
                           flex: 1,
                           child: Padding(
-                              padding: EdgeInsets.all(4),
-                              child: Text('${_getTranslatedUpdateResult()}',
+                              padding: const EdgeInsets.all(4),
+                              child: Text(_getTranslatedUpdateResult(),
                                   maxLines: 3,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 15, color: UpdateHistoryItemWidgetColors.updateStatusTxtColor))))
                     ])
-                  : SizedBox(height: 0)
+                  : const SizedBox(height: 0)
             ])));
   }
 
   String _getUpdateResult() {
-    if (serverExceptions == null || serverExceptions.length == 0) {
-      if (recordLevelException == null || recordLevelException.length == 0) {
+    if (serverExceptions == null || serverExceptions.isEmpty) {
+      if (recordLevelException == null || recordLevelException.isEmpty) {
         return 'Success';
       }
     }
@@ -161,39 +161,39 @@ class UpdateHistoryUpdateOperatingTimeItemWidget extends StatelessWidget {
     List<String> translatedResultCode = [];
     for (final String resultCode in recordLevelException) {
       switch (resultCode) {
-        case OperatingTimeUpdateExceptionCodes.TIME_NOT_IN_RANGE:
+        case OperatingTimeUpdateExceptionCodes.timeNotInRange:
           translatedResultCode.add('TIme not in range');
           break;
-        case OperatingTimeUpdateExceptionCodes.VERSION_MIS_MATCH:
+        case OperatingTimeUpdateExceptionCodes.versionMismatch:
           translatedResultCode.add('Stale update, please refresh');
           break;
-        case OperatingTimeUpdateExceptionCodes.TIME_NOT_CHANGED:
+        case OperatingTimeUpdateExceptionCodes.timeNotChanged:
           translatedResultCode.add('Same as old time');
           break;
-        case OperatingTimeUpdateExceptionCodes.INVALID_PARAM_FOR_OPERATING_TIME:
+        case OperatingTimeUpdateExceptionCodes.invalidParamForOperatingTime:
           translatedResultCode.add('Invalid time');
           break;
-        case OperatingTimeUpdateExceptionCodes.UPDATING_OPERATING_TIME_FOR_MULTIPLE_FUEL_STATIONS:
+        case OperatingTimeUpdateExceptionCodes.updatingOperatingTimeForMultipleFuelStations:
           translatedResultCode.add('Can update one station at a time');
           break;
-        case OperatingTimeUpdateExceptionCodes.NO_OPERATING_TIMES_PROVIDED:
+        case OperatingTimeUpdateExceptionCodes.noOperatingTimesProvided:
           translatedResultCode.add('No updated value provided');
           break;
-        case OperatingTimeUpdateExceptionCodes.OPERATING_TIME_NOT_CROWD_SOURCED:
+        case OperatingTimeUpdateExceptionCodes.operatingTimeNotCrowdSourced:
           translatedResultCode.add('Cannot change operating time not crowd sourced');
           break;
-        case OperatingTimeUpdateExceptionCodes.OPERATING_TIME_FUEL_AUTHORITY_SOURCE:
+        case OperatingTimeUpdateExceptionCodes.operatingTimeFuelAuthoritySource:
           translatedResultCode.add('Cannot change operating time provided by Fuel Authority');
           break;
-        case OperatingTimeUpdateExceptionCodes.OPERATING_TIME_GOOGLE_SOURCE:
+        case OperatingTimeUpdateExceptionCodes.operatingTimeGoogleSource:
           translatedResultCode.add('Cannot change operating time provided by Google');
           break;
-        case OperatingTimeUpdateExceptionCodes.OPERATING_TIME_MERCHANT_SOURCE:
+        case OperatingTimeUpdateExceptionCodes.operatingTimeMerchantSource:
           translatedResultCode.add('Cannot change operating time provided by merchant');
           break;
       }
     }
-    if (translatedResultCode.length == 0) {
+    if (translatedResultCode.isEmpty) {
       return 'Failed';
     } else {
       return translatedResultCode.join(', ');

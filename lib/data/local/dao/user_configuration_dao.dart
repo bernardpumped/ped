@@ -21,9 +21,9 @@ import 'package:pumped_end_device/data/local/model/user_configuration.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
 class UserConfigurationDao {
-  static const _TAG = 'UserConfigurationDao';
-  static const _COLLECTION_USER_CONFIG = 'pumped_user_config';
-  static const DEFAULT_USER_CONFIG_VERSION = 1;
+  static const _tag = 'UserConfigurationDao';
+  static const _collectionUserConfig = 'pumped_user_config';
+  static const defaultUserConfigVersion = 1;
 
   static final UserConfigurationDao instance = UserConfigurationDao._();
 
@@ -31,8 +31,8 @@ class UserConfigurationDao {
 
   Future<UserConfiguration> getUserConfiguration(final String userConfigId) async {
     final db = Localstore.instance;
-    final Map<String, dynamic> userConfig = await db.collection(_COLLECTION_USER_CONFIG).doc(userConfigId).get();
-    if (userConfig != null && userConfig.length > 0) {
+    final Map<String, dynamic> userConfig = await db.collection(_collectionUserConfig).doc(userConfigId).get();
+    if (userConfig != null && userConfig.isNotEmpty) {
       return UserConfiguration.fromMap(userConfig);
     }
     return null;
@@ -40,22 +40,22 @@ class UserConfigurationDao {
 
   Future<dynamic> insertUserConfiguration(final UserConfiguration userConfiguration) async {
     final db = Localstore.instance;
-    LogUtil.debug(_TAG, 'Persisting userConfiguration with id ${userConfiguration.id}');
-    db.collection(_COLLECTION_USER_CONFIG).doc(userConfiguration.id).set(userConfiguration.toMap());
+    LogUtil.debug(_tag, 'Persisting userConfiguration with id ${userConfiguration.id}');
+    db.collection(_collectionUserConfig).doc(userConfiguration.id).set(userConfiguration.toMap());
   }
 
   Future<dynamic> deleteUserConfiguration(final String userConfigId) async {
     final db = Localstore.instance;
-    LogUtil.debug(_TAG, 'Deleting user-config with id $userConfigId');
-    db.collection(_COLLECTION_USER_CONFIG).doc(userConfigId).delete();
+    LogUtil.debug(_tag, 'Deleting user-config with id $userConfigId');
+    db.collection(_collectionUserConfig).doc(userConfigId).delete();
   }
 
   Future<int> getUserConfigurationVersion(final String userConfigId) async {
     final db = Localstore.instance;
-    final Map<String, dynamic> userConfig = await db.collection(_COLLECTION_USER_CONFIG).doc(userConfigId).get();
-    if (userConfig != null && userConfig.length > 0) {
+    final Map<String, dynamic> userConfig = await db.collection(_collectionUserConfig).doc(userConfigId).get();
+    if (userConfig != null && userConfig.isNotEmpty) {
       return UserConfiguration.fromMap(userConfig).version;
     }
-    return DEFAULT_USER_CONFIG_VERSION;
+    return defaultUserConfigVersion;
   }
 }

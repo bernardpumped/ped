@@ -25,7 +25,7 @@ class GetFuelStationOperatingHrsRequest extends Request {
   GetFuelStationOperatingHrsRequest({requestUuid, this.fuelStationId, this.fuelStationSource}) : super(requestUuid);
 
   String toQueryString() {
-    return 'fuelStationId=$fuelStationId&attributes=${FuelStationDetailsAttributes.OPERATING_TIMES.value}' +
+    return 'fuelStationId=$fuelStationId&attributes=${FuelStationDetailsAttributes.operatingTimes.value}'
         '&fuelStationSource=$fuelStationSource';
   }
 

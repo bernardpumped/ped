@@ -31,18 +31,16 @@ abstract class HttpGetExecutor<I extends Request, O extends Response> {
   final int timeOutInMills;
   Function onTimeOutFunction;
 
-  HttpGetExecutor(this.responseParser, this.tag, {this.timeOutInMills: defaultTimeOut, this.onTimeOutFunction}) {
-    if (onTimeOutFunction == null) {
-      onTimeOutFunction = () {
+  HttpGetExecutor(this.responseParser, this.tag, {this.timeOutInMills = defaultTimeOut, this.onTimeOutFunction}) {
+    onTimeOutFunction ??= () {
         LogUtil.debug(tag, 'Timeout happened');
       };
-    }
   }
 
   Future<O> execute(final I request) async {
     final String url = PumpedEndPoint.pumperBaseUrl + getUrl(request);
     LogUtil.debug(tag, 'execute::url is $url');
-    var response;
+    http.Response response;
     int startTimeMills;
     try {
       startTimeMills = DateTime.now().millisecondsSinceEpoch;
@@ -54,7 +52,7 @@ abstract class HttpGetExecutor<I extends Request, O extends Response> {
     } finally {
       LogUtil.debug(tag, 'execute::Time taken ${DateTime.now().millisecondsSinceEpoch - startTimeMills}');
     }
-    LogUtil.debug(tag, 'execute::response.statusCode : ${response.statusCode}');
+    LogUtil.debug(tag, 'execute::response.statusCode : ${response?.statusCode}');
     if (response.statusCode == 200) {
       LogUtil.debug(tag, 'execute::response : ${response.body}');
       return responseParser.parseResponse(response.body);

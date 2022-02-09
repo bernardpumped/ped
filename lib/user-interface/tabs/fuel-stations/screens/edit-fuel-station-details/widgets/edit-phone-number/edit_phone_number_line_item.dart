@@ -31,21 +31,21 @@ class EditPhoneNumberLineItem extends StatefulWidget {
   final bool _backendUpdateInProgress;
   final Function onValueChangeListener;
 
-  EditPhoneNumberLineItem(this.title, this.phoneNumber, this.phoneEditingController, this.onValueChangeListener,
-      this._backendUpdateInProgress);
+  const EditPhoneNumberLineItem(this.title, this.phoneNumber, this.phoneEditingController, this.onValueChangeListener,
+      this._backendUpdateInProgress, {Key key}) : super(key: key);
 
   @override
   _EditPhoneNumberLineItemState createState() => _EditPhoneNumberLineItemState();
 }
 
 class _EditPhoneNumberLineItemState extends State<EditPhoneNumberLineItem> {
-  static const _HEIGHT_WITHOUT_ERROR_MSG = 40.0;
-  static const _HEIGHT_WITH_ERROR_MSG = 65.0;
-  static const _HEIGHT_OF_ERROR_MSG = 20.0;
-  static const _HEIGHT_OF_NO_ERROR_MSG = 0.0;
+  static const _heightWithoutErrorMsg = 40.0;
+  static const _heightWithErrorMsg = 65.0;
+  static const _heightOfErrorMsg = 20.0;
+  static const _heightOfNoErrorMsg = 0.0;
 
-  static const _QUICK_DURATION = 300;
-  static const _SLOW_DURATION = 1000;
+  static const _quickDuration = 300;
+  static const _slowDuration = 1000;
 
   double _containerHeight;
   double _errorContainerHeight;
@@ -62,11 +62,11 @@ class _EditPhoneNumberLineItemState extends State<EditPhoneNumberLineItem> {
   }
 
   void _setInitialState() {
-    _errorContainerHeight = _HEIGHT_OF_NO_ERROR_MSG;
-    _containerHeight = _HEIGHT_WITHOUT_ERROR_MSG;
+    _errorContainerHeight = _heightOfNoErrorMsg;
+    _containerHeight = _heightWithoutErrorMsg;
     _errorMessage = "";
-    _containerHeightChangeTime = _SLOW_DURATION;
-    _errorMsgHeightChangeTime = _QUICK_DURATION;
+    _containerHeightChangeTime = _slowDuration;
+    _errorMsgHeightChangeTime = _quickDuration;
   }
 
   void _setUpdatedWidgetHeight() {
@@ -74,17 +74,17 @@ class _EditPhoneNumberLineItemState extends State<EditPhoneNumberLineItem> {
       final bool isValid = DataUtils.isValidNumber(widget.phoneEditingController.text) ||
           DataUtils.isBlank(widget.phoneEditingController.text);
       if (!isValid) {
-        _containerHeight = _HEIGHT_WITH_ERROR_MSG;
-        _errorContainerHeight = _HEIGHT_OF_ERROR_MSG;
+        _containerHeight = _heightWithErrorMsg;
+        _errorContainerHeight = _heightOfErrorMsg;
         _errorMessage = "Phone Number is invalid - numbers only";
-        _containerHeightChangeTime = _QUICK_DURATION;
-        _errorMsgHeightChangeTime = _SLOW_DURATION;
+        _containerHeightChangeTime = _quickDuration;
+        _errorMsgHeightChangeTime = _slowDuration;
       } else {
-        _containerHeight = _HEIGHT_WITHOUT_ERROR_MSG;
-        _errorContainerHeight = _HEIGHT_OF_NO_ERROR_MSG;
+        _containerHeight = _heightWithoutErrorMsg;
+        _errorContainerHeight = _heightOfNoErrorMsg;
         _errorMessage = "";
-        _containerHeightChangeTime = _SLOW_DURATION;
-        _errorMsgHeightChangeTime = _QUICK_DURATION;
+        _containerHeightChangeTime = _slowDuration;
+        _errorMsgHeightChangeTime = _quickDuration;
       }
     }
   }
@@ -96,7 +96,7 @@ class _EditPhoneNumberLineItemState extends State<EditPhoneNumberLineItem> {
         height: _containerHeight,
         curve: Curves.fastOutSlowIn,
         duration: Duration(milliseconds: _containerHeightChangeTime),
-        padding: EdgeInsets.only(left: 40, right: 20, bottom: 5),
+        padding: const EdgeInsets.only(left: 40, right: 20, bottom: 5),
         child: Row(children: <Widget>[
           Expanded(flex: 1, child: Text(widget.title)),
           Expanded(
@@ -109,11 +109,11 @@ class _EditPhoneNumberLineItemState extends State<EditPhoneNumberLineItem> {
 
   Widget _getErrorMsgField() {
     return AnimatedContainer(
-        padding: EdgeInsets.only(top: _errorContainerHeight == _HEIGHT_OF_ERROR_MSG ? 5 : 0),
+        padding: EdgeInsets.only(top: _errorContainerHeight == _heightOfErrorMsg ? 5 : 0),
         height: _errorContainerHeight,
         curve: Curves.fastOutSlowIn,
         duration: Duration(milliseconds: _errorMsgHeightChangeTime),
-        child: Text(_errorMessage, style: TextStyle(color: Colors.red)));
+        child: Text(_errorMessage, style: const TextStyle(color: Colors.red)));
   }
 
   Widget _getPhoneField(final CupertinoTextField phoneTextField) {
@@ -132,10 +132,10 @@ class _EditPhoneNumberLineItemState extends State<EditPhoneNumberLineItem> {
         decoration: BoxDecoration(
             color: Colors.white,
             border: _phoneEnabled ? Border.all(color: Colors.blue) : Border.all(color: Colors.grey),
-            borderRadius: BorderRadius.all(Radius.circular(3))),
+            borderRadius: const BorderRadius.all(Radius.circular(3))),
         clearButtonMode: OverlayVisibilityMode.editing,
         controller: widget.phoneEditingController,
-        style: TextStyle(fontSize: 15),
+        style: const TextStyle(fontSize: 15),
         keyboardType: TextInputType.phone,
         maxLengthEnforcement: MaxLengthEnforcement.enforced,
         enabled: _phoneEnabled && !widget._backendUpdateInProgress,
@@ -148,13 +148,13 @@ class _EditPhoneNumberLineItemState extends State<EditPhoneNumberLineItem> {
         });
   }
 
-  static const _TAG = 'EditPhoneNumberLineItem';
+  static const _tag = 'EditPhoneNumberLineItem';
 
   void _onValueChange() {
     if (_phoneEnabled) {
       final String enteredPhoneNumber = widget.phoneEditingController.text;
       final bool isValid = DataUtils.isValidNumber(enteredPhoneNumber) || DataUtils.isBlank(enteredPhoneNumber);
-      LogUtil.debug(_TAG, 'Entered Phone Number is |$enteredPhoneNumber| is valid $isValid');
+      LogUtil.debug(_tag, 'Entered Phone Number is |$enteredPhoneNumber| is valid $isValid');
       final bool valueUpdated = !DataUtils.stringEqual(enteredPhoneNumber, widget.phoneNumber, true);
       if (valueUpdated) {
         if (isValid) {

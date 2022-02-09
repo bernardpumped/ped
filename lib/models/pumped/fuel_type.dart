@@ -22,7 +22,7 @@ class FuelType {
 
   FuelType({this.fuelType, this.fuelName});
 
-  factory FuelType.fromJson(Map<String, dynamic> data) => new FuelType(
+  factory FuelType.fromJson(Map<String, dynamic> data) => FuelType(
     fuelType : data['fuel_type'],
     fuelName : data['fuel_name'],
   );
@@ -32,6 +32,8 @@ class FuelType {
     'fuel_name': fuelName,
   };
 
-  bool operator == (o) => o is FuelType && fuelType == o.fuelType;
+  @override
+  bool operator == (other) => other is FuelType && fuelType == other.fuelType;
+  @override
   int get hashCode => fuelType.hashCode;
 }

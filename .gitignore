@@ -64,9 +64,11 @@ lib/models/.DS_Store
 
 linux/
 web/
+windows/
 bundle/
 bundle
 local.properties
 pubspec.lock
 pumped_end_device.iml
+desktop.ini
 test/widget_test.dart

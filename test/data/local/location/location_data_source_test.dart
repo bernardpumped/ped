@@ -46,7 +46,7 @@ void main() {
   test('When Location Service is Disabled', () async {
     when(geoLocationWrapper.isLocationServiceEnabled()).thenAnswer((realInvocation) => Future.value(false));
     GetLocationResult result = await locationDataSource.getLocationData();
-    expect(result.locationInitResultCode, equals(LocationInitResultCode.LOCATION_SERVICE_DISABLED));
+    expect(result.locationInitResultCode, equals(LocationInitResultCode.locationServiceDisabled));
     expect(result.geoLocationData, null);
     verify(platformWrapper.deviceIsBrowser()).called(1);
     verify(platformWrapper.platformIsLinux()).called(1);
@@ -60,7 +60,7 @@ void main() {
     when(geoLocationWrapper.checkPermission()).thenAnswer((realInvocation) => Future.value(LocationPermission.denied));
     when(geoLocationWrapper.requestPermission()).thenAnswer((realInvocation) => Future.value(LocationPermission.denied));
     GetLocationResult result = await locationDataSource.getLocationData();
-    expect(result.locationInitResultCode, equals(LocationInitResultCode.PERMISSION_DENIED));
+    expect(result.locationInitResultCode, equals(LocationInitResultCode.permissionDenied));
     expect(result.geoLocationData, null);
     verify(platformWrapper.deviceIsBrowser()).called(1);
     verify(platformWrapper.platformIsLinux()).called(1);
@@ -75,7 +75,7 @@ void main() {
     when(geoLocationWrapper.isLocationServiceEnabled()).thenAnswer((_) => Future.value(true));
     when(geoLocationWrapper.checkPermission()).thenAnswer((realInvocation) => Future.value(LocationPermission.deniedForever));
     GetLocationResult result = await locationDataSource.getLocationData();
-    expect(result.locationInitResultCode, equals(LocationInitResultCode.PERMISSION_DENIED));
+    expect(result.locationInitResultCode, equals(LocationInitResultCode.permissionDenied));
     expect(result.geoLocationData, null);
     verify(platformWrapper.deviceIsBrowser()).called(1);
     verify(platformWrapper.platformIsLinux()).called(1);

@@ -18,7 +18,6 @@
 
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pumped_end_device/data/local/dao/update_history_dao.dart';
 import 'package:pumped_end_device/user-interface/tabs/fuel-stations/screens/datasource/remote/get_fuel_station_operating_hrs.dart';
@@ -56,15 +55,15 @@ class EditOperatingTimeWidget extends StatefulWidget {
   final bool cupertinoIcon;
   final bool lazyLoaded;
 
-  EditOperatingTimeWidget(this._fuelStation, this.titleText, this.setStateFunction, this.widgetExpanded, this.widgetKey,
-      this.leadingWidgetIcon, this.cupertinoIcon, this.lazyLoaded);
+  const EditOperatingTimeWidget(this._fuelStation, this.titleText, this.setStateFunction, this.widgetExpanded, this.widgetKey,
+      this.leadingWidgetIcon, this.cupertinoIcon, this.lazyLoaded, {Key key}) : super(key: key);
 
   @override
   _EditOperatingTimeWidgetState createState() => _EditOperatingTimeWidgetState();
 }
 
 class _EditOperatingTimeWidgetState extends State<EditOperatingTimeWidget> {
-  static const _TAG = 'EditOperatingTimeWidget';
+  static const _tag = 'EditOperatingTimeWidget';
   bool _backendUpdateInProgress = false;
   Future<GetFuelStationOperatingHrsResponse> getFuelStationOperatingHrsResponseFuture;
   Map<String, OperatingHours> _updatedOperatingTimeMap = {};
@@ -83,10 +82,10 @@ class _EditOperatingTimeWidgetState extends State<EditOperatingTimeWidget> {
     final String fuelStationSource = widget._fuelStation.getFuelStationSource();
     try {
       final GetFuelStationOperatingHrsRequest request = GetFuelStationOperatingHrsRequest(
-          requestUuid: Uuid().v1(), fuelStationId: stationId, fuelStationSource: fuelStationSource);
+          requestUuid: const Uuid().v1(), fuelStationId: stationId, fuelStationSource: fuelStationSource);
       return await GetFuelStationOperatingHrs(GetFuelStationOperatingHrsResponseParser()).execute(request);
     } on Exception catch (e, s) {
-      LogUtil.debug(_TAG, 'Exception occurred while calling GetFuelStationOperatingHrsNew.execute $s');
+      LogUtil.debug(_tag, 'Exception occurred while calling GetFuelStationOperatingHrsNew.execute $s');
       return GetFuelStationOperatingHrsResponse(
           'CALL-EXCEPTION', s.toString(), {}, DateTime.now().millisecondsSinceEpoch, null);
     }
@@ -103,7 +102,7 @@ class _EditOperatingTimeWidgetState extends State<EditOperatingTimeWidget> {
   }
 
   Text _getTitle() {
-    return Text(widget.titleText, style: TextStyle(fontSize: 16, color: Colors.black87, fontWeight: FontWeight.w500));
+    return Text(widget.titleText, style: const TextStyle(fontSize: 16, color: Colors.black87, fontWeight: FontWeight.w500));
   }
 
   Widget _buildOperatingHoursExpansionTileFromFuture() {
@@ -111,17 +110,17 @@ class _EditOperatingTimeWidgetState extends State<EditOperatingTimeWidget> {
         future: getFuelStationOperatingHrsResponseFuture,
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return ListTile(title: Text('Error Loading', style: TextStyle(color: Colors.red)));
+            return const ListTile(title: Text('Error Loading', style: TextStyle(color: Colors.red)));
           } else if (snapshot.hasData) {
             final GetFuelStationOperatingHrsResponse response = snapshot.data;
             if (response.responseCode != 'SUCCESS') {
-              return ListTile(title: Text('Error Loading', style: TextStyle(color: Colors.red)));
+              return const ListTile(title: Text('Error Loading', style: TextStyle(color: Colors.red)));
             } else {
               widget._fuelStation.fuelStationOperatingHrs = response.fuelStationOperatingHrs;
               return _buildOperatingHoursExpansionTile(response.fuelStationOperatingHrs);
             }
           } else {
-            return ListTile(leading: widget.leadingWidgetIcon, title: Text('Loading...'));
+            return ListTile(leading: widget.leadingWidgetIcon, title: const Text('Loading...'));
           }
         });
   }
@@ -143,20 +142,20 @@ class _EditOperatingTimeWidgetState extends State<EditOperatingTimeWidget> {
   List<Widget> _editOperatingHoursExpansionTileWidgetTree(final FuelStationOperatingHrs fuelStationOperatingHrs) {
     final List<Widget> columnContent = [];
     final List<String> daysOfWeek = DateTimeUtils.weekDayShortToLongName.keys.toList();
-    fuelStationOperatingHrs.weeklyOperatingHrs.forEach((operatingHrs) {
+    for (var operatingHrs in fuelStationOperatingHrs.weeklyOperatingHrs) {
       final OperatingHours updatedOperatingHrs = _updatedOperatingTimeMap[operatingHrs.dayOfWeek];
       daysOfWeek.remove(operatingHrs.dayOfWeek);
       columnContent.add(EditOperatingTimeLineItemWidget(operatingHrs, updatedOperatingHrs, undoOperatingTimeChange,
           onOperatingTimeRangeChanged, _backendUpdateInProgress));
-    });
-    daysOfWeek.forEach((dayOfWeek) {
+    }
+    for (var dayOfWeek in daysOfWeek) {
       final OperatingHours operatingHours = OperatingHours(dayOfWeek: dayOfWeek, status: Status.unknown);
       final OperatingHours updatedOperatingHrs = _updatedOperatingTimeMap[dayOfWeek];
       columnContent.add(EditOperatingTimeLineItemWidget(operatingHours, updatedOperatingHrs, undoOperatingTimeChange,
           onOperatingTimeRangeChanged, _backendUpdateInProgress));
-    });
+    }
     columnContent.add(Padding(
-        padding: EdgeInsets.only(top: 10, bottom: 10),
+        padding: const EdgeInsets.only(top: 10, bottom: 10),
         child: SaveUndoButtonWidget(
             onSave: onSaveAction,
             onCancel: onUndoAction,
@@ -170,9 +169,7 @@ class _EditOperatingTimeWidgetState extends State<EditOperatingTimeWidget> {
     setState(() {
       _onValueChanged = true;
       OperatingHours uot = _updatedOperatingTimeMap.remove(dayOfWeek);
-      if (uot == null) {
-        uot = new OperatingHours(dayOfWeek: dayOfWeek);
-      }
+      uot ??= OperatingHours(dayOfWeek: dayOfWeek);
       if (operatingTimeParams.containsKey('OPEN_HOUR')) {
         uot.openingHrs = operatingTimeParams['OPEN_HOUR'];
       }
@@ -202,7 +199,7 @@ class _EditOperatingTimeWidgetState extends State<EditOperatingTimeWidget> {
   }
 
   void onSaveAction() async {
-    if (_updatedOperatingTimeMap.length > 0) {
+    if (_updatedOperatingTimeMap.isNotEmpty) {
       final Map<String, dynamic> updatedValues = {};
       _updatedOperatingTimeMap.forEach((day, operatingHour) {
         updatedValues.putIfAbsent(day, () => jsonEncode(operatingHour.toJson()));
@@ -217,8 +214,8 @@ class _EditOperatingTimeWidgetState extends State<EditOperatingTimeWidget> {
                   originalOperatingHoursMap[day] != null ? jsonEncode(originalOperatingHoursMap[day].toJson()) : null);
         }
       });
-      final AlterOperatingTimeRequest request = new AlterOperatingTimeRequest(
-          uuid: Uuid().v1(),
+      final AlterOperatingTimeRequest request = AlterOperatingTimeRequest(
+          uuid: const Uuid().v1(),
           fuelStationId: widget._fuelStation.stationId,
           featureType: 'FUEL-FILL',
           fuelStationSource: widget._fuelStation.isFaStation ? "F" : "G",
@@ -232,7 +229,7 @@ class _EditOperatingTimeWidgetState extends State<EditOperatingTimeWidget> {
         lockInputs();
         response = await PostOperatingTimeUpdate(AlterOperatingTimeResponseParser()).execute(request);
       } on Exception catch (e, s) {
-        LogUtil.debug(_TAG, 'Exception occurred while calling PostOperatingTimeUpdate.execute $s');
+        LogUtil.debug(_tag, 'Exception occurred while calling PostOperatingTimeUpdate.execute $s');
         response = AlterOperatingTimeResponse(
             responseCode: 'CALL-EXCEPTION',
             responseDetails: s.toString(),
@@ -250,7 +247,7 @@ class _EditOperatingTimeWidgetState extends State<EditOperatingTimeWidget> {
       }
       int updateHistoryPersistenceResult =
           await _persistUpdateHistory(request, response, originalPathAndValues, updatedValues);
-      LogUtil.debug(_TAG, 'UpdateHistory::operatingTime successfully persisted $updateHistoryPersistenceResult');
+      LogUtil.debug(_tag, 'UpdateHistory::operatingTime successfully persisted $updateHistoryPersistenceResult');
       if (response.responseCode == 'SUCCESS') {
         WidgetUtils.showToastMessage(
             context, 'Updated Operating time notified to pumped team', Theme.of(context).primaryColor);
@@ -263,13 +260,13 @@ class _EditOperatingTimeWidgetState extends State<EditOperatingTimeWidget> {
 
   Future<int> _persistUpdateHistory(final AlterOperatingTimeRequest request, final AlterOperatingTimeResponse response,
       final Map<String, dynamic> originalPathAndValues, final Map<String, dynamic> updatedValues) async {
-    final UpdateHistory updateHistory = new UpdateHistory(
+    final UpdateHistory updateHistory = UpdateHistory(
         updateHistoryId: request.uuid,
         fuelStationId: request.fuelStationId,
         fuelStation: widget._fuelStation.fuelStationName,
         fuelStationSource: request.fuelStationSource,
         updateEpoch: response.updateEpoch,
-        updateType: UpdateType.OPERATING_TIME.updateTypeName,
+        updateType: UpdateType.operatingTime.updateTypeName,
         responseCode: response.responseCode,
         originalValues: originalPathAndValues,
         updateValues: updatedValues,
@@ -282,14 +279,14 @@ class _EditOperatingTimeWidgetState extends State<EditOperatingTimeWidget> {
   }
 
   void lockInputs() {
-    LogUtil.debug(_TAG, 'locking the inputs');
+    LogUtil.debug(_tag, 'locking the inputs');
     setState(() {
       _backendUpdateInProgress = true;
     });
   }
 
   void unlockInputs() {
-    LogUtil.debug(_TAG, 'unlocking the inputs');
+    LogUtil.debug(_tag, 'unlocking the inputs');
     setState(() {
       // Ideally it should take backend response before clearing this.
       _updatedOperatingTimeMap = {};
@@ -303,14 +300,14 @@ class _EditOperatingTimeWidgetState extends State<EditOperatingTimeWidget> {
     final List<String> daysOfWeek = DateTimeUtils.weekDayShortToLongName.keys.toList();
     if (widget._fuelStation.fuelStationOperatingHrs != null &&
         widget._fuelStation.fuelStationOperatingHrs.weeklyOperatingHrs != null) {
-      widget._fuelStation.fuelStationOperatingHrs.weeklyOperatingHrs.forEach((operatingHour) {
+      for (var operatingHour in widget._fuelStation.fuelStationOperatingHrs.weeklyOperatingHrs) {
         originalOperatingHoursMap.putIfAbsent(operatingHour.dayOfWeek, () => operatingHour);
         daysOfWeek.remove(operatingHour.dayOfWeek);
-      });
+      }
     }
-    daysOfWeek.forEach((dayOfWeek) {
+    for (var dayOfWeek in daysOfWeek) {
       originalOperatingHoursMap.putIfAbsent(dayOfWeek, () => null);
-    });
+    }
     return originalOperatingHoursMap;
   }
 
@@ -326,7 +323,7 @@ class _EditOperatingTimeWidgetState extends State<EditOperatingTimeWidget> {
       if (_updatedOperatingTimeMap.containsKey(dayOfWeek)) {
         _updatedOperatingTimeMap.remove(dayOfWeek);
       }
-      if (_updatedOperatingTimeMap.length == 0) {
+      if (_updatedOperatingTimeMap.isEmpty) {
         _onValueChanged = false;
       }
     });
@@ -334,11 +331,11 @@ class _EditOperatingTimeWidgetState extends State<EditOperatingTimeWidget> {
 
   List<OperatingTimeVo> _getOperatingTimeVos(final Map<String, OperatingHours> updatedOperatingTimeMap) {
     List<OperatingTimeVo> operatingTimeVos = [];
-    LogUtil.debug(_TAG, 'updatedOperatingTimeMap.length : ${updatedOperatingTimeMap.length}');
+    LogUtil.debug(_tag, 'updatedOperatingTimeMap.length : ${updatedOperatingTimeMap.length}');
     updatedOperatingTimeMap.forEach((day, operatingHour) {
-      final OperatingTimeVo vo = new OperatingTimeVo();
+      final OperatingTimeVo vo = OperatingTimeVo();
       vo.dayOfWeek = operatingHour.dayOfWeek;
-      LogUtil.debug(_TAG,
+      LogUtil.debug(_tag,
           'range ${operatingHour.status} openingHrs : ${operatingHour.openingHrs} openingMins : ${operatingHour.openingMins} closingHrs : ${operatingHour.closingHrs} closingMins ${operatingHour.closingMins}');
       vo.openingTime = sprintf('%02d:%02d', [operatingHour.openingHrs, operatingHour.openingMins]);
       vo.closingTime = sprintf('%02d:%02d', [operatingHour.closingHrs, operatingHour.closingMins]);
@@ -354,7 +351,7 @@ class _EditOperatingTimeWidgetState extends State<EditOperatingTimeWidget> {
       final AlterOperatingTimeResponse response,
       final Map<String, dynamic> originalPathAndValues,
       final Map<String, dynamic> updatedValues) {
-    return new UpdateOperatingTimeResult(true, response.updateEpoch,
+    return UpdateOperatingTimeResult(true, response.updateEpoch,
         updateValues: updatedValues,
         originalValues: originalPathAndValues,
         invalidArguments: response.invalidArguments,

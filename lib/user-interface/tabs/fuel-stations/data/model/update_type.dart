@@ -16,16 +16,16 @@
  *     along with Pumped End Device.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-enum UpdateType { OPERATING_TIME, PRICE, ADDRESS_DETAILS, PHONE_NUMBER, SUGGEST_EDIT, FUEL_STATION_FEATURES }
+enum UpdateType { operatingTime, price, addressDetails, phoneNumber, suggestEdit, fuelStationFeatures }
 
 extension UpdateTypeExt on UpdateType {
   static const _updateTypeNames = {
-    UpdateType.OPERATING_TIME: 'OPERATING_TIME',
-    UpdateType.PRICE: 'PRICE',
-    UpdateType.ADDRESS_DETAILS: 'ADDRESS_DETAILS',
-    UpdateType.PHONE_NUMBER: 'PHONE_NUMBER',
-    UpdateType.SUGGEST_EDIT: 'SUGGEST_EDIT',
-    UpdateType.FUEL_STATION_FEATURES: 'FUEL_STATION_FEATURES'
+    UpdateType.operatingTime: 'OPERATING_TIME',
+    UpdateType.price: 'PRICE',
+    UpdateType.addressDetails: 'ADDRESS_DETAILS',
+    UpdateType.phoneNumber: 'PHONE_NUMBER',
+    UpdateType.suggestEdit: 'SUGGEST_EDIT',
+    UpdateType.fuelStationFeatures: 'FUEL_STATION_FEATURES'
   };
 
   String get updateTypeName => _updateTypeNames[this];

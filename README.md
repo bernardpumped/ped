@@ -335,6 +335,10 @@ Being able to test is the key criteria to build a stable application. PED suppor
    ```bash
    $ dart run build_runner build
    ```
+   If the dart run command fails for any reson try following flutter run
+   ```bash
+   $ flutter packages pub run build_runner build --delete-conflicting-outputs
+   ```
    It will generate mocks in a file whose name follows pattern <test_file>.mocks.dart. Referring the example - the file name will be location_data_source_test.mocks.dart. The generated mocks provide methods which can be used to fix the behavior of mock in a particular scenario. Use these mocks to enable isolation of the logic under test. Refer the [pub.dev mockito page](https://pub.dev/packages/mockito) to understand various features provided by mockito.  Command for executing the test remains the same. 
    ```bash
    $ flutter test test/data/local/location/location_data_source_test.dart

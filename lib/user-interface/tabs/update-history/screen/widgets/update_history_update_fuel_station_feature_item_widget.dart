@@ -20,11 +20,11 @@ import 'package:flutter/material.dart';
 import 'package:pumped_end_device/user-interface/tabs/update-history/screen/widgets/update_history_item_widget_colors.dart';
 
 class UpdateHistoryUpdateFuelStationFeatureItemWidget extends StatelessWidget {
-  final valueType;
-  final originalValue;
-  final updateValue;
+  final String valueType;
+  final dynamic originalValue;
+  final dynamic updateValue;
   final Map<String, dynamic> serverExceptions;
-  final recordLevelExceptions;
+  final List<dynamic> recordLevelExceptions;
 
   const UpdateHistoryUpdateFuelStationFeatureItemWidget(
       {Key key,
@@ -42,32 +42,32 @@ class UpdateHistoryUpdateFuelStationFeatureItemWidget extends StatelessWidget {
     final String updateStatus = _getUpdateResult();
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
-      margin: EdgeInsets.all(2),
+      margin: const EdgeInsets.all(2),
       color: UpdateHistoryItemWidgetColors.updateItemColor,
       child: Container(
-          padding: EdgeInsets.all(5),
+          padding: const EdgeInsets.all(5),
           child: Column(children: <Widget>[
             Row(children: <Widget>[
               Expanded(
                   flex: 3,
                   child: Padding(
-                      padding: EdgeInsets.only(top: 4, bottom: 4, left: 12),
+                      padding: const EdgeInsets.only(top: 4, bottom: 4, left: 12),
                       child: Text(featureType,
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.w600,
                               color: UpdateHistoryItemWidgetColors.updateTypeTxtColor)))),
               Expanded(
                   flex: 2,
                   child: Padding(
-                      padding: EdgeInsets.all(4),
+                      padding: const EdgeInsets.all(4),
                       child: Text(addRemove,
-                          style: TextStyle(fontSize: 15, color: UpdateHistoryItemWidgetColors.updateValuesTxtColor))))
+                          style: const TextStyle(fontSize: 15, color: UpdateHistoryItemWidgetColors.updateValuesTxtColor))))
             ]),
             Row(children: <Widget>[
-              Expanded(
+              const Expanded(
                   flex: 3,
                   child: Padding(
                       padding: EdgeInsets.only(top: 4, bottom: 4, left: 12),
@@ -79,17 +79,17 @@ class UpdateHistoryUpdateFuelStationFeatureItemWidget extends StatelessWidget {
               Expanded(
                   flex: 2,
                   child: Padding(
-                      padding: EdgeInsets.all(4),
-                      child: Text('$updateStatus',
-                          style: TextStyle(fontSize: 15, color: UpdateHistoryItemWidgetColors.updateStatusTxtColor))))
+                      padding: const EdgeInsets.all(4),
+                      child: Text(updateStatus,
+                          style: const TextStyle(fontSize: 15, color: UpdateHistoryItemWidgetColors.updateStatusTxtColor))))
             ])
           ])),
     );
   }
 
   String _getUpdateResult() {
-    if (serverExceptions == null || serverExceptions.length == 0) {
-      if (recordLevelExceptions == null || recordLevelExceptions.length == 0) {
+    if (serverExceptions == null || serverExceptions.isEmpty) {
+      if (recordLevelExceptions == null || recordLevelExceptions.isEmpty) {
         return 'Success';
       }
       return _getTranslatedUpdateResult();

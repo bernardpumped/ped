@@ -24,14 +24,14 @@ import 'package:pumped_end_device/util/log_util.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PhoneWidget extends StatelessWidget {
-  static const _TAG = 'PhoneWidget';
+  static const _tag = 'PhoneWidget';
   static const _buttonIconColor = Colors.white;
   static const _secondaryIconColor = FontsAndColors.pumpedSecondaryIconColor;
   final String _phone;
 
-  PhoneWidget(this._phone);
+  const PhoneWidget(this._phone, {Key key}) : super(key: key);
 
-  static const callIcon = const Icon(IconData(IconCodes.call_icon_code, fontFamily: 'MaterialIcons'), color: _buttonIconColor);
+  static const callIcon = Icon(IconData(IconCodes.callIconCode, fontFamily: 'MaterialIcons'), color: _buttonIconColor);
 
   @override
   Widget build(final BuildContext context) {
@@ -49,11 +49,11 @@ class PhoneWidget extends StatelessWidget {
       if (await canLaunch(phoneUrl)) {
         await launch(phoneUrl);
       } else {
-        LogUtil.debug(_TAG, 'Could not launch $phoneUrl');
+        LogUtil.debug(_tag, 'Could not launch $phoneUrl');
         function.call();
       }
     } on Exception catch (e) {
-      LogUtil.debug(_TAG, 'Exception invoking phoneUrl $phoneUrl $e');
+      LogUtil.debug(_tag, 'Exception invoking phoneUrl $phoneUrl $e');
       function.call();
     }
   }

@@ -16,7 +16,6 @@
  *     along with Pumped End Device.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pumped_end_device/data/local/dao/update_history_dao.dart';
 import 'package:pumped_end_device/user-interface/tabs/fuel-stations/screens/edit-fuel-station-details/datasource/remote/post_end_device_fuel_station_update.dart';
@@ -47,17 +46,17 @@ class EditPhoneNumberWidget extends StatefulWidget {
   final String fuelStationName;
   final int fuelStationId;
 
-  EditPhoneNumberWidget(this.setStateFunction, this.isWidgetExpanded, this.phone1, this.phone2, this.fuelStationSource,
-      this.fuelStationId, this.fuelStationName);
+  const EditPhoneNumberWidget(this.setStateFunction, this.isWidgetExpanded, this.phone1, this.phone2, this.fuelStationSource,
+      this.fuelStationId, this.fuelStationName, {Key key}) : super(key: key);
 
   @override
   _EditPhoneNumberWidgetState createState() => _EditPhoneNumberWidgetState();
 }
 
 class _EditPhoneNumberWidgetState extends State<EditPhoneNumberWidget> {
-  static const _TAG = 'EditPhoneNumberWidget';
-  static const _PHONE1_TITLE = "Phone 1";
-  static const _PHONE2_TITLE = "Phone 2";
+  static const _tag = 'EditPhoneNumberWidget';
+  static const _phone1Title = "Phone 1";
+  static const _phone2Title = "Phone 2";
 
   final TextEditingController _phone1Controller = TextEditingController();
   final TextEditingController _phone2Controller = TextEditingController();
@@ -73,7 +72,7 @@ class _EditPhoneNumberWidgetState extends State<EditPhoneNumberWidget> {
     _enteredPhone2Value = widget.phone2;
   }
 
-  static const addressDetailsIcon = const Icon(IconData(IconCodes.phone_icon_code, fontFamily: 'MaterialIcons', matchTextDirection: true),
+  static const addressDetailsIcon = Icon(IconData(IconCodes.phoneIconCode, fontFamily: 'MaterialIcons', matchTextDirection: true),
       color: FontsAndColors.pumpedNonActionableIconColor, size: 30);
 
   @override
@@ -85,11 +84,11 @@ class _EditPhoneNumberWidgetState extends State<EditPhoneNumberWidget> {
   List<Widget> _editPhoneNumberExpansionTileWidgetTree() {
     List<Widget> columnContent = [];
     columnContent.add(EditPhoneNumberLineItem(
-        _PHONE1_TITLE, widget.phone1, _phone1Controller, _onValueChangedListener, _backendUpdateInProgress));
+        _phone1Title, widget.phone1, _phone1Controller, _onValueChangedListener, _backendUpdateInProgress));
     columnContent.add(EditPhoneNumberLineItem(
-        _PHONE2_TITLE, widget.phone2, _phone2Controller, _onValueChangedListener, _backendUpdateInProgress));
+        _phone2Title, widget.phone2, _phone2Controller, _onValueChangedListener, _backendUpdateInProgress));
     columnContent.add(Padding(
-        padding: EdgeInsets.only(top: 5, bottom: 5),
+        padding: const EdgeInsets.only(top: 5, bottom: 5),
         child: SaveUndoButtonWidget(
             onSave: onSaveAction,
             onCancel: onUndoAction,
@@ -100,22 +99,22 @@ class _EditPhoneNumberWidgetState extends State<EditPhoneNumberWidget> {
   }
 
   void _onValueChangedListener(final String phoneFieldTitle, final String enteredValue) {
-    if (_PHONE1_TITLE == phoneFieldTitle) {
+    if (_phone1Title == phoneFieldTitle) {
       if (DataUtils.isValidNumber(enteredValue)) {
         _enteredPhone1Value = enteredValue;
       }
     }
-    if (_PHONE2_TITLE == phoneFieldTitle) {
+    if (_phone2Title == phoneFieldTitle) {
       if (DataUtils.isValidNumber(enteredValue)) {
         _enteredPhone2Value = enteredValue;
       }
     }
-    LogUtil.debug(_TAG, 'Phone 1 different ${DataUtils.stringEqual(_enteredPhone1Value, widget.phone1, true)}');
-    LogUtil.debug(_TAG, 'Phone 2 different ${DataUtils.stringEqual(_enteredPhone2Value, widget.phone2, true)}');
+    LogUtil.debug(_tag, 'Phone 1 different ${DataUtils.stringEqual(_enteredPhone1Value, widget.phone1, true)}');
+    LogUtil.debug(_tag, 'Phone 2 different ${DataUtils.stringEqual(_enteredPhone2Value, widget.phone2, true)}');
 
     final bool showSaveUndoButton = !DataUtils.stringEqual(_enteredPhone1Value, widget.phone1, true) ||
         !DataUtils.stringEqual(_enteredPhone2Value, widget.phone2, true);
-    LogUtil.debug(_TAG, 'Entered Val1 $_enteredPhone1Value');
+    LogUtil.debug(_tag, 'Entered Val1 $_enteredPhone1Value');
     if (showSaveUndoButton) {
       if (!_onValueChanged) {
         setState(() {
@@ -132,7 +131,7 @@ class _EditPhoneNumberWidgetState extends State<EditPhoneNumberWidget> {
   }
 
   void onSaveAction() async {
-    var uuid = Uuid();
+    var uuid = const Uuid();
     final Map<String, dynamic> updatePathAndValues = {};
     final Map<String, dynamic> originalPathAndValues = {};
     bool _phone1InputValid = true;
@@ -140,18 +139,18 @@ class _EditPhoneNumberWidgetState extends State<EditPhoneNumberWidget> {
     if (_enteredPhone1Value != widget.phone1) {
       _phone1InputValid = DataUtils.isValidNumber(_enteredPhone1Value);
       if (_phone1InputValid) {
-        originalPathAndValues.putIfAbsent(UpdatableAddressComponents.PHONE1, () => widget.phone1);
-        updatePathAndValues.putIfAbsent(UpdatableAddressComponents.PHONE1, () => _enteredPhone1Value);
+        originalPathAndValues.putIfAbsent(UpdatableAddressComponents.phone1, () => widget.phone1);
+        updatePathAndValues.putIfAbsent(UpdatableAddressComponents.phone1, () => _enteredPhone1Value);
       }
     }
     if (_enteredPhone2Value != widget.phone2) {
       _phone2InputValid = DataUtils.isValidNumber(_enteredPhone2Value);
       if (_phone2InputValid) {
-        originalPathAndValues.putIfAbsent(UpdatableAddressComponents.PHONE2, () => widget.phone2);
-        updatePathAndValues.putIfAbsent(UpdatableAddressComponents.PHONE2, () => _enteredPhone2Value);
+        originalPathAndValues.putIfAbsent(UpdatableAddressComponents.phone2, () => widget.phone2);
+        updatePathAndValues.putIfAbsent(UpdatableAddressComponents.phone2, () => _enteredPhone2Value);
       }
     }
-    LogUtil.debug(_TAG, '_phone1InputValid $_phone1InputValid _phone2InputValid $_phone2InputValid');
+    LogUtil.debug(_tag, '_phone1InputValid $_phone1InputValid _phone2InputValid $_phone2InputValid');
     if (!_phone1InputValid || !_phone2InputValid) {
       setState(() {});
       if (!_phone1InputValid && !_phone2InputValid) {
@@ -163,7 +162,7 @@ class _EditPhoneNumberWidgetState extends State<EditPhoneNumberWidget> {
       }
       return;
     }
-    if (updatePathAndValues.length > 0) {
+    if (updatePathAndValues.isNotEmpty) {
       final EndDeviceUpdateFuelStationRequest request = EndDeviceUpdateFuelStationRequest(
           updatePathAndValues: updatePathAndValues,
           uuid: uuid.v1(),
@@ -177,7 +176,7 @@ class _EditPhoneNumberWidgetState extends State<EditPhoneNumberWidget> {
         lockInputs();
         response = await PostEndDeviceFuelStationUpdate(EndDeviceUpdateFuelStationResponseParser()).execute(request);
       } on Exception catch (e, s) {
-        LogUtil.debug(_TAG, 'Exception occurred while calling PostEndDeviceFuelStationUpdate.execute $s');
+        LogUtil.debug(_tag, 'Exception occurred while calling PostEndDeviceFuelStationUpdate.execute $s');
         response = EndDeviceUpdateFuelStationResponse(
             responseCode: 'CALL-EXCEPTION',
             responseDetails: s.toString(),
@@ -195,7 +194,7 @@ class _EditPhoneNumberWidgetState extends State<EditPhoneNumberWidget> {
       }
       final int persistUpdateHistoryResult = await _persistUpdateHistory(request, response, originalPathAndValues);
       LogUtil.debug(
-          _TAG, 'endDeviceUpdateFuelStation::updatePhoneNum::persistenceResult : $persistUpdateHistoryResult');
+          _tag, 'endDeviceUpdateFuelStation::updatePhoneNum::persistenceResult : $persistUpdateHistoryResult');
       if (response.responseCode == 'SUCCESS') {
         WidgetUtils.showToastMessage(
             context, 'Updated phone number notified to pumped team', Theme.of(context).primaryColor);
@@ -208,13 +207,13 @@ class _EditPhoneNumberWidgetState extends State<EditPhoneNumberWidget> {
 
   Future<int> _persistUpdateHistory(final EndDeviceUpdateFuelStationRequest request,
       final EndDeviceUpdateFuelStationResponse response, final Map<String, dynamic> originalPathAndValues) {
-    final UpdateHistory updateHistory = new UpdateHistory(
+    final UpdateHistory updateHistory = UpdateHistory(
         updateHistoryId: request.uuid,
         fuelStationId: request.fuelStationId,
         fuelStation: widget.fuelStationName,
         fuelStationSource: request.fuelStationSource,
         updateEpoch: response.updateEpoch,
-        updateType: UpdateType.PHONE_NUMBER.updateTypeName,
+        updateType: UpdateType.phoneNumber.updateTypeName,
         responseCode: response.responseCode,
         originalValues: originalPathAndValues,
         updateValues: request.updatePathAndValues,
@@ -236,14 +235,14 @@ class _EditPhoneNumberWidgetState extends State<EditPhoneNumberWidget> {
   }
 
   void lockInputs() {
-    LogUtil.debug(_TAG, 'locking the inputs');
+    LogUtil.debug(_tag, 'locking the inputs');
     setState(() {
       _backendUpdateInProgress = true;
     });
   }
 
   void unlockInputs() {
-    LogUtil.debug(_TAG, 'unlocking the inputs');
+    LogUtil.debug(_tag, 'unlocking the inputs');
     setState(() {
       _backendUpdateInProgress = false;
       _onValueChanged = false;
@@ -252,7 +251,7 @@ class _EditPhoneNumberWidgetState extends State<EditPhoneNumberWidget> {
 
   UpdatePhoneNumberResult _getUpdateResponse(
       final EndDeviceUpdateFuelStationRequest request, final EndDeviceUpdateFuelStationResponse response) {
-    return new UpdatePhoneNumberResult(response.successfulUpdate, response.updateEpoch,
+    return UpdatePhoneNumberResult(response.successfulUpdate, response.updateEpoch,
         phoneTypeUpdateStatusMap: response.updateResult, phoneTypeNewValueMap: request.updatePathAndValues);
   }
 }

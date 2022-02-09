@@ -36,6 +36,7 @@ class SuggestEditRequest extends Request {
       this.suggestion})
       : super(uuid);
 
+  @override
   Map<String, dynamic> toJson() => {
         'uuid': uuid,
         'identityProvider': identityProvider,

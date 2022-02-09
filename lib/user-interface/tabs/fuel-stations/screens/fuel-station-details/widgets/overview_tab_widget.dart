@@ -49,14 +49,14 @@ class OverviewTabWidget extends StatefulWidget {
   final FuelStation _fuelStation;
   final Function onUpdateResult;
 
-  OverviewTabWidget(this._fuelStation, this.onUpdateResult);
+  const OverviewTabWidget(this._fuelStation, this.onUpdateResult, {Key key}) : super(key: key);
 
   @override
   _OverviewTabWidgetState createState() => _OverviewTabWidgetState();
 }
 
 class _OverviewTabWidgetState extends State<OverviewTabWidget> {
-  static const _TAG = 'OverviewTabWidget';
+  static const _tag = 'OverviewTabWidget';
   Future<GetFuelStationOperatingHrsResponse> _operatingHrsResponseFuture;
 
   static const Color _secondaryIconColor = FontsAndColors.pumpedSecondaryIconColor;
@@ -65,18 +65,18 @@ class _OverviewTabWidgetState extends State<OverviewTabWidget> {
   @override
   void initState() {
     super.initState();
-    this._operatingHrsResponseFuture = _getFuelStationOperatingHrsFuture();
+    _operatingHrsResponseFuture = _getFuelStationOperatingHrsFuture();
   }
 
   Future<GetFuelStationOperatingHrsResponse> _getFuelStationOperatingHrsFuture() async {
     try {
       final GetFuelStationOperatingHrsRequest request = GetFuelStationOperatingHrsRequest(
-          requestUuid: Uuid().v1(),
+          requestUuid: const Uuid().v1(),
           fuelStationId: widget._fuelStation.stationId,
           fuelStationSource: widget._fuelStation.getFuelStationSource());
       return await GetFuelStationOperatingHrs(GetFuelStationOperatingHrsResponseParser()).execute(request);
     } on Exception catch (e, s) {
-      LogUtil.debug(_TAG, 'Exception occurred while calling GetFuelStationOperatingHrsNew.execute $s');
+      LogUtil.debug(_tag, 'Exception occurred while calling GetFuelStationOperatingHrsNew.execute $s');
       return GetFuelStationOperatingHrsResponse(
           'CALL-EXCEPTION', s.toString(), {}, DateTime.now().millisecondsSinceEpoch, null);
     }
@@ -87,23 +87,23 @@ class _OverviewTabWidgetState extends State<OverviewTabWidget> {
     final FuelStation fuelStation = widget._fuelStation;
     final FuelStationAddress fuelStationAddress = fuelStation.fuelStationAddress;
     final bool phonePresent = fuelStationAddress.phone1 != null || fuelStationAddress.phone2 != null;
-    bool imgUrlsPresent = fuelStation.imgUrls != null && fuelStation.imgUrls.length > 0;
+    bool imgUrlsPresent = fuelStation.imgUrls != null && fuelStation.imgUrls.isNotEmpty;
     return Container(
-        decoration: BoxDecoration(color: FontsAndColors.pumpedBoxDecorationColor),
+        decoration: const BoxDecoration(color: FontsAndColors.pumpedBoxDecorationColor),
         child: Column(children: <Widget>[
           imgUrlsPresent
               ? Container(
-                  margin: EdgeInsets.only(top: 7, bottom: 7), child: HorizontalScrollListWidget(fuelStation.imgUrls))
-              : SizedBox(width: 0),
-          imgUrlsPresent ? Divider(color: Colors.black45, indent: 15, endIndent: 15, height: 0) : SizedBox(width: 0),
+                  margin: const EdgeInsets.only(top: 7, bottom: 7), child: HorizontalScrollListWidget(fuelStation.imgUrls))
+              : const SizedBox(width: 0),
+          imgUrlsPresent ? const Divider(color: Colors.black45, indent: 15, endIndent: 15, height: 0) : const SizedBox(width: 0),
           _getActionBar(fuelStation),
-          Divider(color: Colors.black45, indent: 15, endIndent: 15, height: 0),
+          const Divider(color: Colors.black45, indent: 15, endIndent: 15, height: 0),
           _getFuelStationAddressWidget(fuelStationAddress),
-          Divider(color: Colors.black45, indent: 15, endIndent: 15, height: 0),
+          const Divider(color: Colors.black45, indent: 15, endIndent: 15, height: 0),
           _buildOperatingHourWidget(fuelStation),
-          Divider(color: Colors.black45, indent: 15, endIndent: 15, height: 0),
-          phonePresent ? _getPhoneNumberWidget(fuelStationAddress) : SizedBox(width: 0),
-          phonePresent ? Divider(color: Colors.black45, indent: 15, endIndent: 15, height: 0) : SizedBox(width: 0),
+          const Divider(color: Colors.black45, indent: 15, endIndent: 15, height: 0),
+          phonePresent ? _getPhoneNumberWidget(fuelStationAddress) : const SizedBox(width: 0),
+          phonePresent ? const Divider(color: Colors.black45, indent: 15, endIndent: 15, height: 0) : const SizedBox(width: 0),
           UpdateButtonWidget(fuelStation,
               expandSuggestEdit: true, updateFuelStationDetailsScreenForChange: widget.onUpdateResult)
         ]));
@@ -114,55 +114,55 @@ class _OverviewTabWidgetState extends State<OverviewTabWidget> {
         ? fuelStation.fuelStationAddress.phone1
         : fuelStation.fuelStationAddress.phone2;
     return Container(
-        decoration: BoxDecoration(color: Colors.white),
-        padding: EdgeInsets.only(top: 10, bottom: 10),
-        margin: EdgeInsets.only(bottom: 5),
+        decoration: const BoxDecoration(color: Colors.white),
+        padding: const EdgeInsets.only(top: 10, bottom: 10),
+        margin: const EdgeInsets.only(bottom: 5),
         child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Padding(
-                  padding: EdgeInsets.only(left: 20, right: 15),
+                  padding: const EdgeInsets.only(left: 20, right: 15),
                   child: DirectionsWidget(
-                      fuelStation.fuelStationAddress.latitude, fuelStation.fuelStationAddress.longitude, getIt.get<LocationDataSource>())),
+                      fuelStation.fuelStationAddress.latitude, fuelStation.fuelStationAddress.longitude, getIt.get<LocationDataSource>(instanceName: locationDataSourceInstanceName))),
               (phone != null)
-                  ? Padding(padding: EdgeInsets.only(left: 15, right: 15), child: PhoneWidget(phone))
-                  : SizedBox(width: 0),
-              Padding(padding: EdgeInsets.only(left: 20, right: 15), child: RateWidget(fuelStation.fuelStationAddress)),
-              Padding(padding: EdgeInsets.only(left: 20, right: 15), child: FavoriteFuelStationBookmark(fuelStation))
+                  ? Padding(padding: const EdgeInsets.only(left: 15, right: 15), child: PhoneWidget(phone))
+                  : const SizedBox(width: 0),
+              Padding(padding: const EdgeInsets.only(left: 20, right: 15), child: RateWidget(fuelStation.fuelStationAddress)),
+              Padding(padding: const EdgeInsets.only(left: 20, right: 15), child: FavoriteFuelStationBookmark(fuelStation))
             ]));
   }
 
-  static const _addressDetailsIcon = Icon(IconData(IconCodes.address_details_icon_code, fontFamily: 'MaterialIcons',
+  static const _addressDetailsIcon = Icon(IconData(IconCodes.addressDetailsIconCode, fontFamily: 'MaterialIcons',
       matchTextDirection: true), color: _nonActionIconColor, size: 30);
 
   Container _getFuelStationAddressWidget(final FuelStationAddress fuelStationAddress) {
     return Container(
-        padding: EdgeInsets.only(left: 10, right: 10),
-        decoration: BoxDecoration(color: Colors.white),
+        padding: const EdgeInsets.only(left: 10, right: 10),
+        decoration: const BoxDecoration(color: Colors.white),
         child: ListTile(
-            contentPadding: EdgeInsets.only(left: 10, right: 10, top: 2, bottom: 2),
+            contentPadding: const EdgeInsets.only(left: 10, right: 10, top: 2, bottom: 2),
             // dense: true,
             leading: _addressDetailsIcon,
             title: _getFuelStationAddress(fuelStationAddress)));
   }
 
-  static const _phoneIcon = Icon(IconData(IconCodes.phone_icon_code, fontFamily: 'MaterialIcons',
+  static const _phoneIcon = Icon(IconData(IconCodes.phoneIconCode, fontFamily: 'MaterialIcons',
       matchTextDirection: true), color: _nonActionIconColor, size: 30);
 
   Widget _getPhoneNumberWidget(final FuelStationAddress fuelStationAddress) {
     return Container(
-        padding: EdgeInsets.only(left: 10, right: 10),
-        decoration: BoxDecoration(color: Colors.white),
+        padding: const EdgeInsets.only(left: 10, right: 10),
+        decoration: const BoxDecoration(color: Colors.white),
         child: ListTile(
-            contentPadding: EdgeInsets.only(left: 10, right: 10),
+            contentPadding: const EdgeInsets.only(left: 10, right: 10),
             leading: _phoneIcon,
             title: _getPhone(fuelStationAddress)));
   }
 
   bool _operatingHoursExpanded = false;
 
-  static const _operatingTimeIcon = Icon(IconData(IconCodes.operating_time_icon_code, fontFamily: 'MaterialIcons',
+  static const _operatingTimeIcon = Icon(IconData(IconCodes.operatingTimeIconCode, fontFamily: 'MaterialIcons',
       matchTextDirection: true), color: _nonActionIconColor, size: 30);
 
   Widget _buildOperatingHourWidget(final FuelStation fuelStation) {
@@ -170,28 +170,28 @@ class _OverviewTabWidgetState extends State<OverviewTabWidget> {
         future: _operatingHrsResponseFuture,
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            LogUtil.debug(_TAG, 'Error ${snapshot.error.toString()}');
-            return Container(child: Text('Error Loading'));
+            LogUtil.debug(_tag, 'Error ${snapshot.error.toString()}');
+            return const Text('Error Loading');
           } else if (snapshot.hasData) {
             final GetFuelStationOperatingHrsResponse data = snapshot.data;
             if (data.responseCode != 'SUCCESS') {
-              return ListTile(title: Text('Error Loading', style: TextStyle(color: Colors.red)));
+              return const ListTile(title: Text('Error Loading', style: TextStyle(color: Colors.red)));
             } else {
               fuelStation.fuelStationOperatingHrs = data.fuelStationOperatingHrs;
               final FuelStationOperatingHrs fuelStationOperatingHrs = data.fuelStationOperatingHrs;
               List<OperatingHours> weeklyOperatingHrs = fuelStationOperatingHrs.weeklyOperatingHrs;
-              if (weeklyOperatingHrs != null && weeklyOperatingHrs.length > 0) {
+              if (weeklyOperatingHrs != null && weeklyOperatingHrs.isNotEmpty) {
                 final theme = Theme.of(context).copyWith(dividerColor: Colors.transparent);
                 return Theme(
                     data: theme,
                     child: Container(
-                        padding: EdgeInsets.only(left: 5, right: 10),
-                        decoration: BoxDecoration(color: Colors.white),
+                        padding: const EdgeInsets.only(left: 5, right: 10),
+                        decoration: const BoxDecoration(color: Colors.white),
                         child: ExpansionTile(
                             initiallyExpanded: false,
                             leading: _operatingTimeIcon,
                             title: _getOpenClosed(weeklyOperatingHrs),
-                            key: PageStorageKey<String>("open-close"),
+                            key: const PageStorageKey<String>("open-close"),
                             trailing: ExpandIcon(
                                 isExpanded: _operatingHoursExpanded,
                                 color: _secondaryIconColor,
@@ -205,11 +205,11 @@ class _OverviewTabWidgetState extends State<OverviewTabWidget> {
                               });
                             })));
               } else {
-                return SizedBox(height: 0);
+                return const SizedBox(height: 0);
               }
             }
           } else {
-            return ListTile(
+            return const ListTile(
                 leading: _operatingTimeIcon,
                 title: Text('Loading...'));
           }
@@ -220,14 +220,14 @@ class _OverviewTabWidgetState extends State<OverviewTabWidget> {
     final List<Widget> columnContent = [];
     for (final OperatingHours dailyOperatingHrs in weeklyOperatingHrs) {
       final String weekDay = DateTimeUtils.weekDayShortToLongName[dailyOperatingHrs.dayOfWeek];
-      final String content1 = '$weekDay';
+      final String content1 = weekDay;
       String content2 = '';
       if (DataUtils.isNotBlank(dailyOperatingHrs.operatingTimeRange)) {
         switch (dailyOperatingHrs.operatingTimeRange) {
-          case OperatingTimeRange.ALWAYS_OPEN:
+          case OperatingTimeRange.alwaysOpen:
             content2 = 'Open 24 Hours';
             break;
-          case OperatingTimeRange.CLOSED:
+          case OperatingTimeRange.closed:
             content2 = 'Closed';
             break;
           default:
@@ -248,11 +248,11 @@ class _OverviewTabWidgetState extends State<OverviewTabWidget> {
             Expanded(
                 flex: 4,
                 child: Text(content1,
-                    textAlign: TextAlign.start, style: new TextStyle(fontSize: 14.0, color: Colors.black87))),
+                    textAlign: TextAlign.start, style: const TextStyle(fontSize: 14.0, color: Colors.black87))),
             Expanded(
                 flex: 6,
                 child: Text(content2,
-                    textAlign: TextAlign.center, style: new TextStyle(fontSize: 14.0, color: Colors.black87))),
+                    textAlign: TextAlign.center, style: const TextStyle(fontSize: 14.0, color: Colors.black87))),
             Expanded(flex: 1, child: _getOperatingHoursSourceCitation(dailyOperatingHrs))
           ])));
     }
@@ -261,8 +261,8 @@ class _OverviewTabWidgetState extends State<OverviewTabWidget> {
 
   GestureDetector _getOperatingHoursSourceCitation(final OperatingHours operatingHours) {
     final Icon icon = operatingHours.operatingTimeSource == 'G'
-        ? PumpedIcons.googleSourceIcon_black54Size30
-        : PumpedIcons.crowdSourceIcon_black54Size30;
+        ? PumpedIcons.googleSourceIconBlack54Size30
+        : PumpedIcons.crowdSourceIconBlack54Size30;
     return GestureDetector(
         onTap: () {
           showCupertinoDialog(
@@ -279,20 +279,20 @@ class _OverviewTabWidgetState extends State<OverviewTabWidget> {
         maxLines: 2,
         overflow: TextOverflow.ellipsis,
         style:
-            TextStyle(fontSize: 15, fontWeight: FontWeight.w400, color: Colors.black87, fontFamily: 'SF-Pro-Display'));
+            const TextStyle(fontSize: 15, fontWeight: FontWeight.w400, color: Colors.black87, fontFamily: 'SF-Pro-Display'));
   }
 
-  static TextStyle _redStyle = TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.red);
-  static TextStyle _blackStyle = TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.black87);
+  static const TextStyle _redStyle = TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.red);
+  static const TextStyle _blackStyle = TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.black87);
 
   Widget _getOpenClosed(final List<OperatingHours> weeklyOperatingHrs) {
     final String currentWeekDay = DateTimeUtils.weekDayIntToShortName[DateTime.now().weekday];
     final OperatingHours currentDayOperatingHrs = _getOperatingHrsForDay(weeklyOperatingHrs, currentWeekDay);
-    int currentDayOpeningHrs = currentDayOperatingHrs != null ? currentDayOperatingHrs.openingHrs : null;
-    int currentDayOpeningMins = currentDayOperatingHrs != null ? currentDayOperatingHrs.openingMins : null;
-    int currentDayClosingHrs = currentDayOperatingHrs != null ? currentDayOperatingHrs.closingHrs : null;
-    int currentDayClosingMins = currentDayOperatingHrs != null ? currentDayOperatingHrs.closingMins : null;
-    if (currentDayOperatingHrs != null && OperatingTimeRange.ALWAYS_OPEN == currentDayOperatingHrs.operatingTimeRange) {
+    int currentDayOpeningHrs = currentDayOperatingHrs?.openingHrs;
+    int currentDayOpeningMins = currentDayOperatingHrs?.openingMins;
+    int currentDayClosingHrs = currentDayOperatingHrs?.closingHrs;
+    int currentDayClosingMins = currentDayOperatingHrs?.closingMins;
+    if (currentDayOperatingHrs != null && OperatingTimeRange.alwaysOpen == currentDayOperatingHrs.operatingTimeRange) {
       currentDayOpeningHrs = 0;
       currentDayOpeningMins = 0;
       currentDayClosingHrs = 23;
@@ -312,7 +312,7 @@ class _OverviewTabWidgetState extends State<OverviewTabWidget> {
         (currentHours > currentDayOpeningHrs && currentHours < currentDayClosingHrs ||
             currentHours == currentDayOpeningHrs && currentHours < currentDayClosingHrs ||
             currentHours == currentDayClosingHrs && currentMin < currentDayClosingMins)) {
-      if (OperatingTimeRange.ALWAYS_OPEN == currentDayOperatingHrs.operatingTimeRange) {
+      if (OperatingTimeRange.alwaysOpen == currentDayOperatingHrs.operatingTimeRange) {
         currentStatus = 'Open 24 Hours';
         currentStatusStyle = _blackStyle;
         nextEventStatus = '';
@@ -331,7 +331,7 @@ class _OverviewTabWidgetState extends State<OverviewTabWidget> {
         int nextDayOpeningHrs = nextDayOperatingHrs.openingHrs;
         int nextDayOpeningMins = nextDayOperatingHrs.openingMins;
         if (currentDayOperatingHrs != null &&
-            OperatingTimeRange.ALWAYS_OPEN == currentDayOperatingHrs.operatingTimeRange) {
+            OperatingTimeRange.alwaysOpen == currentDayOperatingHrs.operatingTimeRange) {
           nextDayOpeningHrs = 0;
           nextDayOpeningMins = 0;
         }
@@ -359,8 +359,8 @@ class _OverviewTabWidgetState extends State<OverviewTabWidget> {
   }
 
   Widget _getPhone(final FuelStationAddress fuelStationAddress) {
-    final String phone = fuelStationAddress.phone1 != null ? fuelStationAddress.phone1 : fuelStationAddress.phone2;
-    return Text(phone, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.black87));
+    final String phone = fuelStationAddress.phone1 ?? fuelStationAddress.phone2;
+    return Text(phone, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.black87));
   }
 
   OperatingHours _getOperatingHrsForDay(final List<OperatingHours> weeklyOperatingHrs, final String currentWeekDay) {

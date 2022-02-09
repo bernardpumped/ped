@@ -85,11 +85,10 @@ class OperatingHoursResponseParseUtils {
       status = Status.closed;
     } else {
       if (operatingHours != null) {
-        final String operatingTimeRange =
-            operatingHours.operatingTimeRange == null ? "" : operatingHours.operatingTimeRange;
-        if (OperatingTimeRange.ALWAYS_OPEN == operatingTimeRange) {
+        final String operatingTimeRange = operatingHours.operatingTimeRange ?? "";
+        if (OperatingTimeRange.alwaysOpen == operatingTimeRange) {
           status = Status.open24Hrs;
-        } else if (OperatingTimeRange.CLOSED == operatingTimeRange) {
+        } else if (OperatingTimeRange.closed == operatingTimeRange) {
           status = Status.closed;
         } else {
           final int openingHrs = operatingHours.openingHrs;
@@ -109,9 +108,9 @@ class OperatingHoursResponseParseUtils {
               closingTimeInMinutes += (23 * 60 + 59);
             }
             if (todaysTotalMinutes < openingTimeInMinutes && openingTimeInMinutes - todaysTotalMinutes <= 15) {
-              status = Status.opening_soon;
+              status = Status.openingSoon;
             } else if (todaysTotalMinutes < closingTimeInMinutes && closingTimeInMinutes - todaysTotalMinutes <= 30) {
-              status = Status.closing_soon;
+              status = Status.closingSoon;
             } else {
               status = todaysTotalMinutes >= openingTimeInMinutes && todaysTotalMinutes < closingTimeInMinutes
                   ? Status.open

@@ -27,15 +27,15 @@ import 'package:pumped_end_device/util/log_util.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class RateWidget extends StatelessWidget {
-  static const _TAG = 'RateWidget';
+  static const _tag = 'RateWidget';
   static const Color _buttonIconColor = Colors.white;
   static const Color _secondaryIconColor = FontsAndColors.pumpedSecondaryIconColor;
 
   final FuelStationAddress address;
 
-  RateWidget(this.address);
+  const RateWidget(this.address, {Key key}) : super(key: key);
 
-  static const rateIcon = const Icon(IconData(IconCodes.rate_icon_code, fontFamily: 'MaterialIcons'), color: _buttonIconColor);
+  static const rateIcon = Icon(IconData(IconCodes.rateIconCode, fontFamily: 'MaterialIcons'), color: _buttonIconColor);
 
   @override
   Widget build(final BuildContext context) {
@@ -43,7 +43,7 @@ class RateWidget extends StatelessWidget {
     return WidgetUtils.getActionIconCircular(rateIcon, 'Rate', _secondaryIconColor, _secondaryIconColor, onTap: () async {
       final bool launchRateAction = await _rateAction();
       if (!launchRateAction) {
-        LogUtil.debug(_TAG, 'Unable to launch Rating action');
+        LogUtil.debug(_tag, 'Unable to launch Rating action');
       }
     });
   }
@@ -61,23 +61,26 @@ class RateWidget extends StatelessWidget {
     final String googleRatingUrl = Uri.encodeFull('https://www.google.com/maps/search/?api=1&query=$fsAddress');
     if (Platform.isIOS) {
       if (await canLaunch(googleRatingUrl)) {
+        LogUtil.debug(_tag, 'Attempting native launch of Google Maps/rate url');
         bool nativeAppLaunchSucceeded = false;
         nativeAppLaunchSucceeded = await launch(
           googleRatingUrl,
           forceSafariVC: false,
           universalLinksOnly: true,
         );
-        LogUtil.debug(_TAG, 'Native launch for Google Maps successful $nativeAppLaunchSucceeded');
+        LogUtil.debug(_tag, 'Native launch of Google Maps/rate successful $nativeAppLaunchSucceeded');
         bool nonNativeAppLaunchSucceeded = false;
         if (!nativeAppLaunchSucceeded) {
+          LogUtil.debug(_tag, 'Attempting non-native launch of Google Maps/rate successful');
           nonNativeAppLaunchSucceeded = await launch(
             googleRatingUrl,
             forceSafariVC: true,
           );
+          LogUtil.debug(_tag, 'Non-Native launch of Google Maps/rate successful $nativeAppLaunchSucceeded');
         }
         return nativeAppLaunchSucceeded || nonNativeAppLaunchSucceeded;
       } else {
-        LogUtil.debug(_TAG, 'Could not launch $googleRatingUrl');
+        LogUtil.debug(_tag, 'Could not launch $googleRatingUrl');
         return false;
       }
     } else {

@@ -21,9 +21,9 @@ import 'package:pumped_end_device/user-interface/tabs/fuel-stations/screens/edit
 import 'package:pumped_end_device/user-interface/tabs/update-history/screen/widgets/update_history_item_widget_colors.dart';
 
 class UpdateHistoryUpdateFuelQuoteItem extends StatelessWidget {
-  final valueType;
-  final originalValue;
-  final updateValue;
+  final String valueType;
+  final dynamic originalValue;
+  final dynamic updateValue;
   final Map<String, dynamic> serverExceptions;
   final List<dynamic> recordLevelExceptions;
 
@@ -43,13 +43,13 @@ class UpdateHistoryUpdateFuelQuoteItem extends StatelessWidget {
     final updateStatus = _getUpdateResult();
     return Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
-        margin: EdgeInsets.all(2),
+        margin: const EdgeInsets.all(2),
         color: UpdateHistoryItemWidgetColors.updateItemColor,
         child: Container(
-            padding: EdgeInsets.all(5),
+            padding: const EdgeInsets.all(5),
             child: Column(children: <Widget>[
               Row(children: <Widget>[
-                Expanded(
+                const Expanded(
                     flex: 1,
                     child: Padding(
                         padding: EdgeInsets.only(top: 4, bottom: 4, left: 12),
@@ -61,12 +61,12 @@ class UpdateHistoryUpdateFuelQuoteItem extends StatelessWidget {
                 Expanded(
                     flex: 1,
                     child: Padding(
-                        padding: EdgeInsets.all(4),
+                        padding: const EdgeInsets.all(4),
                         child: Text(fuelType,
-                            style: TextStyle(fontSize: 15, color: UpdateHistoryItemWidgetColors.updateValuesTxtColor))))
+                            style: const TextStyle(fontSize: 15, color: UpdateHistoryItemWidgetColors.updateValuesTxtColor))))
               ]),
               Row(children: <Widget>[
-                Expanded(
+                const Expanded(
                     flex: 1,
                     child: Padding(
                         padding: EdgeInsets.only(top: 4, bottom: 4, left: 12),
@@ -78,12 +78,12 @@ class UpdateHistoryUpdateFuelQuoteItem extends StatelessWidget {
                 Expanded(
                     flex: 1,
                     child: Padding(
-                        padding: EdgeInsets.all(4),
-                        child: Text('$originalFuelQuoteValue',
-                            style: TextStyle(fontSize: 15, color: UpdateHistoryItemWidgetColors.updateValuesTxtColor))))
+                        padding: const EdgeInsets.all(4),
+                        child: Text(originalFuelQuoteValue,
+                            style: const TextStyle(fontSize: 15, color: UpdateHistoryItemWidgetColors.updateValuesTxtColor))))
               ]),
               Row(children: <Widget>[
-                Expanded(
+                const Expanded(
                     flex: 1,
                     child: Padding(
                         padding: EdgeInsets.only(top: 4, bottom: 4, left: 12),
@@ -95,12 +95,12 @@ class UpdateHistoryUpdateFuelQuoteItem extends StatelessWidget {
                 Expanded(
                     flex: 1,
                     child: Padding(
-                        padding: EdgeInsets.all(4),
+                        padding: const EdgeInsets.all(4),
                         child: Text('$updatedFuelQuoteValue',
-                            style: TextStyle(fontSize: 15, color: UpdateHistoryItemWidgetColors.updateValuesTxtColor))))
+                            style: const TextStyle(fontSize: 15, color: UpdateHistoryItemWidgetColors.updateValuesTxtColor))))
               ]),
               Row(children: <Widget>[
-                Expanded(
+                const Expanded(
                     flex: 1,
                     child: Padding(
                         padding: EdgeInsets.only(top: 4, bottom: 4, left: 12),
@@ -112,13 +112,13 @@ class UpdateHistoryUpdateFuelQuoteItem extends StatelessWidget {
                 Expanded(
                     flex: 1,
                     child: Padding(
-                        padding: EdgeInsets.all(4),
-                        child: Text('$updateStatus',
-                            style: TextStyle(fontSize: 15, color: UpdateHistoryItemWidgetColors.updateStatusTxtColor))))
+                        padding: const EdgeInsets.all(4),
+                        child: Text(updateStatus,
+                            style: const TextStyle(fontSize: 15, color: UpdateHistoryItemWidgetColors.updateStatusTxtColor))))
               ]),
               _getUpdateResult() == 'Failed'
                   ? Row(children: <Widget>[
-                      Expanded(
+                      const Expanded(
                           flex: 1,
                           child: Padding(
                               padding: EdgeInsets.only(top: 4, bottom: 4, left: 12),
@@ -130,18 +130,18 @@ class UpdateHistoryUpdateFuelQuoteItem extends StatelessWidget {
                       Expanded(
                           flex: 1,
                           child: Padding(
-                              padding: EdgeInsets.all(4),
-                              child: Text('${_getTranslatedUpdateResult()}',
-                                  style: TextStyle(
+                              padding: const EdgeInsets.all(4),
+                              child: Text(_getTranslatedUpdateResult(),
+                                  style: const TextStyle(
                                       fontSize: 15, color: UpdateHistoryItemWidgetColors.updateStatusTxtColor))))
                     ])
-                  : SizedBox(height: 0)
+                  : const SizedBox(height: 0)
             ])));
   }
 
   String _getUpdateResult() {
-    if (serverExceptions == null || serverExceptions.length == 0) {
-      if (recordLevelExceptions == null || recordLevelExceptions.length == 0) {
+    if (serverExceptions == null || serverExceptions.isEmpty) {
+      if (recordLevelExceptions == null || recordLevelExceptions.isEmpty) {
         return 'Success';
       }
     }
@@ -152,45 +152,45 @@ class UpdateHistoryUpdateFuelQuoteItem extends StatelessWidget {
     List<String> translatedResultCode = [];
     for (final String resultCode in recordLevelExceptions) {
       switch (resultCode) {
-        case FuelQuoteUpdateExceptionCodes.UPDATE_FREQ_EXCEEDED:
+        case FuelQuoteUpdateExceptionCodes.updateFreqExceeded:
           translatedResultCode.add('Successive updates quick');
           break;
-        case FuelQuoteUpdateExceptionCodes.PRICE_NOT_IN_RANGE:
+        case FuelQuoteUpdateExceptionCodes.priceNotInRange:
           translatedResultCode.add('Price not in range');
           break;
-        case FuelQuoteUpdateExceptionCodes.VERSION_MIS_MATCH:
+        case FuelQuoteUpdateExceptionCodes.versionMismatch:
           translatedResultCode.add('Stale update, please refresh');
           break;
-        case FuelQuoteUpdateExceptionCodes.PRICE_NOT_CHANGED:
+        case FuelQuoteUpdateExceptionCodes.priceNotChanged:
           translatedResultCode.add('Same as old price');
           break;
-        case FuelQuoteUpdateExceptionCodes.FUEL_MEASURE_NOT_CONFIGURED_FOR_MARKET_REGION:
+        case FuelQuoteUpdateExceptionCodes.fuelMeasureNotConfiguredForMarketRegion:
           translatedResultCode.add('Invalid value - fuel measure');
           break;
-        case FuelQuoteUpdateExceptionCodes.FUEL_PRICE_NOT_CONFIGURED_FOR_MARKET_REGION:
+        case FuelQuoteUpdateExceptionCodes.fuelPriceNotConfiguredForMarketRegion:
           translatedResultCode.add('Invalid value - currency');
           break;
-        case FuelQuoteUpdateExceptionCodes.FUEL_TYPE_NOT_CONFIGURED_FOR_MARKET_REGION:
+        case FuelQuoteUpdateExceptionCodes.fuelTypeNotConfiguredForMarketRegion:
           translatedResultCode.add('Fuel not configured for your region');
           break;
-        case FuelQuoteUpdateExceptionCodes.INVALID_PARAM_FOR_FUEL_QUOTE:
+        case FuelQuoteUpdateExceptionCodes.invalidParamForFuelQuote:
           translatedResultCode.add('Invalid fuel price');
           break;
-        case FuelQuoteUpdateExceptionCodes.NO_FUEL_QUOTES_PROVIDED:
+        case FuelQuoteUpdateExceptionCodes.noFuelQuotesProvided:
           translatedResultCode.add('No updated value provided');
           break;
-        case FuelQuoteUpdateExceptionCodes.UPDATING_FUEL_QUOTES_OF_MULTIPLE_STATIONS:
+        case FuelQuoteUpdateExceptionCodes.updatingFuelQuoteOfMultipleStations:
           translatedResultCode.add('Can update only one station at a time');
           break;
-        case FuelQuoteUpdateExceptionCodes.FUEL_QUOTE_FUEL_AUTHORITY_SOURCE:
+        case FuelQuoteUpdateExceptionCodes.fuelQuoteFuelAuthoritySource:
           translatedResultCode.add('Cannot change fuel quotes provided by fuel authority');
           break;
-        case FuelQuoteUpdateExceptionCodes.FUEL_QUOTE_MERCHANT_SOURCE:
+        case FuelQuoteUpdateExceptionCodes.fuelQuoteMerchantSource:
           translatedResultCode.add('Cannot change fuel quote provided by merchant');
           break;
       }
     }
-    if (translatedResultCode.length == 0) {
+    if (translatedResultCode.isEmpty) {
       return 'Failed';
     } else {
       return translatedResultCode.join(', ');

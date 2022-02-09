@@ -16,7 +16,6 @@
  *     along with Pumped End Device.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'dart:ui';
 
 import 'package:basic_utils/basic_utils.dart';
 import 'package:flutter/cupertino.dart';
@@ -53,12 +52,13 @@ class AnimEditFuelPriceLineItemWidget extends StatefulWidget {
 }
 
 class _AnimEditFuelPriceLineItemWidgetState extends State<AnimEditFuelPriceLineItemWidget> {
-  static const double DEFAULT_MIN_VAL = 0.0;
-  static const double DEFAULT_MAX_VAL = 999.0;
+  static const double _defaultMinValue = 0.0;
+  static const double _defaultMaxValue = 999.0;
+
   int digitsBeforeDecimal = 4;
   int digitsAfterDecimal = 0;
 
-  final FocusNode _focus = new FocusNode();
+  final FocusNode _focus = FocusNode();
   static const _focusColor = Colors.white;
   static const _noFocusColor = Color(0x33eeeeee);
   static const _focusHeight = 72;
@@ -127,18 +127,18 @@ class _AnimEditFuelPriceLineItemWidgetState extends State<AnimEditFuelPriceLineI
     final bool enabled = widget.fuelQuote.fuelQuoteSource != 'F';
     final CupertinoTextField fuelQuoteTextField = _buildFuelQuoteTextField(enabled);
     return AnimatedContainer(
-        padding: EdgeInsets.only(left: 30, right: 30, top: 3, bottom: 3),
+        padding: const EdgeInsets.only(left: 30, right: 30, top: 3, bottom: 3),
         height: _height,
         decoration: BoxDecoration(color: _color),
-        duration: Duration(milliseconds: 500),
+        duration: const Duration(milliseconds: 500),
         curve: Curves.fastOutSlowIn,
         child: Column(children: [
           Row(children: <Widget>[
             Expanded(
                 flex: 5,
                 child: Padding(
-                    padding: EdgeInsets.only(right: 10),
-                    child: Text(widget.fuelName, style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500)))),
+                    padding: const EdgeInsets.only(right: 10),
+                    child: Text(widget.fuelName, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500)))),
             Expanded(
                 flex: 6,
                 child: !enabled
@@ -161,7 +161,7 @@ class _AnimEditFuelPriceLineItemWidgetState extends State<AnimEditFuelPriceLineI
                     : fuelQuoteTextField),
             Expanded(
                 flex: 2,
-                child: Padding(padding: EdgeInsets.only(left: 15), child: _getFuelQuoteSourceIcon(widget.fuelQuote)))
+                child: Padding(padding: const EdgeInsets.only(left: 15), child: _getFuelQuoteSourceIcon(widget.fuelQuote)))
           ]),
           Row(children: [
             Expanded(child: Container(), flex: 3),
@@ -182,11 +182,11 @@ class _AnimEditFuelPriceLineItemWidgetState extends State<AnimEditFuelPriceLineI
     if (fuelQuote.quoteValue != null && fuelQuote.fuelQuoteSource != null) {
       if (fuelQuote.fuelAuthoritySource() || fuelQuote.crowdSourced()) {
         return fuelQuote.fuelQuoteSource == 'F'
-            ? PumpedIcons.faSourceIcon_black54Size24
-            : PumpedIcons.crowdSourceIcon_black54Size24;
+            ? PumpedIcons.faSourceIconBlack54Size24
+            : PumpedIcons.crowdSourceIconBlack54Size24;
       }
     }
-    return Text('');
+    return const Text('');
   }
 
   CupertinoTextField _buildFuelQuoteTextField(final bool enabled) {
@@ -210,11 +210,11 @@ class _AnimEditFuelPriceLineItemWidgetState extends State<AnimEditFuelPriceLineI
             border: widget.fuelQuote.quoteValue == null
                 ? Border.all(color: _priceBoxColor)
                 : Border.all(color: Colors.grey),
-            borderRadius: BorderRadius.all(Radius.circular(3))),
+            borderRadius: const BorderRadius.all(Radius.circular(3))),
         enabled: enabled,
         clearButtonMode: OverlayVisibilityMode.editing,
         controller: widget.fuelPriceEditingController,
-        style: TextStyle(fontSize: 15),
+        style: const TextStyle(fontSize: 15),
         keyboardType: TextInputType.number,
         maxLengthEnforcement: MaxLengthEnforcement.enforced,
         placeholder: quoteValue,
@@ -222,7 +222,7 @@ class _AnimEditFuelPriceLineItemWidgetState extends State<AnimEditFuelPriceLineI
           FilteringTextInputFormatter(RegExp(currencyFormat), allow: true),
           _PriceTextInputFormatter(digitsAfterDecimal + digitsBeforeDecimal)
         ],
-        placeholderStyle: TextStyle(color: Colors.black87),
+        placeholderStyle: const TextStyle(color: Colors.black87),
         onChanged: (value) {
           int autoDecimalPlacement = finalFirstAllowedCharDecimalPos;
           String fuelPriceEntered = widget.fuelPriceEditingController.text;
@@ -266,14 +266,14 @@ class _AnimEditFuelPriceLineItemWidgetState extends State<AnimEditFuelPriceLineI
 
   double _getMaxPrice(final FuelAuthorityPriceMetadata metaData) {
     if (metaData == null) {
-      return DEFAULT_MAX_VAL;
+      return _defaultMaxValue;
     }
     if (null == metaData.maxPrice) {
-      return DEFAULT_MAX_VAL;
+      return _defaultMaxValue;
     }
     final double maxTolerancePercent = metaData.maxTolerancePercent;
     if (null == maxTolerancePercent) {
-      return DEFAULT_MAX_VAL;
+      return _defaultMaxValue;
     }
     final double maxPrice = metaData.maxPrice + metaData.maxPrice * maxTolerancePercent / 100 - 0.1;
     return double.parse(maxPrice.toStringAsFixed(1));
@@ -281,18 +281,18 @@ class _AnimEditFuelPriceLineItemWidgetState extends State<AnimEditFuelPriceLineI
 
   double _getMinPrice(final FuelAuthorityPriceMetadata metaData) {
     if (metaData == null) {
-      return DEFAULT_MIN_VAL;
+      return _defaultMinValue;
     }
     if (null == metaData.minPrice) {
-      return DEFAULT_MIN_VAL;
+      return _defaultMinValue;
     }
     final double minTolerancePercent = metaData.minTolerancePercent;
     if (null == minTolerancePercent) {
-      return DEFAULT_MIN_VAL;
+      return _defaultMinValue;
     }
     double minPrice = metaData.minPrice - metaData.minPrice * minTolerancePercent / 100 + 0.1;
     if (minPrice < 0) {
-      minPrice = DEFAULT_MIN_VAL;
+      minPrice = _defaultMinValue;
     }
     return double.parse(minPrice.toStringAsFixed(1));
   }
@@ -304,10 +304,10 @@ class _PriceTextInputFormatter implements TextInputFormatter {
 
   @override
   TextEditingValue formatEditUpdate(final TextEditingValue oldValue, final TextEditingValue newValue) {
-    final String newValueText = newValue.text != null ? newValue.text : '';
+    final String newValueText = newValue.text ?? '';
     final int newValueTextLength = newValue.text != null ? newValue.text.length : 0;
 
-    final String oldValueText = oldValue.text != null ? oldValue.text : '';
+    final String oldValueText = oldValue.text ?? '';
     final int oldValueTextLength = oldValue.text != null ? oldValue.text.length : 0;
 
     if (newValueTextLength <= maxLength) {

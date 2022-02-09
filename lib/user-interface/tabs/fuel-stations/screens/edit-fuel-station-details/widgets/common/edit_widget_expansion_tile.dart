@@ -28,16 +28,16 @@ class EditWidgetExpansionTile extends StatefulWidget {
   final bool cupertinoIcon;
   final List<Widget> children;
 
-  EditWidgetExpansionTile(
+  const EditWidgetExpansionTile(
     this.leadingWidgetIcon,
     this.titleText,
     this.widgetKey,
     this.children,
     this.widgetExpanded,
-    this.setStateFunction, {
+    this.setStateFunction, {Key key,
     this.leadingWidget,
     this.cupertinoIcon = true,
-  });
+  }) : super(key: key);
   @override
   _EditWidgetExpansionTileState createState() => _EditWidgetExpansionTileState();
 }
@@ -47,8 +47,8 @@ class _EditWidgetExpansionTileState extends State<EditWidgetExpansionTile> {
   Widget build(final BuildContext context) {
     final theme = Theme.of(context).copyWith(backgroundColor: Colors.white);
     var title =
-        Text(widget.titleText, style: TextStyle(fontSize: 16, color: Colors.black87, fontWeight: FontWeight.w500));
-    var leading;
+        Text(widget.titleText, style: const TextStyle(fontSize: 16, color: Colors.black87, fontWeight: FontWeight.w500));
+    Widget leading;
     if (widget.leadingWidget != null) {
       leading = widget.leadingWidget;
     } else if (widget.leadingWidgetIcon != null) {

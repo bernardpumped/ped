@@ -16,39 +16,83 @@
  *     along with Pumped End Device.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pumped_end_device/data/local/location/location_data_source.dart';
 import 'package:pumped_end_device/user-interface/pumped_base_tab_view.dart';
 import 'package:pumped_end_device/user-interface/tabs/splash/screen/splash_screen.dart';
+import 'package:pumped_end_device/util/log_util.dart';
 import 'package:pumped_end_device/util/platform_wrapper.dart';
 
 import 'data/local/location/geo_location_wrapper.dart';
 
 GetIt getIt = GetIt.instance;
+const appVersion = "23";
+const getLocationWrapperInstanceName = 'geoLocationWrapper';
+const platformWrapperInstanceName = 'platformWrapper';
+const locationDataSourceInstanceName = 'locationDataSource';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(PumpedApp());
+  runApp(const PumpedApp());
 }
 
 class PumpedApp extends StatelessWidget {
+  static const _tag = 'PumpedApp';
+  const PumpedApp({Key key}) : super(key: key);
+
   @override
   Widget build(final BuildContext context) {
-    
-    getIt.registerSingleton<GeoLocationWrapper>(new GeoLocationWrapper());
-    getIt.registerSingleton<PlatformWrapper>(new PlatformWrapper());
-    getIt.registerSingleton(new LocationDataSource(
-        getIt.get<GeoLocationWrapper>(), getIt.get<PlatformWrapper>()));
-    
+    _deviceIngo();
+    _registerBeansWithGetIt();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
           primarySwatch: Colors.indigo,
           colorScheme: ColorScheme.fromSwatch(accentColor: Colors.indigoAccent),
           textTheme: Theme.of(context).textTheme.apply(fontFamily: 'SF-Pro-Display')),
-      home: SplashScreen(),
-      routes: {PumpedBaseTabView.routeName: (context) => PumpedBaseTabView()},
+      home: const SplashScreen(),
+      routes: {PumpedBaseTabView.routeName: (context) => const PumpedBaseTabView()},
     );
+  }
+
+  void _deviceIngo() async {
+    final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
+    final deviceInfo = await deviceInfoPlugin.deviceInfo;
+    final map = deviceInfo.toMap();
+    LogUtil.debug(_tag, map.toString());
+    /*
+      OUTPUT OF ABOVE IS
+      {name: iPhone 13, model: iPhone, systemName: iOS, utsname: {release: 21.3.0,
+      version: Darwin Kernel Version 21.3.0: Wed Jan  5 21:37:58 PST 2022; root:xnu-8019.80.24~20/RELEASE_ARM64_T8101,
+      machine: arm64, sysname: Darwin, nodename: MacBook-Pro.local}
+     */
+  }
+
+  void _registerBeansWithGetIt() {
+    if (!getIt.isRegistered<GeoLocationWrapper>(instanceName: getLocationWrapperInstanceName)) {
+      LogUtil.debug(_tag, 'Registering instance of $getLocationWrapperInstanceName');
+      getIt.registerSingleton<GeoLocationWrapper>(GeoLocationWrapper(), instanceName: getLocationWrapperInstanceName);
+    } else {
+      LogUtil.debug(_tag, 'Instance of $getLocationWrapperInstanceName is already registered');
+    }
+
+    if (!getIt.isRegistered<PlatformWrapper>(instanceName: platformWrapperInstanceName)) {
+      LogUtil.debug(_tag, 'Registering instance of $platformWrapperInstanceName');
+      getIt.registerSingleton<PlatformWrapper>(PlatformWrapper(), instanceName: platformWrapperInstanceName);
+    } else {
+      LogUtil.debug(_tag, 'Instance of $platformWrapperInstanceName is already registered');
+    }
+
+    if (!getIt.isRegistered<LocationDataSource>(instanceName: locationDataSourceInstanceName)) {
+      LogUtil.debug(_tag, 'Registering instance of $locationDataSourceInstanceName');
+      getIt.registerSingleton(LocationDataSource(
+          getIt.get<GeoLocationWrapper>(instanceName: getLocationWrapperInstanceName),
+          getIt.get<PlatformWrapper>(instanceName: platformWrapperInstanceName)),
+          instanceName: locationDataSourceInstanceName);
+    } else {
+      LogUtil.debug(_tag, 'Instance of $platformWrapperInstanceName is already registered');
+    }
   }
 }

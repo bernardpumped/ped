@@ -27,24 +27,24 @@ class SaveUndoButtonWidget extends StatefulWidget {
   final bool onValueChange;
   final bool saveButtonDisabled;
   final bool undoButtonDisabled;
-  SaveUndoButtonWidget(
-      {this.onSave,
+  const SaveUndoButtonWidget(
+      {Key key, this.onSave,
       this.onCancel,
       this.onValueChange = false,
       this.saveButtonDisabled = false,
-      this.undoButtonDisabled = false});
+      this.undoButtonDisabled = false}) : super(key: key);
 
   @override
   _SaveUndoButtonWidgetState createState() => _SaveUndoButtonWidgetState();
 }
 
 class _SaveUndoButtonWidgetState extends State<SaveUndoButtonWidget> {
-  static const _TAG = 'SaveUndoButtonWidget';
+  static const _tag = 'SaveUndoButtonWidget';
   @override
   Widget build(final BuildContext context) {
     return AnimatedContainer(
       height: widget.onValueChange ? 50 : 0,
-      duration: Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 500),
       curve: Curves.fastOutSlowIn,
       child: _getButtonRow(),
     );
@@ -53,7 +53,7 @@ class _SaveUndoButtonWidgetState extends State<SaveUndoButtonWidget> {
   Row _getButtonRow() {
     return Row(children: [
       WidgetUtils.getRoundedElevatedButton(
-          child: Text('Undo'),
+          child: const Text('Undo'),
           backgroundColor: FontsAndColors.vividBlueTextColor,
           foreGroundColor: Colors.white,
           borderRadius: 18.0,
@@ -61,11 +61,11 @@ class _SaveUndoButtonWidgetState extends State<SaveUndoButtonWidget> {
             if (!widget.undoButtonDisabled) {
               widget.onCancel();
             } else {
-              LogUtil.debug(_TAG, 'Undo button is disabled');
+              LogUtil.debug(_tag, 'Undo button is disabled');
             }
           }),
       WidgetUtils.getRoundedElevatedButton(
-          child: Text('Save'),
+          child: const Text('Save'),
           backgroundColor: FontsAndColors.vividBlueTextColor,
           foreGroundColor: Colors.white,
           borderRadius: 18.0,
@@ -73,7 +73,7 @@ class _SaveUndoButtonWidgetState extends State<SaveUndoButtonWidget> {
             if (!widget.saveButtonDisabled) {
               widget.onSave();
             } else {
-              LogUtil.debug(_TAG, 'Save Button is disabled');
+              LogUtil.debug(_tag, 'Save Button is disabled');
             }
           })
     ], mainAxisAlignment: MainAxisAlignment.spaceEvenly);

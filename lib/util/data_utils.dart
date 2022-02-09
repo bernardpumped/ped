@@ -27,7 +27,7 @@ class DataUtils {
   }
 
   static bool isBlank(final String string) {
-    return string == null || string.length == 0 || string.trim().length == 0;
+    return string == null || string.isEmpty || string.trim().isEmpty;
   }
 
   static bool isNotBlank(final String string) {
@@ -51,7 +51,7 @@ class DataUtils {
 
   static bool isValidNumber(final String phoneNumber) {
     final RegExp regExp =
-        new RegExp(r"^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$", caseSensitive: false, multiLine: false);
+        RegExp(r"^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$", caseSensitive: false, multiLine: false);
     return regExp.hasMatch(phoneNumber);
   }
 

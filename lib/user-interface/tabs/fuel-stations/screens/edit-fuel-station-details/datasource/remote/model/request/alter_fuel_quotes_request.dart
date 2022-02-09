@@ -39,6 +39,7 @@ class AlterFuelQuotesRequest extends Request {
       this.fuelQuoteVos})
       : super(uuid);
 
+  @override
   Map<String, dynamic> toJson() => {
         'uuid': uuid,
         'fuelStationId': fuelStationId,

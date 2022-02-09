@@ -22,7 +22,7 @@ import 'package:pumped_end_device/user-interface/tabs/fuel-stations/data/model/u
 class UpdateOperatingTimeResult extends UpdateFuelStationDetailsResult {
   UpdateOperatingTimeResult(final bool isUpdateSuccessful, final int updateEpoch,
       {this.originalValues, this.updateValues, this.invalidArguments, this.recordLevelExceptionCodes})
-      : super(UpdateFuelStationDetailType.OPERATING_HOURS, isUpdateSuccessful, updateEpoch);
+      : super(UpdateFuelStationDetailType.operatingHours, isUpdateSuccessful, updateEpoch);
 
   final Map<String, dynamic> originalValues;
   final Map<String, dynamic> updateValues;

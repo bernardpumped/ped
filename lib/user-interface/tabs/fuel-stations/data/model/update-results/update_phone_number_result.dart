@@ -22,7 +22,7 @@ import 'package:pumped_end_device/user-interface/tabs/fuel-stations/data/model/u
 class UpdatePhoneNumberResult extends UpdateFuelStationDetailsResult {
   UpdatePhoneNumberResult(final bool isUpdateSuccessful, final int updateEpoch,
       {this.phoneTypeUpdateStatusMap, this.phoneTypeNewValueMap})
-      : super(UpdateFuelStationDetailType.PHONE_NUMBER, isUpdateSuccessful, updateEpoch);
+      : super(UpdateFuelStationDetailType.phoneNumber, isUpdateSuccessful, updateEpoch);
   final Map<String, bool> phoneTypeUpdateStatusMap;
   final Map<String, dynamic> phoneTypeNewValueMap;
 }

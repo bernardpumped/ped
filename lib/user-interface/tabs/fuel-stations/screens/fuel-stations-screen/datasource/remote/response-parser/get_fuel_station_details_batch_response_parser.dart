@@ -27,18 +27,19 @@ import 'package:pumped_end_device/models/pumped_exception.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
 class GetFuelStationDetailsBatchResponseParser extends ResponseParser<GetFuelStationDetailsBatchResponse> {
-  static const _TAG = 'GetFuelStationDetailsBatchResponseParser';
+  static const _tag = 'GetFuelStationDetailsBatchResponseParser';
   final String authorityId;
 
   GetFuelStationDetailsBatchResponseParser(this.authorityId);
 
+  @override
   GetFuelStationDetailsBatchResponse parseResponse(final String response) {
     final Map<String, dynamic> responseJson = convert.jsonDecode(response);
     final String responseCode = responseJson['responseCode'];
     final String responseDetails = responseJson['responseDetails'];
     final Map<String, dynamic> invalidArguments = responseJson['invalidArguments'];
     final int responseEpoch = responseJson['responseEpoch'];
-    LogUtil.debug(_TAG, 'Response Code : $responseCode');
+    LogUtil.debug(_tag, 'Response Code : $responseCode');
     if (authorityId == null) {
       throw PumpedException('FuelAuthorityId is null');
     }
@@ -46,8 +47,8 @@ class GetFuelStationDetailsBatchResponseParser extends ResponseParser<GetFuelSta
         FuelStationDetailsResponseParseUtils.getStationIdFuelQuotesMap(responseJson, authorityId);
     final Map<String, FuelStation> stationIdStationMap =
         FuelStationDetailsResponseParseUtils.getStationIdStationMap(responseJson, stationIdFuelQuotes);
-    LogUtil.debug(_TAG, 'stationIdStationMap ${stationIdStationMap.length}');
-    return new GetFuelStationDetailsBatchResponse(
+    LogUtil.debug(_tag, 'stationIdStationMap ${stationIdStationMap.length}');
+    return GetFuelStationDetailsBatchResponse(
         responseCode, responseDetails, invalidArguments, responseEpoch, stationIdStationMap.values.toList());
   }
 }

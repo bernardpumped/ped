@@ -50,7 +50,7 @@ class OperatingHours {
         'closingMins': closingMins,
         'operatingTimeSource': operatingTimeSource,
         'operatingTimeRange': operatingTimeRange,
-        'publishDate': publishDate != null ? publishDate.millisecondsSinceEpoch : null,
+        'publishDate': publishDate?.millisecondsSinceEpoch,
         'isHolidayToday': isHolidayToday
       };
 

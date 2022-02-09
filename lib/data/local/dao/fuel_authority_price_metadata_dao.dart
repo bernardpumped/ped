@@ -22,11 +22,11 @@ import 'package:pumped_end_device/util/log_util.dart';
 import 'package:uuid/uuid.dart';
 
 class FuelAuthorityPriceMetadataDao {
-  static const _TAG = 'FuelAuthorityPriceMetadataDao';
+  static const _tag = 'FuelAuthorityPriceMetadataDao';
   static const _uuid = Uuid();
 
-  static const _COLLECTION_FUEL_AUTHORITY_FUEL_TYPE = 'pumped_fuel_authority_fuel_type';
-  static const _COLLECTION_FUEL_AUTHORITY_PRICE_METADATA = 'pumped_fuel_authority_metadata';
+  static const _collectionFuelAuthorityFuelType = 'pumped_fuel_authority_fuel_type';
+  static const _collectionFuelAuthorityPriceMetadata = 'pumped_fuel_authority_metadata';
 
   static final FuelAuthorityPriceMetadataDao instance = FuelAuthorityPriceMetadataDao._();
 
@@ -36,73 +36,73 @@ class FuelAuthorityPriceMetadataDao {
     final db = Localstore.instance;
     final fapmId = _uuid.v1();
 
-    LogUtil.debug(_TAG, 'Inserting metadata for fa - ${metaData.fuelAuthority} fuel-type ${metaData.fuelType} against id $fapmId');
-    db.collection(_COLLECTION_FUEL_AUTHORITY_PRICE_METADATA).doc(fapmId).set(metaData.toMap());
+    LogUtil.debug(_tag, 'Inserting metadata for fa - ${metaData.fuelAuthority} fuel-type ${metaData.fuelType} against id $fapmId');
+    db.collection(_collectionFuelAuthorityPriceMetadata).doc(fapmId).set(metaData.toMap());
 
-    final Map<String, dynamic> fuelTypeIds = await db.collection(_COLLECTION_FUEL_AUTHORITY_FUEL_TYPE).doc(metaData.fuelAuthority).get();
-    LogUtil.debug(_TAG, 'Found ${fuelTypeIds == null ? 0 : fuelTypeIds.length} existing Fuel-Type:Id mappings for ${metaData.fuelAuthority}');
+    final Map<String, dynamic> fuelTypeIds = await db.collection(_collectionFuelAuthorityFuelType).doc(metaData.fuelAuthority).get();
+    LogUtil.debug(_tag, 'Found ${fuelTypeIds == null ? 0 : fuelTypeIds.length} existing Fuel-Type:Id mappings for ${metaData.fuelAuthority}');
 
-    var oldFapmId = null;
+    dynamic oldFapmId;
 
-    if (fuelTypeIds == null || fuelTypeIds.length == 0) {
-      LogUtil.debug(_TAG, 'Inserted only mapping {Fuel-Type:Id} mapping between ${metaData.fuelType} : $fapmId for ${metaData.fuelAuthority}');
-      db.collection(_COLLECTION_FUEL_AUTHORITY_FUEL_TYPE).doc(metaData.fuelAuthority).set({metaData.fuelType : fapmId});
+    if (fuelTypeIds == null || fuelTypeIds.isEmpty) {
+      LogUtil.debug(_tag, 'Inserted only mapping {Fuel-Type:Id} mapping between ${metaData.fuelType} : $fapmId for ${metaData.fuelAuthority}');
+      db.collection(_collectionFuelAuthorityFuelType).doc(metaData.fuelAuthority).set({metaData.fuelType : fapmId});
     } else {
       if (fuelTypeIds.containsKey(metaData.fuelType)) {
         oldFapmId = fuelTypeIds.remove(metaData.fuelType);
-        LogUtil.debug(_TAG, 'Removed old {${metaData.fuelType} : $oldFapmId} mapping');
+        LogUtil.debug(_tag, 'Removed old {${metaData.fuelType} : $oldFapmId} mapping');
       }
       fuelTypeIds.putIfAbsent(metaData.fuelType, () => fapmId);
-      LogUtil.debug(_TAG, 'Persisted new Id {${metaData.fuelType} : $fapmId} mapping');
+      LogUtil.debug(_tag, 'Persisted new Id {${metaData.fuelType} : $fapmId} mapping');
     }
     if (oldFapmId != fapmId) {
-      db.collection(_COLLECTION_FUEL_AUTHORITY_PRICE_METADATA).doc(oldFapmId).delete();
-      LogUtil.debug(_TAG, 'Deleted old Id $oldFapmId data');
+      db.collection(_collectionFuelAuthorityPriceMetadata).doc(oldFapmId).delete();
+      LogUtil.debug(_tag, 'Deleted old Id $oldFapmId data');
     }
   }
 
   Future<List<FuelAuthorityPriceMetadata>> getFuelAuthorityPriceMetadata(final String authorityId) async {
     final db = Localstore.instance;
-    final Map<String, dynamic> fuelTypeIds = await db.collection(_COLLECTION_FUEL_AUTHORITY_FUEL_TYPE).doc(authorityId).get();
-    LogUtil.debug(_TAG, 'Found ${fuelTypeIds == null ? 0 : fuelTypeIds.length} '
-        '{Fuel-Type : Id} mapping for $authorityId in $_COLLECTION_FUEL_AUTHORITY_FUEL_TYPE');
-    if (fuelTypeIds == null || fuelTypeIds.length == 0) {
+    final Map<String, dynamic> fuelTypeIds = await db.collection(_collectionFuelAuthorityFuelType).doc(authorityId).get();
+    LogUtil.debug(_tag, 'Found ${fuelTypeIds == null ? 0 : fuelTypeIds.length} '
+        '{Fuel-Type : Id} mapping for $authorityId in $_collectionFuelAuthorityFuelType');
+    if (fuelTypeIds == null || fuelTypeIds.isEmpty) {
       return [];
     } else {
       final List<FuelAuthorityPriceMetadata> metadata = [];
       for (var fuelTypeIdsEntry in fuelTypeIds.entries) {
-        final Map<String, dynamic> metadataMap = await db.collection(_COLLECTION_FUEL_AUTHORITY_PRICE_METADATA)
+        final Map<String, dynamic> metadataMap = await db.collection(_collectionFuelAuthorityPriceMetadata)
             .doc(fuelTypeIdsEntry.value).get();
-        if (metadataMap != null && metadataMap.length > 0) {
+        if (metadataMap != null && metadataMap.isNotEmpty) {
           metadata.add(FuelAuthorityPriceMetadata.fromMap(metadataMap));
         }
       }
-      LogUtil.debug(_TAG, 'Returning ${metadata.length} metadata for fuelAuthority : $authorityId');
+      LogUtil.debug(_tag, 'Returning ${metadata.length} metadata for fuelAuthority : $authorityId');
       return metadata;
     }
   }
 
   Future<dynamic> deleteFuelAuthorityPriceMetadata(final FuelAuthorityPriceMetadata metadata) async {
     final db = Localstore.instance;
-    final Map<String, dynamic> fuelTypeIds = await db.collection(_COLLECTION_FUEL_AUTHORITY_FUEL_TYPE).doc(metadata.fuelAuthority).get();
-    if (fuelTypeIds == null || fuelTypeIds.length == 0) {
-      LogUtil.debug(_TAG, 'No FuelTypeIds for fuel-authority : ' + metadata.fuelAuthority);
+    final Map<String, dynamic> fuelTypeIds = await db.collection(_collectionFuelAuthorityFuelType).doc(metadata.fuelAuthority).get();
+    if (fuelTypeIds == null || fuelTypeIds.isEmpty) {
+      LogUtil.debug(_tag, 'No FuelTypeIds for fuel-authority : ' + metadata.fuelAuthority);
     } else {
       final String fapmId = fuelTypeIds[metadata.fuelType];
       if (fapmId == null) {
-        LogUtil.debug(_TAG, 'Meta-data for fuel-type ${metadata.fuelType} and authority ${metadata.fuelAuthority} is not stored');
+        LogUtil.debug(_tag, 'Meta-data for fuel-type ${metadata.fuelType} and authority ${metadata.fuelAuthority} is not stored');
       } else {
         fuelTypeIds.remove(metadata.fuelType);
-        LogUtil.debug(_TAG, 'Deleted Id : $fapmId] fuel-type : ${metadata.fuelType} mapping for ${metadata.fuelAuthority}');
-        if (fuelTypeIds.length == 0) {
-          LogUtil.debug(_TAG, 'No more {FuelType : Id} mapping for ${metadata.fuelAuthority}. Deleting record from $_COLLECTION_FUEL_AUTHORITY_FUEL_TYPE');
-          db.collection(_COLLECTION_FUEL_AUTHORITY_FUEL_TYPE).doc(metadata.fuelAuthority).delete();
+        LogUtil.debug(_tag, 'Deleted Id : $fapmId] fuel-type : ${metadata.fuelType} mapping for ${metadata.fuelAuthority}');
+        if (fuelTypeIds.isEmpty) {
+          LogUtil.debug(_tag, 'No more {FuelType : Id} mapping for ${metadata.fuelAuthority}. Deleting record from $_collectionFuelAuthorityFuelType');
+          db.collection(_collectionFuelAuthorityFuelType).doc(metadata.fuelAuthority).delete();
         } else {
-          LogUtil.debug(_TAG, 'Persisting updated {FuelType : Id} mapping for ${metadata.fuelAuthority} in $_COLLECTION_FUEL_AUTHORITY_FUEL_TYPE');
-          db.collection(_COLLECTION_FUEL_AUTHORITY_FUEL_TYPE).doc(metadata.fuelAuthority).set(fuelTypeIds);
+          LogUtil.debug(_tag, 'Persisting updated {FuelType : Id} mapping for ${metadata.fuelAuthority} in $_collectionFuelAuthorityFuelType');
+          db.collection(_collectionFuelAuthorityFuelType).doc(metadata.fuelAuthority).set(fuelTypeIds);
         }
-        LogUtil.debug(_TAG, 'Deleting {Fuel-Type : Id} mapping for $fapmId');
-        db.collection(_COLLECTION_FUEL_AUTHORITY_PRICE_METADATA).doc(fapmId).delete();
+        LogUtil.debug(_tag, 'Deleting {Fuel-Type : Id} mapping for $fapmId');
+        db.collection(_collectionFuelAuthorityPriceMetadata).doc(fapmId).delete();
       }
     }
   }

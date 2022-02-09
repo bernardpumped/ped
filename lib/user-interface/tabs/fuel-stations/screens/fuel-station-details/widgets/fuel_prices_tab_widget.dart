@@ -16,7 +16,6 @@
  *     along with Pumped End Device.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -35,16 +34,16 @@ class FuelPricesTabWidget extends StatefulWidget {
   final FuelStation fuelStation;
   final Function onUpdateResult;
 
-  FuelPricesTabWidget(this.fuelStation, this.onUpdateResult);
+  const FuelPricesTabWidget(this.fuelStation, this.onUpdateResult, {Key key}) : super(key: key);
 
   @override
   _FuelPricesTabWidgetState createState() => _FuelPricesTabWidgetState();
 }
 
 class _FuelPricesTabWidgetState extends State<FuelPricesTabWidget> {
-  static const _TAG = 'FuelPricesTabWidget';
+  static const _tag = 'FuelPricesTabWidget';
 
-  final MarketRegionZoneConfigUtils _marketRegionZoneConfigUtils = new MarketRegionZoneConfigUtils();
+  final MarketRegionZoneConfigUtils _marketRegionZoneConfigUtils = MarketRegionZoneConfigUtils();
 
   _FuelPricesTabWidgetState();
   Future<List<FuelType>> allowedFuelTypesFuture;
@@ -57,19 +56,19 @@ class _FuelPricesTabWidgetState extends State<FuelPricesTabWidget> {
 
   @override
   Widget build(final BuildContext context) {
-    LogUtil.debug(_TAG, 'Invoking build method of FuelPricesTabWidget');
+    LogUtil.debug(_tag, 'Invoking build method of FuelPricesTabWidget');
     return FutureBuilder(
       future: allowedFuelTypesFuture,
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          return Center(child: Text('Error loading fuelTypes'));
+          return const Center(child: Text('Error loading fuelTypes'));
         } else if (snapshot.hasData) {
           List<FuelType> allowedFuelTypes = snapshot.data;
           return Container(
-              decoration: BoxDecoration(color: FontsAndColors.pumpedBoxDecorationColor),
+              decoration: const BoxDecoration(color: FontsAndColors.pumpedBoxDecorationColor),
               child: Column(children: _getListItem(context, allowedFuelTypes)));
         } else {
-          return Center(child: Text('Loading'));
+          return const Center(child: Text('Loading'));
         }
       },
     );
@@ -80,44 +79,44 @@ class _FuelPricesTabWidgetState extends State<FuelPricesTabWidget> {
     final List<FuelQuote> fuelQuotes = widget.fuelStation.fuelQuotes();
     _sortFuelQuotes(fuelQuotes);
     final Map<String, FuelType> allowedFuelTypesMap = {};
-    allowedFuelTypes.forEach((fuelType) {
+    for (var fuelType in allowedFuelTypes) {
       allowedFuelTypesMap.putIfAbsent(fuelType.fuelType, () => fuelType);
-    });
+    }
 
     for (int i = 0; i < fuelQuotes.length; i++) {
       widgets.add(_getFuelQuoteRowItem(fuelQuotes[i], allowedFuelTypesMap));
     }
     widgets.add(Container(
-        margin: EdgeInsets.only(top: 5, bottom: 5),
+        margin: const EdgeInsets.only(top: 5, bottom: 5),
         child: UpdateButtonWidget(widget.fuelStation,
             fuelPricesExpanded: true, updateFuelStationDetailsScreenForChange: widget.onUpdateResult)));
     return widgets;
   }
 
-  final formatter = new DateFormat('dd-MMM-yy HH:mm');
+  final formatter = DateFormat('dd-MMM-yy HH:mm');
 
   Container _getFuelQuoteRowItem(final FuelQuote fuelQuote, final Map<String, FuelType> allowedFuelTypesMap) {
     final String fuelTypeName = allowedFuelTypesMap[fuelQuote.fuelType].fuelName;
     return Container(
-        margin: EdgeInsets.only(left: 5, right: 5, top: 5),
-        decoration: BoxDecoration(
+        margin: const EdgeInsets.only(left: 5, right: 5, top: 5),
+        decoration: const BoxDecoration(
             shape: BoxShape.rectangle, borderRadius: BorderRadius.all(Radius.circular(5)), color: Colors.white),
         child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
           Expanded(
               flex: 9,
               child: Container(
-                  padding: EdgeInsets.only(top: 10, right: 10, bottom: 2),
+                  padding: const EdgeInsets.only(top: 10, right: 10, bottom: 2),
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
                     Container(
-                        margin: EdgeInsets.only(left: 25), child: Text(fuelTypeName, style: TextStyle(fontSize: 16))),
+                        margin: const EdgeInsets.only(left: 25), child: Text(fuelTypeName, style: const TextStyle(fontSize: 16))),
                     Container(
-                        padding: EdgeInsets.only(right: 10, top: 2, bottom: 10),
+                        padding: const EdgeInsets.only(right: 10, top: 2, bottom: 10),
                         child: Row(children: <Widget>[
-                          Container(child: _getLastUpdateDateWidget(fuelQuote), margin: EdgeInsets.only(left: 25))
+                          Container(child: _getLastUpdateDateWidget(fuelQuote), margin: const EdgeInsets.only(left: 25))
                         ]))
                   ]))),
           Expanded(
-              flex: 4, child: Container(margin: EdgeInsets.only(left: 30), child: _getFuelQuoteValueWidget(fuelQuote))),
+              flex: 4, child: Container(margin: const EdgeInsets.only(left: 30), child: _getFuelQuoteValueWidget(fuelQuote))),
           Expanded(
               flex: 2, child: Container(child: _getFuelQuoteSourceIcon(fuelQuote), alignment: Alignment.centerLeft))
         ]));
@@ -125,33 +124,33 @@ class _FuelPricesTabWidgetState extends State<FuelPricesTabWidget> {
 
   Widget _getFuelQuoteValueWidget(final FuelQuote fuelQuote) {
     return fuelQuote.quoteValue != null
-        ? Text('${fuelQuote.quoteValue}', style: TextStyle(fontSize: 18))
-        : Text('---', style: TextStyle(fontSize: 18));
+        ? Text('${fuelQuote.quoteValue}', style: const TextStyle(fontSize: 18))
+        : const Text('---', style: TextStyle(fontSize: 18));
   }
 
   Widget _getFuelQuoteSourceIcon(final FuelQuote fuelQuote) {
     if (fuelQuote.quoteValue != null && fuelQuote.fuelQuoteSource != null) {
       if (fuelQuote.fuelAuthoritySource() || fuelQuote.crowdSourced()) return _getFuelPriceSourceCitation(fuelQuote);
     }
-    return Text('');
+    return const Text('');
   }
 
   Widget _getLastUpdateDateWidget(final FuelQuote fuelQuote) {
     return fuelQuote.publishDate != null
         ? Text('Last Update ${_getPublishDateFormatted(fuelQuote.publishDate)}',
-            style: TextStyle(fontSize: 13, color: Colors.black54))
-        : SizedBox(width: 0);
+            style: const TextStyle(fontSize: 13, color: Colors.black54))
+        : const SizedBox(width: 0);
   }
 
   String _getPublishDateFormatted(final int publishDateSeconds) {
-    LogUtil.debug(_TAG, 'publishDateSeconds $publishDateSeconds');
+    LogUtil.debug(_tag, 'publishDateSeconds $publishDateSeconds');
     int publishDateMilliseconds = publishDateSeconds * 1000;
     DateTime publishDateTime = DateTime.fromMillisecondsSinceEpoch(publishDateMilliseconds);
     return formatter.format(publishDateTime);
   }
 
   GestureDetector _getFuelPriceSourceCitation(final FuelQuote fuelQuote) {
-    final icon = fuelQuote.fuelQuoteSource == 'F' ? PumpedIcons.faSourceIcon_black54Size30 : PumpedIcons.crowdSourceIcon_black54Size30;
+    final icon = fuelQuote.fuelQuoteSource == 'F' ? PumpedIcons.faSourceIconBlack54Size30 : PumpedIcons.crowdSourceIconBlack54Size30;
     return GestureDetector(
         onTap: () {
           showCupertinoDialog(

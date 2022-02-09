@@ -35,29 +35,29 @@ import 'package:pumped_end_device/util/date_time_utils.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
 class FuelStationUpdateMergeUtil {
-  static const _TAG = 'FuelStationUpdateMergeUtil';
+  static const _tag = 'FuelStationUpdateMergeUtil';
 
   void mergeFuelStationUpdateResult(
       final FuelStation fuelStation, final UpdateFuelStationDetailsResult updateFuelStationDetailsResult) {
-    LogUtil.debug(_TAG, 'updateType : ${updateFuelStationDetailsResult.updateFuelStationDetailType}');
+    LogUtil.debug(_tag, 'updateType : ${updateFuelStationDetailsResult.updateFuelStationDetailType}');
     switch (updateFuelStationDetailsResult.updateFuelStationDetailType) {
-      case UpdateFuelStationDetailType.FUEL_PRICE:
+      case UpdateFuelStationDetailType.fuelPrice:
         _mergeUpdateFuelQuotesResponse(fuelStation, updateFuelStationDetailsResult as UpdateFuelQuoteResult);
         break;
-      case UpdateFuelStationDetailType.FUEL_STATION_FEATURE:
-        LogUtil.debug(_TAG, 'Fuel Station feature update merge is driven by backend and is not implemented here.');
+      case UpdateFuelStationDetailType.fuelStationFeature:
+        LogUtil.debug(_tag, 'Fuel Station feature update merge is driven by backend and is not implemented here.');
         break;
-      case UpdateFuelStationDetailType.OPERATING_HOURS:
+      case UpdateFuelStationDetailType.operatingHours:
         _mergeUpdateOperatingTimeResult(fuelStation, updateFuelStationDetailsResult as UpdateOperatingTimeResult);
         break;
-      case UpdateFuelStationDetailType.PHONE_NUMBER:
+      case UpdateFuelStationDetailType.phoneNumber:
         _mergerUpdatePhoneNumberResult(fuelStation, updateFuelStationDetailsResult as UpdatePhoneNumberResult);
         break;
-      case UpdateFuelStationDetailType.ADDRESS_DETAILS:
+      case UpdateFuelStationDetailType.addressDetails:
         _mergeUpdateAddressDetailsResult(fuelStation, updateFuelStationDetailsResult as UpdateAddressDetailsResult);
         break;
-      case UpdateFuelStationDetailType.SUGGEST_EDIT:
-        LogUtil.debug(_TAG, 'Suggest edit merge does not change anything on device. Skipping');
+      case UpdateFuelStationDetailType.suggestEdit:
+        LogUtil.debug(_tag, 'Suggest edit merge does not change anything on device. Skipping');
         break;
     }
   }
@@ -65,20 +65,20 @@ class FuelStationUpdateMergeUtil {
   void _mergeUpdateFuelQuotesResponse(
       final FuelStation fuelStation, final UpdateFuelQuoteResult updateFuelQuoteResult) {
     if (updateFuelQuoteResult.isUpdateSuccessful) {
-      LogUtil.debug(_TAG, 'Update is successful. Merging.');
+      LogUtil.debug(_tag, 'Update is successful. Merging.');
       final Map<String, FuelQuote> fuelTypeFuelQuoteMap = _getFuelTypeFuelQuoteMap(fuelStation);
       updateFuelQuoteResult.originalValues.forEach((fuelType, originalQuoteValue) {
-        LogUtil.debug(_TAG, 'Merging for fuelType : $fuelType');
+        LogUtil.debug(_tag, 'Merging for fuelType : $fuelType');
         final double updateValue = updateFuelQuoteResult.updateValues[fuelType];
         final List<dynamic> recordExceptions = updateFuelQuoteResult.recordLevelExceptionCodes[fuelType];
-        if (recordExceptions == null || recordExceptions.length == 0) {
+        if (recordExceptions == null || recordExceptions.isEmpty) {
           final FuelQuote originalFuelQuote =
               _getOriginalFuelQuote(fuelTypeFuelQuoteMap, fuelType, fuelStation.stationId);
           _updateQuoteValues(originalFuelQuote, updateValue, updateFuelQuoteResult.updateEpoch);
         }
       });
     } else {
-      LogUtil.debug(_TAG, 'updateFuelQuoteResult is not successful. Not merging the response with on device data');
+      LogUtil.debug(_tag, 'updateFuelQuoteResult is not successful. Not merging the response with on device data');
     }
   }
 
@@ -93,7 +93,7 @@ class FuelStationUpdateMergeUtil {
     FuelQuote originalFuelQuote = fuelTypeFuelQuoteMap[fuelType];
     if (originalFuelQuote == null) {
       originalFuelQuote =
-          new FuelQuote(fuelStationId: fuelStationId, fuelType: fuelType, quoteValue: null, publishDate: null);
+          FuelQuote(fuelStationId: fuelStationId, fuelType: fuelType, quoteValue: null, publishDate: null);
       fuelTypeFuelQuoteMap[fuelType] = originalFuelQuote;
       // Do not have the quoteId. Need to check if it breaks anything.
     }
@@ -120,7 +120,7 @@ class FuelStationUpdateMergeUtil {
         updatedOperatingHour.publishDate = DateTime.fromMillisecondsSinceEpoch(updateOperatingHrsResult.updateEpoch);
         updatedOperatingHour.operatingTimeSource = 'C';
         final List<dynamic> recordLevelExceptionCodes = updateOperatingHrsResult.recordLevelExceptionCodes[dayOfWeek];
-        if (recordLevelExceptionCodes == null || recordLevelExceptionCodes.length == 0) {
+        if (recordLevelExceptionCodes == null || recordLevelExceptionCodes.isEmpty) {
           fuelStation.fuelStationOperatingHrs.updateOperatingHoursForDay(dayOfWeek, updatedOperatingHour);
         }
       });
@@ -128,7 +128,7 @@ class FuelStationUpdateMergeUtil {
       fuelStation.operatingHours = fuelStation.fuelStationOperatingHrs.getOperatingHoursForDay(dayOfWeek);
       fuelStation.status = OperatingHoursResponseParseUtils.getStatus(fuelStation.operatingHours);
     } else {
-      LogUtil.debug(_TAG, 'updateOperatingHrsResult is not successful. Not merging the response with on device data');
+      LogUtil.debug(_tag, 'updateOperatingHrsResult is not successful. Not merging the response with on device data');
     }
   }
 
@@ -137,31 +137,31 @@ class FuelStationUpdateMergeUtil {
     if (updateAddressDetailsResult.isUpdateSuccessful) {
       final FuelStationAddress fuelStationAddress = fuelStation.fuelStationAddress;
       updateAddressDetailsResult.addressComponentNewValue.forEach((addressComponent, newValue) {
-        LogUtil.debug(_TAG, '$addressComponent $newValue');
+        LogUtil.debug(_tag, '$addressComponent $newValue');
         String updateResult = updateAddressDetailsResult.addressComponentUpdateStatus != null
             ? updateAddressDetailsResult.addressComponentUpdateStatus[addressComponent]
             : null;
         bool successfulUpdate = DataUtils.isBlank(updateResult);
         if (successfulUpdate) {
           switch (addressComponent) {
-            case UpdatableAddressComponents.ADDRESS_LINE:
+            case UpdatableAddressComponents.addressLine:
               fuelStationAddress.addressLine1 = newValue;
-              LogUtil.debug(_TAG, 'Updated addressLine $newValue');
+              LogUtil.debug(_tag, 'Updated addressLine $newValue');
               break;
-            case UpdatableAddressComponents.LOCALITY:
+            case UpdatableAddressComponents.locality:
               fuelStationAddress.locality = newValue;
               break;
-            case UpdatableAddressComponents.REGION:
+            case UpdatableAddressComponents.region:
               fuelStationAddress.region = newValue;
               break;
-            case UpdatableAddressComponents.STATION_NAME:
+            case UpdatableAddressComponents.stationName:
               fuelStationAddress.contactName = newValue;
               fuelStation.fuelStationName = newValue;
               break;
-            case UpdatableAddressComponents.STATE:
+            case UpdatableAddressComponents.state:
               fuelStationAddress.state = newValue;
               break;
-            case UpdatableAddressComponents.ZIP:
+            case UpdatableAddressComponents.zip:
               fuelStationAddress.zip = newValue;
               break;
             default:
@@ -170,7 +170,7 @@ class FuelStationUpdateMergeUtil {
         }
       });
     } else {
-      LogUtil.debug(_TAG, 'updateAddressDetailsResult is not successful. Not merging the response with on device data');
+      LogUtil.debug(_tag, 'updateAddressDetailsResult is not successful. Not merging the response with on device data');
     }
   }
 
@@ -180,24 +180,22 @@ class FuelStationUpdateMergeUtil {
       final FuelStationAddress fuelStationAddress = fuelStation.fuelStationAddress;
       updatePhoneNumberResult.phoneTypeNewValueMap.forEach((phoneType, newValue) {
         final bool successFulUpdate = updatePhoneNumberResult.phoneTypeUpdateStatusMap != null
-            ? (updatePhoneNumberResult.phoneTypeUpdateStatusMap[phoneType] != null
-                ? updatePhoneNumberResult.phoneTypeUpdateStatusMap[phoneType]
-                : true)
+            ? (updatePhoneNumberResult.phoneTypeUpdateStatusMap[phoneType] ?? true)
             : true;
         if (successFulUpdate) {
-          if (phoneType == UpdatableAddressComponents.PHONE1) {
+          if (phoneType == UpdatableAddressComponents.phone1) {
             fuelStationAddress.phone1 = newValue;
-          } else if (phoneType == UpdatableAddressComponents.PHONE2) {
+          } else if (phoneType == UpdatableAddressComponents.phone2) {
             fuelStationAddress.phone2 = newValue;
           } else {
-            LogUtil.debug(_TAG, 'Unknown phoneType $phoneType');
+            LogUtil.debug(_tag, 'Unknown phoneType $phoneType');
           }
         } else {
-          LogUtil.debug(_TAG, 'Update was not successful for Phone Type $phoneType');
+          LogUtil.debug(_tag, 'Update was not successful for Phone Type $phoneType');
         }
       });
     } else {
-      LogUtil.debug(_TAG, 'updatePhoneNumberResult is not successful. Not merging the response with on device data');
+      LogUtil.debug(_tag, 'updatePhoneNumberResult is not successful. Not merging the response with on device data');
     }
   }
 }

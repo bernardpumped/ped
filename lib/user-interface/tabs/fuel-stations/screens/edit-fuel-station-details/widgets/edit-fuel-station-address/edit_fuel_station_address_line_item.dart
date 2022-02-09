@@ -31,21 +31,21 @@ class EditFuelStationAddressLineItem extends StatefulWidget {
   final bool _backendUpdateInProgress;
   final Function _onValueChangeListener;
 
-  EditFuelStationAddressLineItem(this._addressComponentName, this._addressComponentType, this._addressComponentValue,
-      this._addressComponentEditingController, this._backendUpdateInProgress, this._onValueChangeListener);
+  const EditFuelStationAddressLineItem(this._addressComponentName, this._addressComponentType, this._addressComponentValue,
+      this._addressComponentEditingController, this._backendUpdateInProgress, this._onValueChangeListener, {Key key}) : super(key: key);
 
   @override
   _EditFuelStationAddressLineItemState createState() => _EditFuelStationAddressLineItemState();
 }
 
 class _EditFuelStationAddressLineItemState extends State<EditFuelStationAddressLineItem> {
-  static const _HEIGHT_WITHOUT_ERROR_MSG = 40.0;
-  static const _HEIGHT_WITH_ERROR_MSG = 65.0;
-  static const _HEIGHT_OF_ERROR_MSG = 20.0;
-  static const _HEIGHT_OF_NO_ERROR_MSG = 0.0;
+  static const _heightWithoutErrorMsg = 40.0;
+  static const _heightWithErrorMsg = 65.0;
+  static const _heightOfErrorMsg = 20.0;
+  static const _heightOfNoErrorMsg = 0.0;
 
-  static const _QUICK_DURATION = 300;
-  static const _SLOW_DURATION = 1000;
+  static const _quickDuration = 300;
+  static const _slowDuration = 1000;
 
   double _containerHeight;
   double _errorContainerHeight;
@@ -69,7 +69,7 @@ class _EditFuelStationAddressLineItemState extends State<EditFuelStationAddressL
         height: _containerHeight,
         curve: Curves.fastOutSlowIn,
         duration: Duration(milliseconds: _containerHeightChangeTime),
-        padding: EdgeInsets.only(left: 40, right: 20, bottom: 5),
+        padding: const EdgeInsets.only(left: 40, right: 20, bottom: 5),
         child: Row(children: <Widget>[
           Expanded(flex: 1, child: Text(widget._addressComponentName)),
           Expanded(
@@ -85,10 +85,10 @@ class _EditFuelStationAddressLineItemState extends State<EditFuelStationAddressL
         decoration: BoxDecoration(
             color: Colors.white,
             border: _addressComponentEnabled ? Border.all(color: Colors.blue) : Border.all(color: Colors.grey),
-            borderRadius: BorderRadius.all(Radius.circular(3))),
+            borderRadius: const BorderRadius.all(Radius.circular(3))),
         clearButtonMode: OverlayVisibilityMode.editing,
         controller: widget._addressComponentEditingController, // Add this
-        style: TextStyle(fontSize: 15),
+        style: const TextStyle(fontSize: 15),
         keyboardType: TextInputType.phone,
         maxLengthEnforcement: MaxLengthEnforcement.enforced,
         enabled: _addressComponentEnabled && !widget._backendUpdateInProgress,
@@ -121,11 +121,11 @@ class _EditFuelStationAddressLineItemState extends State<EditFuelStationAddressL
 
   Widget _getErrorMsgField() {
     return AnimatedContainer(
-        padding: EdgeInsets.only(top: _errorContainerHeight == _HEIGHT_OF_ERROR_MSG ? 5 : 0),
+        padding: EdgeInsets.only(top: _errorContainerHeight == _heightOfErrorMsg ? 5 : 0),
         height: _errorContainerHeight,
         curve: Curves.fastOutSlowIn,
         duration: Duration(milliseconds: _errorMsgHeightChangeTime),
-        child: Text(_errorMessage, style: TextStyle(color: Colors.red)));
+        child: Text(_errorMessage, style: const TextStyle(color: Colors.red)));
   }
 
   Widget _getAddressComponentField(final CupertinoTextField addressComponentTextField) {
@@ -141,28 +141,28 @@ class _EditFuelStationAddressLineItemState extends State<EditFuelStationAddressL
   }
 
   void _setInitialState() {
-    _errorContainerHeight = _HEIGHT_OF_NO_ERROR_MSG;
-    _containerHeight = _HEIGHT_WITHOUT_ERROR_MSG;
+    _errorContainerHeight = _heightOfNoErrorMsg;
+    _containerHeight = _heightWithoutErrorMsg;
     _errorMessage = "";
-    _containerHeightChangeTime = _SLOW_DURATION;
-    _errorMsgHeightChangeTime = _QUICK_DURATION;
+    _containerHeightChangeTime = _slowDuration;
+    _errorMsgHeightChangeTime = _quickDuration;
   }
 
   void _setUpdatedWidgetHeight() {
     if (_addressComponentEnabled) {
       final bool isValid = DataUtils.isNotBlank(widget._addressComponentEditingController.text);
       if (!isValid) {
-        _containerHeight = _HEIGHT_WITH_ERROR_MSG;
-        _errorContainerHeight = _HEIGHT_OF_ERROR_MSG;
+        _containerHeight = _heightWithErrorMsg;
+        _errorContainerHeight = _heightOfErrorMsg;
         _errorMessage = "${widget._addressComponentName} not valid";
-        _containerHeightChangeTime = _QUICK_DURATION;
-        _errorMsgHeightChangeTime = _SLOW_DURATION;
+        _containerHeightChangeTime = _quickDuration;
+        _errorMsgHeightChangeTime = _slowDuration;
       } else {
-        _containerHeight = _HEIGHT_WITHOUT_ERROR_MSG;
-        _errorContainerHeight = _HEIGHT_OF_NO_ERROR_MSG;
+        _containerHeight = _heightWithoutErrorMsg;
+        _errorContainerHeight = _heightOfNoErrorMsg;
         _errorMessage = "";
-        _containerHeightChangeTime = _SLOW_DURATION;
-        _errorMsgHeightChangeTime = _QUICK_DURATION;
+        _containerHeightChangeTime = _slowDuration;
+        _errorMsgHeightChangeTime = _quickDuration;
       }
     }
   }

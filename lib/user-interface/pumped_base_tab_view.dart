@@ -31,6 +31,8 @@ import 'package:pumped_end_device/user-interface/widgets/pumped_icons.dart';
 class PumpedBaseTabView extends StatefulWidget {
   static const routeName = '/homeScreen';
 
+  const PumpedBaseTabView({Key key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
     return _PumpedBaseTabViewState();
@@ -46,18 +48,18 @@ class _PumpedBaseTabViewState extends State<PumpedBaseTabView> {
             activeColor: Theme.of(context).primaryColor,
             inactiveColor: Colors.black54,
             backgroundColor: Colors.white,
-            items: <BottomNavigationBarItem>[
+            items: const <BottomNavigationBarItem>[
               BottomNavigationBarItem(
-                  icon: PumpedIcons.searchTabIcon_size30,
+                  icon: PumpedIcons.searchTabIconSize30,
                   label: 'Home'),
               BottomNavigationBarItem(
-                  icon: PumpedIcons.settingsTabIcon_size30,
+                  icon: PumpedIcons.settingsTabIconSize30,
                   label: 'Settings'),
               BottomNavigationBarItem(
-                  icon: PumpedIcons.updateHistoryTabIcon_size30,
+                  icon: PumpedIcons.updateHistoryTabIconSize30,
                   label: 'Update History'),
               BottomNavigationBarItem(
-                  icon: PumpedIcons.aboutTabIcon_size30,
+                  icon: PumpedIcons.aboutTabIconSize30,
                   label: 'About', backgroundColor: Colors.white)
             ]),
         // ignore: missing_return
@@ -69,25 +71,25 @@ class _PumpedBaseTabViewState extends State<PumpedBaseTabView> {
                     return CupertinoPageScaffold(child: FuelStationsScreen());
                   },
                   routes: {
-                    EditFuelStationDetails.routeName: (context) => EditFuelStationDetails(),
-                    FuelStationDetailsScreen.routeName: (context) => FuelStationDetailsScreen()
+                    EditFuelStationDetails.routeName: (context) => const EditFuelStationDetails(),
+                    FuelStationDetailsScreen.routeName: (context) => const FuelStationDetailsScreen()
                   });
             case 1:
               return CupertinoTabView(
                   builder: (context) {
-                    return CupertinoPageScaffold(child: SettingsScreen());
+                    return const CupertinoPageScaffold(child: SettingsScreen());
                   },
                   routes: {
-                    CustomizeSearchSettingsScreen.routeName: (context) => CustomizeSearchSettingsScreen(),
-                    CleanupLocalCacheScreen.routeName: (context) => CleanupLocalCacheScreen()
+                    CustomizeSearchSettingsScreen.routeName: (context) => const CustomizeSearchSettingsScreen(),
+                    CleanupLocalCacheScreen.routeName: (context) => const CleanupLocalCacheScreen()
                   });
             case 2:
               return CupertinoTabView(builder: (context) {
-                return CupertinoPageScaffold(child: UpdateHistoryScreen());
+                return const CupertinoPageScaffold(child: UpdateHistoryScreen());
               });
             case 3:
               return CupertinoTabView(builder: (context) {
-                return CupertinoPageScaffold(child: AboutScreen());
+                return const CupertinoPageScaffold(child: AboutScreen());
               });
           }
         });

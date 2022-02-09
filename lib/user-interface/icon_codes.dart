@@ -17,119 +17,119 @@
  */
 
 class IconCodes {
-  static const _navigate_next_icon_code_material = 58397;
-  static const navigate_next_icon_code = _navigate_next_icon_code_material;
+  static const _navigateNextIconCodeMaterial = 58397;
+  static const navigateNextIconCode = _navigateNextIconCodeMaterial;
 
-  static const _edit_icon_code_material = 57882;
-  static const edit_icon_code = _edit_icon_code_material;
+  static const _editIconCodeMaterial = 57882;
+  static const editIconCode = _editIconCodeMaterial;
 
-  static const _undo_icon_code_material = 59020;
-  static const undo_icon_code = _undo_icon_code_material;
+  static const _undoIconCodeMaterial = 59020;
+  static const undoIconCode = _undoIconCodeMaterial;
 
-  static const _location_on_outlined_icon_code_material = 61843;
-  static const address_details_icon_code = _location_on_outlined_icon_code_material;
+  static const _locationOnOutlinedIconCodeMaterial = 61843;
+  static const addressDetailsIconCode = _locationOnOutlinedIconCodeMaterial;
 
-  static const _access_time_icon_code_material = 57402;
-  static const operating_time_icon_code = _access_time_icon_code_material;
+  static const _accessTimeIconCodeMaterial = 57402;
+  static const operatingTimeIconCode = _accessTimeIconCodeMaterial;
 
-  static const _phone_icon_code_material = 58530;
-  static const phone_icon_code = _phone_icon_code_material;
+  static const _phoneIconCodeMaterial = 58530;
+  static const phoneIconCode = _phoneIconCodeMaterial;
 
-  static const _call_icon_code_material = 57638;
-  static const call_icon_code = _call_icon_code_material;
+  static const _callIconCodeMaterial = 57638;
+  static const callIconCode = _callIconCodeMaterial;
 
-  static const _directions_icon_code_material = 57809;
-  static const directions_icon_code = _directions_icon_code_material;
+  static const _directionsIconCodeMaterial = 57809;
+  static const directionsIconCode = _directionsIconCodeMaterial;
 
-  static const _email_icon_code_material = 57898;
-  static const email_icon_code = _email_icon_code_material;
+  static const _emailIconCodeMaterial = 57898;
+  static const emailIconCode = _emailIconCodeMaterial;
 
-  static const _monetization_on_outlined_icon_code_material = 61917;
-  static const fuel_price_icon_code = _monetization_on_outlined_icon_code_material;
+  static const _monetizationOnOutlinedIconCodeMaterial = 61917;
+  static const fuelPriceIconCode = _monetizationOnOutlinedIconCodeMaterial;
 
-  static const _flag_outlined_icon_code_material = 61563;
-  static const features_icon_code = _flag_outlined_icon_code_material;
+  static const _flagOutlinedIconCodeMaterial = 61563;
+  static const featuresIconCode = _flagOutlinedIconCodeMaterial;
 
-  static const _comment_outlined_icon_code_material = 61294;
-  static const suggest_edit_icon_code = _comment_outlined_icon_code_material;
+  static const _commentOutlinedIconCodeMaterial = 61294;
+  static const suggestEditIconCode = _commentOutlinedIconCodeMaterial;
 
-  static const _info_icon_code_material = 58172;
-  static const fa_source_icon_code = _info_icon_code_material;
+  static const _infoIconCodeMaterial = 58172;
+  static const faSourceIconCode = _infoIconCodeMaterial;
 
-  static const google_source_icon_code = _info_icon_code_material;
+  static const googleSourceIconCode = _infoIconCodeMaterial;
 
-  static const _people_icon_code_material = 58502;
-  static const crowd_source_icon_code = _people_icon_code_material;
+  static const _peopleIconCodeMaterial = 58502;
+  static const crowdSourceIconCode = _peopleIconCodeMaterial;
 
-  static const _home_icon_code_material = 58136;
-  static const fuel_station_search_tab_icon_code = _home_icon_code_material;
+  static const _homeIconCodeMaterial = 58136;
+  static const fuelStationSearchTabIconCode = _homeIconCodeMaterial;
 
-  static const _settings_icon_code_material = 58751;
-  static const settings_icon_code = _settings_icon_code_material;
+  static const _settingsIconCodeMaterial = 58751;
+  static const settingsIconCode = _settingsIconCodeMaterial;
 
-  static const _account_circle_icon_code_material = 57411;
-  static const account_icon_code = _account_circle_icon_code_material;
+  static const _accountCircleIconCodeMaterial = 57411;
+  static const accountIconCode = _accountCircleIconCodeMaterial;
 
-  static const _history_icon_code_material = 58132;
-  static const update_history_icon_code = _history_icon_code_material;
+  static const _historyIconCodeMaterial = 58132;
+  static const updateHistoryIconCode = _historyIconCodeMaterial;
 
-  static const about_icon_code = _info_icon_code_material;
+  static const aboutIconCode = _infoIconCodeMaterial;
 
-  static const _bookmark_border_icon_code_material = 57588;
-  static const remove_from_favourites_icon_code = _bookmark_border_icon_code_material;
+  static const _bookmarkBorderIconCodeMaterial = 57588;
+  static const removeFromFavouritesIconCode = _bookmarkBorderIconCodeMaterial;
 
-  static const _bookmark_icon_code_material = 57585;
-  static const add_to_favourites_icon_code = _bookmark_icon_code_material;
+  static const _bookmarkIconCodeMaterial = 57585;
+  static const addToFavouritesIconCode = _bookmarkIconCodeMaterial;
 
-  static const _drive_eta_icon_code_material = 57864;
-  static const distance_icon_code = _drive_eta_icon_code_material;
+  static const _driveEtaIconCodeMaterial = 57864;
+  static const distanceIconCode = _driveEtaIconCodeMaterial;
 
-  static const _rate_review_icon_code_material = 58631;
-  static const rate_icon_code = _rate_review_icon_code_material;
+  static const _rateReviewIconCodeMaterial = 58631;
+  static const rateIconCode = _rateReviewIconCodeMaterial;
 
-  static const _search_icon_code_material = 58727;
-  static const cleanup_search_settings_icon_code = _search_icon_code_material;
+  static const _searchIconCodeMaterial = 58727;
+  static const cleanupSearchSettingsIconCode = _searchIconCodeMaterial;
 
-  static const clean_up_favourite_stations_icon_code = _bookmark_border_icon_code_material;
+  static const cleanUpFavouriteStationsIconCode = _bookmarkBorderIconCodeMaterial;
 
-  static const clean_up_update_history_icon_code = _history_icon_code_material;
+  static const cleanUpUpdateHistoryIconCode = _historyIconCodeMaterial;
 
-  static const _description_outlined_icon_code_material = 61358;
-  static const clean_up_application_data_icon_code = _description_outlined_icon_code_material;
+  static const _descriptionOutlinedIconCodeMaterial = 61358;
+  static const cleanUpApplicationDataIconCode = _descriptionOutlinedIconCodeMaterial;
 
-  static const _compare_icon_code_material = 57729;
-  static const search_criteria_icon_code = _compare_icon_code_material;
+  static const _compareIconCodeMaterial = 57729;
+  static const searchCriteriaIconCode = _compareIconCodeMaterial;
 
-  static const _explore_icon_code_material = 57928;
-  static const search_radius_icon_code = _explore_icon_code_material;
+  static const _exploreIconCodeMaterial = 57928;
+  static const searchRadiusIconCode = _exploreIconCodeMaterial;
 
-  static const _class__icon_code_material = 57701;
-  static const fuel_type_icon_code = _class__icon_code_material;
+  static const _classIconCodeMaterial = 57701;
+  static const fuelTypeIconCode = _classIconCodeMaterial;
 
-  static const _category_icon_code_material = 57672;
-  static const fuel_categories_icon_code = _category_icon_code_material;
+  static const _categoryIconCodeMaterial = 57672;
+  static const fuelCategoriesIconCode = _categoryIconCodeMaterial;
 
-  static const _format_list_numbered_icon_code_material = 58041;
-  static const number_of_search_results = _format_list_numbered_icon_code_material;
+  static const _formatListNumberedIconCodeMaterial = 58041;
+  static const numberOfSearchResults = _formatListNumberedIconCodeMaterial;
 
-  static const _delete_icon_code_material = 57785;
-  static const clean_up_local_cache_icon_code_material = _delete_icon_code_material;
+  static const _deleteIconCodeMaterial = 57785;
+  static const cleanUpLocalCacheIconCodeMaterial = _deleteIconCodeMaterial;
 
-  static const _my_location_icon_code_material = 58392;
-  static const location_detected_icon_code = _my_location_icon_code_material;
+  static const _myLocationIconCodeMaterial = 58392;
+  static const locationDetectedIconCode = _myLocationIconCodeMaterial;
 
-  static const _check_icon_code_material = 57686;
-  static const done_icon_code = _check_icon_code_material;
+  static const _checkIconCodeMaterial = 57686;
+  static const doneIconCode = _checkIconCodeMaterial;
 
-  static const _local_gas_station_icon_code_material = 58260;
-  static const find_fuel_station_icon_code = _local_gas_station_icon_code_material;
+  static const _localGasStationIconCodeMaterial = 58260;
+  static const findFuelStationIconCode = _localGasStationIconCodeMaterial;
 
-  static const _done_icon_code_material = 57846;
-  static const success_icon_code = _done_icon_code_material;
+  static const _doneIconCodeMaterial = 57846;
+  static const successIconCode = _doneIconCodeMaterial;
 
-  static const _error_outline_icon_code_material = 57912;
-  static const failed_icon_code = _error_outline_icon_code_material;
+  static const _errorOutlineIconCodeMaterial = 57912;
+  static const failedIconCode = _errorOutlineIconCodeMaterial;
 
-  static const _sync_icon_code_material = 58927;
-  static const in_progress_icon_code = _sync_icon_code_material;
+  static const _syncIconCodeMaterial = 58927;
+  static const inProgressIconCode = _syncIconCodeMaterial;
 }

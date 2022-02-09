@@ -17,10 +17,10 @@
  */
 
 enum UpdateFuelStationDetailType {
-  FUEL_PRICE,
-  FUEL_STATION_FEATURE,
-  OPERATING_HOURS,
-  PHONE_NUMBER,
-  ADDRESS_DETAILS,
-  SUGGEST_EDIT
+  fuelPrice,
+  fuelStationFeature,
+  operatingHours,
+  phoneNumber,
+  addressDetails,
+  suggestEdit
 }

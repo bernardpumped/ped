@@ -27,7 +27,7 @@ class FavoriteFuelStation {
   FavoriteFuelStation({this.favoriteFuelStationId, this.fuelStationSource});
 
   factory FavoriteFuelStation.fromJson(final Map<String, dynamic> data) {
-    return new FavoriteFuelStation(
+    return FavoriteFuelStation(
       favoriteFuelStationId: data['favorite_fuel_station_id'],
       fuelStationSource: data['fuel_station_source'],
     );

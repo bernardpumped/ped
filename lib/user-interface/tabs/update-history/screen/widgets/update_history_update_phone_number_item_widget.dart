@@ -20,9 +20,9 @@ import 'package:flutter/material.dart';
 import 'package:pumped_end_device/user-interface/tabs/update-history/screen/widgets/update_history_item_widget_colors.dart';
 
 class UpdateHistoryUpdatePhoneNumberItemWidget extends StatelessWidget {
-  final valueType;
-  final originalValue;
-  final updateValue;
+  final String valueType;
+  final dynamic originalValue;
+  final dynamic updateValue;
   final Map<String, dynamic> serverExceptions;
   final List<dynamic> recordLevelExceptions;
 
@@ -38,18 +38,18 @@ class UpdateHistoryUpdatePhoneNumberItemWidget extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     final String phoneType = valueType;
-    final String originalPhoneNumber = originalValue == null ? '----' : originalValue;
+    final String originalPhoneNumber = originalValue ?? '----';
     final String updatedPhoneNumber = updateValue;
     final updateStatus = _getUpdateResult();
     return Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
-        margin: EdgeInsets.all(2),
+        margin: const EdgeInsets.all(2),
         color: UpdateHistoryItemWidgetColors.updateItemColor,
         child: Container(
-            padding: EdgeInsets.all(5),
+            padding: const EdgeInsets.all(5),
             child: Column(children: <Widget>[
               Row(children: <Widget>[
-                Expanded(
+                const Expanded(
                     flex: 1,
                     child: Padding(
                         padding: EdgeInsets.only(top: 4, bottom: 4, left: 12),
@@ -61,12 +61,12 @@ class UpdateHistoryUpdatePhoneNumberItemWidget extends StatelessWidget {
                 Expanded(
                     flex: 1,
                     child: Padding(
-                        padding: EdgeInsets.all(4),
+                        padding: const EdgeInsets.all(4),
                         child: Text(phoneType,
-                            style: TextStyle(fontSize: 15, color: UpdateHistoryItemWidgetColors.updateValuesTxtColor))))
+                            style: const TextStyle(fontSize: 15, color: UpdateHistoryItemWidgetColors.updateValuesTxtColor))))
               ]),
               Row(children: <Widget>[
-                Expanded(
+                const Expanded(
                     flex: 1,
                     child: Padding(
                         padding: EdgeInsets.only(top: 4, bottom: 4, left: 12),
@@ -78,12 +78,12 @@ class UpdateHistoryUpdatePhoneNumberItemWidget extends StatelessWidget {
                 Expanded(
                     flex: 1,
                     child: Padding(
-                        padding: EdgeInsets.all(4),
-                        child: Text('$originalPhoneNumber',
-                            style: TextStyle(fontSize: 15, color: UpdateHistoryItemWidgetColors.updateValuesTxtColor))))
+                        padding: const EdgeInsets.all(4),
+                        child: Text(originalPhoneNumber,
+                            style: const TextStyle(fontSize: 15, color: UpdateHistoryItemWidgetColors.updateValuesTxtColor))))
               ]),
               Row(children: <Widget>[
-                Expanded(
+                const Expanded(
                     flex: 1,
                     child: Padding(
                         padding: EdgeInsets.only(top: 4, bottom: 4, left: 12),
@@ -95,12 +95,12 @@ class UpdateHistoryUpdatePhoneNumberItemWidget extends StatelessWidget {
                 Expanded(
                     flex: 1,
                     child: Padding(
-                        padding: EdgeInsets.all(4),
-                        child: Text('$updatedPhoneNumber',
-                            style: TextStyle(fontSize: 15, color: UpdateHistoryItemWidgetColors.updateValuesTxtColor))))
+                        padding: const EdgeInsets.all(4),
+                        child: Text(updatedPhoneNumber,
+                            style: const TextStyle(fontSize: 15, color: UpdateHistoryItemWidgetColors.updateValuesTxtColor))))
               ]),
               Row(children: <Widget>[
-                Expanded(
+                const Expanded(
                     flex: 1,
                     child: Padding(
                         padding: EdgeInsets.only(top: 4, bottom: 4, left: 12),
@@ -112,16 +112,16 @@ class UpdateHistoryUpdatePhoneNumberItemWidget extends StatelessWidget {
                 Expanded(
                     flex: 1,
                     child: Padding(
-                        padding: EdgeInsets.all(4),
-                        child: Text('$updateStatus',
-                            style: TextStyle(fontSize: 15, color: UpdateHistoryItemWidgetColors.updateStatusTxtColor))))
+                        padding: const EdgeInsets.all(4),
+                        child: Text(updateStatus,
+                            style: const TextStyle(fontSize: 15, color: UpdateHistoryItemWidgetColors.updateStatusTxtColor))))
               ])
             ])));
   }
 
   String _getUpdateResult() {
-    if (serverExceptions == null || serverExceptions.length == 0) {
-      if (recordLevelExceptions == null || recordLevelExceptions.length == 0) {
+    if (serverExceptions == null || serverExceptions.isEmpty) {
+      if (recordLevelExceptions == null || recordLevelExceptions.isEmpty) {
         return 'Success';
       }
       return _getTranslatedUpdateResult();

@@ -24,12 +24,13 @@ import 'package:pumped_end_device/data/remote/response-parser/response_parser.da
 import 'package:pumped_end_device/util/log_util.dart';
 
 class GetFuelAuthorityPriceMetaDataResponseParser extends ResponseParser<GetFuelAuthorityPriceMetaDataResponse> {
-  static const _TAG = 'GetFuelAuthorityPriceMetaDataResponseParser';
+  static const _tag = 'GetFuelAuthorityPriceMetaDataResponseParser';
 
+  @override
   GetFuelAuthorityPriceMetaDataResponse parseResponse(final String response) {
     final Map<String, dynamic> responseJson = convert.jsonDecode(response);
     final String responseCode = responseJson['responseCode'];
-    LogUtil.debug(_TAG, 'Response Code : $responseCode');
+    LogUtil.debug(_tag, 'Response Code : $responseCode');
     final String responseDetails = responseJson['responseDetails'];
     final Map<String, dynamic> invalidArguments = responseJson['invalidArguments'];
     final int responseEpoch = responseJson['responseEpoch'];

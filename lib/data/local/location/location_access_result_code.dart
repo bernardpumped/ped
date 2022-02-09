@@ -16,4 +16,4 @@
  *     along with Pumped End Device.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-enum LocationInitResultCode { LOCATION_SERVICE_DISABLED, PERMISSION_DENIED, SUCCESS, NOT_FOUND, FAILURE }
+enum LocationInitResultCode { locationServiceDisabled, permissionDenied, success, notFound, failure }

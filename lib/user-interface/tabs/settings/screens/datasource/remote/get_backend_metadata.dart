@@ -16,15 +16,24 @@
  *     along with Pumped End Device.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'dart:convert' as convert;
-
-import 'package:pumped_end_device/user-interface/tabs/about/screen/datasource/remote/model/response/get_backend_metadata_response.dart';
+import 'package:pumped_end_device/data/remote/http_get_executor.dart';
+import 'package:pumped_end_device/data/remote/model/request/request.dart';
+import 'package:pumped_end_device/user-interface/tabs/settings/screens/datasource/remote/model/response/get_backend_metadata_response.dart';
 import 'package:pumped_end_device/data/remote/response-parser/response_parser.dart';
 
-class GetBackendMetadataResponseParser extends ResponseParser<GetBackendMetadataResponse> {
+
+class GetBackendMetadata extends HttpGetExecutor<Request, GetBackendMetadataResponse> {
+  GetBackendMetadata(final ResponseParser<GetBackendMetadataResponse> responseParser)
+      : super(responseParser, 'GetBackendMetadata');
+
   @override
-  GetBackendMetadataResponse parseResponse(final String response) {
-    final Map<String, dynamic> responseJson = convert.jsonDecode(response);
-    return GetBackendMetadataResponse.fromJson(responseJson);
+  GetBackendMetadataResponse getDefaultResponse(
+      final String responseCode, final String responseDetails, final int responseEpoch, final Request request) {
+    return GetBackendMetadataResponse(responseCode, responseDetails, {}, DateTime.now().millisecondsSinceEpoch);
+  }
+
+  @override
+  String getUrl(final Request request) {
+    return "/getBackendMetadata";
   }
 }
