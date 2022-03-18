@@ -46,19 +46,27 @@ class GetFuelStationOperatingHrsResponseParser extends ResponseParser<GetFuelSta
     final List<OperatingHours> weeklyOperatingHrs = [];
     final detailsVoJson = responseJson['detailsVo'];
     if (detailsVoJson != null) {
-      final Map<String, dynamic> operatingTimeJson = detailsVoJson['operatingTimeVoMap'];
+      final Map<String, dynamic>? operatingTimeJson = detailsVoJson['operatingTimeVoMap'];
       if (operatingTimeJson != null) {
         final List<dynamic> fuelFullOperatingTimes = operatingTimeJson['FUEL-FILL'];
         for (final Map<String, dynamic> jsonVal in fuelFullOperatingTimes) {
-          final OperatingHours operatingHours = OperatingHoursResponseParseUtils.getOperatingHours(jsonVal, null);
-          weeklyOperatingHrs.add(operatingHours);
+          final OperatingHours? operatingHours = OperatingHoursResponseParseUtils.getOperatingHours(jsonVal, null);
+          if (operatingHours != null) {
+            weeklyOperatingHrs.add(operatingHours);
+          }
         }
       }
     }
     weeklyOperatingHrs.sort((o1, o2) {
-      final int dayOneInt = DateTimeUtils.shortNameToWeekDayInt[o1.dayOfWeek];
-      final int dayTwoInt = DateTimeUtils.shortNameToWeekDayInt[o2.dayOfWeek];
-      return dayOneInt.compareTo(dayTwoInt);
+      final int? dayOneInt = DateTimeUtils.shortNameToWeekDayInt[o1.dayOfWeek];
+      final int? dayTwoInt = DateTimeUtils.shortNameToWeekDayInt[o2.dayOfWeek];
+      if (dayOneInt == null && dayTwoInt != null) {
+        return -1;
+      } else if (dayOneInt != null && dayTwoInt == null) {
+        return 1;
+      } else {
+        return (dayOneInt as int).compareTo(dayTwoInt as int);
+      }
     });
     return FuelStationOperatingHrs(stationId: fuelStationId, weeklyOperatingHrs: weeklyOperatingHrs);
   }

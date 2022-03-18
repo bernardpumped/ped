@@ -14,7 +14,7 @@ description: Pumped End Device
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.6.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -22,7 +22,8 @@ dependencies:
 
   cupertino_icons: ^1.0.3
   intl: ^0.17.0
-  rating_bar: ^0.2.0
+#  rating_bar: ^0.2.0
+  flutter_rating_bar: 4.0.0
   flutter_svg: ^0.22.0
   provider: ^6.0.0
   sprintf: ^6.0.0

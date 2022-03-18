@@ -36,7 +36,7 @@ import 'package:pumped_end_device/util/log_util.dart';
 class CustomizeSearchSettingsScreen extends StatefulWidget {
   static const routeName = '/customizeSearchSettings';
 
-  const CustomizeSearchSettingsScreen({Key key}) : super(key: key);
+  const CustomizeSearchSettingsScreen({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -55,26 +55,23 @@ class _CustomizeSearchSettingsScreenState
 
   num _searchRadiusSelectedValue = _unselectedValDouble;
   num _searchResultsCountSelectedValue = _unselectedValInt;
-  FuelCategory _fuelCategorySelectedValue;
-  FuelType _fuelTypeSelectedValue;
-  SortOrder _sortOrderSelectedVal;
-  int _userSettingsVersion;
+  FuelCategory? _fuelCategorySelectedValue;
+  FuelType? _fuelTypeSelectedValue;
+  SortOrder? _sortOrderSelectedVal;
+  int? _userSettingsVersion;
 
-  Future<int> _userSettingsVersionFuture;
-  Future<DropDownValues<FuelCategory>> _fuelCategoryDropdownValues;
-  Future<DropDownValues<FuelType>> _fuelTypeDropdownValues;
-  Future<DropDownValues<SortOrder>> _sortOrderDropdownValues;
+  Future<int>? _userSettingsVersionFuture;
+  Future<DropDownValues<FuelCategory>>? _fuelCategoryDropdownValues;
+  Future<DropDownValues<FuelType>>? _fuelTypeDropdownValues;
+  Future<DropDownValues<SortOrder>>? _sortOrderDropdownValues;
 
   @override
   void initState() {
     super.initState();
-    _fuelCategoryDropdownValues =
-        _settingsDataSource.fuelCategoryDropdownValues();
-    _fuelTypeDropdownValues =
-        _settingsDataSource.fuelTypeDropdownValues(_fuelCategorySelectedValue);
+    _fuelCategoryDropdownValues = _settingsDataSource.fuelCategoryDropdownValues();
+    _fuelTypeDropdownValues = _settingsDataSource.fuelTypeDropdownValues(_fuelCategorySelectedValue);
     _sortOrderDropdownValues = _settingsDataSource.sortOrderDropdownValues();
-    _userSettingsVersionFuture = UserConfigurationDao.instance
-        .getUserConfigurationVersion(UserConfiguration.defaultUserConfigId);
+    _userSettingsVersionFuture = UserConfigurationDao.instance.getUserConfigurationVersion(UserConfiguration.defaultUserConfigId);
   }
 
   @override
@@ -120,44 +117,33 @@ class _CustomizeSearchSettingsScreenState
     return Padding(
         padding: const EdgeInsets.only(top: 20),
         child: Row(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
-          WidgetUtils.getRoundedElevatedButton(
-              backgroundColor: Theme.of(context).primaryColor,
-              foreGroundColor: Colors.white,
-              borderRadius: 18.0,
-              child: const Text("Save"),
+          WidgetUtils.getRoundedElevatedButton(backgroundColor: Theme.of(context).primaryColor,
+              foreGroundColor: Colors.white, borderRadius: 18.0, child: const Text("Save"),
               onPressed: () {
-                if (_userSettingsVersion >= 1) {
-                  _userSettingsVersion = _userSettingsVersion + 1;
-                  _settingsDataSource
-                      .insertSettings(
-                          _searchRadiusSelectedValue,
-                          _searchResultsCountSelectedValue,
-                          _fuelCategorySelectedValue,
-                          _fuelTypeSelectedValue,
-                          _sortOrderSelectedVal.sortOrderStr,
-                          _userSettingsVersion)
-                      .then((result) {
-                    WidgetUtils.showToastMessage(
-                        context,
-                        'Search Settings updated',
-                        Theme.of(context).primaryColor);
-                    Navigator.of(context).pop();
-                  }, onError: (error, s) {
-                    LogUtil.debug(_tag, 'Failed Persistence Result $s');
-                    WidgetUtils.showToastMessage(
-                        context,
-                        'Error updating search settings',
-                        Theme.of(context).primaryColor);
-                  });
+                if (_userSettingsVersion != null && _userSettingsVersion! >= 1) {
+                  if (_fuelCategorySelectedValue != null && _fuelTypeSelectedValue != null && _sortOrderSelectedVal != null) {
+                    _userSettingsVersion = _userSettingsVersion! + 1;
+                    _settingsDataSource.insertSettings(_searchRadiusSelectedValue, _searchResultsCountSelectedValue,
+                        _fuelCategorySelectedValue!, _fuelTypeSelectedValue!, _sortOrderSelectedVal!.sortOrderStr!, _userSettingsVersion!)
+                        .then((result) {
+                      WidgetUtils.showToastMessage(context, 'Search Settings updated', Theme.of(context).primaryColor);
+                      Navigator.of(context).pop();
+                    }, onError: (error, s) {
+                      LogUtil.debug(_tag, 'Failed Persistence Result $s');
+                      WidgetUtils.showToastMessage(context, 'Error updating search settings', Theme.of(context).primaryColor);
+                    });
+                  } else {
+                    LogUtil.debug(_tag, '_getButtonRow::Inconsistent state _fuelCategorySelectedValue : $_fuelCategorySelectedValue'
+                        '  _fuelTypeSelectedValue : $_fuelTypeSelectedValue  _sortOrderSelectedVal : $_sortOrderSelectedVal');
+                  }
                 } else {
-                  WidgetUtils.showToastMessage(
-                      context,
-                      'Settings not loaded. So cannot save.',
-                      Theme.of(context).primaryColor);
+                  WidgetUtils.showToastMessage(context, 'Settings not loaded. So cannot save.', Theme.of(context).primaryColor);
                 }
               })
         ]));
   }
+
+
 
   Widget _getVersionNumberRow() {
     return Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
@@ -166,14 +152,11 @@ class _CustomizeSearchSettingsScreenState
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               _userSettingsVersion = -1;
-              LogUtil.debug(
-                  _tag, '_getVersionNumberRow::${snapshot.error}');
-              return const Text('Error loading the settings',
-                  style: TextStyle(color: Colors.red, fontSize: 13));
+              LogUtil.debug(_tag, '_getVersionNumberRow::${snapshot.error}');
+              return const Text('Error loading the settings', style: TextStyle(color: Colors.red, fontSize: 13));
             } else if (snapshot.hasData) {
               _userSettingsVersion = snapshot.data;
-              return Text('Version : $_userSettingsVersion',
-                  style: const TextStyle(color: Colors.black87, fontSize: 13));
+              return Text('Version : $_userSettingsVersion', style: const TextStyle(color: Colors.black87, fontSize: 13));
             } else {
               return const Text('Loading');
             }
@@ -204,30 +187,27 @@ class _CustomizeSearchSettingsScreenState
       future: _sortOrderDropdownValues,
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          LogUtil.debug(_tag,
-              '_sortOrderDropdown::_sortOrderDropdownValues error ${snapshot.error}');
+          LogUtil.debug(_tag, '_sortOrderDropdown::_sortOrderDropdownValues error ${snapshot.error}');
           return const Text('Error loading');
         } else if (snapshot.hasData) {
-          final DropDownValues<SortOrder> dropDownValues = snapshot.data;
-          _sortOrderSelectedVal = _sortOrderSelectedVal ?? dropDownValues.values[dropDownValues.selectedIndex];
-          return DropdownButton<SortOrder>(
-            value: _sortOrderSelectedVal,
-            icon: const Icon(Icons.keyboard_arrow_down),
-            iconSize: 20,
-            style: const TextStyle(color: Colors.black),
-            onChanged: (SortOrder newValue) {
-              setState(() {
-                _sortOrderSelectedVal = newValue;
-              });
-            },
-            items: dropDownValues.values
-                .map<DropdownMenuItem<SortOrder>>((SortOrder sortOrder) {
-              return DropdownMenuItem<SortOrder>(
-                  value: sortOrder,
-                  child: Text(sortOrder.sortOrderName,
-                      style: const TextStyle(fontSize: 14)));
-            }).toList(),
-          );
+            final DropDownValues<SortOrder> dropDownValues = snapshot.data!;
+            _sortOrderSelectedVal = _sortOrderSelectedVal ?? dropDownValues.values[dropDownValues.selectedIndex];
+            return DropdownButton<SortOrder>(
+              value: _sortOrderSelectedVal,
+              icon: const Icon(Icons.keyboard_arrow_down),
+              iconSize: 20,
+              style: const TextStyle(color: Colors.black),
+              onChanged: (SortOrder? newValue) {
+                setState(() {
+                  _sortOrderSelectedVal = newValue;
+                });
+              },
+              items: dropDownValues.values.map<DropdownMenuItem<SortOrder>>((SortOrder sortOrder) {
+                return DropdownMenuItem<SortOrder>(
+                    value: sortOrder,
+                    child: Text(sortOrder.sortOrderName!, style: const TextStyle(fontSize: 14)));
+              }).toList(),
+            );
         } else {
           return const Text('No Values');
         }
@@ -273,34 +253,30 @@ class _CustomizeSearchSettingsScreenState
         future: _fuelTypeDropdownValues,
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            LogUtil.debug(_tag,
-                '_getFuelTypeDropdown::_fuelTypeDropdownValues error ${snapshot.error}');
+            LogUtil.debug(_tag, '_getFuelTypeDropdown::_fuelTypeDropdownValues error ${snapshot.error}');
             return const Text('Error loading');
           } else if (snapshot.hasData) {
-            final DropDownValues<FuelType> dropDownValues = snapshot.data;
-            if (snapshot.data.noDataFound) {
-              return const Text('No Data');
-            } else {
-              _fuelTypeSelectedValue = __fuelTypeSelectedValue(dropDownValues);
-              return DropdownButton<FuelType>(
-                value: _fuelTypeSelectedValue,
-                icon: const Icon(Icons.keyboard_arrow_down),
-                iconSize: 20,
-                style: const TextStyle(color: Colors.black),
-                onChanged: (FuelType newValue) {
-                  setState(() {
-                    _fuelTypeSelectedValue = newValue;
-                  });
-                },
-                items: dropDownValues.values
-                    .map<DropdownMenuItem<FuelType>>((FuelType value) {
-                  return DropdownMenuItem<FuelType>(
-                      value: value,
-                      child:
-                          Text(value.fuelName, style: const TextStyle(fontSize: 14)));
-                }).toList(),
-              );
-            }
+              final DropDownValues<FuelType> dropDownValues = snapshot.data!;
+              if (dropDownValues.noDataFound) {
+                return const Text('No Data');
+              } else {
+                _fuelTypeSelectedValue = __fuelTypeSelectedValue(dropDownValues);
+                return DropdownButton<FuelType>(
+                  value: _fuelTypeSelectedValue,
+                  icon: const Icon(Icons.keyboard_arrow_down),
+                  iconSize: 20,
+                  style: const TextStyle(color: Colors.black),
+                  onChanged: (FuelType? newValue) {
+                    setState(() {
+                      _fuelTypeSelectedValue = newValue;
+                    });
+                  },
+                  items: dropDownValues.values.map<DropdownMenuItem<FuelType>>((FuelType value) {
+                    return DropdownMenuItem<FuelType>(value: value,
+                        child: Text(value.fuelName, style: const TextStyle(fontSize: 14)));
+                  }).toList(),
+                );
+              }
           } else {
             LogUtil.debug(_tag, 'No values found from fuelTypeFuture');
             return const Text('Loading');
@@ -308,11 +284,9 @@ class _CustomizeSearchSettingsScreenState
         });
   }
 
-  FuelType __fuelTypeSelectedValue(
-      final DropDownValues<FuelType> dropDownValues) {
-    if (_fuelTypeSelectedValue != null &&
-        dropDownValues.values.contains(_fuelTypeSelectedValue)) {
-      return _fuelTypeSelectedValue;
+  FuelType __fuelTypeSelectedValue(final DropDownValues<FuelType> dropDownValues) {
+    if (_fuelTypeSelectedValue != null && dropDownValues.values.contains(_fuelTypeSelectedValue)) {
+      return _fuelTypeSelectedValue!;
     } else {
       return dropDownValues.values[dropDownValues.selectedIndex];
     }
@@ -335,34 +309,33 @@ class _CustomizeSearchSettingsScreenState
       future: _fuelCategoryDropdownValues,
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          LogUtil.debug(_tag,
-              '_fuelCategoryDropdown _fuelCategoryDropdownValues error ${snapshot.error}');
+          LogUtil.debug(_tag, '_fuelCategoryDropdown _fuelCategoryDropdownValues error ${snapshot.error}');
           return const Text('Error loading');
         } else if (snapshot.hasData) {
-          if (snapshot.data.noDataFound) {
+          final DropDownValues<FuelCategory> dropDownValues = snapshot.data!;
+          if (dropDownValues.noDataFound) {
             return const Text('No values');
           } else {
-            final DropDownValues<FuelCategory> dropDownValues = snapshot.data;
             _fuelCategorySelectedValue = _fuelCategorySelectedValue ?? dropDownValues.values[dropDownValues.selectedIndex];
             return DropdownButton<FuelCategory>(
               value: _fuelCategorySelectedValue,
               icon: const Icon(Icons.keyboard_arrow_down),
               iconSize: 20,
               style: const TextStyle(color: Colors.black),
-              onChanged: (FuelCategory newValue) {
+              onChanged: (FuelCategory? newValue) {
                 setState(() {
-                  _fuelTypeSelectedValue = null;
-                  _fuelCategorySelectedValue = newValue;
-                  _fuelTypeDropdownValues =
-                      _settingsDataSource.fuelTypeDropdownValues(newValue);
+                  if (newValue != null) {
+                    _fuelTypeSelectedValue = null;
+                    _fuelCategorySelectedValue = newValue;
+                    _fuelTypeDropdownValues = _settingsDataSource.fuelTypeDropdownValues(newValue);
+                  } else {
+                    LogUtil.debug(_tag, '_fuelCategoryDropdown::newValue in dropdown is null');
+                  }
                 });
               },
-              items: dropDownValues.values
-                  .map<DropdownMenuItem<FuelCategory>>((FuelCategory value) {
-                return DropdownMenuItem<FuelCategory>(
-                  value: value,
-                  child:
-                      Text(value.categoryName, style: const TextStyle(fontSize: 14)),
+              items: dropDownValues.values.map<DropdownMenuItem<FuelCategory>>((FuelCategory value) {
+                return DropdownMenuItem<FuelCategory>(value: value,
+                  child: Text(value.categoryName, style: const TextStyle(fontSize: 14)),
                 );
               }).toList(),
             );
@@ -402,27 +375,29 @@ class _CustomizeSearchSettingsScreenState
         future: dropDownValues, //
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            LogUtil.debug(_tag,
-                'Error getting values from searchResultsCountFuture ${snapshot.error}');
+            LogUtil.debug(_tag, 'Error getting values from searchResultsCountFuture ${snapshot.error}');
             return const Text('Error loading');
           } else if (snapshot.hasData) {
-            final DropDownValues<num> dropDownValues = snapshot.data;
-            _searchResultsCountSelectedValue =
-                _searchResultsCountSelectedValue == _unselectedValDouble
-                    ? dropDownValues.values[dropDownValues.selectedIndex]
-                    : _searchResultsCountSelectedValue;
+            final DropDownValues<num> dropDownValues = snapshot.data!;
+            _searchResultsCountSelectedValue = _searchResultsCountSelectedValue == _unselectedValDouble
+                ? dropDownValues.values[dropDownValues.selectedIndex]
+                : _searchResultsCountSelectedValue;
             return DropdownButton<num>(
               value: _searchResultsCountSelectedValue,
               icon: const Icon(Icons.keyboard_arrow_down),
               iconSize: 20,
               style: const TextStyle(color: Colors.black),
-              onChanged: (num newValue) {
+              onChanged: (num? newValue) {
                 setState(() {
-                  _searchResultsCountSelectedValue = newValue;
+                  if (newValue != null) {
+                    _searchResultsCountSelectedValue = newValue;
+                  } else {
+                    LogUtil.debug(_tag, '_getSearchResultsCountDropDown::newValue from dropdown is null');
+                  }
                 });
               },
               items:
-                  dropDownValues.values.map<DropdownMenuItem<num>>((num value) {
+              dropDownValues.values.map<DropdownMenuItem<num>>((num value) {
                 return DropdownMenuItem<num>(
                   value: value,
                   child: Text(value.toString(), style: const TextStyle(fontSize: 14)),
@@ -436,33 +411,33 @@ class _CustomizeSearchSettingsScreenState
         });
   }
 
-  FutureBuilder<DropDownValues<num>> _getSearchRadiusDropDown(
-      final Future<DropDownValues<num>> dropDownValues) {
+  FutureBuilder<DropDownValues<num>> _getSearchRadiusDropDown(final Future<DropDownValues<num>> dropDownValues) {
     return FutureBuilder<DropDownValues<num>>(
         future: dropDownValues, //
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            LogUtil.debug(_tag,
-                '_getSearchRadiusDropDown::dropDownValues error ${snapshot.error}');
+            LogUtil.debug(_tag, '_getSearchRadiusDropDown::dropDownValues error ${snapshot.error}');
             return const Text('Error loading');
           } else if (snapshot.hasData) {
-            final DropDownValues<num> dropDownValues = snapshot.data;
-            _searchRadiusSelectedValue =
-                _searchRadiusSelectedValue == _unselectedValDouble
-                    ? dropDownValues.values[dropDownValues.selectedIndex]
-                    : _searchRadiusSelectedValue;
+            final DropDownValues<num> dropDownValues = snapshot.data!;
+            _searchRadiusSelectedValue = _searchRadiusSelectedValue == _unselectedValDouble
+                ? dropDownValues.values[dropDownValues.selectedIndex]
+                : _searchRadiusSelectedValue;
             return DropdownButton<num>(
               value: _searchRadiusSelectedValue,
               icon: const Icon(Icons.keyboard_arrow_down),
               iconSize: 20,
               style: const TextStyle(color: Colors.black),
-              onChanged: (num newValue) {
+              onChanged: (num? newValue) {
                 setState(() {
-                  _searchRadiusSelectedValue = newValue;
+                  if (newValue != null) {
+                    _searchRadiusSelectedValue = newValue;
+                  } else {
+                    LogUtil.debug(_tag, '_getSearchRadiusDropDown::new dropdown value is null');
+                  }
                 });
               },
-              items:
-                  dropDownValues.values.map<DropdownMenuItem<num>>((num value) {
+              items: dropDownValues.values.map<DropdownMenuItem<num>>((num value) {
                 return DropdownMenuItem<num>(
                   value: value,
                   child: Text(value.toString(), style: const TextStyle(fontSize: 14)),

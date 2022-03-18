@@ -16,7 +16,6 @@
  *     along with Pumped End Device.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'package:flutter/cupertino.dart';
 import 'package:pumped_end_device/models/pumped/market_region_config.dart';
 import 'package:pumped_end_device/models/pumped/zone_config.dart';
 
@@ -26,9 +25,9 @@ class MarketRegionZoneConfiguration {
   final String version;
 
   MarketRegionZoneConfiguration({
-    @required this.marketRegionConfig,
-    @required this.zoneConfig,
-    @required this.version,
+    required this.marketRegionConfig,
+    required this.zoneConfig,
+    required this.version,
   });
 
   factory MarketRegionZoneConfiguration.fromJson(final Map<String, dynamic> data) => MarketRegionZoneConfiguration(

@@ -35,7 +35,7 @@ import 'package:pumped_end_device/util/log_util.dart';
 class FuelStationDetailsScreen extends StatefulWidget {
   static const routeName = '/fuelStationDetails';
 
-  const FuelStationDetailsScreen({Key key}) : super(key: key);
+  const FuelStationDetailsScreen({Key? key}) : super(key: key);
 
   @override
   _FuelStationDetailsScreenState createState() => _FuelStationDetailsScreenState();
@@ -66,7 +66,7 @@ class _FuelStationDetailsScreenState extends State<FuelStationDetailsScreen> {
   @override
   Widget build(final BuildContext context) {
     LogUtil.debug(_tag, 'Details screen built again');
-    final FuelStationDetailsParam param = ModalRoute.of(context).settings.arguments;
+    final FuelStationDetailsParam param = ModalRoute.of(context)?.settings.arguments as FuelStationDetailsParam;
     final FuelStation fuelStation = param.fuelStation;
     return WillPopScope(
       onWillPop: () async {
@@ -119,9 +119,9 @@ class _FuelStationDetailsScreenState extends State<FuelStationDetailsScreen> {
     );
   }
 
-  Widget _getChildTabContent(final FuelStation fuelStation, final String tabName) {
+  Widget? _getChildTabContent(final FuelStation fuelStation, final String tabName) {
     dynamic promotions;
-    Widget tabWidget;
+    Widget? tabWidget;
     switch (tabName) {
       case _overviewTabHeader:
         tabWidget = OverviewTabWidget(fuelStation, onUpdateResult);

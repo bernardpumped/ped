@@ -23,6 +23,6 @@ class GetFuelStationDetailsBatchResponse extends Response {
   final List<FuelStation> fuelStations;
 
   GetFuelStationDetailsBatchResponse(final String responseCode, final String responseDetails,
-      final Map<String, dynamic> invalidArguments, final int responseEpoch, this.fuelStations)
+      final Map<String, dynamic>? invalidArguments, final int responseEpoch, this.fuelStations)
       : super(responseCode, responseDetails, invalidArguments, responseEpoch);
 }

@@ -28,12 +28,12 @@ class SuggestEditRequest extends Request {
 
   SuggestEditRequest(
       {uuid,
-      this.identityProvider,
-      this.oauthToken,
-      this.oauthTokenSecret,
-      this.fuelStationId,
-      this.fuelStationSource,
-      this.suggestion})
+        required this.identityProvider,
+        required this.oauthToken,
+        required this.oauthTokenSecret,
+        required this.fuelStationId,
+        required this.fuelStationSource,
+        required this.suggestion})
       : super(uuid);
 
   @override

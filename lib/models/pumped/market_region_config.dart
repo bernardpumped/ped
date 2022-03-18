@@ -47,24 +47,24 @@ class MarketRegionConfig {
   double maxDefaultFuelPrice;
 
   MarketRegionConfig(
-      {this.marketRegionId,
-      this.marketRegionName,
-      this.marketRegionConfigVersion,
-      this.currency,
-      this.currencyValueFormat,
-      this.fuelMeasure,
-      this.distanceMeasure,
-      this.maxNumberOfResults,
-      this.defaultFuelCategory,
-      this.allowedFuelCategories,
-      this.searchRange,
-      this.sortOrder,
-      this.incrementalSearch,
-      this.incrementalSearchValue,
-      this.fuelAuthorityId,
-      this.fuelAuthorityName,
-      this.minDefaultFuelPrice,
-      this.maxDefaultFuelPrice});
+      {required this.marketRegionId,
+        required this.marketRegionName,
+        required this.marketRegionConfigVersion,
+        required this.currency,
+        required this.currencyValueFormat,
+        required this.fuelMeasure,
+        required this.distanceMeasure,
+        required this.maxNumberOfResults,
+        required this.defaultFuelCategory,
+        required this.allowedFuelCategories,
+        required this.searchRange,
+        required this.sortOrder,
+        required this.incrementalSearch,
+        required this.incrementalSearchValue,
+        required this.fuelAuthorityId,
+        required this.fuelAuthorityName,
+        required this.minDefaultFuelPrice,
+        required this.maxDefaultFuelPrice});
 
   factory MarketRegionConfig.fromMap(final Map<String, dynamic> data) => MarketRegionConfig.fromJson(data);
 

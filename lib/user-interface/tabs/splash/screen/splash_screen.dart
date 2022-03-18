@@ -29,7 +29,7 @@ import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key key}) : super(key: key);
+  const SplashScreen({Key? key}) : super(key: key);
 
   @override
   _SplashScreenState createState() => _SplashScreenState();
@@ -152,31 +152,33 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void _takeActionOnLocation(final GetLocationResult locationResult) {
-    final Future<GeoLocationData> locationDataFuture = locationResult.geoLocationData;
-    locationDataFuture.then((locationData) {
-      LogUtil.debug(_tag, 'latitude : ${locationData.latitude}, longitude : ${locationData.longitude}');
-      setState(() {
-        _detectingLocationIconVisible = true;
-      });
-      // Below should actually get replaced with call to Firebase app availability
-      Future.delayed(const Duration(milliseconds: 2000), () {
+    final Future<GeoLocationData>? locationDataFuture = locationResult.geoLocationData;
+    if (locationDataFuture != null) {
+      locationDataFuture.then((locationData) {
+        LogUtil.debug(_tag, 'latitude : ${locationData.latitude}, longitude : ${locationData.longitude}');
         setState(() {
-          _checkingPumpedAvailabilityIconVisible = true;
+          _detectingLocationIconVisible = true;
         });
-      });
-      Future.delayed(const Duration(milliseconds: 3500), () {
-        setState(() {
-          _checkingPumpedAvailabilityTextVisible = true;
+        // Below should actually get replaced with call to Firebase app availability
+        Future.delayed(const Duration(milliseconds: 2000), () {
+          setState(() {
+            _checkingPumpedAvailabilityIconVisible = true;
+          });
         });
-      });
-      Future.delayed(const Duration(milliseconds: 5000), () {
-        setState(() {
-          _checkingPumpedAvailabilityTextVisible = true;
+        Future.delayed(const Duration(milliseconds: 3500), () {
+          setState(() {
+            _checkingPumpedAvailabilityTextVisible = true;
+          });
         });
-        Navigator.pushReplacementNamed(context, PumpedBaseTabView.routeName);
+        Future.delayed(const Duration(milliseconds: 5000), () {
+          setState(() {
+            _checkingPumpedAvailabilityTextVisible = true;
+          });
+          Navigator.pushReplacementNamed(context, PumpedBaseTabView.routeName);
+        });
+      }, onError: (error) {
+        LogUtil.error(_tag, 'Error happened on detecting location : $error');
       });
-    }, onError: (error) {
-      LogUtil.error(_tag, 'Error happened on detecting location : $error');
-    });
+    }
   }
 }

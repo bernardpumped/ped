@@ -22,6 +22,6 @@ import 'package:pumped_end_device/user-interface/tabs/fuel-stations/data/model/u
 class UpdateFeatureResult extends UpdateFuelStationDetailsResult {
   UpdateFeatureResult(final bool isUpdateSuccessful, final int updateEpoch)
       : super(UpdateFuelStationDetailType.fuelStationFeature, isUpdateSuccessful, updateEpoch);
-  Map<String, bool> enabledFeaturesUpdateStatus;
-  Map<String, bool> disabledFeaturesUpdateStatus;
+  Map<String, bool>? enabledFeaturesUpdateStatus;
+  Map<String, bool>? disabledFeaturesUpdateStatus;
 }

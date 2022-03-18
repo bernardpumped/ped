@@ -21,25 +21,27 @@ import 'package:pumped_end_device/models/status.dart';
 class OperatingHours {
   Status status;
   final String dayOfWeek;
-  int openingHrs;
-  int openingMins;
-  int closingHrs;
-  int closingMins;
-  String operatingTimeSource;
-  String operatingTimeRange;
-  DateTime publishDate;
-  final bool isHolidayToday;
+  int? openingHrs;
+  int? openingMins;
+  int? closingHrs;
+  int? closingMins;
+  String? operatingTimeSource;
+  String? operatingTimeSourceName;
+  String? operatingTimeRange;
+  DateTime? publishDate;
+  final bool? isHolidayToday;
   OperatingHours(
-      {this.dayOfWeek,
-      this.openingHrs,
-      this.openingMins,
-      this.closingHrs,
-      this.closingMins,
-      this.operatingTimeRange,
-      this.operatingTimeSource,
-      this.publishDate,
-      this.isHolidayToday = false,
-      this.status = Status.open});
+      { required this.dayOfWeek,
+        this.openingHrs,
+        this.openingMins,
+        this.closingHrs,
+        this.closingMins,
+        this.operatingTimeRange,
+        this.operatingTimeSource,
+        this.operatingTimeSourceName,
+        this.publishDate,
+        this.isHolidayToday = false,
+        this.status = Status.open});
 
   Map<String, dynamic> toJson() => {
         'status': status.statusStr,
@@ -49,6 +51,7 @@ class OperatingHours {
         'closingHrs': closingHrs,
         'closingMins': closingMins,
         'operatingTimeSource': operatingTimeSource,
+        'operatingTimeSourceName': operatingTimeSourceName,
         'operatingTimeRange': operatingTimeRange,
         'publishDate': publishDate?.millisecondsSinceEpoch,
         'isHolidayToday': isHolidayToday
@@ -63,6 +66,7 @@ class OperatingHours {
         closingMins: data['closingMins'],
         operatingTimeRange: data['operatingTimeRange'],
         operatingTimeSource: data['operatingTimeSource'],
+        operatingTimeSourceName: data['operatingTimeSourceName'],
         isHolidayToday: data['isHolidayToday'],
         publishDate: data['publishDate'] != null ? DateTime.fromMillisecondsSinceEpoch(data['publishDate']) : null);
   }

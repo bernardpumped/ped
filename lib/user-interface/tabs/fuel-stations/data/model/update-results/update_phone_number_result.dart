@@ -23,6 +23,6 @@ class UpdatePhoneNumberResult extends UpdateFuelStationDetailsResult {
   UpdatePhoneNumberResult(final bool isUpdateSuccessful, final int updateEpoch,
       {this.phoneTypeUpdateStatusMap, this.phoneTypeNewValueMap})
       : super(UpdateFuelStationDetailType.phoneNumber, isUpdateSuccessful, updateEpoch);
-  final Map<String, bool> phoneTypeUpdateStatusMap;
-  final Map<String, dynamic> phoneTypeNewValueMap;
+  final Map<String, dynamic>? phoneTypeUpdateStatusMap;
+  final Map<String, dynamic>? phoneTypeNewValueMap;
 }

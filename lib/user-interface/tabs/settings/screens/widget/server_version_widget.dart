@@ -20,13 +20,15 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:pumped_end_device/user-interface/tabs/settings/screens/datasource/remote/get_backend_metadata.dart';
+import 'package:pumped_end_device/user-interface/tabs/settings/screens/datasource/remote/model/request/get_backend_metadata_request.dart';
 import 'package:pumped_end_device/user-interface/tabs/settings/screens/datasource/remote/model/response/get_backend_metadata_response.dart';
 import 'package:pumped_end_device/user-interface/tabs/settings/screens/datasource/remote/response-parser/get_backend_metadata_response_parser.dart';
 import 'package:pumped_end_device/user-interface/fonts_and_colors.dart';
 import 'package:pumped_end_device/util/log_util.dart';
+import 'package:uuid/uuid.dart';
 
 class ServerVersionWidget extends StatefulWidget {
-  const ServerVersionWidget({Key key}) : super(key: key);
+  const ServerVersionWidget({Key? key}) : super(key: key);
 
   @override
   _ServerVersionWidgetState createState() => _ServerVersionWidgetState();
@@ -34,7 +36,7 @@ class ServerVersionWidget extends StatefulWidget {
 
 class _ServerVersionWidgetState extends State<ServerVersionWidget> {
   static const _tag = 'ServerVersionWidget';
-  Future<GetBackendMetadataResponse> _backendMetadataResponseFuture;
+  Future<GetBackendMetadataResponse>? _backendMetadataResponseFuture;
 
   @override
   void initState() {
@@ -49,11 +51,11 @@ class _ServerVersionWidgetState extends State<ServerVersionWidget> {
         builder: (context, snapshot) {
           String displayText;
           if (snapshot.hasData) {
-            GetBackendMetadataResponse response = snapshot.data;
+            GetBackendMetadataResponse response = snapshot.data as GetBackendMetadataResponse;
             if (response.responseCode == 'SUCCESS') {
               displayText = 'Server Version ${response.versionId}';
             } else {
-              displayText = response.responseDetails;
+              displayText = response.responseDetails ?? 'Error Loading';
             }
           } else if (snapshot.hasError) {
             displayText = 'Error loading ${snapshot.error}';
@@ -70,7 +72,7 @@ class _ServerVersionWidgetState extends State<ServerVersionWidget> {
   Future<GetBackendMetadataResponse> _getBackendMetadata() async {
     GetBackendMetadataResponse response;
     try {
-      response = await GetBackendMetadata(GetBackendMetadataResponseParser()).execute(null);
+      response = await GetBackendMetadata(GetBackendMetadataResponseParser()).execute(GetBackendMetadataRequest(const Uuid().v1()));
     } on Exception catch (e, s) {
       LogUtil.debug(_tag, 'Exception happened while making call GetBackendMetadata $s');
       response = GetBackendMetadataResponse("CALL-EXCEPTION", s.toString(), {}, DateTime.now().millisecondsSinceEpoch);

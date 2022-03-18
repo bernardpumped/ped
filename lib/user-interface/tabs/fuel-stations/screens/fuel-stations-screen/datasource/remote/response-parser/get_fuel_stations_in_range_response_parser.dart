@@ -33,7 +33,7 @@ import 'package:pumped_end_device/util/log_util.dart';
 
 class GetFuelStationsInRangeResponseParser extends ResponseParser<GetFuelStationsInRangeResponse> {
   static const _tag = 'GetFuelStationsInRangeResponseParser';
-  final String fuelAuthorityId;
+  final String? fuelAuthorityId;
 
   GetFuelStationsInRangeResponseParser(this.fuelAuthorityId);
 
@@ -42,14 +42,14 @@ class GetFuelStationsInRangeResponseParser extends ResponseParser<GetFuelStation
     final Map<String, dynamic> responseJson = convert.jsonDecode(response);
     final String responseCode = responseJson['responseCode'];
     LogUtil.debug(_tag, 'Response Code : $responseCode');
-    final String responseDetails = responseJson['responseDetails'];
-    final Map<String, dynamic> invalidArguments = responseJson['invalidArguments'];
+    final String? responseDetails = responseJson['responseDetails'];
+    final Map<String, dynamic>? invalidArguments = responseJson['invalidArguments'];
     final int responseEpoch = responseJson['responseEpoch'];
     if (responseCode == 'NODATA_EXCEPTION') {
-      return GetFuelStationsInRangeResponse(responseCode, responseDetails, invalidArguments, responseEpoch, null, null, null);
+      return GetFuelStationsInRangeResponse(responseCode, responseDetails, invalidArguments, responseEpoch, null, null, false);
     }
     // TODO Take action based on invalidArgs
-    final MarketRegionZoneConfiguration marketRegionZoneConfiguration = _getMarketRegionZoneConfiguration(responseJson);
+    final MarketRegionZoneConfiguration? marketRegionZoneConfiguration = _getMarketRegionZoneConfiguration(responseJson);
     bool configChanged = false;
     if (marketRegionZoneConfiguration != null) {
       configChanged = true;
@@ -57,7 +57,7 @@ class GetFuelStationsInRangeResponseParser extends ResponseParser<GetFuelStation
     if (fuelAuthorityId == null && marketRegionZoneConfiguration == null) {
       throw PumpedException('IllegalState fuelAuthorityId and marketRegion both null');
     }
-    final String resolvedFuelAuthorityId = marketRegionZoneConfiguration != null
+    final String? resolvedFuelAuthorityId = marketRegionZoneConfiguration != null
         ? marketRegionZoneConfiguration.marketRegionConfig.fuelAuthorityId
         : fuelAuthorityId;
     final Map<String, List<FuelQuote>> stationIdFuelQuotes =
@@ -69,9 +69,9 @@ class GetFuelStationsInRangeResponseParser extends ResponseParser<GetFuelStation
         stationIdStationMap.values.toList(), marketRegionZoneConfiguration, configChanged);
   }
 
-  static MarketRegionZoneConfiguration _getMarketRegionZoneConfiguration(final Map<String, dynamic> responseJsonVals) {
-    final Map<String, dynamic> configVosJsonVals = responseJsonVals['configVo'];
-    if (configVosJsonVals != null) {
+  static MarketRegionZoneConfiguration? _getMarketRegionZoneConfiguration(final Map<String, dynamic> responseJsonVals) {
+    final Map<String, dynamic>? configVosJsonVals = responseJsonVals['configVo'];
+    if (configVosJsonVals != null && configVosJsonVals.isNotEmpty) {
       LogUtil.debug(_tag, '_getMarketRegionZoneConfiguration version : ${configVosJsonVals['configVersion']}');
       return MarketRegionZoneConfiguration(
           marketRegionConfig: _getMarketRegionConfig(configVosJsonVals),
@@ -89,7 +89,7 @@ class GetFuelStationsInRangeResponseParser extends ResponseParser<GetFuelStation
     final String currencyValueFormat = mrcvo['currencyValueFormat'];
     final Map<String, dynamic> defaultDistanceMeasureJsonVal = mrcvo['defaultDistanceMeasure'];
     final FuelCategory defaultFuelCategory = _getFuelCategory(mrcvo['defaultFuelCategoryVo']);
-    final List<dynamic> fuelCategoryVosJsonVal = mrcvo['fuelCategoryVos'];
+    final List<dynamic>? fuelCategoryVosJsonVal = mrcvo['fuelCategoryVos'];
     final Set<FuelCategory> allowedFuelCategories = {};
     if (fuelCategoryVosJsonVal != null) {
       for (final Map<String, dynamic> fuelCategoryVoJsonVal in fuelCategoryVosJsonVal) {
@@ -98,8 +98,8 @@ class GetFuelStationsInRangeResponseParser extends ResponseParser<GetFuelStation
     } else {
       LogUtil.debug(_tag, 'fuelCategoryVos is null');
     }
-    if (defaultFuelCategory.allowedFuelTypes == null || defaultFuelCategory.allowedFuelTypes.isEmpty) {
-      populateFuelTypesInDefaultFuelCategory(allowedFuelCategories, defaultFuelCategory);
+    if (defaultFuelCategory.allowedFuelTypes.isEmpty) {
+      _populateFuelTypesInDefaultFuelCategory(allowedFuelCategories, defaultFuelCategory);
     }
     return MarketRegionConfig(
         fuelMeasure: defaultFuelMeasureVoJsonVal['measure'],
@@ -124,7 +124,7 @@ class GetFuelStationsInRangeResponseParser extends ResponseParser<GetFuelStation
 
   static FuelCategory _getFuelCategory(final Map<String, dynamic> fuelCategoryVo) {
     final FuelType defaultFuelType = _getFuelType(fuelCategoryVo['defaultFuelTypeVo']);
-    final List<dynamic> allowedFuelTypeVos = fuelCategoryVo['allowedFuelTypes'];
+    final List<dynamic>? allowedFuelTypeVos = fuelCategoryVo['allowedFuelTypes'];
     final Set<FuelType> allowedFuelTypes = {};
     if (allowedFuelTypeVos != null) {
       for (final allowedFuelTypeVo in allowedFuelTypeVos) {
@@ -164,11 +164,12 @@ class GetFuelStationsInRangeResponseParser extends ResponseParser<GetFuelStation
 
   //Backend is not setting the allowed fuelTypes in defaultFuelCategory
   //So populating it in the app.
-  static void populateFuelTypesInDefaultFuelCategory(
+  static void _populateFuelTypesInDefaultFuelCategory(
       final Set<FuelCategory> allowedFuelCategories, final FuelCategory defaultFuelCategory) {
     for (var fuelCategory in allowedFuelCategories) {
       if (fuelCategory.categoryId == defaultFuelCategory.categoryId) {
         defaultFuelCategory.allowedFuelTypes.addAll(fuelCategory.allowedFuelTypes);
+        return;
       }
     }
   }

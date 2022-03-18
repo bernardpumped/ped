@@ -25,27 +25,28 @@ import 'package:pumped_end_device/util/log_util.dart';
 import 'package:sprintf/sprintf.dart';
 
 class OperatingTimeWidget extends StatefulWidget {
-  final int hours;
-  final int mins;
-  int updatedHrs;
-  int updatedMins;
-  final String source;
+  final bool editable;
+  final int? hours;
+  final int? mins;
+  int? updatedHrs;
+  int? updatedMins;
+  final String? source;
   final Status status;
   final String timeType;
   final String dayOfWeek;
   final Function onOperatingTimeRangeChanged;
   final bool backendUpdateInProgress;
 
-  OperatingTimeWidget(this.hours, this.mins, this.source, this.status, this.onOperatingTimeRangeChanged, this.timeType,
-      this.dayOfWeek, this.backendUpdateInProgress,
-      {Key key, this.updatedHrs, this.updatedMins}) : super(key: key);
+  OperatingTimeWidget(this.editable, this.hours, this.mins, this.source, this.status,
+      this.onOperatingTimeRangeChanged, this.timeType, this.dayOfWeek, this.backendUpdateInProgress,
+      {Key? key, this.updatedHrs, this.updatedMins}) : super(key: key);
   @override
   _OperatingTimeWidgetState createState() => _OperatingTimeWidgetState();
 }
 
 class _OperatingTimeWidgetState extends State<OperatingTimeWidget> {
   static const _tag = 'OperatingTimeWidget';
-  String selectedTime;
+  String? selectedTime;
 
   @override
   void initState() {
@@ -54,8 +55,8 @@ class _OperatingTimeWidgetState extends State<OperatingTimeWidget> {
   }
 
   String _getOperatingTime() {
-    final int selectedHour = widget.updatedHrs ?? widget.hours;
-    final int selectedMin = widget.updatedMins ?? widget.mins;
+    final int? selectedHour = widget.updatedHrs ?? widget.hours;
+    final int? selectedMin = widget.updatedMins ?? widget.mins;
     if (selectedHour != null && selectedMin != null) {
       return sprintf('%02d:%02d', [selectedHour, selectedMin]);
     } else {
@@ -71,7 +72,7 @@ class _OperatingTimeWidgetState extends State<OperatingTimeWidget> {
         if (widget.backendUpdateInProgress) {
           LogUtil.debug(_tag, 'Background task is in progress');
         } else {
-          if (widget.source != 'G' && widget.source != 'F') {
+          if (widget.editable) {
             _pickTime(context, widget.hours, widget.mins, true);
           } else {
             WidgetUtils.showToastMessage(context, 'Cannot change this operating time', Theme.of(context).primaryColor);
@@ -83,13 +84,13 @@ class _OperatingTimeWidgetState extends State<OperatingTimeWidget> {
           height: 30,
           child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[const SizedBox(width: 5), Text(selectedTime, style: const TextStyle(fontSize: 14))])),
+              children: <Widget>[const SizedBox(width: 5), Text(selectedTime!, style: const TextStyle(fontSize: 14))])),
     );
   }
 
-  Duration onTimeChangedDuration;
+  Duration? onTimeChangedDuration;
 
-  void _pickTime(final BuildContext context, final int hrs, final int mins, final bool isOpenHr) {
+  void _pickTime(final BuildContext context, final int? hrs, final int? mins, final bool isOpenHr) {
     final Duration initialTime = Duration(hours: hrs ?? 0, minutes: mins ?? 0);
     showCupertinoModalPopup(
         useRootNavigator: false,
@@ -140,8 +141,12 @@ class _OperatingTimeWidgetState extends State<OperatingTimeWidget> {
         child: const Text('Done'),
         onPressed: () {
           if (onTimeChangedDuration != null) {
-            widget.updatedHrs = onTimeChangedDuration.inHours;
-            widget.updatedMins = onTimeChangedDuration.inMinutes % 60;
+            widget.updatedHrs = onTimeChangedDuration?.inHours;
+            if (onTimeChangedDuration != null) {
+              widget.updatedMins = onTimeChangedDuration!.inMinutes % 60;
+            } else {
+              widget.updatedMins = 0;
+            }
             selectedTime = _getOperatingTime();
             Map<String, dynamic> operatingTimeParams;
             if (widget.timeType == 'OT') {

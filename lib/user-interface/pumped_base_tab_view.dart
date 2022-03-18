@@ -31,7 +31,7 @@ import 'package:pumped_end_device/user-interface/widgets/pumped_icons.dart';
 class PumpedBaseTabView extends StatefulWidget {
   static const routeName = '/homeScreen';
 
-  const PumpedBaseTabView({Key key}) : super(key: key);
+  const PumpedBaseTabView({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -87,7 +87,7 @@ class _PumpedBaseTabViewState extends State<PumpedBaseTabView> {
               return CupertinoTabView(builder: (context) {
                 return const CupertinoPageScaffold(child: UpdateHistoryScreen());
               });
-            case 3:
+            default :
               return CupertinoTabView(builder: (context) {
                 return const CupertinoPageScaffold(child: AboutScreen());
               });

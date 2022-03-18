@@ -31,9 +31,9 @@ import 'location_data_source_test.mocks.dart';
 
 @GenerateMocks([PlatformWrapper, GeoLocationWrapper])
 void main() {
-  LocationDataSource locationDataSource;
-  PlatformWrapper platformWrapper;
-  GeoLocationWrapper geoLocationWrapper;
+  late LocationDataSource locationDataSource;
+  late PlatformWrapper platformWrapper;
+  late GeoLocationWrapper geoLocationWrapper;
   
   setUp(() {
     platformWrapper = MockPlatformWrapper();

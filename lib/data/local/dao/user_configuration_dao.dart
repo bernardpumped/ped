@@ -29,9 +29,9 @@ class UserConfigurationDao {
 
   UserConfigurationDao._();
 
-  Future<UserConfiguration> getUserConfiguration(final String userConfigId) async {
+  Future<UserConfiguration?> getUserConfiguration(final String userConfigId) async {
     final db = Localstore.instance;
-    final Map<String, dynamic> userConfig = await db.collection(_collectionUserConfig).doc(userConfigId).get();
+    final Map<String, dynamic>? userConfig = await db.collection(_collectionUserConfig).doc(userConfigId).get();
     if (userConfig != null && userConfig.isNotEmpty) {
       return UserConfiguration.fromMap(userConfig);
     }
@@ -52,7 +52,7 @@ class UserConfigurationDao {
 
   Future<int> getUserConfigurationVersion(final String userConfigId) async {
     final db = Localstore.instance;
-    final Map<String, dynamic> userConfig = await db.collection(_collectionUserConfig).doc(userConfigId).get();
+    final Map<String, dynamic>? userConfig = await db.collection(_collectionUserConfig).doc(userConfigId).get();
     if (userConfig != null && userConfig.isNotEmpty) {
       return UserConfiguration.fromMap(userConfig).version;
     }

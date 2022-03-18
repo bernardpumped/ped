@@ -17,11 +17,12 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:pumped_end_device/user-interface/tabs/fuel-stations/screens/fuel-station-details/widgets/email_widget.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station.dart';
 
-class FuelStationSourceCitation extends StatelessWidget {
+import 'notification_widget.dart';
+
+class QldFuelStationSourceCitation extends StatelessWidget {
   static const _padding = 15.0;
   static const _margin = 30.0;
   static const _subTitle = 'Fuel Price Data License Obligation';
@@ -34,7 +35,7 @@ class FuelStationSourceCitation extends StatelessWidget {
 
   final FuelStation fuelStation;
 
-  const FuelStationSourceCitation({Key key, this.fuelStation}) : super(key: key);
+  const QldFuelStationSourceCitation({Key? key, required this.fuelStation}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -94,16 +95,16 @@ class FuelStationSourceCitation extends StatelessWidget {
             Navigator.pop(context);
           }),
       const SizedBox(width: 10),
-      EmailWidget(emailBody: _getEmailBody(), emailSubject: _getEmailSubject(), emailAddress: 'bernard@pumpedfuel.com')
+      _getNotificationWidget(),
     ], mainAxisAlignment: MainAxisAlignment.spaceEvenly);
   }
 
-  String _getEmailSubject() {
-    return 'Fuel Price Incorrect';
+  Widget _getNotificationWidget() {
+    final Set<String?>? fuelQuoteSources = fuelStation.fuelQuoteSources();
+    if (fuelQuoteSources != null && fuelQuoteSources.isNotEmpty) {
+      return NotificationWidget(fuelStation: fuelStation);
+    }
+    return const SizedBox(width: 0,);
   }
 
-  String _getEmailBody() {
-    return 'For the fuelStation ${fuelStation.fuelStationName} [${fuelStation.stationId} | ${fuelStation.getFuelStationSource()}],'
-        'we have found incorrect Price ';
-  }
 }

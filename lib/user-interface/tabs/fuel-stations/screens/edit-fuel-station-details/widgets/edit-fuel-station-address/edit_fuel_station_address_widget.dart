@@ -47,7 +47,7 @@ class EditFuelStationAddressWidget extends StatefulWidget {
   final String _fuelStationSource;
 
   const EditFuelStationAddressWidget(this.setStateFunction, this.isWidgetExpanded, this._fuelStationAddress,
-      this._fuelStationId, this.stationName, this._fuelStationSource, {Key key}) : super(key: key);
+      this._fuelStationId, this.stationName, this._fuelStationSource, {Key? key}) : super(key: key);
 
   @override
   _EditFuelStationAddressWidgetState createState() => _EditFuelStationAddressWidgetState();
@@ -63,12 +63,12 @@ class _EditFuelStationAddressWidgetState extends State<EditFuelStationAddressWid
   final TextEditingController _stateController = TextEditingController();
   final TextEditingController _zipController = TextEditingController();
 
-  String _enteredName;
-  String _enteredAddress;
-  String _enteredLocality;
-  String _enteredRegion;
-  String _enteredState;
-  String _enteredZip;
+  String? _enteredName;
+  String? _enteredAddress;
+  String? _enteredLocality;
+  String? _enteredRegion;
+  String? _enteredState;
+  String? _enteredZip;
 
   bool _onValueChange = false;
   bool _backendUpdateInProgress = false;
@@ -93,13 +93,13 @@ class _EditFuelStationAddressWidgetState extends State<EditFuelStationAddressWid
         _editAddressExpansionTileWidgetTree(), widget.isWidgetExpanded, widget.setStateFunction);
   }
 
-  bool isValidInput(final String input) {
+  bool isValidInput(final String? input) {
     return DataUtils.isNotBlank(input);
   }
 
   void _recordChanges(
-      final String newValue,
-      final String originalValue,
+      final String? newValue,
+      final String? originalValue,
       final Map<String, dynamic> originalPathAndValues,
       final Map<String, dynamic> updatePathAndValues,
       final String mapKey,
@@ -184,7 +184,7 @@ class _EditFuelStationAddressWidgetState extends State<EditFuelStationAddressWid
     }
   }
 
-  Future<int> _persistUpdateHistory(final EndDeviceUpdateFuelStationRequest request,
+  Future<dynamic> _persistUpdateHistory(final EndDeviceUpdateFuelStationRequest request,
       final EndDeviceUpdateFuelStationResponse response, final Map<String, dynamic> originalPathAndValues) {
     final UpdateHistory updateHistory = UpdateHistory(
         updateHistoryId: request.uuid,
@@ -192,7 +192,7 @@ class _EditFuelStationAddressWidgetState extends State<EditFuelStationAddressWid
         fuelStation: widget.stationName,
         fuelStationSource: request.fuelStationSource,
         updateEpoch: response.updateEpoch,
-        updateType: UpdateType.addressDetails.updateTypeName,
+        updateType: UpdateType.addressDetails.updateTypeName!,
         responseCode: response.responseCode,
         originalValues: originalPathAndValues,
         updateValues: request.updatePathAndValues,
@@ -303,7 +303,7 @@ class _EditFuelStationAddressWidgetState extends State<EditFuelStationAddressWid
   UpdateAddressDetailsResult _getUpdateResponse(final EndDeviceUpdateFuelStationRequest request,
       final EndDeviceUpdateFuelStationResponse response, final Map<String, dynamic> originalPathAndValues) {
     return UpdateAddressDetailsResult(response.successfulUpdate, response.updateEpoch,
-        addressComponentUpdateStatus: response.updateResult ?? {},
-        addressComponentNewValue: request.updatePathAndValues ?? {});
+        addressComponentUpdateStatus: response.updateResult,
+        addressComponentNewValue: request.updatePathAndValues);
   }
 }

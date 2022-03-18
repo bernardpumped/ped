@@ -22,15 +22,15 @@ import 'package:pumped_end_device/models/pumped/fuel_quote.dart';
 
 class DataUtils {
   static double toPrecision(final double val, final int fractionDigits) {
-    double mod = pow(10, fractionDigits.toDouble());
+    double mod = pow(10, fractionDigits.toDouble()).toDouble();
     return ((val * mod).round().toDouble() / mod);
   }
 
-  static bool isBlank(final String string) {
+  static bool isBlank(final String? string) {
     return string == null || string.isEmpty || string.trim().isEmpty;
   }
 
-  static bool isNotBlank(final String string) {
+  static bool isNotBlank(final String? string) {
     return !isBlank(string);
   }
 
@@ -38,7 +38,7 @@ class DataUtils {
     return isNotBlank(value) ? value : defaultValue;
   }
 
-  static bool stringEqual(final String str1, final String str2, bool nullBlankSame) {
+  static bool stringEqual(final String? str1, final String? str2, bool nullBlankSame) {
     if (str1 == str2) {
       return true;
     } else {
@@ -49,14 +49,14 @@ class DataUtils {
     return false;
   }
 
-  static bool isValidNumber(final String phoneNumber) {
+  static bool isValidNumber(final String? phoneNumber) {
     final RegExp regExp =
         RegExp(r"^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$", caseSensitive: false, multiLine: false);
-    return regExp.hasMatch(phoneNumber);
+    return phoneNumber != null && regExp.hasMatch(phoneNumber);
   }
 
   // Assumption is that this method is called after every typed or deleted char
-  static String charDeleted(final String oldValue, final String newValue) {
+  static String? charDeleted(final String? oldValue, final String? newValue) {
     if (oldValue == null) {
       return null;
     }

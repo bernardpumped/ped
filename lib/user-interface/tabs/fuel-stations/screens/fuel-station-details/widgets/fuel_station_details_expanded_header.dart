@@ -21,7 +21,7 @@ import 'package:flutter/material.dart';
 import 'package:pumped_end_device/user-interface/fonts_and_colors.dart';
 import 'package:pumped_end_device/user-interface/icon_codes.dart';
 import 'package:pumped_end_device/user-interface/tabs/fuel-stations/screens/edit-fuel-station-details/widgets/common/image_widget.dart';
-import 'package:pumped_end_device/user-interface/tabs/fuel-stations/screens/fuel-station-details/widgets/fuel_station_source_citation.dart';
+import 'package:pumped_end_device/user-interface/tabs/fuel-stations/screens/fuel-station-details/widgets/qld_fuel_station_source_citation.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/user-interface/widgets/pumped_icons.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station.dart';
@@ -34,7 +34,7 @@ class FuelStationDetailsExpandedHeader extends StatelessWidget {
 
   final FuelStation fuelStation;
 
-  const FuelStationDetailsExpandedHeader({Key key, this.fuelStation}) : super(key: key);
+  const FuelStationDetailsExpandedHeader({Key? key, required this.fuelStation}) : super(key: key);
 
   @override
   Widget build(final BuildContext context) {
@@ -65,19 +65,23 @@ class FuelStationDetailsExpandedHeader extends StatelessWidget {
   }
 
   Widget _getFuelStationName(final FuelStation fuelStation) {
-    return Text(fuelStation.fuelStationName + ' ' + fuelStation.fuelStationAddress.locality,
-        style: const TextStyle(fontSize: 19, color: Colors.black87, fontWeight: FontWeight.w500),
-        overflow: TextOverflow.ellipsis);
+    String fsName;
+    if (fuelStation.fuelStationAddress.locality != null) {
+      fsName = '${fuelStation.fuelStationName} ${fuelStation.fuelStationAddress.locality}';
+    } else {
+      fsName = fuelStation.fuelStationName;
+    }
+    return Text(fsName, style: const TextStyle(fontSize: 19, color: Colors.black87, fontWeight: FontWeight.w500), overflow: TextOverflow.ellipsis);
   }
 
   Widget _getFuelAuthorityQuotePublisher(final FuelStation fuelStation, final BuildContext context) {
-    if (fuelStation.fuelQuotes() != null) {
-      final List<String> publishers = fuelStation
+    if (fuelStation.fuelQuotes().isNotEmpty) {
+      final List<String?> publishers = fuelStation
           .fuelQuotes()
           .where((fq) => fq.fuelQuoteSource != null && fq.fuelQuoteSource != 'C')
           .map((fq) => fq.fuelQuoteSourceName)
           .toList();
-      if (publishers != null && publishers.isNotEmpty) {
+      if (publishers.isNotEmpty) {
         return Row(children: [
           Text('Fuel Price Source ${publishers[0]}',
               style: const TextStyle(fontSize: 15, color: Colors.black87, fontWeight: FontWeight.w500)),
@@ -89,12 +93,12 @@ class FuelStationDetailsExpandedHeader extends StatelessWidget {
   }
 
   Widget _getFuelStationSourceCitationIcon(
-      final List<String> publishers, final BuildContext context, final FuelStation fuelStation) {
+      final List<String?> publishers, final BuildContext context, final FuelStation fuelStation) {
     if (publishers[0] == 'qld') {
       return GestureDetector(
           onTap: () {
             showCupertinoDialog(
-                context: context, builder: (context) => FuelStationSourceCitation(fuelStation: fuelStation));
+                context: context, builder: (context) => QldFuelStationSourceCitation(fuelStation: fuelStation));
           },
           child: PumpedIcons.faSourceIconBlack54Size20); // Info icon
     } else {

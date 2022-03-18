@@ -42,7 +42,7 @@ class FuelStationListItemExpandedWidget extends StatefulWidget {
   final FuelStation _fuelStation;
   final FuelType _selectedFuelType;
   final Function _triggerHomeScreenRebuild;
-  const FuelStationListItemExpandedWidget(this._fuelStation, this._selectedFuelType, this._triggerHomeScreenRebuild, {Key key}) : super(key: key);
+  const FuelStationListItemExpandedWidget(this._fuelStation, this._selectedFuelType, this._triggerHomeScreenRebuild, {Key? key}) : super(key: key);
 
   @override
   _FuelStationListItemExpandedWidgetState createState() => _FuelStationListItemExpandedWidgetState();
@@ -61,9 +61,9 @@ class _FuelStationListItemExpandedWidgetState extends State<FuelStationListItemE
 
   @override
   Widget build(final BuildContext context) {
-    final FuelQuote selectedFuelQuote = widget._fuelStation.fuelTypeFuelQuoteMap[widget._selectedFuelType.fuelType];
+    final FuelQuote? selectedFuelQuote = widget._fuelStation.fuelTypeFuelQuoteMap[widget._selectedFuelType.fuelType];
     var formatter = DateFormat('dd-MMM hh:mm');
-    final Set<String> fuelQuoteSources = widget._fuelStation.fuelQuoteSources();
+    final Set<String?> fuelQuoteSources = widget._fuelStation.fuelQuoteSources();
     final String fuelQuoteSourcesStr = fuelQuoteSources.join(" ");
     return Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
@@ -141,7 +141,7 @@ class _FuelStationListItemExpandedWidgetState extends State<FuelStationListItemE
             var homeScreenRefreshNeeded = await Navigator.pushNamed(context, FuelStationDetailsScreen.routeName,
                 arguments: FuelStationDetailsParam(widget._fuelStation));
             LogUtil.debug(_tag, 'Rebuild screen $homeScreenRefreshNeeded');
-            if (homeScreenRefreshNeeded) {
+            if (homeScreenRefreshNeeded != null) {
               widget._triggerHomeScreenRebuild();
             }
           }), // more_horiz icon
@@ -150,13 +150,13 @@ class _FuelStationListItemExpandedWidgetState extends State<FuelStationListItemE
           (DataUtils.isNotBlank(widget._fuelStation.fuelStationAddress.phone1) ||
                   DataUtils.isNotBlank(widget._fuelStation.fuelStationAddress.phone2))
               ? PhoneWidget(DataUtils.isNotBlank(widget._fuelStation.fuelStationAddress.phone1)
-                  ? widget._fuelStation.fuelStationAddress.phone1
-                  : widget._fuelStation.fuelStationAddress.phone2)
+                  ? widget._fuelStation.fuelStationAddress.phone1!
+                  : widget._fuelStation.fuelStationAddress.phone2!)
               : const SizedBox(width: 0)
         ]);
   }
 
-  Row _getFuelQuoteDetailsRow(final FuelQuote selectedFuelQuote, final DateFormat formatter,
+  Row _getFuelQuoteDetailsRow(final FuelQuote? selectedFuelQuote, final DateFormat formatter,
       final String fuelQuoteSourcesStr, final BuildContext context) {
     return selectedFuelQuote != null && selectedFuelQuote.quoteValue != null
         ? Row(
@@ -164,7 +164,7 @@ class _FuelStationListItemExpandedWidgetState extends State<FuelStationListItemE
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
                 Expanded(flex: 1, child: getRowTextItem('${selectedFuelQuote.quoteValue}', 'Price')),
-                Expanded(flex: 1, child: getRowTextItem(selectedFuelQuote.fuelQuoteSourceName, 'Price Source')),
+                Expanded(flex: 1, child: getRowTextItem(selectedFuelQuote.fuelQuoteSourceName!, 'Price Source')),
                 Expanded(
                     flex: 1,
                     child: getRowTextItem(
@@ -173,13 +173,7 @@ class _FuelStationListItemExpandedWidgetState extends State<FuelStationListItemE
         : Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-                fuelQuoteSourcesStr != null
-                    ? Expanded(
-                        flex: 1,
-                        child: getRowTextItem(
-                            fuelQuoteSourcesStr ?? 'Pumped', 'Station Source'))
-                    : const SizedBox(width: 0),
+            children: <Widget>[Expanded(flex: 1, child: getRowTextItem(fuelQuoteSourcesStr, 'Station Source')),
                 Expanded(
                     flex: 1,
                     child: GestureDetector(
@@ -191,7 +185,7 @@ class _FuelStationListItemExpandedWidgetState extends State<FuelStationListItemE
                                   expandFuelPrices: true,
                                   lazyLoadOperatingHrs: true));
                           if (updateResult != null) {
-                            _handleUpdateResult(updateResult);
+                            _handleUpdateResult(updateResult as UpdateFuelStationDetailsResult);
                           } else {
                             LogUtil.debug(_tag, 'UpdateResult is null');
                           }
@@ -254,7 +248,7 @@ class _FuelStationListItemExpandedWidgetState extends State<FuelStationListItemE
         : const SizedBox(width: 0);
   }
 
-  String _getPublishDateFormatted(final DateFormat formatter, final int epochSeconds) {
+  String _getPublishDateFormatted(final DateFormat formatter, final int? epochSeconds) {
     if (epochSeconds == null) {
       return '';
     }
@@ -272,13 +266,14 @@ class _FuelStationListItemExpandedWidgetState extends State<FuelStationListItemE
                 arguments: EditFuelStationDetailsParams(
                     fuelStation: widget._fuelStation, expandOperatingHours: true, lazyLoadOperatingHrs: true));
             if (updateResult != null) {
-              _handleUpdateResult(updateResult);
+              _handleUpdateResult(updateResult as UpdateFuelStationDetailsResult);
             } else {
               LogUtil.debug(_tag, 'UpdateResult is null');
             }
           });
+    } else {
+      return getRowTextItem(widget._fuelStation.status?.statusName ?? 'unknown', 'Status');
     }
-    return getRowTextItem(widget._fuelStation.status.statusName, 'Status');
   }
 
   Widget getRowIconItem2(final Icon icon, final String description) {
@@ -290,7 +285,7 @@ class _FuelStationListItemExpandedWidgetState extends State<FuelStationListItemE
     ]);
   }
 
-  Widget getRowTextItem(final String text, final String description, {Color color}) {
+  Widget getRowTextItem(final String text, final String description, {Color? color}) {
     return Column(children: <Widget>[
       Text(text,
           style: TextStyle(

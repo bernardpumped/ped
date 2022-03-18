@@ -19,7 +19,7 @@
 import 'package:flutter/material.dart';
 
 class ApplicationTitleTextWidget extends StatelessWidget {
-  const ApplicationTitleTextWidget({Key key}) : super(key: key);
+  const ApplicationTitleTextWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(final BuildContext context) {

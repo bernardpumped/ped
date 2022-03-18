@@ -30,10 +30,10 @@ class CircularImageWidget extends StatelessWidget {
   final double marginWidth;
 
   const CircularImageWidget(
-      {Key key, @required this.imagePath,
-      @required this.isNetworkImage,
-      @required this.width,
-      @required this.height,
+      {Key? key, required this.imagePath,
+        required this.isNetworkImage,
+        required this.width,
+        required this.height,
       this.margin = 0,
       this.color = Colors.deepPurple,
       this.marginWidth = 1}) : super(key: key);
@@ -55,6 +55,6 @@ class CircularImageWidget extends StatelessWidget {
             decoration: BoxDecoration(
                 shape: BoxShape.rectangle,
                 image: DecorationImage(
-                    fit: BoxFit.scaleDown, image: isNetworkImage ? NetworkImage(imagePath) : AssetImage(imagePath)))));
+                    fit: BoxFit.scaleDown, image: isNetworkImage ? NetworkImage(imagePath) : AssetImage(imagePath) as ImageProvider))));
   }
 }

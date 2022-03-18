@@ -20,8 +20,8 @@ import 'package:pumped_end_device/models/pumped/fuel_quote.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station.dart';
 
 class FuelStationsSorter {
-  void sortFuelStations(final List<FuelStation> fuelStations, final String fuelType, final int sortOrder) {
-    if (fuelStations == null || fuelStations.isEmpty) {
+  void sortFuelStations(final List<FuelStation> fuelStations, final String? fuelType, final int sortOrder) {
+    if (fuelStations.isEmpty) {
       return;
     }
     fuelStations.sort((fs1, fs2) {
@@ -40,7 +40,7 @@ class FuelStationsSorter {
     });
   }
 
-  int _comparisonResultForPromoSortOrder(final FuelStation fs1, final FuelStation fs2, final String fuelType) {
+  int _comparisonResultForPromoSortOrder(final FuelStation fs1, final FuelStation fs2, final String? fuelType) {
     int comparisonResult = _comparePromos(fs1, fs2);
     if (comparisonResult == 0) {
       comparisonResult = _compareFuelQuotes(fs1, fs2, fuelType);
@@ -54,7 +54,7 @@ class FuelStationsSorter {
     return comparisonResult;
   }
 
-  int _comparisonResultForPriceSortOrder(final FuelStation fs1, final FuelStation fs2, final String fuelType) {
+  int _comparisonResultForPriceSortOrder(final FuelStation fs1, final FuelStation fs2, final String? fuelType) {
     int comparisonResult = _compareFuelQuotes(fs1, fs2, fuelType);
     if (comparisonResult == 0) {
       comparisonResult = _compareDistance(fs1, fs2);
@@ -68,7 +68,7 @@ class FuelStationsSorter {
     return comparisonResult;
   }
 
-  int _comparisonResultForDistanceSortOrder(final FuelStation fs1, final FuelStation fs2, final String fuelType) {
+  int _comparisonResultForDistanceSortOrder(final FuelStation fs1, final FuelStation fs2, final String? fuelType) {
     int comparisonResult = _compareDistance(fs1, fs2);
     if (comparisonResult == 0) {
       comparisonResult = _compareFuelQuotes(fs1, fs2, fuelType);
@@ -82,7 +82,7 @@ class FuelStationsSorter {
     return comparisonResult;
   }
 
-  int _comparisonResultForNameSortOrder(final FuelStation fs1, final FuelStation fs2, final String fuelType) {
+  int _comparisonResultForNameSortOrder(final FuelStation fs1, final FuelStation fs2, final String? fuelType) {
     int comparisonResult = _compareNames(fs1, fs2);
     if (comparisonResult == 0) {
       comparisonResult = _compareFuelQuotes(fs1, fs2, fuelType);
@@ -104,11 +104,11 @@ class FuelStationsSorter {
     if (fuelType == null) {
       return 0;
     }
-    final FuelQuote fq1 = fs1.fuelTypeFuelQuoteMap[fuelType];
-    final FuelQuote fq2 = fs2.fuelTypeFuelQuoteMap[fuelType];
-    final double quoteVal1 = fq1 != null && fq1.quoteValue != null ? fq1.quoteValue : double.maxFinite;
-    final double quoteVal2 = fq2 != null && fq2.quoteValue != null ? fq2.quoteValue : double.maxFinite;
-    return quoteVal1.compareTo(quoteVal2);
+    final FuelQuote? fq1 = fs1.fuelTypeFuelQuoteMap[fuelType];
+    final FuelQuote? fq2 = fs2.fuelTypeFuelQuoteMap[fuelType];
+    final double? quoteVal1 = fq1 != null && fq1.quoteValue != null ? fq1.quoteValue : double.maxFinite;
+    final double? quoteVal2 = fq2 != null && fq2.quoteValue != null ? fq2.quoteValue : double.maxFinite;
+    return quoteVal1 == null ? -1 : (quoteVal2 == null ? 1 : quoteVal1.compareTo(quoteVal2));
   }
 
   static int _compareNames(fs1, fs2) => fs1.fuelStationName.toLowerCase().compareTo(fs2.fuelStationName.toLowerCase());

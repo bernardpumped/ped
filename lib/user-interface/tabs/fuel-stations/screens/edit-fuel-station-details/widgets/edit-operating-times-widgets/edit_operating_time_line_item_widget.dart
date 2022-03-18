@@ -26,14 +26,15 @@ import 'package:pumped_end_device/util/log_util.dart';
 import 'operating_time_widget.dart';
 
 class EditOperatingTimeLineItemWidget extends StatefulWidget {
+  final bool isFaStation;
   final OperatingHours operatingHour;
-  final OperatingHours updatedOperatingHrs;
+  final OperatingHours? updatedOperatingHrs;
   final Function onOperatingTimeRangeChanged;
   final Function undoOperatingTimeChange;
   final bool backendUpdateInProgress;
 
-  const EditOperatingTimeLineItemWidget(this.operatingHour, this.updatedOperatingHrs, this.undoOperatingTimeChange,
-      this.onOperatingTimeRangeChanged, this.backendUpdateInProgress, {Key key}) : super(key: key);
+  const EditOperatingTimeLineItemWidget(this.isFaStation, this.operatingHour, this.updatedOperatingHrs, this.undoOperatingTimeChange,
+      this.onOperatingTimeRangeChanged, this.backendUpdateInProgress, {Key? key}) : super(key: key);
 
   @override
   _EditOperatingTimeLineItemWidgetStateNew createState() => _EditOperatingTimeLineItemWidgetStateNew();
@@ -55,18 +56,18 @@ class _EditOperatingTimeLineItemWidgetStateNew extends State<EditOperatingTimeLi
   static const _quickDuration = 300;
   static const _slowDuration = 1000;
 
-  int _containerHeightChangeTime;
-  int _errorMsgHeightChangeTime;
+  int _containerHeightChangeTime = _slowDuration;
+  int _errorMsgHeightChangeTime = _quickDuration;
 
-  double _height;
-  double _errorContainerHeight;
+  double _height = _editableHeight;
+  double _errorContainerHeight = _noErrorMsgHeight;
   String _errorMessage = "";
-  bool _editable;
+  bool _editable = false;
 
   @override
   void initState() {
     super.initState();
-    _editable = widget.operatingHour.operatingTimeSource != 'G' && widget.operatingHour.operatingTimeSource != 'F';
+    _editable = widget.operatingHour.operatingTimeSource != 'G' && widget.operatingHour.operatingTimeSource != 'F' && !widget.isFaStation;
     _setInitialHeight();
   }
 
@@ -87,10 +88,10 @@ class _EditOperatingTimeLineItemWidgetStateNew extends State<EditOperatingTimeLi
   @override
   Widget build(final BuildContext context) {
     if (widget.updatedOperatingHrs != null) {
-      if (widget.updatedOperatingHrs.status != null) {
-        _selectedValue = widget.updatedOperatingHrs.status == Status.open24Hrs
+      if (widget.updatedOperatingHrs?.status != null) {
+        _selectedValue = widget.updatedOperatingHrs?.status == Status.open24Hrs
             ? _open24Hours
-            : (widget.updatedOperatingHrs.status == Status.closed ? _closed : _other);
+            : (widget.updatedOperatingHrs?.status == Status.closed ? _closed : _other);
       }
       LogUtil.debug(_tag, 'calling _setUpdatedWidgetHeight');
       _setUpdatedWidgetHeight();
@@ -121,6 +122,7 @@ class _EditOperatingTimeLineItemWidgetStateNew extends State<EditOperatingTimeLi
             Expanded(
                 flex: 2,
                 child: OperatingTimeWidget(
+                    _editable,
                     widget.operatingHour.openingHrs,
                     widget.operatingHour.openingMins,
                     widget.operatingHour.operatingTimeSource,
@@ -134,6 +136,7 @@ class _EditOperatingTimeLineItemWidgetStateNew extends State<EditOperatingTimeLi
             Expanded(
                 flex: 2,
                 child: OperatingTimeWidget(
+                    _editable,
                     widget.operatingHour.closingHrs,
                     widget.operatingHour.closingMins,
                     widget.operatingHour.operatingTimeSource,
@@ -184,6 +187,7 @@ class _EditOperatingTimeLineItemWidgetStateNew extends State<EditOperatingTimeLi
           Expanded(
             flex: 2,
             child: OperatingTimeWidget(
+                _editable,
                 widget.operatingHour.openingHrs,
                 widget.operatingHour.openingMins,
                 widget.operatingHour.operatingTimeSource,
@@ -198,6 +202,7 @@ class _EditOperatingTimeLineItemWidgetStateNew extends State<EditOperatingTimeLi
           Expanded(
               flex: 2,
               child: OperatingTimeWidget(
+                  _editable,
                   widget.operatingHour.closingHrs,
                   widget.operatingHour.closingMins,
                   widget.operatingHour.operatingTimeSource,
@@ -214,14 +219,14 @@ class _EditOperatingTimeLineItemWidgetStateNew extends State<EditOperatingTimeLi
   void _setUpdatedWidgetHeight() {
     bool openingHrsValid = true;
     bool closingHrsValid = true;
-    if (widget.updatedOperatingHrs.status == Status.open24Hrs || widget.updatedOperatingHrs.status == Status.closed) {
+    if (widget.updatedOperatingHrs?.status == Status.open24Hrs || widget.updatedOperatingHrs?.status == Status.closed) {
       openingHrsValid = true;
       closingHrsValid = true;
     } else {
-      if (widget.updatedOperatingHrs.openingHrs == null) {
+      if (widget.updatedOperatingHrs?.openingHrs == null) {
         openingHrsValid = false;
       }
-      if (widget.updatedOperatingHrs.closingHrs == null) {
+      if (widget.updatedOperatingHrs?.closingHrs == null) {
         closingHrsValid = false;
       }
     }
@@ -267,7 +272,7 @@ class _EditOperatingTimeLineItemWidgetStateNew extends State<EditOperatingTimeLi
         ]));
   }
 
-  void _handleRadioValueChange(final int value) {
+  void _handleRadioValueChange(final int? value) {
     setState(() {
       if (value == _open24Hours) {
         final Map<String, dynamic> operatingTimeParams = {
@@ -288,7 +293,9 @@ class _EditOperatingTimeLineItemWidgetStateNew extends State<EditOperatingTimeLi
         };
         widget.onOperatingTimeRangeChanged(operatingTimeParams, widget.operatingHour.dayOfWeek);
       }
-      _selectedValue = value;
+      if (value != null) {
+        _selectedValue = value;
+      }
     });
   }
 }

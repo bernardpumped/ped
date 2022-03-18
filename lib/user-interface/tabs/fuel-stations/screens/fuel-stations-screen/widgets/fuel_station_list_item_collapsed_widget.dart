@@ -28,19 +28,15 @@ import 'package:pumped_end_device/util/data_utils.dart';
 
 class FuelStationListItemCollapsedWidget extends StatelessWidget {
 
-  static const Color _expandedViewPrimaryTextColor = Colors.black87;
-  static const Color _expandedViewPrimaryIconColor = Colors.black54;
-  static const Color _expandedViewSecondaryTextColor = Colors.black54;
-
   final FuelStation _fuelStation;
   final FuelType _selectedFuelType;
 
-  const FuelStationListItemCollapsedWidget(this._fuelStation, this._selectedFuelType, {Key key}) : super(key: key);
+  const FuelStationListItemCollapsedWidget(this._fuelStation, this._selectedFuelType, {Key? key}) : super(key: key);
 
   @override
   Widget build(final BuildContext context) {
     final dateFormatter = DateFormat('dd/MM/yyyy HH:mm');
-    final FuelQuote selectedFuelQuote = _fuelStation.fuelTypeFuelQuoteMap[_selectedFuelType.fuelType];
+    final FuelQuote? selectedFuelQuote = _fuelStation.fuelTypeFuelQuoteMap[_selectedFuelType.fuelType];
     return Container(
         margin: const EdgeInsets.only(bottom: 5, top: 2),
         padding: const EdgeInsets.all(10),
@@ -63,15 +59,8 @@ class FuelStationListItemCollapsedWidget extends StatelessWidget {
                             fit: BoxFit.scaleDown, image: NetworkImage(_fuelStation.merchantLogoUrl))))),
                 Padding(
                 padding: const EdgeInsets.only(top: 5),
-                child: Text(
-                    (_fuelStation.status != null && _fuelStation.status != Status.unknown)
-                        ? _fuelStation.status.statusName
-                        : "",
-                    style: TextStyle(
-                        fontSize: 14,
-                        color: (_fuelStation.status == Status.open || _fuelStation.status == Status.open24Hrs)
-                            ? Colors.green
-                            : Colors.red)))
+                child: Text(((_fuelStation.status != null && _fuelStation.status != Status.unknown) ? _fuelStation.status!.statusName : "")!,
+                    style: TextStyle(fontSize: 14, color: (_fuelStation.status == Status.open || _fuelStation.status == Status.open24Hrs) ? Colors.green : Colors.red)))
               ]),
               Expanded(
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
@@ -110,7 +99,7 @@ class FuelStationListItemCollapsedWidget extends StatelessWidget {
                   ]),
                   Container(child: selectedFuelQuote != null && selectedFuelQuote.publishDate != null
                           ? Padding( padding: const EdgeInsets.only(top: 10, left: 10),
-                            child: Text('${dateFormatter.format(DateTime.fromMillisecondsSinceEpoch(selectedFuelQuote.publishDate * 1000))} last update', style: const TextStyle(fontSize: 14)))
+                            child: Text('${dateFormatter.format(DateTime.fromMillisecondsSinceEpoch(selectedFuelQuote.publishDate! * 1000))} last update', style: const TextStyle(fontSize: 14)))
                           : const SizedBox(width: 0)),
                   Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
                       Padding(padding: const EdgeInsets.only(left: 5, top: 10), child: WidgetUtils.getRating(_fuelStation.rating, 18)),
@@ -155,30 +144,11 @@ class FuelStationListItemCollapsedWidget extends StatelessWidget {
       return const SizedBox(width: 0);
     }
   }
-
-  Widget getRowIconItem2(final int iconCode, final String description) {
-    return Column(children: <Widget>[
-      Icon(IconData(iconCode, fontFamily: 'MaterialIcons'), color: _expandedViewPrimaryIconColor),
-      const SizedBox(height: 5),
-      Text(description,
-          style: const TextStyle(color: _expandedViewSecondaryTextColor, fontSize: 13), textAlign: TextAlign.center)
-    ]);
-  }
-
-  Widget getRowTextItem(final String text, final String description, {Color color}) {
-    return Column(children: <Widget>[
-      Text(text,
-          style: TextStyle(
-              color: color ?? _expandedViewPrimaryTextColor, fontSize: 14, fontWeight: FontWeight.w500)),
-      const SizedBox(height: 5),
-      Text(description, style: const TextStyle(color: _expandedViewSecondaryTextColor, fontSize: 13))
-    ]);
-  }
 }
 
 class OffersAvailableWidget extends StatefulWidget {
   const OffersAvailableWidget({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -186,8 +156,8 @@ class OffersAvailableWidget extends StatefulWidget {
 }
 
 class _OffersAvailableWidgetState extends State<OffersAvailableWidget> with TickerProviderStateMixin {
-  AnimationController animationController;
-  Animation<double> _fadeInFadeOutAnimation;
+  AnimationController? animationController;
+  Animation<double>? _fadeInFadeOutAnimation;
   bool disposed = false;
 
   @override
@@ -197,32 +167,32 @@ class _OffersAvailableWidgetState extends State<OffersAvailableWidget> with Tick
       vsync: this,
       duration: const Duration(seconds: 1),
     );
-    _fadeInFadeOutAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(animationController);
+    _fadeInFadeOutAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(animationController!);
 
-    animationController.addStatusListener((status) {
+    animationController?.addStatusListener((status) {
       if (disposed) {
         return;
       }
       if (status == AnimationStatus.completed) {
-        animationController.reverse();
+        animationController?.reverse();
       } else if (status == AnimationStatus.dismissed) {
-        animationController.forward();
+        animationController?.forward();
       }
     });
-    TickerFuture tickerFuture = animationController.repeat();
-    tickerFuture.timeout(const Duration(seconds: 5), onTimeout: () {
+    TickerFuture? tickerFuture = animationController?.repeat();
+    tickerFuture?.timeout(const Duration(seconds: 5), onTimeout: () {
       if (disposed) {
         return;
       }
-      animationController.stop(canceled: true);
+      animationController?.stop(canceled: true);
     });
-    animationController.forward();
+    animationController?.forward();
   }
 
   @override
   void dispose() {
     disposed = true;
-    animationController.dispose();
+    animationController?.dispose();
     super.dispose();
   }
 
@@ -231,7 +201,7 @@ class _OffersAvailableWidgetState extends State<OffersAvailableWidget> with Tick
     return Container(
         margin: const EdgeInsets.only(top: 5, left: 5),
         child: FadeTransition(
-            opacity: _fadeInFadeOutAnimation,
+            opacity: _fadeInFadeOutAnimation!,
             child: const Text('Offers available. Explore...',
                 style: TextStyle(fontSize: 14, color: FontsAndColors.vividBlueTextColor))));
   }

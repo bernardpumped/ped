@@ -18,9 +18,9 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pumped_end_device/util/log_util.dart';
-import 'package:rating_bar/rating_bar.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class WidgetUtils {
@@ -39,7 +39,7 @@ class WidgetUtils {
   }
 
   static Icon buildCupertinoIcon(final int iconCode,
-      {final double size, final Color color}) {
+      {required final double size, required final Color color}) {
     return Icon(
         IconData(iconCode,
             fontFamily: CupertinoIcons.iconFont,
@@ -48,23 +48,19 @@ class WidgetUtils {
         color: color);
   }
 
-  static Widget getRating(final double rating, final double size) {
-    return rating != null
-        ? RatingBar.readOnly(
-            initialRating: rating,
-            isHalfAllowed: true,
-            halfFilledIcon: Icons.star_half,
-            filledIcon: Icons.star,
-            emptyIcon: Icons.star_border,
-            filledColor: Colors.orangeAccent,
-            halfFilledColor: Colors.orangeAccent,
-            size: size)
-        : const SizedBox(width: 0);
+  static Widget getRating(final double? rating, final double size) {
+    return rating != null ? RatingBarIndicator(
+      rating: rating,
+      itemBuilder: (context, index) => const Icon(Icons.star, color: Colors.amber),
+      itemCount: 5,
+      itemSize: size,
+      direction: Axis.horizontal
+    ) : const SizedBox(width: 0);
   }
 
   static Widget getActionIconCircular(final Icon icon, final String description,
       final Color backgroundColor, final Color textColor,
-      {final Function onTap}) {
+      {final Function()? onTap}) {
     return GestureDetector(
         onTap: onTap,
         child: Column(children: <Widget>[
@@ -115,7 +111,7 @@ class WidgetUtils {
       final String text,
       final int durationToFadeIn,
       final String actionLabel,
-      final Function onPressedFunction) {
+      final Function() onPressedFunction) {
     var snackBar = SnackBar(
       backgroundColor: Theme.of(context).dialogBackgroundColor,
       content:
@@ -128,11 +124,11 @@ class WidgetUtils {
   }
 
   static ElevatedButton getRoundedElevatedButton({
-    final Function onPressed,
-    final Widget child,
-    final Color backgroundColor,
+    final Function()? onPressed,
+    final Widget? child,
+    required final Color backgroundColor,
     final Color foreGroundColor = Colors.white,
-    final double borderRadius}) {
+    required final double borderRadius}) {
     return ElevatedButton(onPressed: onPressed,
         child: Padding(child: child, padding: const EdgeInsets.only(left: 15, right: 15)),
         style: ButtonStyle(
@@ -146,11 +142,11 @@ class WidgetUtils {
   }
 
   static TextButton getRoundedTextButton({
-      final Function onPressed,
-      final Widget child,
-      final Color backgroundColor,
+      final Function()? onPressed,
+      final Widget? child,
+      required final Color backgroundColor,
       final Color foreGroundColor = Colors.white,
-      final double borderRadius}) {
+      required final double borderRadius}) {
     return TextButton(
         onPressed: onPressed,
         child: Padding(child: child, padding: const EdgeInsets.only(left: 15, right: 15)),

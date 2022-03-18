@@ -38,13 +38,13 @@ class UpdateHistory {
   // Values provided for update
   final Map<String, dynamic> updateValues;
   // Did it actually result into update
-  final Map<String, dynamic> recordLevelExceptionCodes;
+  final Map<String, dynamic>? recordLevelExceptionCodes;
   // Any exception code at complete request level
-  final List<dynamic> uberLevelExceptionCodes;
+  final List<dynamic>? uberLevelExceptionCodes;
   // If any parameters were bad
-  final Map<String, dynamic> invalidArguments;
+  final Map<String, dynamic>? invalidArguments;
   // Any generalized message sent back by server.
-  final String responseDetails;
+  final String? responseDetails;
 
   Map<String, dynamic> toJson() => {
         'update_history_id': updateHistoryId,
@@ -84,15 +84,15 @@ class UpdateHistory {
   }
 
   UpdateHistory(
-      {this.updateHistoryId,
-      this.fuelStationId,
-      this.fuelStation,
-      this.fuelStationSource,
-      this.updateEpoch,
-      this.updateType,
-      this.responseCode,
-      this.originalValues,
-      this.updateValues,
+      {required this.updateHistoryId,
+        required this.fuelStationId,
+        required this.fuelStation,
+        required this.fuelStationSource,
+        required this.updateEpoch,
+        required this.updateType,
+        required this.responseCode,
+        required this.originalValues,
+        required this.updateValues,
       this.recordLevelExceptionCodes,
       this.uberLevelExceptionCodes,
       this.invalidArguments,

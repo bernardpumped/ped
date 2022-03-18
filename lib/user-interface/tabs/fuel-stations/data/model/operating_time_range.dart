@@ -24,7 +24,7 @@ class OperatingTimeRange {
   static const closed = 'CLOSED';
   static const hasClosingHours = 'HAS_CLOSING_HOURS';
 
-  static String getStringRepresentation(final OperatingHours operatingHours) {
+  static String getStringRepresentation(final OperatingHours? operatingHours) {
     if (operatingHours != null) {
       if (alwaysOpen == operatingHours.operatingTimeRange) {
         return "Always Open";

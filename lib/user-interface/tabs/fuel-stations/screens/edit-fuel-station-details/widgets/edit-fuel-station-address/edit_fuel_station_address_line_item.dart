@@ -26,13 +26,13 @@ import 'package:pumped_end_device/util/data_utils.dart';
 class EditFuelStationAddressLineItem extends StatefulWidget {
   final String _addressComponentName;
   final String _addressComponentType;
-  final String _addressComponentValue;
+  final String? _addressComponentValue;
   final TextEditingController _addressComponentEditingController;
   final bool _backendUpdateInProgress;
   final Function _onValueChangeListener;
 
   const EditFuelStationAddressLineItem(this._addressComponentName, this._addressComponentType, this._addressComponentValue,
-      this._addressComponentEditingController, this._backendUpdateInProgress, this._onValueChangeListener, {Key key}) : super(key: key);
+      this._addressComponentEditingController, this._backendUpdateInProgress, this._onValueChangeListener, {Key? key}) : super(key: key);
 
   @override
   _EditFuelStationAddressLineItemState createState() => _EditFuelStationAddressLineItemState();
@@ -47,11 +47,11 @@ class _EditFuelStationAddressLineItemState extends State<EditFuelStationAddressL
   static const _quickDuration = 300;
   static const _slowDuration = 1000;
 
-  double _containerHeight;
-  double _errorContainerHeight;
-  String _errorMessage;
-  int _containerHeightChangeTime;
-  int _errorMsgHeightChangeTime;
+  double? _containerHeight = _heightWithoutErrorMsg;
+  double _errorContainerHeight = _heightOfNoErrorMsg;
+  String _errorMessage = "";
+  int _containerHeightChangeTime = _slowDuration;
+  int _errorMsgHeightChangeTime = _quickDuration;
 
   bool _addressComponentEnabled = false;
 

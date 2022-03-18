@@ -23,12 +23,12 @@ class UpdateHistorySuggestEditItem extends StatelessWidget {
   final String valueType;
   final dynamic originalValue;
   final dynamic updateValue;
-  final Map<String, dynamic> serverExceptions;
-  final List<dynamic> recordLevelExceptions;
+  final Map<String, dynamic>? serverExceptions;
+  final List<dynamic>? recordLevelExceptions;
 
   const UpdateHistorySuggestEditItem(
-      {Key key,
-      this.valueType,
+      {Key? key,
+      required this.valueType,
       this.originalValue,
       this.updateValue,
       this.serverExceptions,
@@ -80,7 +80,7 @@ class UpdateHistorySuggestEditItem extends StatelessWidget {
   }
 
   String _getUpdateResult() {
-    if (serverExceptions == null || serverExceptions.isEmpty) {
+    if (serverExceptions == null || serverExceptions!.isEmpty) {
       return 'Success';
     } else {
       return _getTranslatedUpdateResult();

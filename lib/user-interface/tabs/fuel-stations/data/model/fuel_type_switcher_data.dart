@@ -20,9 +20,15 @@ import 'package:pumped_end_device/models/pumped/fuel_category.dart';
 import 'package:pumped_end_device/models/pumped/fuel_type.dart';
 
 class FuelTypeSwitcherData {
-  FuelType defaultFuelType;
-  FuelCategory defaultFuelCategory;
-  int userSettingsVersion;
-  String failureReason;
-  bool hasFailed = false;
+  final FuelType defaultFuelType;
+  final FuelCategory defaultFuelCategory;
+  final int userSettingsVersion;
+
+  FuelTypeSwitcherData(this.defaultFuelType, this.defaultFuelCategory, this.userSettingsVersion);
+}
+
+class FuelTypeSwitcherDataError {
+  final String failureReason;
+
+  FuelTypeSwitcherDataError(this.failureReason);
 }

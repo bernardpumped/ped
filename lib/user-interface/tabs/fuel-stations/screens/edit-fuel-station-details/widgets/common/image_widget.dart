@@ -23,9 +23,9 @@ class ImageWidget extends StatelessWidget {
   final double width;
   final double height;
   final double borderRadius;
-  final EdgeInsets padding;
+  final EdgeInsets? padding;
 
-  const ImageWidget({Key key, this.imageUrl, this.width, this.height, this.borderRadius = 10, this.padding})
+  const ImageWidget({Key? key, required this.imageUrl, required this.width, required this.height, this.borderRadius = 10, this.padding})
       : super(key: key);
 
   @override

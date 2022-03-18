@@ -31,14 +31,14 @@ class AlterOperatingTimeRequest extends Request {
 
   AlterOperatingTimeRequest(
       {uuid,
-      this.fuelStationId,
-      this.authValidatorType,
-      this.oauthToken,
-      this.oauthTokenSecret,
-      this.operatingTimeVos,
-      this.featureType,
-      this.fuelStationSource,
-      this.identityProvider})
+        required this.fuelStationId,
+        required this.authValidatorType,
+        required this.oauthToken,
+        required this.oauthTokenSecret,
+        required this.operatingTimeVos,
+        required this.featureType,
+        required this.fuelStationSource,
+        required this.identityProvider})
       : super(uuid);
 
   @override

@@ -34,7 +34,7 @@ class FuelPricesTabWidget extends StatefulWidget {
   final FuelStation fuelStation;
   final Function onUpdateResult;
 
-  const FuelPricesTabWidget(this.fuelStation, this.onUpdateResult, {Key key}) : super(key: key);
+  const FuelPricesTabWidget(this.fuelStation, this.onUpdateResult, {Key? key}) : super(key: key);
 
   @override
   _FuelPricesTabWidgetState createState() => _FuelPricesTabWidgetState();
@@ -46,7 +46,7 @@ class _FuelPricesTabWidgetState extends State<FuelPricesTabWidget> {
   final MarketRegionZoneConfigUtils _marketRegionZoneConfigUtils = MarketRegionZoneConfigUtils();
 
   _FuelPricesTabWidgetState();
-  Future<List<FuelType>> allowedFuelTypesFuture;
+  Future<List<FuelType>>? allowedFuelTypesFuture;
 
   @override
   void initState() {
@@ -63,7 +63,7 @@ class _FuelPricesTabWidgetState extends State<FuelPricesTabWidget> {
         if (snapshot.hasError) {
           return const Center(child: Text('Error loading fuelTypes'));
         } else if (snapshot.hasData) {
-          List<FuelType> allowedFuelTypes = snapshot.data;
+          List<FuelType> allowedFuelTypes = snapshot.data as List<FuelType>;
           return Container(
               decoration: const BoxDecoration(color: FontsAndColors.pumpedBoxDecorationColor),
               child: Column(children: _getListItem(context, allowedFuelTypes)));
@@ -96,7 +96,7 @@ class _FuelPricesTabWidgetState extends State<FuelPricesTabWidget> {
   final formatter = DateFormat('dd-MMM-yy HH:mm');
 
   Container _getFuelQuoteRowItem(final FuelQuote fuelQuote, final Map<String, FuelType> allowedFuelTypesMap) {
-    final String fuelTypeName = allowedFuelTypesMap[fuelQuote.fuelType].fuelName;
+    final String? fuelTypeName = allowedFuelTypesMap[fuelQuote.fuelType]?.fuelName;
     return Container(
         margin: const EdgeInsets.only(left: 5, right: 5, top: 5),
         decoration: const BoxDecoration(
@@ -107,8 +107,9 @@ class _FuelPricesTabWidgetState extends State<FuelPricesTabWidget> {
               child: Container(
                   padding: const EdgeInsets.only(top: 10, right: 10, bottom: 2),
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
+                    // Putting some confidence that fuelTypeName! can never be null
                     Container(
-                        margin: const EdgeInsets.only(left: 25), child: Text(fuelTypeName, style: const TextStyle(fontSize: 16))),
+                        margin: const EdgeInsets.only(left: 25), child: Text(fuelTypeName!, style: const TextStyle(fontSize: 16))),
                     Container(
                         padding: const EdgeInsets.only(right: 10, top: 2, bottom: 10),
                         child: Row(children: <Widget>[
@@ -137,7 +138,7 @@ class _FuelPricesTabWidgetState extends State<FuelPricesTabWidget> {
 
   Widget _getLastUpdateDateWidget(final FuelQuote fuelQuote) {
     return fuelQuote.publishDate != null
-        ? Text('Last Update ${_getPublishDateFormatted(fuelQuote.publishDate)}',
+        ? Text('Last Update ${_getPublishDateFormatted(fuelQuote.publishDate!)}',
             style: const TextStyle(fontSize: 13, color: Colors.black54))
         : const SizedBox(width: 0);
   }

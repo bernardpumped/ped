@@ -28,7 +28,7 @@ import 'package:pumped_end_device/util/log_util.dart';
 
 class GetFuelStationDetailsBatchResponseParser extends ResponseParser<GetFuelStationDetailsBatchResponse> {
   static const _tag = 'GetFuelStationDetailsBatchResponseParser';
-  final String authorityId;
+  final String? authorityId;
 
   GetFuelStationDetailsBatchResponseParser(this.authorityId);
 

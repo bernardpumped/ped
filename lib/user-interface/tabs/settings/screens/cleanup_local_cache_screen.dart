@@ -30,7 +30,7 @@ import 'package:pumped_end_device/util/log_util.dart';
 class CleanupLocalCacheScreen extends StatefulWidget {
   static const routeName = '/cleanUpLocalCache';
 
-  const CleanupLocalCacheScreen({Key key}) : super(key: key);
+  const CleanupLocalCacheScreen({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -87,7 +87,7 @@ class _CleanupLocalCacheScreenState
                   setState(() {
                     LogUtil.debug(
                         _tag, 'build::Clear Search settings Click function');
-                    _clearSearchSettings = value;
+                    _clearSearchSettings = value!;
                   });
                 }),
                 _buildListTile(
@@ -98,7 +98,7 @@ class _CleanupLocalCacheScreenState
                   setState(() {
                     LogUtil.debug(
                         _tag, 'build::Clear Update History Click function');
-                    _clearUpdateHistory = value;
+                    _clearUpdateHistory = value!;
                   });
                 }),
                 _buildListTile(
@@ -109,7 +109,7 @@ class _CleanupLocalCacheScreenState
                   setState(() {
                     LogUtil.debug(_tag,
                         'build::Clear Favorite Stations Click function');
-                    _clearFavouriteStations = value;
+                    _clearFavouriteStations = value!;
                   });
                 }),
                 _buildListTile(
@@ -120,7 +120,7 @@ class _CleanupLocalCacheScreenState
                   setState(() {
                     LogUtil.debug(
                         _tag, 'build::Clear Application Data Click function');
-                    _clearApplicationData = value;
+                    _clearApplicationData = value!;
                   });
                 }),
                 ListTile(
@@ -161,7 +161,7 @@ class _CleanupLocalCacheScreenState
   }
 
   void _cleanUpSearchSettings(final BuildContext context) {
-    final Future<int> deleteUserConfigFuture = UserConfigurationDao.instance
+    final Future<dynamic> deleteUserConfigFuture = UserConfigurationDao.instance
         .deleteUserConfiguration(UserConfiguration.defaultUserConfigId);
     deleteUserConfigFuture.then((result) {
       LogUtil.debug(_tag, 'User Configuration successfully deleted');
@@ -175,7 +175,7 @@ class _CleanupLocalCacheScreenState
   }
 
   void _cleanUpUpdateHistory(final BuildContext context) {
-    final Future<int> deleteUpdateHistoryFuture =
+    final Future<dynamic> deleteUpdateHistoryFuture =
         UpdateHistoryDao.instance.deleteUpdateHistory();
     deleteUpdateHistoryFuture.then((result) {
       LogUtil.debug(_tag, 'Update History successfully deleted');
@@ -214,7 +214,7 @@ class _CleanupLocalCacheScreenState
       final String title,
       final String subTitle,
       final bool checkBoxValue,
-      final Function onChangeFunction) {
+      final Function(bool?)? onChangeFunction) {
     return ListTile(
         contentPadding: const EdgeInsets.only(left: 10),
         leading: icon,

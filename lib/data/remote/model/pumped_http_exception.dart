@@ -17,9 +17,9 @@
  */
 
 class PumpedHttpException implements Exception {
-  final int httpStatusCode;
-  final String httpStatusDescription;
-  final String url;
-  final String message;
+  final int? httpStatusCode;
+  final String? httpStatusDescription;
+  final String? url;
+  final String? message;
   PumpedHttpException({this.httpStatusCode, this.httpStatusDescription, this.url, this.message});
 }

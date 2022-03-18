@@ -19,14 +19,15 @@
 import 'package:pumped_end_device/data/remote/model/request/request.dart';
 
 class GetFuelStationDetailsBatchRequest extends Request {
-  final List<int> fuelStationIds;
-  final List<int> fuelAuthorityStationIds;
+  final List<int>? fuelStationIds;
+  final List<int>? fuelAuthorityStationIds;
   final double latitude;
   final double longitude;
   final String dayOfWeek;
 
   GetFuelStationDetailsBatchRequest(
-      {requestUuid, this.fuelStationIds, this.fuelAuthorityStationIds, this.latitude, this.longitude, this.dayOfWeek})
+      {requestUuid, this.fuelStationIds, this.fuelAuthorityStationIds,
+      required this.latitude, required this.longitude, required this.dayOfWeek})
       : super(requestUuid);
 
   @override

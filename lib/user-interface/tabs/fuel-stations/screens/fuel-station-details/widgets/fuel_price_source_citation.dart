@@ -17,10 +17,14 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:pumped_end_device/models/pumped/fuel_station_address.dart';
 import 'package:pumped_end_device/user-interface/tabs/fuel-stations/screens/fuel-station-details/widgets/email_widget.dart';
+import 'package:pumped_end_device/user-interface/tabs/fuel-stations/screens/fuel-station-details/widgets/notification_widget.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/models/pumped/fuel_quote.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station.dart';
+import 'package:sprintf/sprintf.dart';
 
 class FuelPriceSourceCitation extends StatelessWidget {
   static const _padding = 15.0;
@@ -30,7 +34,7 @@ class FuelPriceSourceCitation extends StatelessWidget {
   final FuelQuote fuelQuote;
   final FuelStation fuelStation;
 
-  const FuelPriceSourceCitation(this.fuelQuote, this.fuelStation, {Key key}) : super(key: key);
+  const FuelPriceSourceCitation(this.fuelQuote, this.fuelStation, {Key? key}) : super(key: key);
 
   @override
   Widget build(final BuildContext context) {
@@ -42,7 +46,7 @@ class FuelPriceSourceCitation extends StatelessWidget {
   }
 
   Widget _dialogContent(final BuildContext context) {
-    final String fuelQuoteSource = fuelQuote.fuelQuoteSource;
+    final String? fuelQuoteSource = fuelQuote.fuelQuoteSource;
     Widget child;
     if (fuelQuoteSource == 'F') {
       child = _getFuelAuthorityMessage(context);
@@ -109,8 +113,19 @@ class FuelPriceSourceCitation extends StatelessWidget {
           borderRadius: 10.0,
           backgroundColor: Theme.of(context).primaryColor),
       const SizedBox(width: 10),
-      EmailWidget(emailBody: _getEmailBody(), emailSubject: _getEmailSubject(), emailAddress: 'bernard@pumpedfuel.com')
+      _getNotificationWidget()
     ], mainAxisAlignment: MainAxisAlignment.spaceEvenly);
+  }
+
+  Widget _getNotificationWidget() {
+    var notificationType = notificationTypeMap[fuelQuote.fuelQuoteSourceName];
+    if (notificationType == emailNotificationType) {
+      // fuelQuote.fuelQuoteSourceName can never be null.
+      return EmailNotificationWidget(emailBody: _getEmailBody(), emailSubject: _getEmailSubject(), source: fuelQuote.fuelQuoteSourceName!);
+    } else if (notificationType == externalUrlNotificationType) {
+      return NotificationWidget(fuelStation: fuelStation);
+    }
+    return const SizedBox(width: 0,);
   }
 
   Text _getAdminContactMessage() {
@@ -118,13 +133,13 @@ class FuelPriceSourceCitation extends StatelessWidget {
         textAlign: TextAlign.start, style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w400, color: Colors.red));
   }
 
-  String _getFuelAuthorityQuotePublisher() {
-    final List<String> publishers = fuelStation
+  String? _getFuelAuthorityQuotePublisher() {
+    final List<String?> publishers = fuelStation
         .fuelQuotes()
         .where((fq) => fq.fuelQuoteSource != null && fq.fuelQuoteSource != 'C')
         .map((fq) => fq.fuelQuoteSourceName)
         .toList();
-    if (publishers != null && publishers.isNotEmpty) {
+    if (publishers.isNotEmpty) {
       return publishers[0];
     }
     return null;
@@ -135,7 +150,33 @@ class FuelPriceSourceCitation extends StatelessWidget {
   }
 
   String _getEmailBody() {
-    return 'For the fuelStation ${fuelStation.fuelStationName} [${fuelStation.stationId} | ${fuelStation.getFuelStationSource()}],'
-        'we have found incorrect Price ${fuelQuote.quoteValue} for fuel ${fuelQuote.fuelType}';
+    final FuelStationAddress addr = fuelStation.fuelStationAddress;
+    final DateFormat dateFormat = DateFormat('dd/MM/yyyy HH:mm:ss');
+    String? publishDate;
+    if (fuelQuote.publishDate != null) {
+      publishDate = dateFormat.format(DateTime.fromMillisecondsSinceEpoch(fuelQuote.publishDate! * 1000).toUtc());
+    }
+    String publishDateTxt = publishDate != null ? 'publish date : $publishDate' : '';
+    final String deviceDate = dateFormat.format(DateTime.now().toUtc());
+    String message = 'Hello fuel support it appears fuelStation Id: ${fuelStation.stationId} name : ${fuelStation.fuelStationName}'
+      ', ${addr.addressLine1}, ${addr.zip}, ${addr.state} may have an incorrect Price ${fuelQuote.quoteValue} for fuel type ${fuelQuote.fuelType}'
+      '$publishDateTxt. Dear user within this email please include the actual fuel type price as of $deviceDate '
+      'and we\'ll follow it up for you - best regards pumped fuel';
+    if (fuelStation.fuelAuthorityStationCode != null) {
+      message = '$message [stationCode=${fuelStation.fuelAuthorityStationCode}]';
+    }
+    return message;
   }
+
+  static const emailNotificationType = 'email';
+  static const externalUrlNotificationType = 'external-url';
+
+  static const notificationTypeMap = {
+    'nsw' : emailNotificationType,
+    'qld' : externalUrlNotificationType,
+    'sa' : emailNotificationType,
+    'fwa' : emailNotificationType,
+    'tas' : emailNotificationType,
+    'nt' : emailNotificationType
+  };
 }

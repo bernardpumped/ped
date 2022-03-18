@@ -20,9 +20,13 @@ class OperatingTimeVo {
   String dayOfWeek;
   String openingTime;
   String closingTime;
-  String operatingTimeRange;
+  String? operatingTimeRange;
   String operatingTimeSource;
-  int publishDate;
+  int? publishDate;
+
+  OperatingTimeVo({required this.dayOfWeek, required this.openingTime, required this.closingTime,
+    required this.operatingTimeRange, required this.operatingTimeSource, this.publishDate});
+
   Map<String, dynamic> toJson() => {
         'dayOfWeek': dayOfWeek,
         'openingTime': openingTime,

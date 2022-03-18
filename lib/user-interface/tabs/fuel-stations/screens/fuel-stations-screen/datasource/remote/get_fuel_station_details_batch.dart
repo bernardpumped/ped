@@ -29,13 +29,13 @@ class GetFuelStationDetailsBatch
   @override
   String getUrl(final GetFuelStationDetailsBatchRequest request) {
     String url = '/enddevice/getFuelStationDetailsBatch' '?';
-    String param1;
-    if (request.fuelStationIds != null && request.fuelStationIds.isNotEmpty) {
-      param1 = 'fuelStationId=' + request.fuelStationIds.join('&fuelStationId=');
+    String? param1;
+    if (request.fuelStationIds != null && request.fuelStationIds!.isNotEmpty) {
+      param1 = 'fuelStationId=' + request.fuelStationIds!.join('&fuelStationId=');
     }
-    String param2;
-    if (request.fuelAuthorityStationIds != null && request.fuelAuthorityStationIds.isNotEmpty) {
-      param2 = 'fuelAuthorityStationId=' + request.fuelAuthorityStationIds.join('&fuelAuthorityStationId=');
+    String? param2;
+    if (request.fuelAuthorityStationIds != null && request.fuelAuthorityStationIds!.isNotEmpty) {
+      param2 = 'fuelAuthorityStationId=' + request.fuelAuthorityStationIds!.join('&fuelAuthorityStationId=');
     }
     if (param1 != null) {
       url = url + param1;

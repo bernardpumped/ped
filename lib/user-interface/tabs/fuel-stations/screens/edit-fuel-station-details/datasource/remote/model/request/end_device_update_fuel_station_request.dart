@@ -28,12 +28,12 @@ class EndDeviceUpdateFuelStationRequest extends Request {
 
   EndDeviceUpdateFuelStationRequest(
       {uuid,
-      this.updatePathAndValues,
-      this.identityProvider,
-      this.oauthToken,
-      this.oauthTokenSecret,
-      this.fuelStationId,
-      this.fuelStationSource})
+        required this.updatePathAndValues,
+        required this.identityProvider,
+        required this.oauthToken,
+        required this.oauthTokenSecret,
+        required this.fuelStationId,
+        required this.fuelStationSource})
       : super(uuid);
 
   @override
