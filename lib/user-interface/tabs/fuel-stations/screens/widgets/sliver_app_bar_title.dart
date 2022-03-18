@@ -20,7 +20,7 @@ import 'package:flutter/material.dart';
 
 class SliverAppBarTitle extends StatefulWidget {
   final Widget child;
-  const SliverAppBarTitle({Key key, @required this.child}) : super(key: key);
+  const SliverAppBarTitle({Key? key, required this.child}) : super(key: key);
 
   @override
   _SliverAppBarTitleState createState() {
@@ -29,8 +29,8 @@ class SliverAppBarTitle extends StatefulWidget {
 }
 
 class _SliverAppBarTitleState extends State<SliverAppBarTitle> {
-  ScrollPosition _position;
-  bool _visible;
+  ScrollPosition? _position;
+  late bool _visible;
   @override
   void dispose() {
     _removeListener();
@@ -55,8 +55,8 @@ class _SliverAppBarTitleState extends State<SliverAppBarTitle> {
   }
 
   void _positionListener() {
-    final FlexibleSpaceBarSettings settings = context.dependOnInheritedWidgetOfExactType();
-    bool visible = settings == null || settings.currentExtent <= settings.minExtent;
+    final FlexibleSpaceBarSettings settings = context.dependOnInheritedWidgetOfExactType() as FlexibleSpaceBarSettings;
+    bool visible = settings.currentExtent <= settings.minExtent;
     if (_visible != visible) {
       setState(() {
         _visible = visible;

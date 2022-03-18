@@ -37,7 +37,7 @@ class DirectionsWidget extends StatelessWidget {
   final double _dLng;
   final LocationDataSource _locationDataSource;
 
-  const DirectionsWidget(this._dLat, this._dLng, this._locationDataSource, {Key key}) : super(key: key);
+  const DirectionsWidget(this._dLat, this._dLng, this._locationDataSource, {Key? key}) : super(key: key);
 
   static const directionsIcon = Icon(IconData(IconCodes.directionsIconCode, fontFamily: 'MaterialIcons'), color: _expandedViewButtonIconColor);
 
@@ -62,12 +62,16 @@ class DirectionsWidget extends StatelessWidget {
           break;
         case LocationInitResultCode.success:
           {
-            final GeoLocationData geoLocationData = await locationResult.geoLocationData;
-            final sLat = geoLocationData.latitude;
-            final sLng = geoLocationData.longitude;
-            _launchMaps(sLat, sLng, _dLat, _dLng, () {
-              WidgetUtils.showToastMessage(context, 'Cannot call phone', Theme.of(context).primaryColor);
-            });
+            final GeoLocationData? geoLocationData = await locationResult.geoLocationData;
+            if (geoLocationData != null) {
+              final sLat = geoLocationData.latitude;
+              final sLng = geoLocationData.longitude;
+              _launchMaps(sLat, sLng, _dLat, _dLng, () {
+                WidgetUtils.showToastMessage(context, 'Cannot call phone', Theme.of(context).primaryColor);
+              });
+            } else {
+              WidgetUtils.buildSnackBar(context, 'Location Failure', 2, '', () {});
+            }
           }
           break;
       }

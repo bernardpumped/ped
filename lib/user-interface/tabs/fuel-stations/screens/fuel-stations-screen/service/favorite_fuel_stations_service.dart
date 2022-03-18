@@ -55,46 +55,48 @@ class FavoriteFuelStationsService {
         favFuelStationsScreenData.locationSearchSuccessful = false;
         favFuelStationsScreenData.locationErrorReason = 'Location Service is disabled';
       } else {
-        final GeoLocationData locationData = await locationResult.geoLocationData;
-        LogUtil.debug(_tag,
-            'fetchFavoriteFuelStations:: latitude : ${locationData.latitude}, longitude : ${locationData.longitude}');
-        final List<FavoriteFuelStation> allFavoriteFuelStations =
-            await FavoriteFuelStationsDao.instance.getAllFavoriteFuelStations();
-        favFuelStationsScreenData.latitude = locationData.latitude;
-        favFuelStationsScreenData.longitude = locationData.longitude;
-        if (allFavoriteFuelStations != null && allFavoriteFuelStations.isNotEmpty) {
-          LogUtil.debug(_tag, 'Found ${allFavoriteFuelStations.length} fuel stations');
-          final List<int> fuelStationIds = allFavoriteFuelStations
-              .where((favFuelStation) => favFuelStation.fuelStationSource == 'G')
-              .map((e) => e.favoriteFuelStationId)
-              .toList();
-          final List<int> fuelAuthStationIds = allFavoriteFuelStations
-              .where((favFuelStation) => favFuelStation.fuelStationSource == 'F')
-              .map((e) => e.favoriteFuelStationId)
-              .toList();
-          if (fuelStationIds.isEmpty && fuelAuthStationIds.isEmpty) {
-            LogUtil.debug(_tag, 'No favorite fuelStations found');
-            favFuelStationsScreenData.fuelStations = [];
-            return favFuelStationsScreenData;
+        final GeoLocationData? locationData = await locationResult.geoLocationData;
+        if (locationData != null) {
+          LogUtil.debug(_tag,
+              'fetchFavoriteFuelStations:: latitude : ${locationData.latitude}, longitude : ${locationData.longitude}');
+          final List<FavoriteFuelStation> allFavoriteFuelStations =
+          await FavoriteFuelStationsDao.instance.getAllFavoriteFuelStations();
+          favFuelStationsScreenData.latitude = locationData.latitude;
+          favFuelStationsScreenData.longitude = locationData.longitude;
+          if (allFavoriteFuelStations.isNotEmpty) {
+            LogUtil.debug(_tag, 'Found ${allFavoriteFuelStations.length} fuel stations');
+            final List<int> fuelStationIds = allFavoriteFuelStations.where((favFuelStation) => favFuelStation.fuelStationSource == 'G')
+                .map((e) => e.favoriteFuelStationId).toList();
+            final List<int> fuelAuthStationIds = allFavoriteFuelStations.where((favFuelStation) => favFuelStation.fuelStationSource == 'F')
+                .map((e) => e.favoriteFuelStationId).toList();
+            if (fuelStationIds.isEmpty && fuelAuthStationIds.isEmpty) {
+              LogUtil.debug(_tag, 'No favorite fuelStations found');
+              favFuelStationsScreenData.fuelStations = [];
+              return favFuelStationsScreenData;
+            } else {
+              LogUtil.debug(_tag,
+                  'FuelStationIds : ${fuelStationIds.length} and FuelAuthorityStationIds : ${fuelAuthStationIds.length}');
+              final String weekDay = DateTimeUtils.weekDayIntToShortName[DateTime.now().weekday]!;
+              final GetFuelStationDetailsBatchRequest request = GetFuelStationDetailsBatchRequest(
+                  requestUuid: const Uuid().v1(),
+                  fuelStationIds: fuelStationIds,
+                  fuelAuthorityStationIds: fuelAuthStationIds,
+                  latitude: locationData.latitude,
+                  longitude: locationData.longitude,
+                  dayOfWeek: weekDay);
+              final GetFuelStationDetailsBatchResponse response = await _fetchFavoriteFuelStations(request);
+              favFuelStationsScreenData.fuelStations = response.fuelStations;
+              favFuelStationsScreenData.responseCode = response.responseCode;
+              favFuelStationsScreenData.responseDetails = response.responseDetails;
+              return favFuelStationsScreenData;
+            }
           } else {
-            LogUtil.debug(_tag,
-                'FuelStationIds : ${fuelStationIds.length} and FuelAuthorityStationIds : ${fuelAuthStationIds.length}');
-            final String weekDay = DateTimeUtils.weekDayIntToShortName[DateTime.now().weekday];
-            final GetFuelStationDetailsBatchRequest request = GetFuelStationDetailsBatchRequest(
-                requestUuid: const Uuid().v1(),
-                fuelStationIds: fuelStationIds,
-                fuelAuthorityStationIds: fuelAuthStationIds,
-                latitude: locationData.latitude,
-                longitude: locationData.longitude,
-                dayOfWeek: weekDay);
-            final GetFuelStationDetailsBatchResponse response = await _fetchFavoriteFuelStations(request);
-            favFuelStationsScreenData.fuelStations = response.fuelStations;
-            favFuelStationsScreenData.responseCode = response.responseCode;
-            favFuelStationsScreenData.responseDetails = response.responseDetails;
-            return favFuelStationsScreenData;
+            LogUtil.debug(_tag, 'No Favorite fuel stations found');
           }
         } else {
-          LogUtil.debug(_tag, 'No Favorite fuel stations found');
+          favFuelStationsScreenData.responseCode = 'FAILURE';
+          favFuelStationsScreenData.responseDetails = 'Failed while retrieving the geolocation';
+          LogUtil.debug(_tag, 'Failed while retrieving the geolocation');
         }
       }
     } catch (e, s) {
@@ -108,11 +110,15 @@ class FavoriteFuelStationsService {
   Future<GetFuelStationDetailsBatchResponse> _fetchFavoriteFuelStations(
       final GetFuelStationDetailsBatchRequest request) async {
     try {
-      final MarketRegionZoneConfiguration marketRegionZoneConfiguration =
+      final MarketRegionZoneConfiguration? marketRegionZoneConfiguration =
           await MarketRegionZoneConfigDao.instance.getMarketRegionZoneConfiguration();
-      return GetFuelStationDetailsBatch(GetFuelStationDetailsBatchResponseParser(
-              marketRegionZoneConfiguration?.marketRegionConfig?.fuelAuthorityId))
-          .execute(request);
+      if (marketRegionZoneConfiguration != null) {
+        return GetFuelStationDetailsBatch(GetFuelStationDetailsBatchResponseParser(
+            marketRegionZoneConfiguration.marketRegionConfig.fuelAuthorityId)).execute(request);
+      } else {
+        return GetFuelStationDetailsBatchResponse(
+            'FAILURE', 'Error loading data for favorite fuel station', null, DateTime.now().millisecondsSinceEpoch, []);
+      }
     } on Exception catch (e) {
       LogUtil.debug(_tag, 'Exception happened in _fetchFavoriteFuelStations $e');
       return GetFuelStationDetailsBatchResponse(

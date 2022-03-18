@@ -19,7 +19,7 @@
 import 'package:flutter/material.dart';
 
 class PromotionsTabWidget extends StatefulWidget {
-  const PromotionsTabWidget ( {Key key} ) : super( key: key );
+  const PromotionsTabWidget ( {Key? key} ) : super( key: key );
 
   @override
   _PromotionsTabWidgetState createState ( ) => _PromotionsTabWidgetState ( );

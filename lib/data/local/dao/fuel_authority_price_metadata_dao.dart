@@ -39,7 +39,7 @@ class FuelAuthorityPriceMetadataDao {
     LogUtil.debug(_tag, 'Inserting metadata for fa - ${metaData.fuelAuthority} fuel-type ${metaData.fuelType} against id $fapmId');
     db.collection(_collectionFuelAuthorityPriceMetadata).doc(fapmId).set(metaData.toMap());
 
-    final Map<String, dynamic> fuelTypeIds = await db.collection(_collectionFuelAuthorityFuelType).doc(metaData.fuelAuthority).get();
+    final Map<String, dynamic>? fuelTypeIds = await db.collection(_collectionFuelAuthorityFuelType).doc(metaData.fuelAuthority).get();
     LogUtil.debug(_tag, 'Found ${fuelTypeIds == null ? 0 : fuelTypeIds.length} existing Fuel-Type:Id mappings for ${metaData.fuelAuthority}');
 
     dynamic oldFapmId;
@@ -63,7 +63,7 @@ class FuelAuthorityPriceMetadataDao {
 
   Future<List<FuelAuthorityPriceMetadata>> getFuelAuthorityPriceMetadata(final String authorityId) async {
     final db = Localstore.instance;
-    final Map<String, dynamic> fuelTypeIds = await db.collection(_collectionFuelAuthorityFuelType).doc(authorityId).get();
+    final Map<String, dynamic>? fuelTypeIds = await db.collection(_collectionFuelAuthorityFuelType).doc(authorityId).get();
     LogUtil.debug(_tag, 'Found ${fuelTypeIds == null ? 0 : fuelTypeIds.length} '
         '{Fuel-Type : Id} mapping for $authorityId in $_collectionFuelAuthorityFuelType');
     if (fuelTypeIds == null || fuelTypeIds.isEmpty) {
@@ -71,7 +71,7 @@ class FuelAuthorityPriceMetadataDao {
     } else {
       final List<FuelAuthorityPriceMetadata> metadata = [];
       for (var fuelTypeIdsEntry in fuelTypeIds.entries) {
-        final Map<String, dynamic> metadataMap = await db.collection(_collectionFuelAuthorityPriceMetadata)
+        final Map<String, dynamic>? metadataMap = await db.collection(_collectionFuelAuthorityPriceMetadata)
             .doc(fuelTypeIdsEntry.value).get();
         if (metadataMap != null && metadataMap.isNotEmpty) {
           metadata.add(FuelAuthorityPriceMetadata.fromMap(metadataMap));
@@ -84,11 +84,11 @@ class FuelAuthorityPriceMetadataDao {
 
   Future<dynamic> deleteFuelAuthorityPriceMetadata(final FuelAuthorityPriceMetadata metadata) async {
     final db = Localstore.instance;
-    final Map<String, dynamic> fuelTypeIds = await db.collection(_collectionFuelAuthorityFuelType).doc(metadata.fuelAuthority).get();
+    final Map<String, dynamic>? fuelTypeIds = await db.collection(_collectionFuelAuthorityFuelType).doc(metadata.fuelAuthority).get();
     if (fuelTypeIds == null || fuelTypeIds.isEmpty) {
       LogUtil.debug(_tag, 'No FuelTypeIds for fuel-authority : ' + metadata.fuelAuthority);
     } else {
-      final String fapmId = fuelTypeIds[metadata.fuelType];
+      final String? fapmId = fuelTypeIds[metadata.fuelType];
       if (fapmId == null) {
         LogUtil.debug(_tag, 'Meta-data for fuel-type ${metadata.fuelType} and authority ${metadata.fuelAuthority} is not stored');
       } else {

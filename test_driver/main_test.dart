@@ -21,7 +21,7 @@ import 'package:test/test.dart' as ft;
 
 void main() {
   ft.group('Splash Screen Test', () {
-    FlutterDriver driver;
+    late FlutterDriver driver;
     ft.setUpAll(() async {
       driver = await FlutterDriver.connect();
     });

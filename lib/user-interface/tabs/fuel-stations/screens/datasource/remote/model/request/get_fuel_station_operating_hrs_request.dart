@@ -22,7 +22,7 @@ import 'package:pumped_end_device/data/remote/model/request/request.dart';
 class GetFuelStationOperatingHrsRequest extends Request {
   final int fuelStationId;
   final String fuelStationSource;
-  GetFuelStationOperatingHrsRequest({requestUuid, this.fuelStationId, this.fuelStationSource}) : super(requestUuid);
+  GetFuelStationOperatingHrsRequest({requestUuid, required this.fuelStationId, required this.fuelStationSource}) : super(requestUuid);
 
   String toQueryString() {
     return 'fuelStationId=$fuelStationId&attributes=${FuelStationDetailsAttributes.operatingTimes.value}'

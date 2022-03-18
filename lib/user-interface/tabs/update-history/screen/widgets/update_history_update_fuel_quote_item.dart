@@ -24,16 +24,16 @@ class UpdateHistoryUpdateFuelQuoteItem extends StatelessWidget {
   final String valueType;
   final dynamic originalValue;
   final dynamic updateValue;
-  final Map<String, dynamic> serverExceptions;
+  final Map<String, dynamic>? serverExceptions;
   final List<dynamic> recordLevelExceptions;
 
   const UpdateHistoryUpdateFuelQuoteItem(
-      {Key key,
-      this.valueType,
+      {Key? key,
+      required this.valueType,
       this.originalValue,
       this.updateValue,
       this.serverExceptions,
-      this.recordLevelExceptions})
+      required this.recordLevelExceptions})
       : super(key: key);
   @override
   Widget build(final BuildContext context) {
@@ -140,8 +140,8 @@ class UpdateHistoryUpdateFuelQuoteItem extends StatelessWidget {
   }
 
   String _getUpdateResult() {
-    if (serverExceptions == null || serverExceptions.isEmpty) {
-      if (recordLevelExceptions == null || recordLevelExceptions.isEmpty) {
+    if (serverExceptions == null || serverExceptions!.isEmpty) {
+      if (recordLevelExceptions.isEmpty) {
         return 'Success';
       }
     }

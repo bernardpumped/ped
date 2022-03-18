@@ -21,9 +21,8 @@ import 'package:pumped_end_device/data/local/location/geo_location_data.dart';
 import 'package:pumped_end_device/data/local/location/location_access_result_code.dart';
 
 class GetLocationResult {
-  @required
   final LocationInitResultCode locationInitResultCode;
-  final Future<GeoLocationData> geoLocationData;
+  final Future<GeoLocationData>? geoLocationData;
 
   GetLocationResult(this.locationInitResultCode, this.geoLocationData);
 }

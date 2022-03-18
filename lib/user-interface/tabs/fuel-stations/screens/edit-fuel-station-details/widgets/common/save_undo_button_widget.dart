@@ -28,8 +28,8 @@ class SaveUndoButtonWidget extends StatefulWidget {
   final bool saveButtonDisabled;
   final bool undoButtonDisabled;
   const SaveUndoButtonWidget(
-      {Key key, this.onSave,
-      this.onCancel,
+      {Key? key, required this.onSave,
+        required this.onCancel,
       this.onValueChange = false,
       this.saveButtonDisabled = false,
       this.undoButtonDisabled = false}) : super(key: key);

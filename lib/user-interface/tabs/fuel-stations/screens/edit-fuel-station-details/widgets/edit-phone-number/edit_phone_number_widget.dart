@@ -40,14 +40,14 @@ import '../../../../../../fonts_and_colors.dart';
 class EditPhoneNumberWidget extends StatefulWidget {
   final Function setStateFunction;
   final Function isWidgetExpanded;
-  final String phone1;
-  final String phone2;
+  final String? phone1;
+  final String? phone2;
   final String fuelStationSource;
   final String fuelStationName;
   final int fuelStationId;
 
   const EditPhoneNumberWidget(this.setStateFunction, this.isWidgetExpanded, this.phone1, this.phone2, this.fuelStationSource,
-      this.fuelStationId, this.fuelStationName, {Key key}) : super(key: key);
+      this.fuelStationId, this.fuelStationName, {Key? key}) : super(key: key);
 
   @override
   _EditPhoneNumberWidgetState createState() => _EditPhoneNumberWidgetState();
@@ -60,8 +60,8 @@ class _EditPhoneNumberWidgetState extends State<EditPhoneNumberWidget> {
 
   final TextEditingController _phone1Controller = TextEditingController();
   final TextEditingController _phone2Controller = TextEditingController();
-  String _enteredPhone1Value;
-  String _enteredPhone2Value;
+  String? _enteredPhone1Value;
+  String? _enteredPhone2Value;
   bool _onValueChanged = false;
   bool _backendUpdateInProgress = false;
 
@@ -205,7 +205,7 @@ class _EditPhoneNumberWidgetState extends State<EditPhoneNumberWidget> {
     }
   }
 
-  Future<int> _persistUpdateHistory(final EndDeviceUpdateFuelStationRequest request,
+  Future<dynamic> _persistUpdateHistory(final EndDeviceUpdateFuelStationRequest request,
       final EndDeviceUpdateFuelStationResponse response, final Map<String, dynamic> originalPathAndValues) {
     final UpdateHistory updateHistory = UpdateHistory(
         updateHistoryId: request.uuid,
@@ -213,7 +213,7 @@ class _EditPhoneNumberWidgetState extends State<EditPhoneNumberWidget> {
         fuelStation: widget.fuelStationName,
         fuelStationSource: request.fuelStationSource,
         updateEpoch: response.updateEpoch,
-        updateType: UpdateType.phoneNumber.updateTypeName,
+        updateType: UpdateType.phoneNumber.updateTypeName!,
         responseCode: response.responseCode,
         originalValues: originalPathAndValues,
         updateValues: request.updatePathAndValues,

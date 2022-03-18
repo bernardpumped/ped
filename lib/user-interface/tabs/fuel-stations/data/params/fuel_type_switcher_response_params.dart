@@ -23,5 +23,5 @@ class FuelTypeSwitcherResponseParams {
   final FuelType fuelType;
   final FuelCategory fuelCategory;
 
-  FuelTypeSwitcherResponseParams({this.fuelType, this.fuelCategory});
+  FuelTypeSwitcherResponseParams({required this.fuelType, required this.fuelCategory});
 }

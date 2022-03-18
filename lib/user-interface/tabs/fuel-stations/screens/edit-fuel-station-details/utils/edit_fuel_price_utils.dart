@@ -36,27 +36,30 @@ class EditFuelPriceUtils {
   static const _tag = 'EditFuelStationDetailsScreenUtils';
   static final MarketRegionZoneConfigUtils _marketRegionZoneConfigUtils = MarketRegionZoneConfigUtils();
 
-  Future<EditFuelPriceWidgetData> editFuelPriceWidgetData() async {
-    final MarketRegionZoneConfiguration marketRegionZoneConfiguration =
+  Future<EditFuelPriceWidgetData?> editFuelPriceWidgetData() async {
+    final MarketRegionZoneConfiguration? marketRegionZoneConfiguration =
         await MarketRegionZoneConfigDao.instance.getMarketRegionZoneConfiguration();
-    final List<FuelAuthorityPriceMetadata> metadataForFuelAuthority =
-        await _getLatestFuelAuthorityPriceMetadata(marketRegionZoneConfiguration.marketRegionConfig.fuelAuthorityId);
-    final currencyValueFormat = marketRegionZoneConfiguration.marketRegionConfig.currencyValueFormat;
-    final List<FuelType> fuelTypesForMarketRegion = await _marketRegionZoneConfigUtils.getFuelTypesForMarketRegion();
-    return EditFuelPriceWidgetData(metadataForFuelAuthority, fuelTypesForMarketRegion, currencyValueFormat);
+    if (marketRegionZoneConfiguration != null) {
+      final List<FuelAuthorityPriceMetadata> metadataForFuelAuthority =
+      await _getLatestFuelAuthorityPriceMetadata(marketRegionZoneConfiguration.marketRegionConfig.fuelAuthorityId);
+      final currencyValueFormat = marketRegionZoneConfiguration.marketRegionConfig.currencyValueFormat;
+      final List<FuelType> fuelTypesForMarketRegion = await _marketRegionZoneConfigUtils.getFuelTypesForMarketRegion();
+      return EditFuelPriceWidgetData(metadataForFuelAuthority, fuelTypesForMarketRegion, currencyValueFormat);
+    }
+    return null;
   }
 
   Future<List<FuelAuthorityPriceMetadata>> _getLatestFuelAuthorityPriceMetadata(final String authorityId) async {
-    final MarketRegionZoneConfiguration config =
+    final MarketRegionZoneConfiguration? config =
         await MarketRegionZoneConfigDao.instance.getMarketRegionZoneConfiguration();
     if (config != null) {
       final List<FuelAuthorityPriceMetadata> currentMetadata =
           await FuelAuthorityPriceMetadataDao.instance.getFuelAuthorityPriceMetadata(authorityId);
       final GetFuelAuthorityPriceMetadataRequest request =
           GetFuelAuthorityPriceMetadataRequest(requestUuid: const Uuid().v1(), authorityId: authorityId);
-      if (currentMetadata != null && currentMetadata.isNotEmpty) {
+      if (currentMetadata.isNotEmpty) {
         // Assumption is all these marketRegionZoneConfigVersions will be same
-        final List<String> marketRegionZoneConfigVersion =
+        final List<String?> marketRegionZoneConfigVersion =
             currentMetadata.map((e) => e.marketRegionZoneConfigVersion).toList();
         LogUtil.debug(
             _tag,
@@ -140,9 +143,9 @@ class EditFuelPriceUtils {
           fuelType: metadatumVo.fuelType,
           marketRegionZoneConfigVersion: marketRegionZoneConfigVersion,
           fuelAuthority: authorityId,
-          decPosForAllowedMaxForChar: metadatumVo.decimalPositionVo.decPosForAllowedMaxForChar,
-          allowedMaxFirstChar: metadatumVo.decimalPositionVo.allowedMaxFirstChar,
-          alternatePos: metadatumVo.decimalPositionVo.alternatePos));
+          decPosForAllowedMaxForChar: metadatumVo.decimalPositionVo?.decPosForAllowedMaxForChar,
+          allowedMaxFirstChar: metadatumVo.decimalPositionVo?.allowedMaxFirstChar,
+          alternatePos: metadatumVo.decimalPositionVo?.alternatePos));
     }
     return metadata;
   }

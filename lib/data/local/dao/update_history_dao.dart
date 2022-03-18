@@ -29,7 +29,7 @@ class UpdateHistoryDao {
 
   Future<dynamic> deleteUpdateHistory() async {
     final db = Localstore.instance;
-    final Map<String, dynamic> records = await db.collection(_collectionUpdateHistory).get();
+    final Map<String, dynamic>? records = await db.collection(_collectionUpdateHistory).get();
     if (records != null && records.isNotEmpty) {
       LogUtil.debug(_tag, 'Number of UpdateHistory records found : ${records.length}');
       for (var record in records.entries) {
@@ -49,12 +49,14 @@ class UpdateHistoryDao {
   Future<List<UpdateHistory>> getAllUpdateHistory() async {
     final db = Localstore.instance;
     List<UpdateHistory> allUpdateHistory = [];
-    final Map<String, dynamic> records = await db.collection(_collectionUpdateHistory).get();
+    final Map<String, dynamic>? records = await db.collection(_collectionUpdateHistory).get();
     if (records != null && records.isNotEmpty) {
       LogUtil.debug(_tag, 'Number of UpdateHistory records found : ${records.length}');
       for (var record in records.entries) {
-        final Map<String, dynamic> data = await db.collection(_collectionUpdateHistory).doc(record.value['update_history_id']).get();
-        allUpdateHistory.add(UpdateHistory.fromMap(data));
+        final Map<String, dynamic>? data = await db.collection(_collectionUpdateHistory).doc(record.value['update_history_id']).get();
+        if (data != null) {
+          allUpdateHistory.add(UpdateHistory.fromMap(data));
+        }
       }
     }
     return allUpdateHistory;

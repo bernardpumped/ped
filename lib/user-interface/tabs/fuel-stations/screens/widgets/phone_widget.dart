@@ -29,7 +29,7 @@ class PhoneWidget extends StatelessWidget {
   static const _secondaryIconColor = FontsAndColors.pumpedSecondaryIconColor;
   final String _phone;
 
-  const PhoneWidget(this._phone, {Key key}) : super(key: key);
+  const PhoneWidget(this._phone, {Key? key}) : super(key: key);
 
   static const callIcon = Icon(IconData(IconCodes.callIconCode, fontFamily: 'MaterialIcons'), color: _buttonIconColor);
 

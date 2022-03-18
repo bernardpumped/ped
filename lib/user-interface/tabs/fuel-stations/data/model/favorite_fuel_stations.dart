@@ -20,14 +20,14 @@ import 'package:pumped_end_device/models/pumped/fuel_station.dart';
 
 class FavoriteFuelStations {
   bool locationSearchSuccessful = true;
-  String locationErrorReason;
+  String? locationErrorReason;
 
-  List<FuelStation> fuelStations;
-  String searchResultFailureReason;
-  int userSettingsVersion;
+  List<FuelStation>? fuelStations;
+  String? searchResultFailureReason;
+  int? userSettingsVersion;
 
-  double latitude;
-  double longitude;
-  String responseCode;
-  String responseDetails;
+  double? latitude;
+  double? longitude;
+  String? responseCode;
+  String? responseDetails;
 }

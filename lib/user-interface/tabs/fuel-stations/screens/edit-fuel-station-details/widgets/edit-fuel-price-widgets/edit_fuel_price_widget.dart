@@ -49,7 +49,7 @@ class EditFuelPriceWidget extends StatefulWidget {
   final Icon _leadingWidgetIcon;
 
   const EditFuelPriceWidget(this._fuelStation, this._titleText, this._setStateFunction, this._widgetExpanded, this._widgetKey,
-      this._leadingWidgetIcon, {Key key}) : super(key: key);
+      this._leadingWidgetIcon, {Key? key}) : super(key: key);
 
   @override
   _EditFuelPriceWidgetState createState() => _EditFuelPriceWidgetState();
@@ -59,7 +59,7 @@ class _EditFuelPriceWidgetState extends State<EditFuelPriceWidget> {
   static const _tag = 'EditFuelPriceWidget';
   final EditFuelPriceUtils _editFuelPriceUtils = EditFuelPriceUtils();
 
-  Future<EditFuelPriceWidgetData> _editFuelPriceWidgetDataFuture;
+  Future<EditFuelPriceWidgetData?>? _editFuelPriceWidgetDataFuture;
   Map<String, FuelQuote> fuelTypeFuelQuote = {};
   bool onValueChanged = false;
   bool _backendUpdateInProgress = false;
@@ -78,14 +78,14 @@ class _EditFuelPriceWidgetState extends State<EditFuelPriceWidget> {
     final theme = Theme.of(context).copyWith(backgroundColor: Colors.white);
     final title =
         Text(widget._titleText, style: const TextStyle(fontSize: 16, color: Colors.black87, fontWeight: FontWeight.w500));
-    return FutureBuilder<EditFuelPriceWidgetData>(
+    return FutureBuilder<EditFuelPriceWidgetData?>(
       future: _editFuelPriceWidgetDataFuture,
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           LogUtil.debug(_tag, 'Error loading EditFuelPriceWidgetData ${snapshot.error}');
           return Theme(data: theme, child: const Center(child: Text('Error Loading fuel-types')));
         } else if (snapshot.hasData) {
-          final EditFuelPriceWidgetData editFuelPriceWidgetData = snapshot.data;
+          final EditFuelPriceWidgetData editFuelPriceWidgetData = snapshot.data!;
           return Theme(
               data: theme,
               child: ExpansionTile(
@@ -99,6 +99,7 @@ class _EditFuelPriceWidgetState extends State<EditFuelPriceWidget> {
                       widget._setStateFunction(expanded);
                     });
                   }));
+
         } else {
           return Theme(data: theme, child: const Center(child: Text('Loading')));
         }
@@ -128,22 +129,23 @@ class _EditFuelPriceWidgetState extends State<EditFuelPriceWidget> {
 
     for (var fuelQuote in fuelTypeFuelQuotes) {
       String fuelType = fuelQuote.fuelType;
-      TextEditingController fuelPriceEditingController;
+      TextEditingController? fuelPriceEditingController;
       if (fuelQuote.fuelQuoteSource != 'F') {
         if (!fuelPriceEditingControllers.containsKey(fuelType)) {
           fuelPriceEditingController = fuelPriceEditingControllers.putIfAbsent(fuelType, () => TextEditingController());
         } else {
-          fuelPriceEditingController = fuelPriceEditingControllers[fuelType];
+          fuelPriceEditingController = fuelPriceEditingControllers[fuelType]!;
         }
       }
       children.add(AnimEditFuelPriceLineItemWidget(
           key: PageStorageKey('$fuelType-${widget._fuelStation.stationId}'),
+          isFaStation: widget._fuelStation.isFaStation,
           fuelQuote: fuelQuote,
           quoteChangeListener: onFuelPriceChanged,
-          fuelName: allowedFuelTypesMap[fuelType].fuelName,
+          fuelName: allowedFuelTypesMap[fuelType]?.fuelName as String,
           currencyValueFormat: editFuelPriceWidgetData.currencyValueFormat,
-          fuelAuthorityPriceMetadata: fuelTypePriceMetadata[fuelType],
-          fuelPriceEditingController: fuelPriceEditingController));
+          fuelAuthorityPriceMetadata: fuelTypePriceMetadata[fuelType]!,
+          fuelPriceEditingController: fuelPriceEditingController!));
     }
     children.add(Padding(
         padding: const EdgeInsets.only(top: 10, bottom: 15),
@@ -173,7 +175,7 @@ class _EditFuelPriceWidgetState extends State<EditFuelPriceWidget> {
     final Map<String, dynamic> originalPrices = {};
     final Map<String, dynamic> updatedPrices = {};
     changedFuelQuotes.forEach((fuelType, newQuoteValue) {
-      final FuelQuote oldFuelQuote = fuelTypeFuelQuote[fuelType];
+      final FuelQuote oldFuelQuote = fuelTypeFuelQuote[fuelType] as FuelQuote;
       if (oldFuelQuote.quoteValue != newQuoteValue) {
         updatedFuelQuotes.add(DataUtils.duplicateWithOverrideQuoteValue(oldFuelQuote, newQuoteValue));
         originalPrices.putIfAbsent(oldFuelQuote.fuelType, () => oldFuelQuote.quoteValue);
@@ -187,7 +189,7 @@ class _EditFuelPriceWidgetState extends State<EditFuelPriceWidget> {
       }
       final AlterFuelQuotesRequest request = AlterFuelQuotesRequest(
           fuelStationId: widget._fuelStation.stationId,
-          fuelStationSource: widget._fuelStation.isFaStation ? "F" : "G",
+          fuelStationSource: widget._fuelStation.getFuelStationSource(),
           fuelQuoteVos: updatedFuelQuoteVos,
           oauthToken: 'my-dummy-oauth-token',
           oauthTokenSecret: 'my-dummy-oauth-token-secret',
@@ -237,7 +239,7 @@ class _EditFuelPriceWidgetState extends State<EditFuelPriceWidget> {
         fuelStation: widget._fuelStation.fuelStationName,
         fuelStationSource: request.fuelStationSource,
         updateEpoch: response.updateEpoch,
-        updateType: UpdateType.price.updateTypeName,
+        updateType: UpdateType.price.updateTypeName!,
         responseCode: response.responseCode,
         originalValues: originalPrices,
         updateValues: updatedPrices,
@@ -251,7 +253,7 @@ class _EditFuelPriceWidgetState extends State<EditFuelPriceWidget> {
   final Map<String, double> changedFuelQuotes = {};
 
   onFuelPriceChanged(final String fuelType, final double newQuoteValue) {
-    if (fuelTypeFuelQuote[fuelType].quoteValue != newQuoteValue) {
+    if (fuelTypeFuelQuote[fuelType]?.quoteValue != newQuoteValue) {
       if (changedFuelQuotes.containsKey(fuelType)) {
         changedFuelQuotes.remove(fuelType);
       }
@@ -301,9 +303,9 @@ class _EditFuelPriceWidgetState extends State<EditFuelPriceWidget> {
     return UpdateFuelQuoteResult(
         isUpdateSuccessful: response.successfulUpdate,
         updateEpoch: response.updateEpoch,
-        originalValues: originalPrices ?? {},
-        updateValues: updatedPrices ?? {},
-        invalidArguments: response.invalidArguments ?? {},
-        recordLevelExceptionCodes: response.updateResult ?? {});
+        originalValues: originalPrices,
+        updateValues: updatedPrices,
+        invalidArguments: response.invalidArguments,
+        recordLevelExceptionCodes: response.updateResult);
   }
 }

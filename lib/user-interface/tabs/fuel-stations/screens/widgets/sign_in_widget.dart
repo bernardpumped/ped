@@ -28,7 +28,7 @@ class SignInWidget extends StatelessWidget {
   static const String description = "Please authenticate yourself, before proceeding ahead";
   static const String buttonText = "Cancel";
 
-  const SignInWidget({Key key}) : super(key: key);
+  const SignInWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

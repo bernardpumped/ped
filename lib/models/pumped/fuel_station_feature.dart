@@ -25,9 +25,9 @@ class FuelStationFeature {
   final Icon icon;
   bool selected = true;
   FuelStationFeature(
-      {this.featureType,
-      this.featureName,
-      this.iconType,
-      this.icon,
-      this.selected});
+      {required this.featureType,
+        required this.featureName,
+        required this.iconType,
+        required this.icon,
+        required this.selected});
 }

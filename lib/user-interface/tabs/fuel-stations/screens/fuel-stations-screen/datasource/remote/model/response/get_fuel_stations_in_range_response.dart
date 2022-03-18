@@ -21,13 +21,13 @@ import 'package:pumped_end_device/data/remote/model/response/response.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station.dart';
 
 class GetFuelStationsInRangeResponse extends Response {
-  final List<FuelStation> fuelStations;
-  MarketRegionZoneConfiguration marketRegionZoneConfiguration;
+  final List<FuelStation>? fuelStations;
+  MarketRegionZoneConfiguration? marketRegionZoneConfiguration;
   final bool configChanged;
   GetFuelStationsInRangeResponse(
       final String responseCode,
-      final String responseDetails,
-      final Map<String, dynamic> invalidArguments,
+      final String? responseDetails,
+      final Map<String, dynamic>? invalidArguments,
       final int responseEpoch,
       this.fuelStations,
       this.marketRegionZoneConfiguration,

@@ -23,14 +23,19 @@ import 'package:pumped_end_device/models/pumped/fuel_station.dart';
 class FuelStationDetailsCollapsedHeader extends StatelessWidget {
   final FuelStation fuelStation;
 
-  const FuelStationDetailsCollapsedHeader({Key key, this.fuelStation}) : super(key: key);
+  const FuelStationDetailsCollapsedHeader({Key? key, required this.fuelStation}) : super(key: key);
 
   @override
   Widget build(final BuildContext context) {
+    String headerText;
+    if (fuelStation.fuelStationAddress.locality != null) {
+      headerText = '${fuelStation.fuelStationName} ${fuelStation.fuelStationAddress.locality}';
+    } else {
+      headerText = fuelStation.fuelStationName;
+    }
     return Row(children: [
       ImageWidget(imageUrl: fuelStation.merchantLogoUrl, width: 50, height: 50, padding: const EdgeInsets.only(right: 15)),
-      Text(fuelStation.fuelStationName + ' ' + fuelStation.fuelStationAddress.locality,
-          style: const TextStyle(fontSize: 19, color: Colors.black87, fontFamily: 'SF-Pro-Display'))
+      Text(headerText, style: const TextStyle(fontSize: 19, color: Colors.black87, fontFamily: 'SF-Pro-Display'))
     ]);
   }
 }

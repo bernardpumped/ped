@@ -28,22 +28,23 @@ class UpdateHistoryUpdateOperatingTimeItemWidget extends StatelessWidget {
   final String valueType;
   final dynamic originalValue;
   final dynamic updateValue;
-  final Map<String, dynamic> serverExceptions;
-  final List<dynamic> recordLevelException;
+  final Map<String, dynamic>? serverExceptions;
+  final List<dynamic>? recordLevelException;
 
   const UpdateHistoryUpdateOperatingTimeItemWidget(
-      {Key key, this.valueType, this.originalValue, this.updateValue, this.serverExceptions, this.recordLevelException})
+      {Key? key, required this.valueType, this.originalValue, this.updateValue, this.serverExceptions, this.recordLevelException})
+
       : super(key: key);
 
   @override
   Widget build(final BuildContext context) {
     final String dayOfWeek = valueType;
-    final OperatingHours originalOperatingHour =
+    final OperatingHours? originalOperatingHour =
         originalValue != null ? OperatingHours.fromJson(jsonDecode(originalValue)) : null;
-    final OperatingHours updatedOperatingHour =
+    final OperatingHours? updatedOperatingHour =
         updateValue != null ? OperatingHours.fromJson(jsonDecode(updateValue)) : null;
     String originalTimeRange = OperatingTimeRange.getStringRepresentation(originalOperatingHour);
-    String updatedTimeRange;
+    String updatedTimeRange = '';
     if (updatedOperatingHour != null) {
       updatedTimeRange = OperatingTimeRange.getStringRepresentation(updatedOperatingHour);
     }
@@ -149,8 +150,8 @@ class UpdateHistoryUpdateOperatingTimeItemWidget extends StatelessWidget {
   }
 
   String _getUpdateResult() {
-    if (serverExceptions == null || serverExceptions.isEmpty) {
-      if (recordLevelException == null || recordLevelException.isEmpty) {
+    if (serverExceptions == null || serverExceptions!.isEmpty) {
+      if (recordLevelException == null || recordLevelException!.isEmpty) {
         return 'Success';
       }
     }
@@ -159,38 +160,40 @@ class UpdateHistoryUpdateOperatingTimeItemWidget extends StatelessWidget {
 
   String _getTranslatedUpdateResult() {
     List<String> translatedResultCode = [];
-    for (final String resultCode in recordLevelException) {
-      switch (resultCode) {
-        case OperatingTimeUpdateExceptionCodes.timeNotInRange:
-          translatedResultCode.add('TIme not in range');
-          break;
-        case OperatingTimeUpdateExceptionCodes.versionMismatch:
-          translatedResultCode.add('Stale update, please refresh');
-          break;
-        case OperatingTimeUpdateExceptionCodes.timeNotChanged:
-          translatedResultCode.add('Same as old time');
-          break;
-        case OperatingTimeUpdateExceptionCodes.invalidParamForOperatingTime:
-          translatedResultCode.add('Invalid time');
-          break;
-        case OperatingTimeUpdateExceptionCodes.updatingOperatingTimeForMultipleFuelStations:
-          translatedResultCode.add('Can update one station at a time');
-          break;
-        case OperatingTimeUpdateExceptionCodes.noOperatingTimesProvided:
-          translatedResultCode.add('No updated value provided');
-          break;
-        case OperatingTimeUpdateExceptionCodes.operatingTimeNotCrowdSourced:
-          translatedResultCode.add('Cannot change operating time not crowd sourced');
-          break;
-        case OperatingTimeUpdateExceptionCodes.operatingTimeFuelAuthoritySource:
-          translatedResultCode.add('Cannot change operating time provided by Fuel Authority');
-          break;
-        case OperatingTimeUpdateExceptionCodes.operatingTimeGoogleSource:
-          translatedResultCode.add('Cannot change operating time provided by Google');
-          break;
-        case OperatingTimeUpdateExceptionCodes.operatingTimeMerchantSource:
-          translatedResultCode.add('Cannot change operating time provided by merchant');
-          break;
+    if (recordLevelException != null && recordLevelException!.isNotEmpty) {
+      for (final String resultCode in recordLevelException!) {
+        switch (resultCode) {
+          case OperatingTimeUpdateExceptionCodes.timeNotInRange:
+            translatedResultCode.add('TIme not in range');
+            break;
+          case OperatingTimeUpdateExceptionCodes.versionMismatch:
+            translatedResultCode.add('Stale update, please refresh');
+            break;
+          case OperatingTimeUpdateExceptionCodes.timeNotChanged:
+            translatedResultCode.add('Same as old time');
+            break;
+          case OperatingTimeUpdateExceptionCodes.invalidParamForOperatingTime:
+            translatedResultCode.add('Invalid time');
+            break;
+          case OperatingTimeUpdateExceptionCodes.updatingOperatingTimeForMultipleFuelStations:
+            translatedResultCode.add('Can update one station at a time');
+            break;
+          case OperatingTimeUpdateExceptionCodes.noOperatingTimesProvided:
+            translatedResultCode.add('No updated value provided');
+            break;
+          case OperatingTimeUpdateExceptionCodes.operatingTimeNotCrowdSourced:
+            translatedResultCode.add('Cannot change operating time not crowd sourced');
+            break;
+          case OperatingTimeUpdateExceptionCodes.operatingTimeFuelAuthoritySource:
+            translatedResultCode.add('Cannot change operating time provided by Fuel Authority');
+            break;
+          case OperatingTimeUpdateExceptionCodes.operatingTimeGoogleSource:
+            translatedResultCode.add('Cannot change operating time provided by Google');
+            break;
+          case OperatingTimeUpdateExceptionCodes.operatingTimeMerchantSource:
+            translatedResultCode.add('Cannot change operating time provided by merchant');
+            break;
+        }
       }
     }
     if (translatedResultCode.isEmpty) {

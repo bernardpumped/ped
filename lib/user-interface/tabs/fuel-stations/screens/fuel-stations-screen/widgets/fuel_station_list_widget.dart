@@ -35,7 +35,7 @@ class FuelStationListWidget extends StatefulWidget {
   final int sortOrder;
 
   const FuelStationListWidget(
-      this._scrollController, this._fuelStations, this._expandedChildren, this._selectedFuelType, this.sortOrder, {Key key}) : super(key: key);
+      this._scrollController, this._fuelStations, this._expandedChildren, this._selectedFuelType, this.sortOrder, {Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -58,24 +58,24 @@ class _FuelStationListWidgetState extends State<FuelStationListWidget> with Tick
     }
   }
 
-  Animation collapsedAnimation;
-  AnimationController collapsedAnimationController;
-  Animation expandedAnimation;
-  AnimationController expandedAnimationController;
+  Animation? collapsedAnimation;
+  AnimationController? collapsedAnimationController;
+  Animation? expandedAnimation;
+  AnimationController? expandedAnimationController;
 
   @override
   void initState() {
     collapsedAnimationController = AnimationController(vsync: this, duration: const Duration(milliseconds: 1000));
-    collapsedAnimation = Tween(begin: 0.0, end: 1.0).animate(collapsedAnimationController);
+    collapsedAnimation = Tween(begin: 0.0, end: 1.0).animate(collapsedAnimationController!);
     expandedAnimationController = AnimationController(vsync: this, duration: const Duration(milliseconds: 1000));
-    expandedAnimation = Tween(begin: 0.0, end: 1.0).animate(expandedAnimationController);
+    expandedAnimation = Tween(begin: 0.0, end: 1.0).animate(expandedAnimationController!);
     super.initState();
   }
 
   @override
   void dispose() {
-    collapsedAnimationController.dispose();
-    expandedAnimationController.dispose();
+    collapsedAnimationController?.dispose();
+    expandedAnimationController?.dispose();
     super.dispose();
   }
 
@@ -98,9 +98,9 @@ class _FuelStationListWidgetState extends State<FuelStationListWidget> with Tick
           final bool expanded = widget._expandedChildren[index];
           final FuelStation fuelStation = widget._fuelStations[index];
           if (expanded) {
-            expandedAnimationController.forward();
+            expandedAnimationController?.forward();
           } else {
-            collapsedAnimationController.forward();
+            collapsedAnimationController?.forward();
           }
           return SizeFadeTransition(
               sizeFraction: 0.7,

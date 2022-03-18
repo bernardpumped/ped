@@ -19,19 +19,19 @@
 import 'package:pumped_end_device/models/pumped/fuel_quote.dart';
 
 class FuelQuoteVo {
-  final int id;
+  final int? id;
   final int fuelStationId;
   final String fuelType;
-  final String fuelMeasure;
-  final double quoteValue;
-  final int fuelBrandId;
-  final String fuelQuoteSource;
-  final int publishDate;
+  final String? fuelMeasure;
+  final double? quoteValue;
+  final int? fuelBrandId;
+  final String? fuelQuoteSource;
+  final int? publishDate;
 
   FuelQuoteVo(
       {this.id,
-      this.fuelStationId,
-      this.fuelType,
+      required this.fuelStationId,
+      required this.fuelType,
       this.fuelMeasure,
       this.quoteValue,
       this.fuelBrandId,

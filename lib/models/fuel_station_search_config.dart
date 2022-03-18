@@ -20,7 +20,7 @@ import 'package:pumped_end_device/models/pumped/fuel_type.dart';
 
 class FuelStationSearchConfig {
 
-  final FuelType fuelType;
+  final FuelType? fuelType;
   final double range;
   final String defaultUnit;
   final String clientConfigVersion;
@@ -28,12 +28,12 @@ class FuelStationSearchConfig {
   final String sortOrder;
 
   FuelStationSearchConfig(
-      {this.fuelType,
-      this.range,
-      this.defaultUnit,
-      this.clientConfigVersion,
-      this.numOfResults,
-      this.sortOrder});
+      {required this.fuelType,
+        required this.range,
+        required this.defaultUnit,
+        required this.clientConfigVersion,
+        required this.numOfResults,
+        required this.sortOrder});
 
   Map<String, dynamic> toJson() => {
         'fuel_type': fuelType,

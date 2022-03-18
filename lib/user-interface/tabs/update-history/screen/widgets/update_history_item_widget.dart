@@ -31,7 +31,7 @@ import 'package:pumped_end_device/models/update_history.dart';
 
 class UpdateHistoryItemWidget extends StatefulWidget {
   final UpdateHistory updateHistory;
-  const UpdateHistoryItemWidget(this.updateHistory, {Key key}) : super(key: key);
+  const UpdateHistoryItemWidget(this.updateHistory, {Key? key}) : super(key: key);
 
   @override
   _UpdateHistoryItemWidgetState createState() => _UpdateHistoryItemWidgetState();
@@ -129,11 +129,11 @@ class _UpdateHistoryItemWidgetState extends State<UpdateHistoryItemWidget> {
     final String updateType = updateHistory.updateType;
     final Map<String, dynamic> originalValues = updateHistory.originalValues;
     final Map<String, dynamic> updateValues = updateHistory.updateValues;
-    final Map<String, dynamic> invalidArguments = updateHistory.invalidArguments;
-    final Map<String, dynamic> recordLevelExceptionCodes = updateHistory.recordLevelExceptionCodes;
+    final Map<String, dynamic>? invalidArguments = updateHistory.invalidArguments;
+    final Map<String, dynamic>? recordLevelExceptionCodes = updateHistory.recordLevelExceptionCodes;
     originalValues.forEach((originalValueType, originalValue) {
       var updateValue = updateValues[originalValueType];
-      var recordLevelExceptions = recordLevelExceptionCodes != null ? recordLevelExceptionCodes[originalValueType] : [];
+      var recordLevelExceptions = recordLevelExceptionCodes != null ? recordLevelExceptionCodes[originalValueType]??[] : [];
       if (updateType == UpdateType.operatingTime.updateTypeName) {
         children.add(UpdateHistoryUpdateOperatingTimeItemWidget(
             valueType: originalValueType,

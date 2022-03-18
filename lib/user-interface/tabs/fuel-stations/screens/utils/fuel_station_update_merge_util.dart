@@ -70,7 +70,7 @@ class FuelStationUpdateMergeUtil {
       updateFuelQuoteResult.originalValues.forEach((fuelType, originalQuoteValue) {
         LogUtil.debug(_tag, 'Merging for fuelType : $fuelType');
         final double updateValue = updateFuelQuoteResult.updateValues[fuelType];
-        final List<dynamic> recordExceptions = updateFuelQuoteResult.recordLevelExceptionCodes[fuelType];
+        final List<dynamic>? recordExceptions = updateFuelQuoteResult.recordLevelExceptionCodes?[fuelType];
         if (recordExceptions == null || recordExceptions.isEmpty) {
           final FuelQuote originalFuelQuote =
               _getOriginalFuelQuote(fuelTypeFuelQuoteMap, fuelType, fuelStation.stationId);
@@ -90,7 +90,7 @@ class FuelStationUpdateMergeUtil {
 
   FuelQuote _getOriginalFuelQuote(
       final Map<String, FuelQuote> fuelTypeFuelQuoteMap, final String fuelType, final int fuelStationId) {
-    FuelQuote originalFuelQuote = fuelTypeFuelQuoteMap[fuelType];
+    FuelQuote? originalFuelQuote = fuelTypeFuelQuoteMap[fuelType];
     if (originalFuelQuote == null) {
       originalFuelQuote =
           FuelQuote(fuelStationId: fuelStationId, fuelType: fuelType, quoteValue: null, publishDate: null);
@@ -112,20 +112,21 @@ class FuelStationUpdateMergeUtil {
   void _mergeUpdateOperatingTimeResult(
       final FuelStation fuelStation, final UpdateOperatingTimeResult updateOperatingHrsResult) {
     if (updateOperatingHrsResult.isUpdateSuccessful) {
-      final Map<String, dynamic> updateValues = updateOperatingHrsResult.updateValues;
-      updateOperatingHrsResult.originalValues.forEach((dayOfWeek, originalOpHrsJson) {
-        var updatedOperatingHrsJson = updateValues[dayOfWeek];
-        final OperatingHours updatedOperatingHour =
-            updatedOperatingHrsJson != null ? OperatingHours.fromJson(jsonDecode(updatedOperatingHrsJson)) : null;
-        updatedOperatingHour.publishDate = DateTime.fromMillisecondsSinceEpoch(updateOperatingHrsResult.updateEpoch);
-        updatedOperatingHour.operatingTimeSource = 'C';
-        final List<dynamic> recordLevelExceptionCodes = updateOperatingHrsResult.recordLevelExceptionCodes[dayOfWeek];
-        if (recordLevelExceptionCodes == null || recordLevelExceptionCodes.isEmpty) {
-          fuelStation.fuelStationOperatingHrs.updateOperatingHoursForDay(dayOfWeek, updatedOperatingHour);
+      final Map<String, dynamic>? updateValues = updateOperatingHrsResult.updateValues;
+      updateOperatingHrsResult.originalValues?.forEach((dayOfWeek, originalOpHrsJson) {
+        var updatedOperatingHrsJson = updateValues?[dayOfWeek];
+        final OperatingHours? updatedOperatingHour = updatedOperatingHrsJson != null ? OperatingHours.fromJson(jsonDecode(updatedOperatingHrsJson)) : null;
+        if (updatedOperatingHour != null) {
+          updatedOperatingHour.publishDate = DateTime.fromMillisecondsSinceEpoch(updateOperatingHrsResult.updateEpoch);
+          updatedOperatingHour.operatingTimeSource = 'C';
+          final List<dynamic>? recordLevelExceptionCodes = updateOperatingHrsResult.recordLevelExceptionCodes?[dayOfWeek];
+          if (recordLevelExceptionCodes == null || recordLevelExceptionCodes.isEmpty) {
+            fuelStation.fuelStationOperatingHrs?.updateOperatingHoursForDay(dayOfWeek, updatedOperatingHour);
+          }
         }
       });
-      final String dayOfWeek = DateTimeUtils.weekDayIntToShortName[DateTime.now().weekday];
-      fuelStation.operatingHours = fuelStation.fuelStationOperatingHrs.getOperatingHoursForDay(dayOfWeek);
+      final String dayOfWeek = DateTimeUtils.weekDayIntToShortName[DateTime.now().weekday]!;
+      fuelStation.operatingHours = fuelStation.fuelStationOperatingHrs?.getOperatingHoursForDay(dayOfWeek);
       fuelStation.status = OperatingHoursResponseParseUtils.getStatus(fuelStation.operatingHours);
     } else {
       LogUtil.debug(_tag, 'updateOperatingHrsResult is not successful. Not merging the response with on device data');
@@ -136,10 +137,10 @@ class FuelStationUpdateMergeUtil {
       final FuelStation fuelStation, final UpdateAddressDetailsResult updateAddressDetailsResult) {
     if (updateAddressDetailsResult.isUpdateSuccessful) {
       final FuelStationAddress fuelStationAddress = fuelStation.fuelStationAddress;
-      updateAddressDetailsResult.addressComponentNewValue.forEach((addressComponent, newValue) {
+      updateAddressDetailsResult.addressComponentNewValue?.forEach((addressComponent, newValue) {
         LogUtil.debug(_tag, '$addressComponent $newValue');
         String updateResult = updateAddressDetailsResult.addressComponentUpdateStatus != null
-            ? updateAddressDetailsResult.addressComponentUpdateStatus[addressComponent]
+            ? updateAddressDetailsResult.addressComponentUpdateStatus![addressComponent]
             : null;
         bool successfulUpdate = DataUtils.isBlank(updateResult);
         if (successfulUpdate) {
@@ -178,9 +179,9 @@ class FuelStationUpdateMergeUtil {
       final FuelStation fuelStation, final UpdatePhoneNumberResult updatePhoneNumberResult) {
     if (updatePhoneNumberResult.isUpdateSuccessful) {
       final FuelStationAddress fuelStationAddress = fuelStation.fuelStationAddress;
-      updatePhoneNumberResult.phoneTypeNewValueMap.forEach((phoneType, newValue) {
+      updatePhoneNumberResult.phoneTypeNewValueMap?.forEach((phoneType, newValue) {
         final bool successFulUpdate = updatePhoneNumberResult.phoneTypeUpdateStatusMap != null
-            ? (updatePhoneNumberResult.phoneTypeUpdateStatusMap[phoneType] ?? true)
+            ? (updatePhoneNumberResult.phoneTypeUpdateStatusMap![phoneType] ?? true)
             : true;
         if (successFulUpdate) {
           if (phoneType == UpdatableAddressComponents.phone1) {

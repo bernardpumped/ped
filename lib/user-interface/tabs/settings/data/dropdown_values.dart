@@ -18,7 +18,7 @@
 
 class DropDownValues<T> {
   bool noDataFound = false;
-  List<T> values;
-  int selectedIndex;
+  List<T> values = [];
+  int selectedIndex = 0;
   Map<String, dynamic> toJson() => {'values': values, 'selectedIndex': selectedIndex, 'noDataFound': noDataFound};
 }

@@ -33,11 +33,16 @@ class FuelStationDetailsResponseParseUtils {
       final bool activeItemPromotions =
           fuelStationJsonVal['activeItemPromotions'] ?? false;
       final bool activeAutoServicePromotions = fuelStationJsonVal['activeAutoServicePromotions'] ?? false;
-      final List<FuelQuote> fuelQuotes = stationIdFuelQuotes[stationIdStr];
+      final List<FuelQuote>? fuelQuotes = stationIdFuelQuotes[stationIdStr];
       final bool holidayToday = fuelStationJsonVal['holidayToday'];
-      final OperatingHours operatingHours =
+      final OperatingHours? operatingHours =
           OperatingHoursResponseParseUtils.getOperatingHours(fuelStationJsonVal['fuelFillOperatingTime'], holidayToday);
-      final Map<String, FuelQuote> fuelTypeQuoteMap = {for (var fuelQuote in fuelQuotes) fuelQuote.fuelType: fuelQuote};
+      final Map<String, FuelQuote> fuelTypeQuoteMap = {};
+      if (fuelQuotes != null) {
+        for (var fuelQuote in fuelQuotes) {
+          fuelTypeQuoteMap.putIfAbsent(fuelQuote.fuelType, () => fuelQuote);
+        }
+      }
       final FuelStation fuelStation = FuelStation(
         stationId: fuelStationJsonVal['fuelStationId'],
         fuelStationAddress: _getFuelStationAddress(fuelStationJsonVal),
@@ -46,11 +51,13 @@ class FuelStationDetailsResponseParseUtils {
         distanceUnit: fuelStationJsonVal['distanceUnit'],
         managed: fuelStationJsonVal['managed'],
         fuelAuthMatchStatus: fuelStationJsonVal['matchStatus'],
+        fuelAuthorityStationCode: fuelStationJsonVal['fuelAuthorityStationCode'],
         merchant: fuelStationJsonVal['merchant'],
         merchantLogoUrl: fuelStationJsonVal['merchantLogoUrl'],
         rating: fuelStationJsonVal['rating'],
         stationType: fuelStationJsonVal['stationType'],
         hasPromos: activeItemPromotions || activeAutoServicePromotions,
+        hasServices: false,
         fuelTypeFuelQuoteMap: fuelTypeQuoteMap,
         imgUrls: null, //TODO
         isFaStation: fuelStationJsonVal['faStation'],
@@ -63,7 +70,7 @@ class FuelStationDetailsResponseParseUtils {
   }
 
   static Map<String, List<FuelQuote>> getStationIdFuelQuotesMap(
-      final Map<String, dynamic> responseJson, final String fuelAuthorityId) {
+      final Map<String, dynamic> responseJson, final String? fuelAuthorityId) {
     final Map<String, dynamic> stationIdQuoteJsonMap = responseJson['stationFuelQuoteMap'];
     final Map<String, List<FuelQuote>> stationIdFuelQuotes = {};
 
@@ -72,8 +79,8 @@ class FuelStationDetailsResponseParseUtils {
       final List<dynamic> fuelQuotesJsonVal = me.value;
       final List<FuelQuote> fuelQuotes = [];
       for (var jsonVal in fuelQuotesJsonVal) {
-        final String fuelQuoteSource = jsonVal['fuelQuoteSource'];
-        String fuelQuoteSourceName = (fuelQuoteSource == 'C') ? "Crowd" : fuelAuthorityId;
+        final String? fuelQuoteSource = jsonVal['fuelQuoteSource'];
+        String? fuelQuoteSourceName = (fuelQuoteSource == 'C') ? "Crowd" : fuelAuthorityId;
         final FuelQuote fuelQuote = FuelQuote(
             fuelType: jsonVal['fuelType'],
             fuelMeasure: jsonVal['fuelMeasure'],

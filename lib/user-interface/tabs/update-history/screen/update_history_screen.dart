@@ -26,7 +26,7 @@ import 'package:pumped_end_device/models/update_history.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
 class UpdateHistoryScreen extends StatefulWidget {
-  const UpdateHistoryScreen({Key key}) : super(key: key);
+  const UpdateHistoryScreen({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -35,7 +35,7 @@ class UpdateHistoryScreen extends StatefulWidget {
 }
 
 class _UpdateHistoryScreenState extends State<UpdateHistoryScreen> {
-  Future<List<UpdateHistory>> updateHistoryFuture;
+  Future<List<UpdateHistory>>? updateHistoryFuture;
   @override
   void initState() {
     super.initState();
@@ -45,46 +45,58 @@ class _UpdateHistoryScreenState extends State<UpdateHistoryScreen> {
   @override
   Widget build(final BuildContext context) {
     return Scaffold(
-        appBar: const CupertinoNavigationBar(middle: ApplicationTitleTextWidget()),
+        appBar:
+            const CupertinoNavigationBar(middle: ApplicationTitleTextWidget()),
         body: Container(
             width: double.infinity,
             padding: const EdgeInsets.only(right: 5, bottom: 5, left: 5),
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-              Padding(
-                  padding: const EdgeInsets.only(left: 5, right: 5),
-                  child: WidgetUtils.getTabHeaderWidget(context, "Update History")),
-              Expanded(
-                  child: FutureBuilder<List<UpdateHistory>>(
-                      future: updateHistoryFuture,
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          return RefreshIndicator(
-                              color: Colors.blue,
-                              child: _getUpdateHistoryItemList(snapshot.data),
-                              onRefresh: () async {
-                                setState(() {
-                                  updateHistoryFuture = UpdateHistoryDao.instance.getAllUpdateHistory();
-                                });
-                              });
-                        } else if (snapshot.hasError) {
-                          LogUtil.debug('updateHistory', 'Error happened ${snapshot.error}');
-                          return RefreshIndicator(
-                              color: Colors.blue,
-                              child: const Center(child: Text('Error Loading Update History')),
-                              onRefresh: () async {
-                                setState(() {
-                                  updateHistoryFuture = UpdateHistoryDao.instance.getAllUpdateHistory();
-                                });
-                              });
-                        } else {
-                          return const CircularProgressIndicator();
-                        }
-                      }))
-            ])));
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Padding(
+                      padding: const EdgeInsets.only(left: 5, right: 5),
+                      child: WidgetUtils.getTabHeaderWidget(
+                          context, "Update History")),
+                  Expanded(
+                      child: FutureBuilder<List<UpdateHistory>>(
+                          future: updateHistoryFuture,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return RefreshIndicator(
+                                  color: Colors.blue,
+                                  child:
+                                      _getUpdateHistoryItemList(snapshot.data!),
+                                  onRefresh: () async {
+                                    setState(() {
+                                      updateHistoryFuture = UpdateHistoryDao
+                                          .instance
+                                          .getAllUpdateHistory();
+                                    });
+                                  });
+                            } else if (snapshot.hasError) {
+                              LogUtil.debug('updateHistory',
+                                  'Error happened ${snapshot.error}');
+                              return RefreshIndicator(
+                                  color: Colors.blue,
+                                  child: const Center(
+                                      child:
+                                          Text('Error Loading Update History')),
+                                  onRefresh: () async {
+                                    setState(() {
+                                      updateHistoryFuture = UpdateHistoryDao
+                                          .instance
+                                          .getAllUpdateHistory();
+                                    });
+                                  });
+                            } else {
+                              return const CircularProgressIndicator();
+                            }
+                          }))
+                ])));
   }
 
   Widget _getUpdateHistoryItemList(final List<UpdateHistory> updateHistories) {
-    if (updateHistories != null && updateHistories.isNotEmpty) {
+    if (updateHistories.isNotEmpty) {
       return ListView.builder(
           itemCount: updateHistories.length,
           itemBuilder: (context, index) {
@@ -92,7 +104,9 @@ class _UpdateHistoryScreenState extends State<UpdateHistoryScreen> {
           });
     } else {
       return ListView(children: const <Widget>[
-        Center(child: Text('No Update History Found', style: TextStyle(fontSize: 18, color: Colors.black87)))
+        Center(
+            child: Text('No Update History Found',
+                style: TextStyle(fontSize: 18, color: Colors.black87)))
       ]);
     }
   }

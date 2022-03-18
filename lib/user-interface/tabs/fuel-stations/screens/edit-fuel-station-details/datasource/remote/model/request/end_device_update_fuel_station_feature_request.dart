@@ -28,13 +28,13 @@ class EndDeviceUpdateFuelStationFeatureRequest extends Request {
   final List<String> disabledFeatures;
   EndDeviceUpdateFuelStationFeatureRequest(
       {uuid,
-      this.oauthToken,
-      this.oauthTokenSecret,
-      this.identityProvider,
-      this.fuelStationId,
-      this.fuelStationSource,
-      this.enabledFeatures,
-      this.disabledFeatures})
+        required this.oauthToken,
+        required this.oauthTokenSecret,
+        required this.identityProvider,
+        required this.fuelStationId,
+        required this.fuelStationSource,
+        required this.enabledFeatures,
+        required this.disabledFeatures})
       : super(uuid);
 
   @override

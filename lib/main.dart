@@ -28,7 +28,7 @@ import 'package:pumped_end_device/util/platform_wrapper.dart';
 import 'data/local/location/geo_location_wrapper.dart';
 
 GetIt getIt = GetIt.instance;
-const appVersion = "23";
+const appVersion = "24";
 const getLocationWrapperInstanceName = 'geoLocationWrapper';
 const platformWrapperInstanceName = 'platformWrapper';
 const locationDataSourceInstanceName = 'locationDataSource';
@@ -40,7 +40,7 @@ void main() {
 
 class PumpedApp extends StatelessWidget {
   static const _tag = 'PumpedApp';
-  const PumpedApp({Key key}) : super(key: key);
+  const PumpedApp({Key? key}) : super(key: key);
 
   @override
   Widget build(final BuildContext context) {

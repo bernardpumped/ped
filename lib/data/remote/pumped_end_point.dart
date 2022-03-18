@@ -18,7 +18,7 @@
 
 class PumpedEndPoint {
   // ignore: unused_field
-  static const _pumpedBaseUrlLocal = 'http://192.168.1.28:17001';
+  static const _pumpedBaseUrlLocal = 'http://172.17.6.36:17001';
   static const _pumpedBaseUrlOzServer = 'http://tst.pumpedsvr.com:17001';
   static const pumperBaseUrl = _pumpedBaseUrlOzServer;
 }

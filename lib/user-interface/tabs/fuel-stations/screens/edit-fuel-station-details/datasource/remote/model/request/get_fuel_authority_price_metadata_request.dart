@@ -21,7 +21,7 @@ import 'package:pumped_end_device/data/remote/model/request/request.dart';
 class GetFuelAuthorityPriceMetadataRequest extends Request {
   final String authorityId;
 
-  GetFuelAuthorityPriceMetadataRequest({requestUuid, this.authorityId}) : super(requestUuid);
+  GetFuelAuthorityPriceMetadataRequest({requestUuid, required this.authorityId}) : super(requestUuid);
 
   @override
   Map<String, dynamic> toJson() {

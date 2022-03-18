@@ -18,6 +18,7 @@
 
 import 'package:pumped_end_device/data/remote/model/request/request.dart';
 import 'package:pumped_end_device/models/fuel_station_search_config.dart';
+import 'package:uuid/uuid.dart';
 
 class GetFuelStationsInRangeParams extends Request {
   final double lat;
@@ -25,7 +26,7 @@ class GetFuelStationsInRangeParams extends Request {
   final double range;
   final String unit;
   final String fuelType;
-  final int numResults;
+  final num numResults;
   final String quoteSortOrder;
   final bool searchIncrementally;
   final String dayOfWeek;
@@ -34,22 +35,23 @@ class GetFuelStationsInRangeParams extends Request {
 
   GetFuelStationsInRangeParams(
       {requestUuid,
-      this.lat,
-      this.lng,
-      this.range,
-      this.unit,
-      this.fuelType,
-      this.numResults,
-      this.quoteSortOrder,
-      this.searchIncrementally,
-      this.dayOfWeek,
-      this.clientConfigVersion,
-      this.excludeVetoFuelStations})
+        required this.lat,
+        required this.lng,
+        required this.range,
+        required this.unit,
+        required this.fuelType,
+        required this.numResults,
+        required this.quoteSortOrder,
+        required this.searchIncrementally,
+        required this.dayOfWeek,
+        required this.clientConfigVersion,
+        required this.excludeVetoFuelStations})
       : super(requestUuid);
 
   factory GetFuelStationsInRangeParams.get(final FuelStationSearchConfig config, final double lat, final double lng,
       final String day, final bool searchIncrementally, final bool excludeVetoFuelStations) {
     return GetFuelStationsInRangeParams(
+        requestUuid: const Uuid().v1(),
         lat: lat,
         lng: lng,
         range: config.range,

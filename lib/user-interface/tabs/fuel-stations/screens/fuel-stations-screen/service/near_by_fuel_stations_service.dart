@@ -60,25 +60,29 @@ class NearByFuelStationsService {
         nearByFuelStationsScreenData.locationSearchSuccessful = false;
         nearByFuelStationsScreenData.locationErrorReason = 'Location Service is disabled';
       } else {
-        final GeoLocationData locationData = await locationResult.geoLocationData;
-        nearByFuelStationsScreenData.latitude = locationData.latitude;
-        nearByFuelStationsScreenData.longitude = locationData.longitude;
-        LogUtil.debug(_tag,
-            'fetchNearByFuelStationData :: latitude : ${locationData.latitude}, longitude : ${locationData.longitude}');
-        final FuelStationSearchConfig searchConfig = await _getFuelStationSearchConfig();
-        final GetFuelStationsInRangeResponse response =
-            await _fetchFuelStations(locationData.latitude, locationData.longitude, searchConfig);
-        nearByFuelStationsScreenData.fuelStations = response.fuelStations;
-        if (response.responseCode == 'NODATA_EXCEPTION') {
-          nearByFuelStationsScreenData.searchResultFailureReason = response.responseDetails;
-        } else {
-          if (response.configChanged) {
-            nearByFuelStationsScreenData.defaultFuelType = await _getDefaultFuelType();
+        final GeoLocationData? locationData = await locationResult.geoLocationData;
+        if (locationData != null) {
+          nearByFuelStationsScreenData.latitude = locationData.latitude;
+          nearByFuelStationsScreenData.longitude = locationData.longitude;
+          LogUtil.debug(_tag,
+              'fetchNearByFuelStationData :: latitude : ${locationData.latitude}, longitude : ${locationData.longitude}');
+          final FuelStationSearchConfig searchConfig = await _getFuelStationSearchConfig();
+          final GetFuelStationsInRangeResponse response = await _fetchFuelStations(locationData.latitude, locationData.longitude, searchConfig);
+          nearByFuelStationsScreenData.fuelStations = response.fuelStations;
+          if (response.responseCode == 'NODATA_EXCEPTION') {
+            nearByFuelStationsScreenData.searchResultFailureReason = response.responseDetails;
+          } else {
+            if (response.configChanged) {
+              nearByFuelStationsScreenData.defaultFuelType = await _getDefaultFuelType();
+            }
+            LogUtil.debug(_tag, 'Number of fuelStations fetched : ${nearByFuelStationsScreenData.fuelStations?.length}');
+            nearByFuelStationsScreenData.userSettingsVersion = await UserConfigurationDao.instance
+                .getUserConfigurationVersion(UserConfiguration.defaultUserConfigId);
+            LogUtil.debug(_tag, 'User settings version is : ${nearByFuelStationsScreenData.userSettingsVersion}');
           }
-          LogUtil.debug(_tag, 'Number of fuelStations fetched : ${nearByFuelStationsScreenData.fuelStations.length}');
-          nearByFuelStationsScreenData.userSettingsVersion = await UserConfigurationDao.instance
-              .getUserConfigurationVersion(UserConfiguration.defaultUserConfigId);
-          LogUtil.debug(_tag, 'User settings version is : ${nearByFuelStationsScreenData.userSettingsVersion}');
+        } else {
+          nearByFuelStationsScreenData.locationSearchSuccessful = false;
+          nearByFuelStationsScreenData.locationErrorReason = 'Location retrieval failed even after permission and service enabled';
         }
       }
     } catch (error, s) {
@@ -91,7 +95,7 @@ class NearByFuelStationsService {
   Future<GetFuelStationsInRangeResponse> _fetchFuelStations(
       final double latitude, final double longitude, final FuelStationSearchConfig searchConfig) async {
     try {
-      final String weekDay = DateTimeUtils.weekDayIntToShortName[DateTime.now().weekday];
+      final String weekDay = DateTimeUtils.weekDayIntToShortName[DateTime.now().weekday]!;
       final GetFuelStationsInRangeParams request = GetFuelStationsInRangeParams.get(
           searchConfig, latitude, longitude, weekDay, true, true);
       final GetFuelStationsInRangeResponse response = await _getFuelStationsInRange(request);
@@ -105,9 +109,9 @@ class NearByFuelStationsService {
   }
 
   Future<GetFuelStationsInRangeResponse> _getFuelStationsInRange(final GetFuelStationsInRangeParams request) async {
-    MarketRegionZoneConfiguration existingMarketRegionZoneConfiguration =
+    MarketRegionZoneConfiguration? existingMarketRegionZoneConfiguration =
         await MarketRegionZoneConfigDao.instance.getMarketRegionZoneConfiguration();
-    String fuelAuthorityId;
+    String? fuelAuthorityId;
     if (existingMarketRegionZoneConfiguration != null) {
       fuelAuthorityId = existingMarketRegionZoneConfiguration.marketRegionConfig.fuelAuthorityId;
     }
@@ -116,7 +120,7 @@ class NearByFuelStationsService {
         await GetFuelStationsInRange(GetFuelStationsInRangeResponseParser(fuelAuthorityId)).execute(request);
     if (response.marketRegionZoneConfiguration != null) {
       final int persistenceResult = await MarketRegionZoneConfigDao.instance
-          .insertMarketRegionZoneConfiguration(response.marketRegionZoneConfiguration);
+          .insertMarketRegionZoneConfiguration(response.marketRegionZoneConfiguration!);
       LogUtil.debug(_tag, 'MarketRegionZoneConfig persistence result $persistenceResult');
     } else {
       LogUtil.debug(_tag, 'Existing marketRegionZoneConfig set in GetFuelStationsInRangeResponse');
@@ -125,14 +129,14 @@ class NearByFuelStationsService {
     return response;
   }
 
-  double _getSearchRadius(final ZoneConfig zoneConfig, final UserConfiguration userConfiguration) {
-    if (userConfiguration == null || userConfiguration.searchRadius == null) {
+  double _getSearchRadius(final ZoneConfig zoneConfig, final UserConfiguration? userConfiguration) {
+    if (userConfiguration == null) {
       return zoneConfig.maxRadius;
     }
     return userConfiguration.searchRadius.toDouble();
   }
 
-  String _getSortOrder(final UserConfiguration userConfiguration) {
+  String _getSortOrder(final UserConfiguration? userConfiguration) {
     if (userConfiguration != null) {
       return userConfiguration.searchCriteria;
     } else {
@@ -140,8 +144,8 @@ class NearByFuelStationsService {
     }
   }
 
-  num _getMaxNumberOfResults(final MarketRegionConfig marketRegionConfig, final UserConfiguration userConfiguration) {
-    if (userConfiguration == null || userConfiguration.numSearchResults == null) {
+  num _getMaxNumberOfResults(final MarketRegionConfig marketRegionConfig, final UserConfiguration? userConfiguration) {
+    if (userConfiguration == null) {
       return marketRegionConfig.maxNumberOfResults;
     }
     return userConfiguration.numSearchResults;
@@ -153,53 +157,50 @@ class NearByFuelStationsService {
     LogUtil.debug(_tag, '_getFuelStationSearchConfig::MarketRegionZoneConfigDao.instance');
     final UserConfigurationDao userConfigurationDao = UserConfigurationDao.instance;
     LogUtil.debug(_tag, '_getFuelStationSearchConfig::UserConfigurationDao.instance');
-    final UserConfiguration userConfiguration = await userConfigurationDao
+    final UserConfiguration? userConfiguration = await userConfigurationDao
         .getUserConfiguration(UserConfiguration.defaultUserConfigId);
     LogUtil.debug(_tag, '_getFuelStationSearchConfig::userConfigurationDao.getUserConfiguration()');
-    final MarketRegionZoneConfiguration marketRegionZoneConfig =
+    final MarketRegionZoneConfiguration? marketRegionZoneConfig =
         await marketRegionZoneConfigDao.getMarketRegionZoneConfiguration();
     LogUtil.debug(_tag, '_getFuelStationSearchConfig::marketRegionZoneConfigDao.getMarketRegionZoneConfiguration()');
     if (marketRegionZoneConfig != null) {
       LogUtil.debug(_tag, 'Stored marketRegionZoneConfig is not null');
       final MarketRegionConfig marketRegionConfig = marketRegionZoneConfig.marketRegionConfig;
-      if (marketRegionConfig != null) {
-        final FuelType fuelType =
-            _getDefaultFuelTypeForMarketRegionAndUserConfig(marketRegionConfig, userConfiguration);
-        final double searchRadius = _getSearchRadius(marketRegionZoneConfig.zoneConfig, userConfiguration);
-        final String distanceMeasure = marketRegionConfig.distanceMeasure;
-        final String configVersion = marketRegionZoneConfig.version;
-        final String sortOrder = _getSortOrder(userConfiguration);
-        final num maxNumberOfResults = _getMaxNumberOfResults(marketRegionConfig, userConfiguration);
-        return FuelStationSearchConfig(
-            fuelType: fuelType,
-            range: searchRadius,
-            defaultUnit: distanceMeasure,
-            sortOrder: sortOrder,
-            clientConfigVersion: configVersion,
-            numOfResults: maxNumberOfResults);
-      }
+      final FuelType? fuelType = _getDefaultFuelTypeForMarketRegionAndUserConfig(marketRegionConfig, userConfiguration);
+      final double searchRadius = _getSearchRadius(marketRegionZoneConfig.zoneConfig, userConfiguration);
+      final String distanceMeasure = marketRegionConfig.distanceMeasure;
+      final String configVersion = marketRegionZoneConfig.version;
+      final String sortOrder = _getSortOrder(userConfiguration);
+      final num maxNumberOfResults = _getMaxNumberOfResults(marketRegionConfig, userConfiguration);
+      return FuelStationSearchConfig(
+          fuelType: fuelType,
+          range: searchRadius,
+          defaultUnit: distanceMeasure,
+          sortOrder: sortOrder,
+          clientConfigVersion: configVersion,
+          numOfResults: maxNumberOfResults);
     }
     LogUtil.debug(_tag, "Stored FuelStationSearchConfig not found.. returning default");
     return FuelStationSearchConfig(
         fuelType: _getDefaultFuelTypeForMarketRegionAndUserConfig(null, userConfiguration),
         range: 5.0,
-        sortOrder: SortOrder.cheapestClosest.sortOrderStr,
+        sortOrder: SortOrder.cheapestClosest.sortOrderStr!,
         defaultUnit: "kilometre",
         clientConfigVersion: "-1",
         numOfResults: 5);
   }
 
-  Future<FuelType> _getDefaultFuelType() async {
-    final MarketRegionZoneConfiguration marketRegionZoneConfig =
+  Future<FuelType?> _getDefaultFuelType() async {
+    final MarketRegionZoneConfiguration? marketRegionZoneConfig =
         await MarketRegionZoneConfigDao.instance.getMarketRegionZoneConfiguration();
-    final UserConfiguration userConfiguration = await UserConfigurationDao.instance
+    final UserConfiguration? userConfiguration = await UserConfigurationDao.instance
         .getUserConfiguration(UserConfiguration.defaultUserConfigId);
     return _getDefaultFuelTypeForMarketRegionAndUserConfig(
         marketRegionZoneConfig?.marketRegionConfig, userConfiguration);
   }
 
-  FuelType _getDefaultFuelTypeForMarketRegionAndUserConfig(
-      final MarketRegionConfig marketRegionConfig, final UserConfiguration userConfiguration) {
+  FuelType? _getDefaultFuelTypeForMarketRegionAndUserConfig(
+      final MarketRegionConfig? marketRegionConfig, final UserConfiguration? userConfiguration) {
     if (userConfiguration != null) {
       return userConfiguration.defaultFuelType;
     }

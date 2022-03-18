@@ -26,13 +26,13 @@ import 'package:pumped_end_device/util/log_util.dart';
 
 class EditPhoneNumberLineItem extends StatefulWidget {
   final String title;
-  final String phoneNumber;
+  final String? phoneNumber;
   final TextEditingController phoneEditingController;
   final bool _backendUpdateInProgress;
   final Function onValueChangeListener;
 
   const EditPhoneNumberLineItem(this.title, this.phoneNumber, this.phoneEditingController, this.onValueChangeListener,
-      this._backendUpdateInProgress, {Key key}) : super(key: key);
+      this._backendUpdateInProgress, {Key? key}) : super(key: key);
 
   @override
   _EditPhoneNumberLineItemState createState() => _EditPhoneNumberLineItemState();
@@ -47,11 +47,11 @@ class _EditPhoneNumberLineItemState extends State<EditPhoneNumberLineItem> {
   static const _quickDuration = 300;
   static const _slowDuration = 1000;
 
-  double _containerHeight;
-  double _errorContainerHeight;
-  String _errorMessage;
-  int _containerHeightChangeTime;
-  int _errorMsgHeightChangeTime;
+  double _containerHeight = _heightWithoutErrorMsg;
+  double _errorContainerHeight = _heightOfNoErrorMsg;
+  String _errorMessage = "";
+  int _containerHeightChangeTime = _slowDuration;
+  int _errorMsgHeightChangeTime = _quickDuration;
   bool _phoneEnabled = false;
 
   @override
@@ -161,7 +161,7 @@ class _EditPhoneNumberLineItemState extends State<EditPhoneNumberLineItem> {
           widget.onValueChangeListener(widget.title, enteredPhoneNumber);
           _setInitialState();
         }
-        if (_errorMessage == "" && !isValid || _errorMessage != null && isValid) {
+        if (_errorMessage == "" && !isValid) {
           setState(() {
             _setUpdatedWidgetHeight();
           });

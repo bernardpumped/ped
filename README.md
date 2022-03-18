@@ -335,7 +335,7 @@ Being able to test is the key criteria to build a stable application. PED suppor
    ```bash
    $ dart run build_runner build
    ```
-   If the dart run command fails for any reson try following flutter run
+   If the above dart run command fails for any reason try following flutter run
    ```bash
    $ flutter packages pub run build_runner build --delete-conflicting-outputs
    ```
@@ -344,6 +344,7 @@ Being able to test is the key criteria to build a stable application. PED suppor
    $ flutter test test/data/local/location/location_data_source_test.dart
    ```
    *Code should follow certain design patterns so that dependencies could be easily mocked. Example - injecting the dependencies at the time of object creation, instead of creating them dynamically when needed. A dependency injection framework [GetIt](https://pub.dev/packages/get_it) is being introduced in PED to enable this, and the code is slowly refactored to use GetIt where ever applicable.*
+
  * **UI test cases** - The purpose of UI testing is to mimic the behavior and experience of end user. It provides completeness to testing, as this covers testing scenarios which cannot be easily covered with the unit testing. It is an integration testing mechanism for the application. These test run in a separate process and can be done on real devices/simulators/emulators. To enable UI testing Flutter SDK package [flutter_driver](https://api.flutter.dev/flutter/flutter_driver/flutter_driver-library.html) as dependency in dev_dependencies section of pubspec.yaml. General strategy for UI testing is to a) initiate an instrumented version of the app b) run the unit test on the instrumented app c) validate the assertion d) teardown the instrumented app. For brevity, this README.md would not go in all the details of how this is done. In PED code base, the UI instrumented tests are present in test_driver folder. Command to execute the tests is 
 ```bash
 $ flutter driver --target test_driver/main.dart

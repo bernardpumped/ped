@@ -24,7 +24,7 @@ class FuelAuthorityPriceMetadataVo {
   final String fuelMeasure;
   final String fuelType;
   final String fuelAuthority;
-  DecimalPositionVo decimalPositionVo;
+  DecimalPositionVo? decimalPositionVo;
 
   FuelAuthorityPriceMetadataVo(this.minPrice, this.maxPrice, this.minTolerancePercent, this.maxTolerancePercent,
       this.fuelMeasure, this.fuelType, this.fuelAuthority);

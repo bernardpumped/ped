@@ -16,38 +16,30 @@
  *     along with Pumped End Device.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'package:flutter/cupertino.dart';
-
 class FuelAuthorityPriceMetadata {
-  @required
   final double minPrice;
-  @required
   final double maxPrice;
-  @required
   final double minTolerancePercent;
-  @required
   final double maxTolerancePercent;
-  @required
   final String fuelMeasure;
-  @required
   final String fuelType;
-  @required
   final String fuelAuthority;
-  final String marketRegionZoneConfigVersion;
+  final String? marketRegionZoneConfigVersion;
   // Temporarily adding decimalPositionVo
   // will move the logic from backend to device.
-  final int decPosForAllowedMaxForChar;
-  final int allowedMaxFirstChar;
-  final int alternatePos;
+  final int? decPosForAllowedMaxForChar;
+  final int? allowedMaxFirstChar;
+  final int? alternatePos;
 
   FuelAuthorityPriceMetadata(
-      {this.minPrice,
-      this.maxPrice,
-      this.minTolerancePercent,
-      this.maxTolerancePercent,
-      this.fuelMeasure,
-      this.fuelType,
-      this.fuelAuthority,
+      {
+        required this.minPrice,
+        required this.maxPrice,
+        required this.minTolerancePercent,
+        required this.maxTolerancePercent,
+        required this.fuelMeasure,
+        required this.fuelType,
+        required this.fuelAuthority,
       this.marketRegionZoneConfigVersion,
       this.decPosForAllowedMaxForChar,
       this.allowedMaxFirstChar,

@@ -20,7 +20,7 @@ import 'package:pumped_end_device/data/remote/model/response/response.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station_operating_hrs.dart';
 
 class GetFuelStationOperatingHrsResponse extends Response {
-  final FuelStationOperatingHrs fuelStationOperatingHrs;
+  final FuelStationOperatingHrs? fuelStationOperatingHrs;
   GetFuelStationOperatingHrsResponse(final String responseCode, final String responseDetails,
       final Map<String, dynamic> invalidArguments, final int responseEpoch, this.fuelStationOperatingHrs)
       : super(responseCode, responseDetails, invalidArguments, responseEpoch);

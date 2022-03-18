@@ -21,13 +21,13 @@ import 'package:pumped_end_device/models/pumped/fuel_type.dart';
 
 class NearByFuelStations {
   bool locationSearchSuccessful = true;
-  String locationErrorReason;
+  String? locationErrorReason;
 
-  List<FuelStation> fuelStations;
-  String searchResultFailureReason;
-  FuelType defaultFuelType;
-  int userSettingsVersion;
+  List<FuelStation>? fuelStations;
+  String? searchResultFailureReason;
+  FuelType? defaultFuelType;
+  int? userSettingsVersion;
 
-  double latitude;
-  double longitude;
+  double? latitude;
+  double? longitude;
 }

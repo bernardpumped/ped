@@ -30,13 +30,13 @@ class AlterFuelQuotesRequest extends Request {
 
   AlterFuelQuotesRequest(
       {uuid,
-      this.fuelStationId,
-      this.fuelStationSource,
-      this.oauthToken,
-      this.oauthTokenSecret,
-      this.oauthValidatorType,
-      this.identityProvider,
-      this.fuelQuoteVos})
+      required this.fuelStationId,
+      required this.fuelStationSource,
+      required this.oauthToken,
+      required this.oauthTokenSecret,
+      required this.oauthValidatorType,
+      required this.identityProvider,
+      required this.fuelQuoteVos})
       : super(uuid);
 
   @override

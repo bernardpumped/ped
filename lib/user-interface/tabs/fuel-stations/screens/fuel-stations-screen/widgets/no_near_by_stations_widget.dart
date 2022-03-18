@@ -20,7 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:pumped_end_device/user-interface/widgets/pumped_icons.dart';
 
 class NoNearByStationsWidget extends StatelessWidget {
-  const NoNearByStationsWidget({Key key}) : super(key: key);
+  const NoNearByStationsWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(final BuildContext context) {

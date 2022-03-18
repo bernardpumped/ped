@@ -19,7 +19,7 @@
 enum FuelStationDetailsAttributes { stationBasicDetails, merchantDetails, quotes, operatingTimes }
 
 extension FuelStationDetailsAttributesExtension on FuelStationDetailsAttributes {
-  static String _value(final FuelStationDetailsAttributes value) {
+  static String? _value(final FuelStationDetailsAttributes value) {
     switch (value) {
       case FuelStationDetailsAttributes.operatingTimes:
         return 'OPERATING_TIMES';
@@ -33,5 +33,5 @@ extension FuelStationDetailsAttributesExtension on FuelStationDetailsAttributes 
     return null;
   }
 
-  String get value => _value(this);
+  String? get value => _value(this);
 }

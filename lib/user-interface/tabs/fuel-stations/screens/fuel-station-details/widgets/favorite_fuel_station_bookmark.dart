@@ -28,7 +28,7 @@ import 'package:pumped_end_device/util/log_util.dart';
 class FavoriteFuelStationBookmark extends StatefulWidget {
   final FuelStation _fuelStation;
 
-  const FavoriteFuelStationBookmark(this._fuelStation, {Key key}) : super(key: key);
+  const FavoriteFuelStationBookmark(this._fuelStation, {Key? key}) : super(key: key);
 
   @override
   _FavoriteFuelStationBookmarkState createState() => _FavoriteFuelStationBookmarkState();
@@ -55,16 +55,16 @@ class _FavoriteFuelStationBookmarkState extends State<FavoriteFuelStationBookmar
           future: isFavoriteFuelStationFuture,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              bool isFavoriteFuelStation = snapshot.data;
+              final bool isFavoriteFuelStation = snapshot.data!;
               return isFavoriteFuelStation
                   ? WidgetUtils.getActionIconCircular(removeFavouriteIcon,
-                      'Remove from\nFavourites', _secondaryIconColor, _secondaryIconColor, onTap: () {
-                      _favoriteRemoveAction(station);
-                    })
+                  'Remove from\nFavourites', _secondaryIconColor, _secondaryIconColor, onTap: () {
+                    _favoriteRemoveAction(station);
+                  })
                   : WidgetUtils.getActionIconCircular(addToFavouriteIcon, 'Add to\nFavourites',
-                      _secondaryIconColor, _secondaryIconColor, onTap: () {
-                      _favoriteAddAction(station);
-                    });
+                  _secondaryIconColor, _secondaryIconColor, onTap: () {
+                    _favoriteAddAction(station);
+                  });
             } else if (snapshot.hasError) {
               return const Text('Error Loading');
             } else {

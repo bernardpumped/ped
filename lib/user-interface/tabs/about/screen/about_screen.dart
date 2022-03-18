@@ -23,7 +23,7 @@ import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/user-interface/widgets/application_title_text_widget.dart';
 
 class AboutScreen extends StatelessWidget {
-  const AboutScreen({Key key}) : super(key: key);
+  const AboutScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(final BuildContext context) {

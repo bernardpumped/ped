@@ -22,16 +22,16 @@ import 'package:pumped_end_device/user-interface/tabs/fuel-stations/data/model/u
 
 class UpdateFuelQuoteResult extends UpdateFuelStationDetailsResult {
   UpdateFuelQuoteResult(
-      {final bool isUpdateSuccessful,
-      final int updateEpoch,
-      @required this.originalValues,
-      @required this.updateValues,
-      this.invalidArguments,
-      @required this.recordLevelExceptionCodes})
+      {required final bool isUpdateSuccessful,
+        required final int updateEpoch,
+        required this.originalValues,
+        required this.updateValues,
+        this.invalidArguments,
+        required this.recordLevelExceptionCodes})
       : super(UpdateFuelStationDetailType.fuelPrice, isUpdateSuccessful, updateEpoch);
 
   final Map<String, dynamic> originalValues;
   final Map<String, dynamic> updateValues;
-  final Map<String, dynamic> invalidArguments;
-  final Map<String, dynamic> recordLevelExceptionCodes;
+  final Map<String, dynamic>? invalidArguments;
+  final Map<String, dynamic>? recordLevelExceptionCodes;
 }

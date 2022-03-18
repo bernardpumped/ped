@@ -19,7 +19,7 @@
 import 'package:flutter/material.dart';
 
 class NoPromotionsWidget extends StatelessWidget {
-  const NoPromotionsWidget({Key key}) : super(key: key);
+  const NoPromotionsWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
