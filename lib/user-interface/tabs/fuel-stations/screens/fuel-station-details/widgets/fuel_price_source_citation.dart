@@ -24,7 +24,6 @@ import 'package:pumped_end_device/user-interface/tabs/fuel-stations/screens/fuel
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/models/pumped/fuel_quote.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station.dart';
-import 'package:sprintf/sprintf.dart';
 
 class FuelPriceSourceCitation extends StatelessWidget {
   static const _padding = 15.0;

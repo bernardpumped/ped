@@ -25,7 +25,7 @@ import 'package:pumped_end_device/data/remote/response-parser/response_parser.da
 import 'package:pumped_end_device/util/log_util.dart';
 
 abstract class HttpGetExecutor<I extends Request, O extends Response> {
-  static const defaultTimeOut = 5000;
+  static const defaultTimeOut = 25000;
   final ResponseParser<O> responseParser;
   final String tag;
   final int timeOutInMills;

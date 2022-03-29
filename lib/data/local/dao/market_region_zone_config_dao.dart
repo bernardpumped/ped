@@ -62,7 +62,7 @@ class MarketRegionZoneConfigDao {
     return null;
   }
 
-  Future<dynamic> insertMarketRegionZoneConfiguration(final MarketRegionZoneConfiguration configuration) async {
+  insertMarketRegionZoneConfiguration(final MarketRegionZoneConfiguration configuration) async {
     final db = Localstore.instance;
     LogUtil.debug(_tag, 'Inserting MarketRegionConfigDoc using key ${_getMarketRegionConfigDocId(configuration.version)}');
     db.collection(_collectionMarketRegionConfig).doc(_getMarketRegionConfigDocId(configuration.version)).set(configuration.marketRegionConfig.toMap());

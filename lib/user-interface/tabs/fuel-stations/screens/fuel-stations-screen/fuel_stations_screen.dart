@@ -27,7 +27,6 @@ import 'package:pumped_end_device/data/local/location/location_service_subscript
 import 'package:pumped_end_device/data/local/location_utils.dart';
 import 'package:pumped_end_device/data/local/model/market_region_zone_config.dart';
 import 'package:pumped_end_device/main.dart';
-import 'package:pumped_end_device/user-interface/fonts_and_colors.dart';
 import 'package:pumped_end_device/user-interface/tabs/fuel-stations/screens/fuel-stations-screen/service/favorite_fuel_stations_service.dart';
 import 'package:pumped_end_device/user-interface/tabs/fuel-stations/service/fuel_type_switcher_service.dart';
 import 'package:pumped_end_device/user-interface/tabs/fuel-stations/screens/fuel-stations-screen/service/near_by_fuel_stations_service.dart';
@@ -165,22 +164,23 @@ class _FuelStationsScreenState extends State<FuelStationsScreen> {
             backgroundColor: Colors.white,
             trailing: _getFuelTypeSwitcherStreamBuilder()),
         body: Container(
-            decoration: const BoxDecoration(color: FontsAndColors.pumpedBoxDecorationColor),
-            padding: const EdgeInsets.all(7),
+            // decoration: const BoxDecoration(color: FontsAndColors.pumpedBoxDecorationColor),
+            // padding: const EdgeInsets.all(7),
             child: Column(children: <Widget>[
-              Row(children: <Widget>[
-                Expanded(
-                    child: CupertinoSegmentedControl(
-                        borderColor: FontsAndColors.pumpedSecondaryIconColor,
-                        selectedColor: FontsAndColors.pumpedSecondaryIconColor,
-                        children: logoWidgets,
-                        onValueChanged: (int val) {
-                          setState(() => selectedSegment = val);
-                        },
-                        groupValue: selectedSegment))
-              ]),
-              const SizedBox(height: 10),
-              _getSortationHeaderWidget(),
+              // Row(children: <Widget>[
+              //   Expanded(
+              //       child: CupertinoSegmentedControl(
+              //           borderColor: FontsAndColors.pumpedSecondaryIconColor,
+              //           selectedColor: FontsAndColors.pumpedSecondaryIconColor,
+              //           children: logoWidgets,
+              //           onValueChanged: (int val) {
+              //             setState(() => selectedSegment = val);
+              //           },
+              //           groupValue: selectedSegment))
+              // ]),
+              // const SizedBox(height: 10),
+              // _getSortationHeaderWidget(),
+              _getFuelStationSearchFilterBar(),
               const SizedBox(height: 6),
               _getFuelStationList(),
             ])));
@@ -201,6 +201,18 @@ class _FuelStationsScreenState extends State<FuelStationsScreen> {
         });
   }
 
+  Widget _getFuelStationSearchFilterBar() {
+    return Padding(
+      padding: EdgeInsets.only(left: 10, right: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            _getFuelFavouriteNearbyFuelStationSwitcher(),
+            _getSortationHeaderWidget2()
+      ]),
+    );
+  }
+
   RenderObjectWidget _getSortationHeaderWidget() {
     return Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
       CupertinoSlidingSegmentedControl<int>(
@@ -217,6 +229,37 @@ class _FuelStationsScreenState extends State<FuelStationsScreen> {
           },
           groupValue: sortOrder)
     ]);
+  }
+
+  Widget _getFuelFavouriteNearbyFuelStationSwitcher() {
+    return DropdownButton<String>(
+        onChanged: (value) {
+
+        },
+        value: 'Nearby Stations',
+        // items: sortHeaders.values.map((value) => DropdownMenuItem(child: value)).toList()
+        items: [
+          DropdownMenuItem(child: Text('Favourite Stations'), value: 'Favourite Stations'),
+          DropdownMenuItem(child: Text('Nearby Stations'), value: 'Nearby Stations')
+        ]
+    );
+  }
+
+  Widget _getSortationHeaderWidget2() {
+    return DropdownButton<String>(
+      onChanged: (value) {
+
+      },
+      value: 'Price',
+      // items: sortHeaders.values.map((value) => DropdownMenuItem(child: value)).toList()
+      items: const [
+        DropdownMenuItem(child: Text('Brand'), value: 'Brand'),
+        DropdownMenuItem(child: Text('Price'), value: 'Price'),
+        DropdownMenuItem(child: Text('Distance'), value: 'Distance'),
+        DropdownMenuItem(child: Text('Offers'), value: 'Offers')
+      ]
+    );
+
   }
 
   void _sortFuelStations() {

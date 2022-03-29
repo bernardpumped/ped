@@ -18,11 +18,28 @@
 
 import 'package:flutter/material.dart';
 
-class ApplicationTitleTextWidget extends StatelessWidget {
-  const ApplicationTitleTextWidget({Key? key}) : super(key: key);
+@immutable
+class ExpandableFabActionButton extends StatelessWidget {
+  const ExpandableFabActionButton({
+    Key? key,
+    this.onPressed,
+    required this.label,
+    required this.icon,
+  }) : super(key: key);
+
+  final VoidCallback? onPressed;
+  final Widget icon;
+  final String label;
 
   @override
-  Widget build(final BuildContext context) {
-    return const Text('Pumped', style: TextStyle(fontSize: 28, color: Colors.black87, fontWeight: FontWeight.bold));
+  Widget build(BuildContext context) {
+    return Chip(
+        labelPadding: const EdgeInsets.all(5.0),
+        avatar: CircleAvatar(backgroundColor: Theme.of(context).colorScheme.secondary, child: icon),
+        label: Text(label, style: const TextStyle(color: Colors.white)),
+        backgroundColor: Theme.of(context).colorScheme.secondary,
+        elevation: 6.0,
+        shadowColor: Colors.grey[60],
+        padding: const EdgeInsets.all(8.0));
   }
 }

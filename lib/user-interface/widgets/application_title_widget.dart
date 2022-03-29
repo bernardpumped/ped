@@ -16,19 +16,15 @@
  *     along with Pumped End Device.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'package:pumped_end_device/models/pumped/fuel_category.dart';
-import 'package:pumped_end_device/models/pumped/fuel_type.dart';
+import 'package:flutter/material.dart';
 
-class FuelTypeSwitcherData {
-  final FuelType defaultFuelType;
-  final FuelCategory defaultFuelCategory;
-  final int userSettingsVersion;
+class ApplicationTitleWidget extends StatelessWidget {
+  final String title;
+  final Color titleColor;
+  const ApplicationTitleWidget({Key? key, required this.title, required this.titleColor}) : super(key: key);
 
-  FuelTypeSwitcherData(this.defaultFuelType, this.defaultFuelCategory, this.userSettingsVersion);
-}
-
-class FuelTypeSwitcherDataError {
-  final String failureReason;
-
-  FuelTypeSwitcherDataError(this.failureReason);
+  @override
+  Widget build(final BuildContext context) {
+    return Text(title, style: TextStyle(fontSize: 28, color: titleColor, fontWeight: FontWeight.bold));
+  }
 }
