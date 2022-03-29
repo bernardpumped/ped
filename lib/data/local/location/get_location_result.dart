@@ -16,7 +16,6 @@
  *     along with Pumped End Device.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'package:flutter/cupertino.dart';
 import 'package:pumped_end_device/data/local/location/geo_location_data.dart';
 import 'package:pumped_end_device/data/local/location/location_access_result_code.dart';
 

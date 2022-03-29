@@ -30,7 +30,6 @@ extension FuelStationDetailsAttributesExtension on FuelStationDetailsAttributes 
       case FuelStationDetailsAttributes.stationBasicDetails:
         return 'STATION_BASIC_DETAILS';
     }
-    return null;
   }
 
   String? get value => _value(this);

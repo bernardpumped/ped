@@ -119,9 +119,8 @@ class NearByFuelStationsService {
     final GetFuelStationsInRangeResponse response =
         await GetFuelStationsInRange(GetFuelStationsInRangeResponseParser(fuelAuthorityId)).execute(request);
     if (response.marketRegionZoneConfiguration != null) {
-      final int persistenceResult = await MarketRegionZoneConfigDao.instance
-          .insertMarketRegionZoneConfiguration(response.marketRegionZoneConfiguration!);
-      LogUtil.debug(_tag, 'MarketRegionZoneConfig persistence result $persistenceResult');
+      await MarketRegionZoneConfigDao.instance.insertMarketRegionZoneConfiguration(response.marketRegionZoneConfiguration!);
+      LogUtil.debug(_tag, 'MarketRegionZoneConfig persistence successfully');
     } else {
       LogUtil.debug(_tag, 'Existing marketRegionZoneConfig set in GetFuelStationsInRangeResponse');
       response.marketRegionZoneConfiguration = existingMarketRegionZoneConfiguration;

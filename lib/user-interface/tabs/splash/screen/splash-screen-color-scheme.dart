@@ -16,19 +16,15 @@
  *     along with Pumped End Device.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'package:pumped_end_device/models/pumped/fuel_category.dart';
-import 'package:pumped_end_device/models/pumped/fuel_type.dart';
+import 'package:flutter/material.dart';
 
-class FuelTypeSwitcherData {
-  final FuelType defaultFuelType;
-  final FuelCategory defaultFuelCategory;
-  final int userSettingsVersion;
-
-  FuelTypeSwitcherData(this.defaultFuelType, this.defaultFuelCategory, this.userSettingsVersion);
-}
-
-class FuelTypeSwitcherDataError {
-  final String failureReason;
-
-  FuelTypeSwitcherDataError(this.failureReason);
+class SplashScreenColorScheme {
+  late Color backgroundColor;
+  late Color appDescColor;
+  late Color notificationsColor;
+  SplashScreenColorScheme(final ThemeData themeData) {
+    backgroundColor = themeData.primaryColor;
+    appDescColor = Colors.white;
+    notificationsColor = Colors.white;
+  }
 }

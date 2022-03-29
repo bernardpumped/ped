@@ -24,7 +24,9 @@ import 'package:pumped_end_device/data/local/location/location_access_result_cod
 import 'package:pumped_end_device/data/local/location/location_data_source.dart';
 import 'package:pumped_end_device/main.dart';
 import 'package:pumped_end_device/user-interface/icon_codes.dart';
-import 'package:pumped_end_device/user-interface/pumped_base_tab_view.dart';
+// import 'package:pumped_end_device/user-interface/pumped_base_tab_view.dart';
+import 'package:pumped_end_device/user-interface/fuel-stations/screens/nearby/nearby-stations-screen.dart';
+import 'package:pumped_end_device/user-interface/tabs/splash/screen/splash-screen-color-scheme.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
@@ -37,9 +39,8 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   static const _tag = 'SplashScreen';
-  static const _locationIcon = Icon(IconData(IconCodes.locationDetectedIconCode, fontFamily: 'MaterialIcons'), color: Colors.white);
-  static const _checkIcon = Icon(IconData(IconCodes.doneIconCode, fontFamily: 'MaterialIcons'), color: Colors.white);
-  static const _localGasIcon = Icon(IconData(IconCodes.findFuelStationIconCode, fontFamily: 'MaterialIcons'), color: Colors.white);
+  final SplashScreenColorScheme colorScheme =
+      getIt.get<SplashScreenColorScheme>(instanceName: splashScreenColorSchemeName);
 
   bool _locationDetectionTriggered = false;
   bool _checkingPumpedAvailabilityTextVisible = false;
@@ -59,19 +60,21 @@ class _SplashScreenState extends State<SplashScreen> {
     final double widthOfScaffold = MediaQuery.of(context).size.width;
     return Scaffold(
         key: _scaffoldKey,
-        backgroundColor: Theme.of(context).primaryColor,
+        backgroundColor: colorScheme.backgroundColor,
         body: Container(
             alignment: Alignment.center,
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  const Image(image: AssetImage('assets/images/ic_splash.png'), width: 153, height: 133, fit: BoxFit.fill),
+                  const Image(
+                      image: AssetImage('assets/images/ic_splash.png'), width: 153, height: 133, fit: BoxFit.fill),
                   const SizedBox(height: 30),
-                  const Center(
+                  Center(
                       child: Text('Your friendly \n neighbourhood fuel finder',
                           textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 22, color: Colors.white, fontWeight: FontWeight.w500))),
+                          style:
+                              TextStyle(fontSize: 22, color: colorScheme.appDescColor, fontWeight: FontWeight.w500))),
                   Container(
                       margin: const EdgeInsets.only(top: 20),
                       width: 150,
@@ -84,17 +87,21 @@ class _SplashScreenState extends State<SplashScreen> {
                         opacity: _locationDetectionTriggered ? 1.0 : 0.0,
                         duration: const Duration(milliseconds: 500),
                         child: Padding(
-                            padding: EdgeInsets.only(left: widthOfScaffold / 2 - 135, right: 5), child: _locationIcon)),
+                            padding: EdgeInsets.only(left: widthOfScaffold / 2 - 135, right: 5),
+                            child: Icon(const IconData(IconCodes.locationDetectedIconCode, fontFamily: 'MaterialIcons'),
+                                color: colorScheme.notificationsColor))),
                     AnimatedOpacity(
                         opacity: _locationDetectionTriggered ? 1.0 : 0.0,
                         duration: const Duration(milliseconds: 500),
-                        child: const SizedBox(
+                        child: SizedBox(
                             width: 200,
-                            child: Text('Detecting Location', style: TextStyle(fontSize: 16, color: Colors.white)))),
+                            child: Text('Detecting Location',
+                                style: TextStyle(fontSize: 16, color: colorScheme.notificationsColor)))),
                     AnimatedOpacity(
                         opacity: _detectingLocationIconVisible ? 1.0 : 0.0,
                         duration: const Duration(milliseconds: 500),
-                        child: _checkIcon)
+                        child: Icon(const IconData(IconCodes.doneIconCode, fontFamily: 'MaterialIcons'),
+                            color: colorScheme.notificationsColor))
                   ]),
                   const SizedBox(height: 20),
                   Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
@@ -102,18 +109,21 @@ class _SplashScreenState extends State<SplashScreen> {
                         opacity: _checkingPumpedAvailabilityIconVisible ? 1.0 : 0.0,
                         duration: const Duration(milliseconds: 500),
                         child: Padding(
-                            padding: EdgeInsets.only(left: widthOfScaffold / 2 - 135, right: 7), child: _localGasIcon)),
+                            padding: EdgeInsets.only(left: widthOfScaffold / 2 - 135, right: 7),
+                            child: Icon(const IconData(IconCodes.findFuelStationIconCode, fontFamily: 'MaterialIcons'),
+                                color: colorScheme.notificationsColor))),
                     AnimatedOpacity(
                         opacity: _checkingPumpedAvailabilityIconVisible ? 1.0 : 0.0,
                         duration: const Duration(milliseconds: 500),
-                        child: const SizedBox(
+                        child: SizedBox(
                             width: 200,
-                            child:
-                                Text('Fetching Fuel Stations', style: TextStyle(fontSize: 16, color: Colors.white)))),
+                            child: Text('Fetching Fuel Stations',
+                                style: TextStyle(fontSize: 16, color: colorScheme.notificationsColor)))),
                     AnimatedOpacity(
                         opacity: _checkingPumpedAvailabilityTextVisible ? 1.0 : 0.0,
                         duration: const Duration(milliseconds: 500),
-                        child: _checkIcon)
+                        child: Icon(const IconData(IconCodes.doneIconCode, fontFamily: 'MaterialIcons'),
+                            color: colorScheme.notificationsColor))
                   ])
                 ])));
   }
@@ -128,15 +138,18 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void _getLocationFromOnDeviceLocationService() {
-    final Future<GetLocationResult> getLocationDataFuture = getIt.get<LocationDataSource>(instanceName: locationDataSourceInstanceName).getLocationData();
+    final Future<GetLocationResult> getLocationDataFuture =
+        getIt.get<LocationDataSource>(instanceName: locationDataSourceInstanceName).getLocationData();
     getLocationDataFuture.then((locationResult) {
       final LocationInitResultCode code = locationResult.locationInitResultCode;
       switch (code) {
         case LocationInitResultCode.locationServiceDisabled:
-          ScaffoldMessenger.of(context).showSnackBar(WidgetUtils.buildSnackBar(context, 'Location Service is disabled', 2, '', () {}));
+          ScaffoldMessenger.of(context)
+              .showSnackBar(WidgetUtils.buildSnackBar(context, 'Location Service is disabled', 2, '', () {}));
           break;
         case LocationInitResultCode.permissionDenied:
-          ScaffoldMessenger.of(context).showSnackBar(WidgetUtils.buildSnackBar(context, 'Location Service is disabled', 2, '', () {}));
+          ScaffoldMessenger.of(context)
+              .showSnackBar(WidgetUtils.buildSnackBar(context, 'Location Service is disabled', 2, '', () {}));
           break;
         case LocationInitResultCode.notFound:
           WidgetUtils.buildSnackBar(context, 'Location Not Found', 2, '', () {});
@@ -174,7 +187,7 @@ class _SplashScreenState extends State<SplashScreen> {
           setState(() {
             _checkingPumpedAvailabilityTextVisible = true;
           });
-          Navigator.pushReplacementNamed(context, PumpedBaseTabView.routeName);
+          Navigator.pushReplacementNamed(context, NearbyStationsScreen.routeName);
         });
       }, onError: (error) {
         LogUtil.error(_tag, 'Error happened on detecting location : $error');

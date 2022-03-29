@@ -81,6 +81,10 @@ flutter:
     - assets/images/1.0x/ic_pumped_black_text.png
     - assets/images/2.0x/ic_pumped_black_text.png
     - assets/images/3.0x/ic_pumped_black_text.png
+    - assets/images/ic_user.png
+    - assets/images/1.0x/ic_user.png
+    - assets/images/2.0x/ic_user.png
+    - assets/images/3.0x/ic_user.png
 
   fonts:
     - family: SF-Pro-Display

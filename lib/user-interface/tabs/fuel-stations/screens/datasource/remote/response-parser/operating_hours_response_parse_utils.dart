@@ -36,8 +36,8 @@ class OperatingHoursResponseParseUtils {
       if (closingMinutes == 0 || closingMinutes == null) {
         closingMinutes = 59;
       }
-      var operatingHours = operatingHoursJsonVal['publishDate'];
-      final DateTime? publishDateTime = operatingHours != null ? DateTime.fromMillisecondsSinceEpoch(operatingHours * 1000) : null;
+      var publishDate = operatingHoursJsonVal['publishDate'];
+      final DateTime? publishDateTime = publishDate != null ? DateTime.fromMillisecondsSinceEpoch(publishDate * 1000) : null;
       operatingHours = OperatingHours(
           dayOfWeek: operatingHoursJsonVal['dayOfWeek'],
           openingHrs: openingHrs,

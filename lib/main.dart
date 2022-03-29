@@ -20,7 +20,11 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pumped_end_device/data/local/location/location_data_source.dart';
-import 'package:pumped_end_device/user-interface/pumped_base_tab_view.dart';
+import 'package:pumped_end_device/user-interface/fuel-stations/fuel-station-screen-color-scheme.dart';
+import 'package:pumped_end_device/user-interface/fuel-stations/screens/favourite/favourite-stations-screen.dart';
+import 'package:pumped_end_device/user-interface/nav-drawer/nav-drawer-color-scheme.dart';
+import 'package:pumped_end_device/user-interface/fuel-stations/screens/nearby/nearby-stations-screen.dart';
+import 'package:pumped_end_device/user-interface/tabs/splash/screen/splash-screen-color-scheme.dart';
 import 'package:pumped_end_device/user-interface/tabs/splash/screen/splash_screen.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 import 'package:pumped_end_device/util/platform_wrapper.dart';
@@ -28,10 +32,15 @@ import 'package:pumped_end_device/util/platform_wrapper.dart';
 import 'data/local/location/geo_location_wrapper.dart';
 
 GetIt getIt = GetIt.instance;
-const appVersion = "24";
+const appVersion = "25";
 const getLocationWrapperInstanceName = 'geoLocationWrapper';
 const platformWrapperInstanceName = 'platformWrapper';
 const locationDataSourceInstanceName = 'locationDataSource';
+
+const splashScreenColorSchemeName = 'splashScreenColorScheme';
+const navDrawerColorSchemeName = 'navDrawerColorScheme';
+const fsScreenColorSchemeName = 'fsScreenColorScheme';
+const fsCardColorSchemeName = 'fsCardColorScheme';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -44,20 +53,28 @@ class PumpedApp extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    _deviceIngo();
+    _deviceInfo();
     _registerBeansWithGetIt();
+    final ThemeData themeData = ThemeData(
+        useMaterial3: true,
+        primarySwatch: Colors.indigo,
+        colorScheme: ColorScheme.fromSwatch(accentColor: Colors.indigoAccent),
+        // colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromRGBO(103, 80, 164, 1)), //#6750A4
+        // colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
+        textTheme: Theme.of(context).textTheme.apply(fontFamily: 'SF-Pro-Display'));
+    _registerThemes(themeData);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-          primarySwatch: Colors.indigo,
-          colorScheme: ColorScheme.fromSwatch(accentColor: Colors.indigoAccent),
-          textTheme: Theme.of(context).textTheme.apply(fontFamily: 'SF-Pro-Display')),
+      theme: themeData,
       home: const SplashScreen(),
-      routes: {PumpedBaseTabView.routeName: (context) => const PumpedBaseTabView()},
+      routes: {
+        NearbyStationsScreen.routeName: (context) => const NearbyStationsScreen(),
+        FavouriteStationsScreen.routeName: (context) => const FavouriteStationsScreen(),
+      },
     );
   }
 
-  void _deviceIngo() async {
+  void _deviceInfo() async {
     final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
     final deviceInfo = await deviceInfoPlugin.deviceInfo;
     final map = deviceInfo.toMap();
@@ -93,6 +110,36 @@ class PumpedApp extends StatelessWidget {
           instanceName: locationDataSourceInstanceName);
     } else {
       LogUtil.debug(_tag, 'Instance of $platformWrapperInstanceName is already registered');
+    }
+  }
+
+  void _registerThemes(final ThemeData themeData) {
+    if (!getIt.isRegistered<SplashScreenColorScheme>(instanceName: splashScreenColorSchemeName)) {
+      LogUtil.debug(_tag, 'Registering instance of $splashScreenColorSchemeName');
+      getIt.registerSingleton<SplashScreenColorScheme>(SplashScreenColorScheme(themeData), instanceName: splashScreenColorSchemeName);
+    } else {
+      LogUtil.debug(_tag, 'Instance of $splashScreenColorSchemeName is already registered');
+    }
+
+    if (!getIt.isRegistered<NavDrawerColorScheme>(instanceName: navDrawerColorSchemeName)) {
+      LogUtil.debug(_tag, 'Registering instance of $navDrawerColorSchemeName');
+      getIt.registerSingleton<NavDrawerColorScheme>(NavDrawerColorScheme(themeData), instanceName: navDrawerColorSchemeName);
+    } else {
+      LogUtil.debug(_tag, 'Instance of $navDrawerColorSchemeName is already registered');
+    }
+
+    if (!getIt.isRegistered<FuelStationsScreenColorScheme>(instanceName: fsScreenColorSchemeName)) {
+      LogUtil.debug(_tag, 'Registering instance of $fsScreenColorSchemeName');
+      getIt.registerSingleton<FuelStationsScreenColorScheme>(FuelStationsScreenColorScheme(themeData), instanceName: fsScreenColorSchemeName);
+    } else {
+      LogUtil.debug(_tag, 'Instance of $fsScreenColorSchemeName is already registered');
+    }
+
+    if (!getIt.isRegistered<FuelStationCardColorScheme>(instanceName: fsCardColorSchemeName)) {
+      LogUtil.debug(_tag, 'Registering instance of $fsCardColorSchemeName');
+      getIt.registerSingleton<FuelStationCardColorScheme>(FuelStationCardColorScheme(themeData), instanceName: fsCardColorSchemeName);
+    } else {
+      LogUtil.debug(_tag, 'Instance of $fsCardColorSchemeName is already registered');
     }
   }
 }

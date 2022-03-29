@@ -16,19 +16,25 @@
  *     along with Pumped End Device.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'package:pumped_end_device/models/pumped/fuel_category.dart';
-import 'package:pumped_end_device/models/pumped/fuel_type.dart';
+import 'package:flutter/material.dart';
 
-class FuelTypeSwitcherData {
-  final FuelType defaultFuelType;
-  final FuelCategory defaultFuelCategory;
-  final int userSettingsVersion;
+class NavDrawerColorScheme {
+  late Color backgroundColor;
+  late Color selectedBackgroundColor = Colors.white;
+  late Color textColor;
+  late Color selectedTextColor;
+  late Color iconColor;
+  late Color selectedIconColor;
+  late Color dividerColor = Colors.white;
+  static const pumpedImage = 'assets/images/ic_splash.png';
 
-  FuelTypeSwitcherData(this.defaultFuelType, this.defaultFuelCategory, this.userSettingsVersion);
-}
-
-class FuelTypeSwitcherDataError {
-  final String failureReason;
-
-  FuelTypeSwitcherDataError(this.failureReason);
+  NavDrawerColorScheme(final ThemeData themData) {
+    backgroundColor = themData.primaryColor;
+    selectedBackgroundColor = themData.colorScheme.onPrimary;
+    textColor = Colors.white;
+    selectedTextColor = backgroundColor;
+    iconColor = Colors.white;
+    selectedIconColor = backgroundColor;
+    dividerColor = Colors.white;
+  }
 }
