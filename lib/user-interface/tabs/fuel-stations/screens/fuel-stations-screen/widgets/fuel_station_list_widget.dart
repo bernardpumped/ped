@@ -118,8 +118,8 @@ class _FuelStationListWidgetState extends State<FuelStationListWidget> with Tick
                   firstChild: FuelStationListItemCollapsedWidget(fuelStation, widget._selectedFuelType),
                   secondChild: FuelStationListItemExpandedWidget(
                       fuelStation, widget._selectedFuelType, rebuildTriggerOnDataUpdate),
-                  crossFadeState: !expanded ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-                ),
+                  crossFadeState: !expanded ? CrossFadeState.showFirst : CrossFadeState.showSecond
+                )
               ));
         });
   }

@@ -22,37 +22,27 @@ class NoFavouriteStationsWidget extends StatelessWidget {
   const NoFavouriteStationsWidget({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return ListView(children: <Widget>[
-      const SizedBox(height: 120),
-      Text(
-    'No Favourites',
-    style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600, color: Theme.of(context).primaryColor),
-    textAlign: TextAlign.center,
-      ),
-      const SizedBox(height: 20),
-      RichText(
-    textAlign: TextAlign.center,
-    text: const TextSpan(
-      children: [
-        TextSpan(
-          text: "Tap on the bookmark",
-          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.black54),
-        ),
-        WidgetSpan(
-          child: Icon(
-            Icons.bookmark_border,
-            size: 18,
-            color: Colors.black54,
-          ),
-        ),
-        TextSpan(
-          text: " icon in Fuel Station details to add fuel station to favourites.",
-          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.black54),
-        ),
-      ],
-    ),
-      ),
-    ]);
+  Widget build(final BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: ListView(children: <Widget>[
+        const SizedBox(height: 120),
+        Text('No Favourites',
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600, color: Theme.of(context).primaryColor),
+            textAlign: TextAlign.center),
+        const SizedBox(height: 20),
+        RichText(
+            textAlign: TextAlign.center,
+            text: const TextSpan(children: [
+              TextSpan(
+                  text: "Tap on the bookmark",
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.black54)),
+              WidgetSpan(child: Icon(Icons.bookmark_border, size: 18, color: Colors.black54)),
+              TextSpan(
+                  text: " icon in Fuel Station details to add fuel station to favourites.",
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.black54))
+            ]))
+      ]),
+    );
   }
 }

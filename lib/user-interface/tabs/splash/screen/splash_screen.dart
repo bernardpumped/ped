@@ -62,6 +62,12 @@ class _SplashScreenState extends State<SplashScreen> {
         key: _scaffoldKey,
         backgroundColor: colorScheme.backgroundColor,
         body: Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/images/Wave-2.png"),
+                fit: BoxFit.cover,
+              ),
+            ),
             alignment: Alignment.center,
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
