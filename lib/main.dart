@@ -59,8 +59,6 @@ class PumpedApp extends StatelessWidget {
         useMaterial3: true,
         primarySwatch: Colors.indigo,
         colorScheme: ColorScheme.fromSwatch(accentColor: Colors.indigoAccent),
-        // colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromRGBO(103, 80, 164, 1)), //#6750A4
-        // colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
         textTheme: Theme.of(context).textTheme.apply(fontFamily: 'SF-Pro-Display'));
     _registerThemes(themeData);
     return MaterialApp(

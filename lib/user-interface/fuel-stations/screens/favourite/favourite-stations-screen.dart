@@ -16,10 +16,28 @@
  *     along with Pumped End Device.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:pumped_end_device/user-interface/fuel-stations/widgets/fuel-stations-sort-fab.dart';
+import 'package:pumped_end_device/data/local/location/location_data_source.dart';
+import 'package:pumped_end_device/main.dart';
+import 'package:pumped_end_device/models/pumped/fuel_category.dart';
+import 'package:pumped_end_device/models/pumped/fuel_station.dart';
+import 'package:pumped_end_device/models/pumped/fuel_type.dart';
+import 'package:pumped_end_device/user-interface/fuel-stations/fuel-station-screen-color-scheme.dart';
+import 'package:pumped_end_device/user-interface/fuel-stations/widgets/fuel-station-type-switcher.dart';
+import 'package:pumped_end_device/user-interface/fuel-stations/widgets/floating-panel.dart';
+import 'package:pumped_end_device/user-interface/fuel-stations/widgets/fuel-type-switcher-widget.dart';
+import 'package:pumped_end_device/user-interface/fuel-stations/widgets/fuel-station-list-widget.dart';
 import 'package:pumped_end_device/user-interface/nav-drawer/nav-drawer.dart';
-import 'package:pumped_end_device/user-interface/widgets/application_title_text_widget.dart';
+import 'package:pumped_end_device/user-interface/tabs/fuel-stations/data/model/favorite_fuel_stations.dart';
+import 'package:pumped_end_device/user-interface/tabs/fuel-stations/data/model/fuel_type_switcher_data.dart';
+import 'package:pumped_end_device/user-interface/tabs/fuel-stations/data/params/fuel_type_switcher_response_params.dart';
+import 'package:pumped_end_device/user-interface/tabs/fuel-stations/screens/fuel-stations-screen/service/favorite_fuel_stations_service.dart';
+import 'package:pumped_end_device/user-interface/tabs/fuel-stations/screens/fuel-stations-screen/widgets/no_favourite_stations_widget.dart';
+import 'package:pumped_end_device/user-interface/tabs/fuel-stations/service/fuel_type_switcher_service.dart';
+import 'package:pumped_end_device/user-interface/widgets/application_title_widget.dart';
+import 'package:pumped_end_device/util/log_util.dart';
 
 class FavouriteStationsScreen extends StatefulWidget {
   static const routeName = '/favourite-stations';
@@ -31,27 +49,175 @@ class FavouriteStationsScreen extends StatefulWidget {
 
 class _FavouriteStationsScreenState extends State<FavouriteStationsScreen> {
   static const _tag = 'FavouriteStationsScreen';
+  final FavoriteFuelStationsService _favoriteFuelStationsDataSource =
+      FavoriteFuelStationsService(getIt.get<LocationDataSource>(instanceName: locationDataSourceInstanceName));
+  ScrollController _scrollController = ScrollController();
+  final FuelTypeSwitcherService _fuelTypeSwitcherDataSource = FuelTypeSwitcherService();
+  static const Map<int, IconData> sortHeaders = {
+    0: Icons.label_outline,
+    1: Icons.attach_money,
+    2: Icons.navigation_outlined,
+    3: Icons.shopping_cart_outlined,
+  };
+
+  final FuelStationsScreenColorScheme colorScheme =
+      getIt.get<FuelStationsScreenColorScheme>(instanceName: fsScreenColorSchemeName);
+  late StreamController<FuelTypeSwitcherData> _fuelTypeSwitcherDataStreamController;
+
+  Future<FavoriteFuelStations>? _favoriteFuelStationsFuture;
+
+  int _userSettingsVersion = 0;
+  int sortOrder = 1;
+  List<FuelStation> _favouriteStations = [];
+  FuelType? _selectedFuelType;
+  FuelCategory? _selectedFuelCategory;
 
   @override
-  Widget build(final BuildContext context) => Scaffold(
-      appBar: AppBar(
-          elevation: 1,
-          backgroundColor: Colors.white,
-          iconTheme: const IconThemeData(color: Colors.black),
-          centerTitle: false,
-          title: const ApplicationTitleTextWidget()),
-      drawer: const NavDrawer(),
-      body: _drawBody(),
-      floatingActionButton: const FuelStationsSortFab());
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+    _favoriteFuelStationsFuture = _favoriteFuelStationsDataSource.getFuelStations();
+    _fuelTypeSwitcherDataStreamController = StreamController<FuelTypeSwitcherData>.broadcast();
+  }
+
+  @override
+  void dispose() {
+    _fuelTypeSwitcherDataStreamController.close();
+    super.dispose();
+  }
+
+  @override
+  Widget build(final BuildContext context) {
+    _fuelTypeSwitcherDataSource.addFuelTypeSwitcherDataToStream(_fuelTypeSwitcherDataStreamController);
+    return Scaffold(
+        appBar: AppBar(
+            elevation: 0,
+            backgroundColor: colorScheme.appBarBackgroundColor,
+            iconTheme: IconThemeData(color: colorScheme.appBarIconThemeColor),
+            centerTitle: false,
+            foregroundColor: colorScheme.appBarForegroundColor,
+            title: ApplicationTitleWidget(title: 'Pumped', titleColor: colorScheme.appBarTitleColor)),
+        drawer: const NavDrawer(),
+        body: _drawBody(),
+        floatingActionButton: FloatBoxPanel(
+            panelIcon: Icons.sort_outlined,
+            backgroundColor: colorScheme.floatingBoxPanelBackgroundColor,
+            contentColor: colorScheme.floatingBoxPanelSelectedColor,
+            nonSelColor: colorScheme.floatingBoxPanelNonSelectedColor,
+            buttons: sortHeaders.values.toList(),
+            selIndex: sortOrder,
+            onPressed: (index) {
+              setState(() {
+                sortOrder = index;
+                if (_favouriteStations.isNotEmpty) {
+                  _scrollController.animateTo(0.0, curve: Curves.easeOut, duration: const Duration(milliseconds: 500));
+                }
+              });
+            }));
+  }
 
   _drawBody() {
-    return Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
+    return Container(
+        color: colorScheme.bodyBackgroundColor,
+        child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
           Padding(
-              padding: EdgeInsets.only(top: 5.0, left: 20, right: 20),
-              // child: FuelStationFuelTypeWidget(fuelStationChipTitle: 'Favourite Fuel', fuelTypeChipTitle: 'Unleaded 91', fuelTypeSwitcherData: null)
-              child: Container()
-          )]);
+              padding: const EdgeInsets.only(top: 5.0, left: 20, right: 20), child: _getStationTypeFuelTypeSwitcher()),
+          Expanded(child: _getFavouriteFuelStationsFutureBuilder()),
+        ]));
+  }
+
+  Widget _getStationTypeFuelTypeSwitcher() {
+    return Material(
+        color: colorScheme.stationFuelTypeSwitcherColor,
+        child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [FuelStationTypeSwitcherWidget(labelText: 'Favourite Fuel'), _getFuelTypeSwitcherStreamBuilder()]));
+  }
+
+  StreamBuilder<FuelTypeSwitcherData> _getFuelTypeSwitcherStreamBuilder() {
+    return StreamBuilder(
+        stream: _fuelTypeSwitcherDataStreamController.stream,
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return const Material(color: Colors.white, child: Text('Error Loading'));
+          } else if (snapshot.hasData) {
+            return _getFuelTypeSwitcherButton(snapshot.data!);
+          } else {
+            return const Text('Loading');
+          }
+        });
+  }
+
+  Widget _getFuelTypeSwitcherButton(final FuelTypeSwitcherData data) {
+    if (data.userSettingsVersion > _userSettingsVersion) {
+      _userSettingsVersion = data.userSettingsVersion;
+      _selectedFuelType = data.defaultFuelType;
+      _selectedFuelCategory = data.defaultFuelCategory;
+    } else {
+      _selectedFuelType = _selectedFuelType ?? data.defaultFuelType;
+      _selectedFuelCategory = _selectedFuelCategory ?? data.defaultFuelCategory;
+    }
+    return FuelTypeSwitcherWidget(
+        selectedFuelType: _selectedFuelType!,
+        selectedFuelCategory: _selectedFuelCategory!,
+        onChangeCallback: _handleFuelTypeSwitch);
+  }
+
+  void _handleFuelTypeSwitch(final FuelTypeSwitcherResponseParams? params) {
+    if (params != null) {
+      LogUtil.debug(_tag, 'Params received : ${params.fuelType} ${params.fuelType}');
+      setState(() {
+        _selectedFuelCategory = params.fuelCategory;
+        _selectedFuelType = params.fuelType;
+      });
+    } else {
+      LogUtil.debug(_tag, 'handleFuelTypeSwitch::No response returned from FuelTypeSwitcher');
+    }
+  }
+
+  _getFavouriteFuelStationsFutureBuilder() {
+    return FutureBuilder<FavoriteFuelStations>(
+        future: _favoriteFuelStationsFuture,
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.none:
+            case ConnectionState.waiting:
+            case ConnectionState.active:
+              return const Center(child: CircularProgressIndicator());
+            case ConnectionState.done:
+            default:
+              if (snapshot.hasError) {
+                LogUtil.debug(_tag, 'Error loading nearby fuel stations ${snapshot.error}');
+                return const NoFavouriteStationsWidget();
+              } else if (snapshot.hasData) {
+                final FavoriteFuelStations data = snapshot.data!;
+                return RefreshIndicator(
+                    color: Colors.blue,
+                    onRefresh: () async {
+                      setState(() {
+                        _favoriteFuelStationsFuture = _favoriteFuelStationsDataSource.getFuelStations();
+                      });
+                    },
+                    child: _favoriteFuelStationWidget(data));
+              } else {
+                return const Center(child: CircularProgressIndicator());
+              }
+          }
+        });
+  }
+
+  Widget _favoriteFuelStationWidget(final FavoriteFuelStations data) {
+    if (!data.locationSearchSuccessful) {
+      final String locationErrorReason = data.locationErrorReason ?? 'Unknown Location Error Reason';
+      return Center(child: Text(locationErrorReason));
+    } else {
+      _favouriteStations = data.fuelStations ?? [];
+      if (_favouriteStations.isNotEmpty) {
+        LogUtil.debug(_tag, '_favoriteFuelStationWidget::fuel type ${_selectedFuelType?.fuelType}');
+        return FuelStationListWidget(_scrollController, _favouriteStations, _selectedFuelType!, sortOrder);
+      } else {
+        return const NoFavouriteStationsWidget();
+      }
+    }
   }
 }

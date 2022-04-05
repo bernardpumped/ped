@@ -16,13 +16,14 @@
  *     along with Pumped End Device.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:focused_menu/focused_menu.dart';
+import 'package:focused_menu/modals.dart';
 import 'package:implicitly_animated_reorderable_list/implicitly_animated_reorderable_list.dart';
+import 'package:implicitly_animated_reorderable_list/transitions.dart';
 import 'package:pumped_end_device/user-interface/tabs/fuel-stations/screens/utils/fuel_stations_sorter.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station.dart';
 import 'package:pumped_end_device/models/pumped/fuel_type.dart';
-import 'package:pumped_end_device/util/log_util.dart';
 import 'fuel-station-list-item.dart';
 
 class FuelStationListWidget extends StatefulWidget {
@@ -31,8 +32,9 @@ class FuelStationListWidget extends StatefulWidget {
   final FuelType _selectedFuelType;
   final int sortOrder;
 
-  const FuelStationListWidget(
-      this._scrollController, this._fuelStations, this._selectedFuelType, this.sortOrder, {Key? key}) : super(key: key);
+  const FuelStationListWidget(this._scrollController, this._fuelStations, this._selectedFuelType, this.sortOrder,
+      {Key? key})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -41,15 +43,12 @@ class FuelStationListWidget extends StatefulWidget {
 }
 
 class _FuelStationListWidgetState extends State<FuelStationListWidget> with TickerProviderStateMixin {
-  static const _tag = 'FuelStationListWidget';
   final FuelStationsSorter _fuelStationsSorter = FuelStationsSorter();
 
   @override
   Widget build(final BuildContext context) {
     _fuelStationsSorter.sortFuelStations(widget._fuelStations, widget._selectedFuelType.fuelType, widget.sortOrder);
     return ImplicitlyAnimatedList<FuelStation>(
-        // To provide scrolling behavior to lists
-        // which are smaller than screen size.
         physics: const AlwaysScrollableScrollPhysics(),
         controller: widget._scrollController,
         items: widget._fuelStations,
@@ -61,28 +60,38 @@ class _FuelStationListWidgetState extends State<FuelStationListWidget> with Tick
             return const SizedBox(height: 0);
           }
           final FuelStation fuelStation = widget._fuelStations[index];
-          return FuelStationListItem(fuelStation: fuelStation, selectedFuelType: widget._selectedFuelType);
-          // return FuelStationListItem(fuelStation: fuelStation, selectedFuelType: widget._selectedFuelType);
+          return SizeFadeTransition(
+              sizeFraction: 0.7,
+              curve: Curves.easeInOut,
+              animation: animation,
+              child: _getFocusedMenu(
+                  FuelStationListItem(fuelStation: fuelStation, selectedFuelType: widget._selectedFuelType)));
         });
   }
 
-  void rebuildTriggerOnDataUpdate() {
-    setState(() {
-      LogUtil.debug(_tag, 'Triggering rebuild');
-      _goToElement(0, widget._fuelStations.length);
-    });
-  }
-
-  void _goToElement(final int index, final int totalElements) {
-    // 155 is the height of collapsed container
-    // index of 6th element is 5
-    // 280 is the height of expanded container.
-    double scrollToOffset = (155.0 * index);
-    double totalHeight = 155.0 * totalElements;
-    if (scrollToOffset + 280 > totalHeight) {
-      scrollToOffset = totalHeight - 280;
-    }
-    widget._scrollController
-        .animateTo(scrollToOffset, duration: const Duration(milliseconds: 1000), curve: Curves.easeOut);
+  Widget _getFocusedMenu(final Widget child) {
+    return FocusedMenuHolder(
+        menuWidth: MediaQuery.of(context).size.width * 0.40,
+        blurSize: 5.0,
+        menuItemExtent: 45,
+        menuBoxDecoration:
+            const BoxDecoration(color: Colors.grey, borderRadius: BorderRadius.all(Radius.circular(15.0))),
+        duration: const Duration(milliseconds: 100),
+        animateMenuItems: false,
+        blurBackgroundColor: Colors.black54,
+        // openWithTap: true, // Open Focused-Menu on Tap rather than Long Press
+        menuOffset: 10.0, // Offset value to show menuItem from the selected item
+        // Offset height to consider, for showing the menu item ( for example bottom navigation bar), so that the popup menu will be shown on top of selected item.
+        bottomOffsetHeight: 80.0,
+        menuItems: <FocusedMenuItem>[
+          // Add Each FocusedMenuItem  for Menu Options
+          FocusedMenuItem(title: const Text("Enter"), trailingIcon: const Icon(Icons.open_in_new), onPressed: () {}),
+          FocusedMenuItem(
+              title: const Text("Favorite"), trailingIcon: const Icon(Icons.bookmark_add_outlined), onPressed: () {}),
+          FocusedMenuItem(
+              title: const Text("Hide"), trailingIcon: const Icon(Icons.hide_source_outlined), onPressed: () {})
+        ],
+        onPressed: () {},
+        child: child);
   }
 }

@@ -19,34 +19,61 @@
 import 'package:flutter/material.dart';
 
 class FuelStationsScreenColorScheme {
-  late Color appBarColor;
-  late Color appBarTextColor;
-  late Color backgroundColor;
+  late Color appBarBackgroundColor;
+  late Color appBarIconThemeColor;
+  late Color appBarForegroundColor;
+  late Color appBarTitleColor;
 
-  FuelStationsScreenColorScheme(final ThemeData themData) {
-    appBarColor = Colors.white;
-    appBarTextColor = themData.colorScheme.secondary;
-    backgroundColor = Colors.white70;
-    // appBarColor = themData.colorScheme.secondary;
-    // appBarTextColor = Colors.white;
-    // backgroundColor = themData.colorScheme.secondary;
+  late Color floatingBoxPanelBackgroundColor;
+  late Color floatingBoxPanelSelectedColor;
+  late Color floatingBoxPanelNonSelectedColor;
+
+  late Color bodyBackgroundColor;
+  late Color stationFuelTypeSwitcherColor;
+
+  late Color fuelTypeSwitcherBtnBackgroundColor;
+  late Color fuelTypeSwitcherBtnForegroundColor;
+
+  FuelStationsScreenColorScheme(final ThemeData themeData) {
+    appBarBackgroundColor = const Color(0xFFF0EDFF);
+    appBarIconThemeColor = themeData.primaryColor;
+    appBarForegroundColor = themeData.primaryColor;
+    appBarTitleColor = themeData.primaryColor;
+
+    floatingBoxPanelBackgroundColor = themeData.primaryColor;
+    floatingBoxPanelSelectedColor = const Color(0xFFFF886F); // derived from mycolor.space using indigo as primarycolor
+    floatingBoxPanelNonSelectedColor = Colors.white;
+
+    bodyBackgroundColor = const Color(0xFFF0EDFF); // derived from mycolor.space using indigo as primarycolor
+    stationFuelTypeSwitcherColor = const Color(0xFFF0EDFF); // derived from mycolor.space using indigo as primarycolor
+
+    fuelTypeSwitcherBtnBackgroundColor = themeData.primaryColor;
+    fuelTypeSwitcherBtnForegroundColor = Colors.white;
   }
 }
 
 class FuelStationCardColorScheme {
-  late Color fuelStationCardColor;
-  late Color fsCardPrimaryTextColor;
-  late Color fsCardSecondaryTextColor;
-  late Color chipColor;
-  late Color chipInactiveColor;
-  late Color chipTextColor;
+  late Color contextMenuBackgroundColor;
+  late Color contextMenuForegroundColor;
 
-  FuelStationCardColorScheme(final ThemeData themData) {
-    fuelStationCardColor = themData.colorScheme.primaryContainer;
-    fsCardPrimaryTextColor = themData.colorScheme.onPrimaryContainer;
-    fsCardSecondaryTextColor = themData.colorScheme.onSecondaryContainer;
-    chipColor = themData.colorScheme.secondary;
-    chipTextColor = themData.colorScheme.onPrimary;
-    chipInactiveColor = themData.colorScheme.inversePrimary;
+  late Color cardColor;
+  late Color primaryTextColor;
+  late Color secondaryTextColor;
+
+  late Color openCloseWidgetOpenColor;
+  late Color openCloseWidgetCloseColor;
+
+  late Color dividerColor;
+
+  FuelStationCardColorScheme(final ThemeData themeData) {
+    contextMenuBackgroundColor = Colors.white;
+    contextMenuForegroundColor = themeData.primaryColor;
+
+    cardColor = Colors.white;
+    primaryTextColor = themeData.primaryColor;
+    secondaryTextColor = themeData.colorScheme.secondary;
+    openCloseWidgetOpenColor = const Color(0xFF05A985);
+    openCloseWidgetCloseColor = const Color(0xFFF65D91);
+    dividerColor = const Color(0xFF8987BC);
   }
 }

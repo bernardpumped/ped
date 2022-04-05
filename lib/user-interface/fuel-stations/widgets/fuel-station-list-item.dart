@@ -27,7 +27,6 @@ import 'package:pumped_end_device/user-interface/fuel-stations/fuel-station-scre
 import 'package:pumped_end_device/util/data_utils.dart';
 
 class FuelStationListItem extends StatelessWidget {
-  static const _dividerColor = Color(0xFF8987BC);
   static const _defaultTextSize = 14.0;
   final FuelStation fuelStation;
   final FuelType selectedFuelType;
@@ -44,12 +43,12 @@ class FuelStationListItem extends StatelessWidget {
   Widget build(final BuildContext context) {
     final FuelQuote? selectedFuelQuote = fuelStation.fuelTypeFuelQuoteMap[selectedFuelType.fuelType];
     return Card(
-        margin: const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 3),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-        shadowColor: Colors.indigo,
-        elevation: 3,
+        margin: const EdgeInsets.only(left: 7, right: 7, top: 7, bottom: 3),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+        elevation: 1.5,
+
         child: Padding(
-            padding: const EdgeInsets.all(15),
+            padding: const EdgeInsets.all(12),
             child: Column(children: [
               Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
                 _getStationLogoWidget(),
@@ -67,9 +66,35 @@ class FuelStationListItem extends StatelessWidget {
               Row(mainAxisAlignment: MainAxisAlignment.end, crossAxisAlignment: CrossAxisAlignment.end, children: [
                 IntrinsicHeight(child: _getOffersWidget(selectedFuelQuote)),
                 const SizedBox(width: 15),
-                IntrinsicHeight(child: _getPriceWithDetailsWidget(selectedFuelQuote))
+                IntrinsicHeight(child: _getPriceWithDetailsWidget(selectedFuelQuote)),
               ])
             ])));
+  }
+
+  Widget _getPopupMenu() {
+    return PopupMenuButton<String>(
+        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15))),
+        color: colorScheme.contextMenuBackgroundColor,
+        padding: EdgeInsets.zero,
+        onSelected: (value) => {},
+        itemBuilder: (context) => <PopupMenuEntry<String>>[
+              PopupMenuItem<String>(
+                  value: 'preview',
+                  child: ListTile(
+                      leading: Icon(Icons.visibility, color: colorScheme.contextMenuForegroundColor),
+                      title: Text('Preview', style: TextStyle(color: colorScheme.contextMenuForegroundColor)))),
+              PopupMenuItem<String>(
+                  value: 'favourite',
+                  child: ListTile(
+                      leading: Icon(Icons.favorite_border_outlined, color: colorScheme.contextMenuForegroundColor),
+                      title: Text('Favourite', style: TextStyle(color: colorScheme.contextMenuForegroundColor)))),
+              const PopupMenuDivider(),
+              PopupMenuItem<String>(
+                  value: 'hide',
+                  child: ListTile(
+                      leading: Icon(Icons.hide_source_outlined, color: colorScheme.contextMenuForegroundColor),
+                      title: Text('Hide', style: TextStyle(color: colorScheme.contextMenuForegroundColor)))),
+            ]);
   }
 
   Widget _getOpenCloseRatingDistanceWidget() {
@@ -78,21 +103,22 @@ class FuelStationListItem extends StatelessWidget {
       const SizedBox(width: 10),
       _getRatingWidget(),
       const SizedBox(width: 10),
-      _getDistanceWidget()
+      _getDistanceWidget(),
+      _getPopupMenu()
     ]);
   }
 
   Widget _getStationAddressWidget() {
     return Text(
         '${fuelStation.fuelStationAddress.addressLine1}, ${fuelStation.fuelStationAddress.locality}'.toTitleCase(),
-        style: const TextStyle(
-            fontSize: 15, fontWeight: FontWeight.normal, color: Colors.indigo, overflow: TextOverflow.ellipsis),
+        style: TextStyle(
+            fontSize: 15, fontWeight: FontWeight.normal, color: colorScheme.primaryTextColor, overflow: TextOverflow.ellipsis),
         maxLines: 1);
   }
 
   Widget _getStationNameWidget() => Text(fuelStation.fuelStationName.toTitleCase(),
-      style: const TextStyle(
-          fontSize: 18, fontWeight: FontWeight.bold, color: Colors.indigo, overflow: TextOverflow.ellipsis));
+      style: TextStyle(
+          fontSize: 18, fontWeight: FontWeight.bold, color: colorScheme.primaryTextColor, overflow: TextOverflow.ellipsis));
 
   Widget _getStationLogoWidget() {
     return Material(
@@ -114,9 +140,9 @@ class FuelStationListItem extends StatelessWidget {
     if (fuelStation.rating != null) {
       final Widget childWidget = Row(children: [
         Text(fuelStation.rating.toString(),
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.indigo)),
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal, color: colorScheme.primaryTextColor)),
         const SizedBox(width: 2),
-        const Icon(Icons.star, color: Colors.indigo, size: 15)
+        Icon(Icons.star, color: colorScheme.primaryTextColor, size: 15)
       ]);
       return _getElevatedBoxSingleChild(childWidget);
     }
@@ -134,7 +160,7 @@ class FuelStationListItem extends StatelessWidget {
       distance = "$distanced km";
     }
     final child1 =
-        Text(distance, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.indigo));
+        Text(distance, style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal, color: colorScheme.primaryTextColor));
     return _getElevatedBoxSingleChild(child1);
   }
 
@@ -142,10 +168,10 @@ class FuelStationListItem extends StatelessWidget {
     if (fuelStation.status != null && fuelStation.status != Status.unknown) {
       final String status = fuelStation.status!.statusName!;
       final Color widgetChipColor = (fuelStation.status == Status.open || fuelStation.status == Status.open24Hrs)
-          ? const Color(0xFF05A985)
-          : Colors.red;
+          ? colorScheme.openCloseWidgetOpenColor
+          : colorScheme.openCloseWidgetCloseColor;
       final childWidget =
-          Text(status, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: widgetChipColor));
+          Text(status, style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal, color: widgetChipColor));
       return _getElevatedBoxSingleChild(childWidget);
     }
     return const SizedBox(width: 0);
@@ -153,29 +179,30 @@ class FuelStationListItem extends StatelessWidget {
 
   Widget _getOffersWidget(final FuelQuote? selectedFuelQuote) {
     if (selectedFuelQuote != null && selectedFuelQuote.quoteValue != null) {
-      const Widget child1 = Text('Offers', style: TextStyle(fontSize: 13, color: Colors.indigoAccent));
-      final Widget child2 = Row(children: const [
-        Icon(Icons.shopping_cart, color: Colors.indigo, size: 20),
-        SizedBox(width: 5),
-        Text("10", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.indigo)),
+      final Widget child1 = Text('Offers', style: TextStyle(fontSize: 13, color: colorScheme.secondaryTextColor));
+      final Widget child2 = Row(children: [
+        Icon(Icons.shopping_cart, color: colorScheme.primaryTextColor, size: 20),
+        const SizedBox(width: 5),
+        Text("10", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: colorScheme.primaryTextColor)),
       ]);
-      final Widget child3 = Row(children: const [
-        Icon(Icons.car_repair_sharp, color: Colors.indigo, size: 20),
-        SizedBox(width: 5),
-        Text("10", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.indigo))
+      final Widget child3 = Row(children: [
+        Icon(Icons.car_repair_sharp, color: colorScheme.primaryTextColor, size: 20),
+        const SizedBox(width: 5),
+        Text("10", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: colorScheme.primaryTextColor))
       ]);
 
-      final Widget rowOfChildren = IntrinsicHeight(child: Row(children: [
+      final Widget rowOfChildren = IntrinsicHeight(
+          child: Row(children: [
         child2,
         const SizedBox(width: 7),
-        const VerticalDivider(width: 1, color: _dividerColor),
+        VerticalDivider(width: 1, color: colorScheme.dividerColor),
         const SizedBox(width: 7),
         child3
       ]));
 
       return Material(
           elevation: .5,
-          shadowColor: Colors.indigo,
+          shadowColor: colorScheme.primaryTextColor,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           child: Container(
               padding: const EdgeInsets.all(8),
@@ -186,11 +213,11 @@ class FuelStationListItem extends StatelessWidget {
 
   Widget _getPriceWithDetailsWidget(final FuelQuote? selectedFuelQuote) {
     if (selectedFuelQuote != null && selectedFuelQuote.quoteValue != null) {
-      const Widget child1 = Text('Price', style: TextStyle(fontSize: 13, color: Colors.indigoAccent));
+      final Widget child1 = Text('Price', style: TextStyle(fontSize: 13, color: colorScheme.secondaryTextColor));
       final Widget child2 = Row(children: <Widget>[
         Text("${selectedFuelQuote.quoteValue}",
-            style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.indigo)),
-        const Text("￠", style: TextStyle(fontSize: 10, color: Colors.black))
+            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: colorScheme.primaryTextColor)),
+        Text("￠", style: TextStyle(fontSize: 10, color: colorScheme.primaryTextColor))
       ]);
       final Column priceColumn = Column(children: [child1, const SizedBox(height: 8), child2]);
 
@@ -203,20 +230,20 @@ class FuelStationListItem extends StatelessWidget {
         publishDateString = DateFormat('dd-MMM HH:mm').format(publishDate);
       }
 
-      Widget child3 = const Text('Last Update', style: TextStyle(fontSize: 13, color: Colors.indigoAccent));
+      Widget child3 = Text('Last Update', style: TextStyle(fontSize: 13, color: colorScheme.secondaryTextColor));
       Widget child4 = Text(publishDateString,
-          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.indigo));
+          style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: colorScheme.primaryTextColor));
       final Column pubDateColumn = Column(children: [child3, const SizedBox(height: 8), child4]);
       return Material(
           elevation: .5,
-          shadowColor: Colors.indigo,
+          shadowColor: colorScheme.primaryTextColor,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           child: Container(
               padding: const EdgeInsets.all(8),
               child: Row(children: [
                 priceColumn,
                 const SizedBox(width: 7),
-                const VerticalDivider(width: 1, color: _dividerColor),
+                VerticalDivider(width: 1, color: colorScheme.dividerColor),
                 const SizedBox(width: 7),
                 pubDateColumn
               ])));
@@ -227,7 +254,7 @@ class FuelStationListItem extends StatelessWidget {
   Widget _getElevatedBoxSingleChild(final Widget child1) {
     return Material(
         elevation: .5,
-        shadowColor: Colors.indigo,
+        shadowColor: colorScheme.primaryTextColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: Container(padding: const EdgeInsets.all(5), child: child1));
   }
