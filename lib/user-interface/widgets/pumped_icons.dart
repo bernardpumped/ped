@@ -23,7 +23,7 @@ import '../icon_codes.dart';
 class PumpedIcons {
   static const emailIconWhiteSize24 = Icon(IconData(IconCodes.emailIconCode, fontFamily: 'MaterialIcons'), color: Colors.white, size: 24);
 
-  static const faSourceIconBlack54Size30 = Icon(IconData(IconCodes.faSourceIconCode, fontFamily: 'MaterialIcons'), color: Colors.black54, size: 30);
+  static const faSourceIconBlack54Size30 = Icon(Icons.info_outline, color: Colors.indigo, size: 25);
   static const faSourceIconBlack54Size24 = Icon(IconData(IconCodes.faSourceIconCode, fontFamily: 'MaterialIcons'), color: Colors.black54, size: 24);
   static const faSourceIconBlack54Size20 = Icon(IconData(IconCodes.faSourceIconCode, fontFamily: 'MaterialIcons'), color: Colors.black54, size: 20);
 

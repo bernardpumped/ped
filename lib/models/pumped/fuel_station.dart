@@ -29,8 +29,10 @@ class FuelStation {
 
   final bool? managed;
   final double? rating;
-  final bool hasPromos;
-  final bool hasServices;
+  // final bool hasPromos;
+  int promos = 0;
+  // final bool hasServices;
+  int services = 0;
   final String? stationType;
   final List<String>? imgUrls;
 
@@ -53,8 +55,8 @@ class FuelStation {
   // in fuel station details screen page.
   FuelStationOperatingHrs? fuelStationOperatingHrs;
 
-  FuelStation({
-      required this.stationId,
+  FuelStation(
+      {required this.stationId,
       required this.fuelStationName,
       required this.fuelStationAddress,
       this.status,
@@ -66,8 +68,6 @@ class FuelStation {
       this.fuelAuthMatchStatus,
       this.fuelAuthorityStationCode,
       required this.isFaStation,
-      this.hasPromos = false,
-      this.hasServices = false,
       this.imgUrls,
       this.stationType,
       this.operatingHours,
@@ -87,5 +87,27 @@ class FuelStation {
 
   String getFuelStationSource() {
     return isFaStation ? "F" : "G";
+  }
+
+  bool hasFuelPrices() {
+    if (fuelTypeFuelQuoteMap.isEmpty) {
+      return false;
+    }
+    bool pricePresent = false;
+    for (var fq in fuelTypeFuelQuoteMap.values) {
+      pricePresent = pricePresent || fq.quoteValue != null && fq.quoteValue! > 0;
+      if (pricePresent) {
+        break;
+      }
+    }
+    return pricePresent;
+  }
+
+  set setPromos(int promos){
+    this.promos = promos;
+  }
+
+  set setServices(int services){
+    this.services = services;
   }
 }
