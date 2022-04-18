@@ -71,7 +71,7 @@ abstract class HttpPostExecutor<I extends Request, O extends Response> {
         LogUtil.debug(tag, 'execute::response : ${response.body}');
         return responseParser.parseResponse(response.body);
       } else {
-        throw pumpedHttpException(response.statusCode, response.reasonPhrase, url);
+        throw pumpedHttpException(response.httpStatusCode, response.reasonPhrase, url);
       }
     } else {
       throw pumpedHttpException(408, 'Timed out', url);

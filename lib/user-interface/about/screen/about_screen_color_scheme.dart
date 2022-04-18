@@ -16,22 +16,16 @@
  *     along with Pumped End Device.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-enum FuelStationDetailsAttributes { stationBasicDetails, merchantDetails, quotes, operatingTimes }
+import 'package:flutter/material.dart';
 
-extension FuelStationDetailsAttributesExtension on FuelStationDetailsAttributes {
-  static String? _value(final FuelStationDetailsAttributes value) {
-    switch (value) {
-      case FuelStationDetailsAttributes.operatingTimes:
-        return 'OPERATING_TIMES';
-      case FuelStationDetailsAttributes.merchantDetails:
-        return 'MERCHANT_DETAILS';
-      case FuelStationDetailsAttributes.quotes:
-        return 'QUOTES';
-      case FuelStationDetailsAttributes.stationBasicDetails:
-        return 'STATION_BASIC_DETAILS';
-    }
-    return null;
+class AboutScreenColorScheme {
+  late Color backgroundColor;
+  late Color textColor;
+  late Color titleColor;
+
+  AboutScreenColorScheme(final ThemeData themeData) {
+    backgroundColor = const Color(0xFFF0EDFF);
+    textColor = themeData.primaryColor;
+    titleColor = themeData.primaryColor;
   }
-
-  String? get value => _value(this);
 }
