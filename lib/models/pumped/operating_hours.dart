@@ -31,17 +31,17 @@ class OperatingHours {
   DateTime? publishDate;
   final bool? isHolidayToday;
   OperatingHours(
-      { required this.dayOfWeek,
-        this.openingHrs,
-        this.openingMins,
-        this.closingHrs,
-        this.closingMins,
-        this.operatingTimeRange,
-        this.operatingTimeSource,
-        this.operatingTimeSourceName,
-        this.publishDate,
-        this.isHolidayToday = false,
-        this.status = Status.open});
+      {required this.dayOfWeek,
+      this.openingHrs,
+      this.openingMins,
+      this.closingHrs,
+      this.closingMins,
+      this.operatingTimeRange,
+      this.operatingTimeSource,
+      this.operatingTimeSourceName,
+      this.publishDate,
+      this.isHolidayToday = false,
+      this.status = Status.open});
 
   Map<String, dynamic> toJson() => {
         'status': status.statusStr,
@@ -59,6 +59,7 @@ class OperatingHours {
 
   factory OperatingHours.fromJson(final Map<String, dynamic> data) {
     return OperatingHours(
+        status: FuelStationStatus.getStatus(data['status']),
         dayOfWeek: data['dayOfWeek'],
         openingHrs: data['openingHrs'],
         openingMins: data['openingMins'],

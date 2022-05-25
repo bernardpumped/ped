@@ -20,11 +20,11 @@ import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:pumped_end_device/main.dart';
-import 'package:pumped_end_device/user-interface/tabs/fuel-stations/screens/datasource/remote/response-parser/operating_hours_response_parse_utils.dart';
 import 'package:pumped_end_device/models/pumped/fuel_quote.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station_address.dart';
 import 'package:pumped_end_device/models/pumped/operating_hours.dart';
+import 'package:pumped_end_device/user-interface/fuel-station-details/data/remote/response-parser/operating_hours_response_parse_utils.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
 class FuelStationDetailsResponseParseUtils {
@@ -51,7 +51,7 @@ class FuelStationDetailsResponseParseUtils {
       }
       final FuelStation fuelStation = FuelStation(
         stationId: fuelStationJsonVal['fuelStationId'],
-        fuelStationAddress: _getFuelStationAddress(fuelStationJsonVal),
+        fuelStationAddress: _getFuelStationAddress(fuelStationJsonVal, fuelStationJsonVal['stationName']),
         fuelStationName: fuelStationJsonVal['stationName'],
         distance: fuelStationJsonVal['distance'],
         distanceUnit: fuelStationJsonVal['distanceUnit'],
@@ -133,12 +133,12 @@ class FuelStationDetailsResponseParseUtils {
     return stationIdFuelQuotes;
   }
 
-  static FuelStationAddress _getFuelStationAddress(final Map<String, dynamic> fuelStationJsonVal) {
+  static FuelStationAddress _getFuelStationAddress(final Map<String, dynamic> fuelStationJsonVal, String? stationName) {
     return FuelStationAddress(
         addressLine1: fuelStationJsonVal['addressLine'],
         latitude: fuelStationJsonVal['latitude'],
         longitude: fuelStationJsonVal['longitude'],
-        contactName: fuelStationJsonVal['contactName'],
+        contactName: stationName??fuelStationJsonVal['contactName'],
         countryName: fuelStationJsonVal['country'],
         email: fuelStationJsonVal['email'],
         fax: fuelStationJsonVal['fax'],

@@ -19,9 +19,10 @@
 import 'package:flutter/material.dart';
 import 'package:pumped_end_device/main.dart';
 import 'package:pumped_end_device/user-interface/about/screen/about_screen.dart';
-import 'package:pumped_end_device/user-interface/fuel-stations/screens/favourite/favourite_stations_screen.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/screens/nearby/nearby_stations_screen.dart';
 import 'package:pumped_end_device/user-interface/nav-drawer/nav_drawer_color_scheme.dart';
+import 'package:pumped_end_device/user-interface/settings/screen/settings_screen.dart';
+import 'package:pumped_end_device/user-interface/update-history/screen/update_history_screen.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
 import 'nav_drawer_item_widget.dart';
@@ -63,12 +64,12 @@ class _NavDrawerWidgetState extends State<NavDrawerWidget> {
             Divider(color: colorScheme.dividerColor),
             NavDrawerItemWidget(
                 itemIndex: 1, label: 'Settings', icon: Icons.settings_outlined,
-                callback: ()=> _selectItem(context, 1, NearbyStationsScreen.routeName),
+                callback: ()=> _selectItem(context, 1, SettingsScreen.routeName),
                 selected: selectedIndex == 1),
             const SizedBox(height: 10),
             NavDrawerItemWidget(
                 itemIndex: 2, label: 'Updates History', icon: Icons.update,
-                callback: ()=> _selectItem(context, 2, NearbyStationsScreen.routeName),
+                callback: ()=> _selectItem(context, 2, UpdateHistoryScreen.routeName),
                 selected: selectedIndex == 2),
             const SizedBox(height: 10),
             NavDrawerItemWidget(
@@ -100,7 +101,7 @@ class _NavDrawerWidgetState extends State<NavDrawerWidget> {
       child: Row(children: [
         const Image(image: AssetImage(NavDrawerColorScheme.pumpedImage), height: 65),
         Padding(padding: const EdgeInsets.only(left: 20),
-          child: Text('Fuel Finder', style: TextStyle(color: colorScheme.textColor, fontSize: 24, fontWeight: FontWeight.w600)))]));
+          child: Text('Fuel Finder', style: TextStyle(color: colorScheme.textColor, fontSize: 24, fontWeight: FontWeight.w500)))]));
   }
 
   _userDetailsWidget() {
@@ -115,7 +116,7 @@ class _NavDrawerWidgetState extends State<NavDrawerWidget> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Bernard', style: TextStyle(color: colorScheme.textColor, fontSize: 18, fontWeight: FontWeight.w600)),
+                    Text('Bernard', style: TextStyle(color: colorScheme.textColor, fontSize: 18, fontWeight: FontWeight.w500)),
                     const SizedBox(height: 15),
                     Text('bernard@pumpedfuel.com', style: TextStyle(color: colorScheme.textColor, fontSize: 13, fontWeight: FontWeight.normal))]))]));
   }

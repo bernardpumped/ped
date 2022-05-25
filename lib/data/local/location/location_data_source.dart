@@ -21,7 +21,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:pumped_end_device/data/local/location/geo_location_wrapper.dart';
-import 'package:pumped_end_device/user-interface/tabs/fuel-stations/data/places.dart';
+import 'package:pumped_end_device/user-interface/fuel-stations/data/local/places.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 import 'package:pumped_end_device/util/platform_wrapper.dart';
 
@@ -39,12 +39,10 @@ class LocationDataSource {
 
   Future<GetLocationResult> getLocationData({String thread = 'default'}) async {
     if (!_platformWrapper.deviceIsBrowser() && _platformWrapper.platformIsLinux()) {
-      return Future.value(GetLocationResult(LocationInitResultCode.success,
+      return Future.value(GetLocationResult(
+          LocationInitResultCode.success,
           Future.value(GeoLocationData(
-            latitude: Places.fishBurnerSydney.latitude,
-            longitude: Places.fishBurnerSydney.longitude,
-            altitude: 0,
-          ))));
+              latitude: Places.fishBurnerSydney.latitude, longitude: Places.fishBurnerSydney.longitude, altitude: 0))));
     }
     LogUtil.debug(_tag, "Checking Location Service Enabled");
     bool serviceEnabled = await _geoLocationWrapper.isLocationServiceEnabled();
@@ -67,25 +65,26 @@ class LocationDataSource {
 
     try {
       final Position position = await _geoLocationWrapper.getCurrentPosition();
-      if (position == null) {
-        return Future.value(GetLocationResult(LocationInitResultCode.notFound, null));
-      }
       LogUtil.debug(_tag, "Location found as : $position");
       if (kIsWeb) {
         LogUtil.debug(_tag, 'Returning from kIsWeb');
-        return Future.value(GetLocationResult(LocationInitResultCode.success,
+        return Future.value(GetLocationResult(
+            LocationInitResultCode.success,
             Future.value(GeoLocationData(
-              latitude: Places.fishBurnerSydney.latitude,
-              longitude: Places.fishBurnerSydney.longitude,
-              altitude: 0,
-            ))));
+                latitude: Places.fishBurnerSydney.latitude,
+                longitude: Places.fishBurnerSydney.longitude,
+                altitude: 0))));
       } else {
         LogUtil.debug(_tag, 'Returning from !kIsWeb');
+        // return Future.value(GetLocationResult(
+        //     LocationInitResultCode.success,
+        //     Future.value(GeoLocationData(
+        //         latitude: position.latitude, longitude: position.longitude, altitude: position.altitude))));
         return Future.value(GetLocationResult(LocationInitResultCode.success,
             Future.value(GeoLocationData(
-              latitude: position.latitude,
-              longitude: position.longitude,
-              altitude: position.altitude,
+              latitude: Places.cairnsQld.latitude,
+              longitude: Places.cairnsQld.longitude,
+              altitude: 1,
             ))));
       }
     } catch (e) {
@@ -93,16 +92,16 @@ class LocationDataSource {
     }
   }
 
-  Future<LocationServiceSubscription> updateLocationSettings(final int interval,
-      final double distance, final Function listenerFunction) async {
-      final StreamSubscription<Position> positionSubscription = _geoLocationWrapper.getPositionStream(interval, distance)
-        .listen((Position position) {
-            if (kIsWeb) {
-              listenerFunction(Places.fishBurnerSydney.latitude, Places.fishBurnerSydney.longitude);
-            } else {
-              listenerFunction(position.latitude, position.longitude);
-            }
-          });
-      return LocationServiceSubscription(positionSubscription);
+  Future<LocationServiceSubscription> updateLocationSettings(
+      final int interval, final double distance, final Function listenerFunction) async {
+    final StreamSubscription<Position> positionSubscription =
+        _geoLocationWrapper.getPositionStream(interval, distance).listen((Position position) {
+      if (kIsWeb) {
+        listenerFunction(Places.fishBurnerSydney.latitude, Places.fishBurnerSydney.longitude);
+      } else {
+        listenerFunction(position.latitude, position.longitude);
+      }
+    });
+    return LocationServiceSubscription(positionSubscription);
   }
 }

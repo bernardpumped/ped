@@ -28,7 +28,7 @@ import 'package:pumped_end_device/user-interface/fuel-stations/data/remote/get_f
 import 'package:pumped_end_device/user-interface/fuel-stations/data/remote/model/request/get_fuel_station_details_batch_request.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/data/remote/model/response/get_fuel_station_details_batch_response.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/data/remote/response-parser/get_fuel_station_details_batch_response_parser.dart';
-import 'package:pumped_end_device/user-interface/tabs/fuel-stations/data/model/favorite_fuel_stations.dart';
+import 'package:pumped_end_device/user-interface/fuel-stations/model/favorite_fuel_stations.dart';
 import 'package:pumped_end_device/util/date_time_utils.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 import 'package:uuid/uuid.dart';

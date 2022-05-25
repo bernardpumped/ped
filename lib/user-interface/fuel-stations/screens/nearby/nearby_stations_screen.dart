@@ -31,18 +31,20 @@ import 'package:pumped_end_device/models/pumped/fuel_station.dart';
 import 'package:pumped_end_device/models/pumped/fuel_type.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/fuel_station_screen_color_scheme.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/screens/favourite/favourite_stations_screen.dart';
+import 'package:pumped_end_device/user-interface/fuel-stations/screens/widgets/fuel-type-switcher/fuel_type_switcher_btn.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/screens/widgets/fuel_station_switcher_widget.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/screens/widgets/floating_panel_widget.dart';
-import 'package:pumped_end_device/user-interface/fuel-stations/screens/widgets/fuel_type_switcher_widget.dart';
+import 'package:pumped_end_device/user-interface/fuel-stations/screens/widgets/fuel-type-switcher/fuel_type_switcher_widget.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/screens/widgets/fuel_station_list_widget.dart';
 import 'package:pumped_end_device/user-interface/nav-drawer/nav_drawer_widget.dart';
-import 'package:pumped_end_device/user-interface/tabs/fuel-stations/data/model/fuel_type_switcher_data.dart';
-import 'package:pumped_end_device/user-interface/tabs/fuel-stations/data/model/nearby_fuel_stations.dart';
-import 'package:pumped_end_device/user-interface/tabs/fuel-stations/data/params/fuel_type_switcher_response_params.dart';
+import 'package:pumped_end_device/user-interface/fuel-stations/model/fuel_type_switcher_data.dart';
+import 'package:pumped_end_device/user-interface/fuel-stations/model/nearby_fuel_stations.dart';
+import 'package:pumped_end_device/user-interface/fuel-stations/params/fuel_type_switcher_response_params.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/service/near_by_fuel_stations_service.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/screens/widgets/no_near_by_stations_widget.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/service/fuel_type_switcher_service.dart';
-import 'package:pumped_end_device/user-interface/widgets/pumped-app-bar.dart';
+import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
+import 'package:pumped_end_device/user-interface/widgets/pumped_app_bar.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
 class NearbyStationsScreen extends StatefulWidget {
@@ -102,6 +104,12 @@ class _NearbyStationsScreenState extends State<NearbyStationsScreen> {
     _nearbyFuelStationsFuture?.whenComplete(() {
       whenNearbyFuelStationFutureComplete();
     });
+    _nearbyFuelStationsFuture?.then((value) => showDisclaimer(value));
+    underMaintenanceDocRef.snapshots().listen((event) {
+      if (!mounted) return;
+      WidgetUtils.showPumpedUnavailabilityMessage(event, context);
+      LogUtil.debug(_tag, '${event.data}');
+    });
   }
 
   @override
@@ -115,7 +123,8 @@ class _NearbyStationsScreenState extends State<NearbyStationsScreen> {
 
   @override
   Widget build(final BuildContext context) {
-    _fuelTypeSwitcherDataSource.addFuelTypeSwitcherDataToStream(_fuelTypeSwitcherDataStreamController);
+    _fuelTypeSwitcherDataSource.addFuelTypeSwitcherDataToStream(_fuelTypeSwitcherDataStreamController,
+        throwError: false);
     return Scaffold(
         appBar: const PumpedAppBar(),
         drawer: const NavDrawerWidget(),
@@ -195,7 +204,6 @@ class _NearbyStationsScreenState extends State<NearbyStationsScreen> {
                 final NearByFuelStations data = snapshot.data!;
                 lastQueryLatitude = data.latitude;
                 lastQueryLongitude = data.longitude;
-                // WidgetsBinding.instance?.addPostFrameCallback((_)  => _updateFabVisibility());
                 return RefreshIndicator(
                     color: Colors.blue,
                     onRefresh: () async {
@@ -203,6 +211,7 @@ class _NearbyStationsScreenState extends State<NearbyStationsScreen> {
                         setState(() {
                           timeOfLastNearbySearch = DateTime.now().millisecondsSinceEpoch;
                           _nearbyFuelStationsFuture = _nearByFuelStationsService.getFuelStations();
+                          _nearbyFuelStationsFuture?.then((value) => showDisclaimer(value));
                           _nearbyFuelStationsFuture?.whenComplete(() {
                             whenNearbyFuelStationFutureComplete();
                           });
@@ -242,6 +251,7 @@ class _NearbyStationsScreenState extends State<NearbyStationsScreen> {
       setState(() {
         timeOfLastNearbySearch = DateTime.now().millisecondsSinceEpoch;
         _nearbyFuelStationsFuture = _nearByFuelStationsService.getFuelStations();
+        _nearbyFuelStationsFuture?.then((value) => showDisclaimer(value));
         _nearbyFuelStationsFuture?.whenComplete(() {
           whenNearbyFuelStationFutureComplete();
         });
@@ -271,16 +281,27 @@ class _NearbyStationsScreenState extends State<NearbyStationsScreen> {
     }
   }
 
+  void showDisclaimer(final NearByFuelStations value) {
+    if (value.hiddenResultsFilteredCount != 0) {
+      WidgetUtils.showToastMessage(
+          context,
+          '${value.hiddenResultsFilteredCount} hidden fuel stations filtered for result. '
+          'To view clear hidden list in settings.',
+          Colors.indigo);
+    }
+  }
+
   StreamBuilder<FuelTypeSwitcherData> _getFuelTypeSwitcherStreamBuilder() {
     return StreamBuilder(
         stream: _fuelTypeSwitcherDataStreamController.stream,
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return const Material(color: Colors.white, child: Text('Error Loading'));
+            LogUtil.debug(_tag, 'Error is ${snapshot.error}');
+            return FuelTypeSwitcherButton('Error Loading', () => {});
           } else if (snapshot.hasData) {
             return _getFuelTypeSwitcherButton(snapshot.data!);
           } else {
-            return const Text('Loading');
+            return FuelTypeSwitcherButton('Loading', () => {});
           }
         });
   }

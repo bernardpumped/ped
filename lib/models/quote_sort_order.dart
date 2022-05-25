@@ -21,14 +21,22 @@ enum SortOrder { cheapestClosest, closestCheapest }
 extension QuoteSortOrder on SortOrder {
   static const _sortOrderName = {SortOrder.cheapestClosest: 'Cheapest Closest', SortOrder.closestCheapest: 'Closest Cheapest'};
   static const _sortOrderStr = {SortOrder.cheapestClosest: 'CHEAPEST_CLOSEST', SortOrder.closestCheapest: 'CLOSEST_CHEAPEST'};
+  static const _sortOrderDesc = {SortOrder.cheapestClosest: 'Price Over Distance', SortOrder.closestCheapest: 'Distance Over Price'};
 
   String? get sortOrderName => _sortOrderName[this];
   String? get sortOrderStr => _sortOrderStr[this];
+  String? get sortOrderDesc => _sortOrderDesc[this];
 
   static SortOrder? getSortOrder(String sortOrderStr) {
     switch (sortOrderStr) {
+      case 'Cheapest Closest': { // This is temporary arrangement
+        return SortOrder.cheapestClosest;
+      }
       case 'CHEAPEST_CLOSEST': {
         return SortOrder.cheapestClosest;
+      }
+      case 'Closest Cheapest': {
+        return SortOrder.closestCheapest;
       }
       case 'CLOSEST_CHEAPEST': {
         return SortOrder.closestCheapest;

@@ -19,7 +19,6 @@
 import 'package:geolocator/geolocator.dart';
 
 class GeoLocationWrapper {
-
   Future<bool> isLocationServiceEnabled() async {
     return Geolocator.isLocationServiceEnabled();
   }
@@ -38,14 +37,15 @@ class GeoLocationWrapper {
 
   Stream<Position> getPositionStream(final int intervalInMillis, final double distance) {
     return Geolocator.getPositionStream(
-        desiredAccuracy: LocationAccuracy.best,
-        distanceFilter: distance.toInt(),
-        intervalDuration: Duration(milliseconds: intervalInMillis));
+        locationSettings: LocationSettings(
+            accuracy: LocationAccuracy.best,
+            distanceFilter: distance.toInt(),
+            timeLimit: Duration(milliseconds: intervalInMillis)));
   }
 
-  double distanceBetween(final double startLatitude, final double startLongitude,
-      final double endLatitude, final double endLongitude) {
-    double distanceBetween =  Geolocator.distanceBetween(startLatitude, startLongitude, endLatitude, endLongitude);
+  double distanceBetween(
+      final double startLatitude, final double startLongitude, final double endLatitude, final double endLongitude) {
+    double distanceBetween = Geolocator.distanceBetween(startLatitude, startLongitude, endLatitude, endLongitude);
     return distanceBetween < 0 ? distanceBetween * -1 : distanceBetween;
   }
 }

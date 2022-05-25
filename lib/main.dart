@@ -16,27 +16,37 @@
  *     along with Pumped End Device.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pumped_end_device/data/local/location/location_data_source.dart';
 import 'package:pumped_end_device/user-interface/about/screen/about_screen_color_scheme.dart';
 import 'package:pumped_end_device/user-interface/about/screen/about_screen.dart';
+import 'package:pumped_end_device/user-interface/edit-fuel-station-details/screen/edit_fuel_station_details_screen.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/fuel_station_details_screen_color_scheme.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/screen/fuel_station_details_screen.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/fuel_station_screen_color_scheme.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/screens/favourite/favourite_stations_screen.dart';
 import 'package:pumped_end_device/user-interface/nav-drawer/nav_drawer_color_scheme.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/screens/nearby/nearby_stations_screen.dart';
-import 'package:pumped_end_device/user-interface/tabs/splash/screen/splash-screen-color-scheme.dart';
-import 'package:pumped_end_device/user-interface/tabs/splash/screen/splash_screen.dart';
-import 'package:pumped_end_device/user-interface/widgets/pumped-app-bar-color-scheme.dart';
+import 'package:pumped_end_device/user-interface/settings/screen/cleanup_local_cache_screen.dart';
+import 'package:pumped_end_device/user-interface/settings/screen/customize_search_settings_screen.dart';
+import 'package:pumped_end_device/user-interface/settings/screen/settings_screen.dart';
+import 'package:pumped_end_device/user-interface/splash/screen/splash_screen_color_scheme.dart';
+import 'package:pumped_end_device/user-interface/splash/screen/splash_screen.dart';
+import 'package:pumped_end_device/user-interface/update-history/screen/update_history_details_screen.dart';
+import 'package:pumped_end_device/user-interface/update-history/screen/update_history_screen.dart';
+import 'package:pumped_end_device/user-interface/widgets/pumped_app_bar_color_scheme.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 import 'package:pumped_end_device/util/platform_wrapper.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 import 'data/local/location/geo_location_wrapper.dart';
+import 'firebase_options.dart';
 
 GetIt getIt = GetIt.instance;
+DocumentReference underMaintenanceDocRef = FirebaseFirestore.instance.collection("pumped-documents").doc("under-maintenance");
 // Set this variable to false when in release mode.
 bool enrichOffers = true;
 const appVersion = "26";
@@ -52,8 +62,11 @@ const fsCardColorSchemeName = 'fsCardColorScheme';
 const aboutScreenColorSchemeName = 'aboutScreenColorScheme';
 const fsDetailsScreenColorSchemeName = 'fsDetailsScreenColorScheme';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const PumpedApp());
 }
 
@@ -71,17 +84,18 @@ class PumpedApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSwatch(accentColor: Colors.indigoAccent),
         textTheme: Theme.of(context).textTheme.apply(fontFamily: 'SF-Pro-Display'));
     _registerThemes(themeData);
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: themeData,
-      home: const SplashScreen(),
-      routes: {
-        NearbyStationsScreen.routeName: (context) => const NearbyStationsScreen(),
-        FavouriteStationsScreen.routeName: (context) => const FavouriteStationsScreen(),
-        AboutScreen.routeName: (context) => AboutScreen(),
-        FuelStationDetailsScreen.routeName: (context) => const FuelStationDetailsScreen()
-      },
-    );
+    return MaterialApp(debugShowCheckedModeBanner: false, theme: themeData, home: const SplashScreen(), routes: {
+      NearbyStationsScreen.routeName: (context) => const NearbyStationsScreen(),
+      FavouriteStationsScreen.routeName: (context) => const FavouriteStationsScreen(),
+      AboutScreen.routeName: (context) => AboutScreen(),
+      SettingsScreen.routeName: (context) => const SettingsScreen(),
+      FuelStationDetailsScreen.routeName: (context) => const FuelStationDetailsScreen(),
+      CustomizeSearchSettingsScreen.routeName: (context) => const CustomizeSearchSettingsScreen(),
+      CleanupLocalCacheScreen.routeName: (context) => const CleanupLocalCacheScreen(),
+      EditFuelStationDetailsScreen.routeName: (context) => const EditFuelStationDetailsScreen(),
+      UpdateHistoryScreen.routeName: (context) => const UpdateHistoryScreen(),
+      UpdateHistoryDetailsScreen.routeName: (context) => const UpdateHistoryDetailsScreen()
+    });
   }
 
   void _deviceInfo() async {

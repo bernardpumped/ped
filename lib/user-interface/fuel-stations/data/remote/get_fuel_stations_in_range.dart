@@ -33,6 +33,6 @@ class GetFuelStationsInRange extends HttpGetExecutor<GetFuelStationsInRangeParam
 
   @override
   String getUrl(GetFuelStationsInRangeParams request) {
-    return '/getFuelStationsInRange' '?' + request.toQueryString();
+    return '/getFuelStationsInRange?${request.toQueryString()}';
   }
 }

@@ -26,18 +26,20 @@ import 'package:pumped_end_device/models/pumped/fuel_station.dart';
 import 'package:pumped_end_device/models/pumped/fuel_type.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/fuel_station_screen_color_scheme.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/screens/nearby/nearby_stations_screen.dart';
+import 'package:pumped_end_device/user-interface/fuel-stations/screens/widgets/fuel-type-switcher/fuel_type_switcher_btn.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/screens/widgets/fuel_station_switcher_widget.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/screens/widgets/floating_panel_widget.dart';
-import 'package:pumped_end_device/user-interface/fuel-stations/screens/widgets/fuel_type_switcher_widget.dart';
+import 'package:pumped_end_device/user-interface/fuel-stations/screens/widgets/fuel-type-switcher/fuel_type_switcher_widget.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/screens/widgets/fuel_station_list_widget.dart';
 import 'package:pumped_end_device/user-interface/nav-drawer/nav_drawer_widget.dart';
-import 'package:pumped_end_device/user-interface/tabs/fuel-stations/data/model/favorite_fuel_stations.dart';
-import 'package:pumped_end_device/user-interface/tabs/fuel-stations/data/model/fuel_type_switcher_data.dart';
-import 'package:pumped_end_device/user-interface/tabs/fuel-stations/data/params/fuel_type_switcher_response_params.dart';
+import 'package:pumped_end_device/user-interface/fuel-stations/model/favorite_fuel_stations.dart';
+import 'package:pumped_end_device/user-interface/fuel-stations/model/fuel_type_switcher_data.dart';
+import 'package:pumped_end_device/user-interface/fuel-stations/params/fuel_type_switcher_response_params.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/service/favorite_fuel_stations_service.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/screens/widgets/no_favourite_stations_widget.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/service/fuel_type_switcher_service.dart';
-import 'package:pumped_end_device/user-interface/widgets/pumped-app-bar.dart';
+import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
+import 'package:pumped_end_device/user-interface/widgets/pumped_app_bar.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
 class FavouriteStationsScreen extends StatefulWidget {
@@ -79,6 +81,12 @@ class _FavouriteStationsScreenState extends State<FavouriteStationsScreen> {
     _scrollController = ScrollController();
     _favoriteFuelStationsFuture = _favoriteFuelStationsDataSource.getFuelStations();
     _fuelTypeSwitcherDataStreamController = StreamController<FuelTypeSwitcherData>.broadcast();
+    underMaintenanceDocRef.snapshots().listen((event) {
+      if (!mounted) return;
+      WidgetUtils.showPumpedUnavailabilityMessage(event, context);
+      LogUtil.debug(_tag, '${event.data}');
+      LogUtil.debug(_tag, '${event.data}');
+    });
   }
 
   @override
@@ -136,11 +144,11 @@ class _FavouriteStationsScreenState extends State<FavouriteStationsScreen> {
         stream: _fuelTypeSwitcherDataStreamController.stream,
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return const Material(color: Colors.white, child: Text('Error Loading'));
+            return FuelTypeSwitcherButton('Error Loading', () => {});
           } else if (snapshot.hasData) {
             return _getFuelTypeSwitcherButton(snapshot.data!);
           } else {
-            return const Text('Loading');
+            return FuelTypeSwitcherButton('Loading', () => {});
           }
         });
   }
