@@ -36,7 +36,7 @@ import 'package:pumped_end_device/models/pumped/fuel_station_address.dart';
 class EditFuelStationDetails extends StatefulWidget {
   static const routeName = '/editFuelStationDetails';
 
-  const EditFuelStationDetails({Key key}) : super(key: key);
+  const EditFuelStationDetails({Key? key}) : super(key: key);
 
   @override
   _EditFuelStationDetailsState createState() {
@@ -55,7 +55,7 @@ class _EditFuelStationDetailsState extends State<EditFuelStationDetails> {
 
   @override
   Widget build(final BuildContext context) {
-    final EditFuelStationDetailsParams params = ModalRoute.of(context).settings.arguments;
+    final EditFuelStationDetailsParams params = ModalRoute.of(context)?.settings.arguments as EditFuelStationDetailsParams;
     final FuelStation fuelStation = params.fuelStation;
     fuelPricesExpanded = params.expandFuelPrices;
     suggestEditExpanded = params.expandSuggestEdit;
@@ -128,9 +128,9 @@ class _EditFuelStationDetailsState extends State<EditFuelStationDetails> {
       color: FontsAndColors.pumpedNonActionableIconColor, size: 30);
 
   Widget _buildFuelStationFeatureTile(final FuelStation fuelStation) {
-    var setStateFunction = (expanded) {
+    setStateFunction (expanded) {
       fuelStationFeaturesExpanded = expanded;
-    };
+    }
     return EditFuelStationFeatureWidget('Fuel Station Features', 'fuel-station-features', fuelStation,
         fuelStation.getFuelStationSource(), () => fuelStationFeaturesExpanded, setStateFunction, featuresIcon);
   }
@@ -139,33 +139,33 @@ class _EditFuelStationDetailsState extends State<EditFuelStationDetails> {
       color: FontsAndColors.pumpedNonActionableIconColor, size: 30);
 
   Widget _buildFuelPricesTile(final FuelStation fuelStation) {
-    var setStateFunction = (expanded) {
+    setStateFunction (expanded) {
       fuelPricesExpanded = expanded;
-    };
+    }
     return EditFuelPriceWidget(
         fuelStation, 'Fuel Prices', setStateFunction, () => fuelPricesExpanded, "fuel-prices", editFuelPriceIcon);
   }
 
   Widget _buildAddressDetailsTile(final FuelStation fuelStation) {
-    var setStateFunction = (expanded) {
+    setStateFunction (expanded) {
       addressDetailsExpanded = expanded;
-    };
+    }
     return EditFuelStationAddressWidget(setStateFunction, () => addressDetailsExpanded, fuelStation.fuelStationAddress,
         fuelStation.stationId, fuelStation.fuelStationName, fuelStation.getFuelStationSource());
   }
 
   _buildSuggestEditTile(final FuelStation fuelStation) {
-    var setStateFunction = (expanded) {
+    setStateFunction (expanded) {
       suggestEditExpanded = expanded;
-    };
+    }
     return SuggestEditWidget(setStateFunction, () => suggestEditExpanded, fuelStation.stationId,
         fuelStation.fuelStationName, fuelStation.getFuelStationSource());
   }
 
   Widget _buildPhoneNumberTile(final FuelStation fuelStation) {
-    var setStateFunction = (expanded) {
+    setStateFunction (expanded) {
       phoneNumberExpanded = expanded;
-    };
+    }
     final FuelStationAddress fuelStationAddress = fuelStation.fuelStationAddress;
     return EditPhoneNumberWidget(
         setStateFunction,
@@ -181,9 +181,9 @@ class _EditFuelStationDetailsState extends State<EditFuelStationDetails> {
       color: FontsAndColors.pumpedNonActionableIconColor, size: 30);
 
   Widget _buildOperatingHourTile(final FuelStation fuelStation) {
-    var setStateFunction = (expanded) {
+    setStateFunction (expanded) {
       operatingHoursExpanded = expanded;
-    };
+    }
     return EditOperatingTimeWidget(fuelStation, 'Operating Hours', setStateFunction, () => operatingHoursExpanded,
         "open-close", _operatingTimeIcon, true, lazyLoadOperatingHrs);
   }

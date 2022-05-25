@@ -22,13 +22,13 @@ import 'package:pumped_end_device/user-interface/widgets/pumped_icons.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class EmailWidget extends StatelessWidget {
-  static const _tag = 'EmailWidget';
-  final String emailAddress;
+class EmailNotificationWidget extends StatelessWidget {
+  static const _tag = 'EmailNotificationWidget';
   final String emailSubject;
   final String emailBody;
+  final String source;
 
-  const EmailWidget({Key key, this.emailAddress, this.emailSubject, this.emailBody}) : super(key: key);
+  const EmailNotificationWidget({Key? key, required this.emailSubject, required this.emailBody, required this.source}) : super(key: key);
 
   @override
   Widget build(final BuildContext context) {
@@ -48,7 +48,9 @@ class EmailWidget extends StatelessWidget {
   }
 
   void _sendEmail(final Function function) async {
-    final String emailUrl = Uri.encodeFull("mailto:$emailAddress?subject=$emailSubject&body=$emailBody");
+    final List<String>? toEmailAddresses = _faToEmailAddressMap[source];
+    final String emailAddress = (toEmailAddresses == null || toEmailAddresses.isEmpty) ? 'bernard@pumpedfuel.com' : toEmailAddresses.join(',');
+    final String emailUrl = Uri.encodeFull("mailto:$emailAddress?subject=$emailSubject&body=$emailBody&cc:bernard@pumpedfuel.com");
     try {
       if (await canLaunch(emailUrl)) {
         await launch(emailUrl);
@@ -61,4 +63,13 @@ class EmailWidget extends StatelessWidget {
       function.call();
     }
   }
+
+  static const _faToEmailAddressMap = {
+    'nsw' : ['support@onegov.nsw.gov.au', 'fuelchecknews@customerservice.nsw.gov.au'],
+    'qld' : ['fuelprices@dnrme.qld.gov.au', 'support@fuelpricesqld.com.au'],
+    'sa' : ['fuelpricingscheme@sa.gov.au', 'support@safuelpricinginformation.com.au'],
+    'fwa' : ['fuelwatch@dmirs.wa.gov.au', 'fuelwatch@commerce.wa.gov.au'],
+    'tas' : ['support@onegov.nsw.gov.au', 'fuelchecknews@customerservice.nsw.gov.au'],
+    'nt' : ['consumer@nt.gov.au']
+  };
 }

@@ -32,7 +32,7 @@ class EditFuelStationDetailsParams {
   bool lazyLoadFuelQuotes = false;
 
   EditFuelStationDetailsParams(
-      {this.fuelStation,
+      {required this.fuelStation,
       this.expandFuelPrices = false,
       this.expandSuggestEdit = false,
       this.expandPhoneNumber = false,

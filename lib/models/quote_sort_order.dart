@@ -22,10 +22,10 @@ extension QuoteSortOrder on SortOrder {
   static const _sortOrderName = {SortOrder.cheapestClosest: 'Cheapest Closest', SortOrder.closestCheapest: 'Closest Cheapest'};
   static const _sortOrderStr = {SortOrder.cheapestClosest: 'CHEAPEST_CLOSEST', SortOrder.closestCheapest: 'CLOSEST_CHEAPEST'};
 
-  String get sortOrderName => _sortOrderName[this];
-  String get sortOrderStr => _sortOrderStr[this];
+  String? get sortOrderName => _sortOrderName[this];
+  String? get sortOrderStr => _sortOrderStr[this];
 
-  static SortOrder getSortOrder(String sortOrderStr) {
+  static SortOrder? getSortOrder(String sortOrderStr) {
     switch (sortOrderStr) {
       case 'CHEAPEST_CLOSEST': {
         return SortOrder.cheapestClosest;

@@ -16,7 +16,6 @@
  *     along with Pumped End Device.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'package:flutter/cupertino.dart';
 import 'package:pumped_end_device/models/pumped/fuel_type.dart';
 import 'package:pumped_end_device/models/pumped/fuel_category.dart';
 
@@ -26,19 +25,16 @@ class UserConfiguration {
 
   final String id;
   final int version;
-  @required
   final num numSearchResults;
-  @required
   final FuelType defaultFuelType;
-  @required
   final FuelCategory defaultFuelCategory;
-  @required
   final num searchRadius;
-  @required
   final String searchCriteria;
 
   UserConfiguration(
-      {this.id, this.numSearchResults, this.defaultFuelType, this.defaultFuelCategory, this.searchRadius, this.searchCriteria, this.version});
+      {required this.id, required this.numSearchResults, required this.defaultFuelType,
+        required this.defaultFuelCategory, required this.searchRadius,
+        required this.searchCriteria, required this.version});
 
   Map<String, dynamic> toMap() => {
         'id': id,

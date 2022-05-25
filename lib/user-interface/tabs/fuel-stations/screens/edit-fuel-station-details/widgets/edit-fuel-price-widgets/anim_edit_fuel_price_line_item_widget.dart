@@ -29,20 +29,22 @@ import 'package:pumped_end_device/util/data_utils.dart';
 
 class AnimEditFuelPriceLineItemWidget extends StatefulWidget {
   final FuelQuote fuelQuote;
+  final bool isFaStation;
   final String fuelName;
   final String currencyValueFormat;
   final TextEditingController fuelPriceEditingController;
-  final FuelAuthorityPriceMetadata fuelAuthorityPriceMetadata;
+  final FuelAuthorityPriceMetadata? fuelAuthorityPriceMetadata;
   final Function quoteChangeListener;
 
   const AnimEditFuelPriceLineItemWidget(
-      {Key key,
-      this.fuelQuote,
-      this.fuelName,
-      this.fuelAuthorityPriceMetadata,
-      this.fuelPriceEditingController,
-      this.currencyValueFormat,
-      this.quoteChangeListener})
+      {Key? key,
+        required this.isFaStation,
+        required this.fuelQuote,
+        required this.fuelName,
+        this.fuelAuthorityPriceMetadata,
+        required this.fuelPriceEditingController,
+        required this.currencyValueFormat,
+        required this.quoteChangeListener})
       : super(key: key);
 
   @override
@@ -75,8 +77,8 @@ class _AnimEditFuelPriceLineItemWidgetState extends State<AnimEditFuelPriceLineI
   static const _focusDurationMills = 1000;
   static const _noFocusDurationMills = 250;
   int _durationMills = _focusDurationMills;
-  double enteredPrice;
-  String trackingValue;
+  double? enteredPrice;
+  String? trackingValue;
   Color _priceBoxColor = _greyColor;
   Color _hintTextColor = _blackColor;
 
@@ -112,7 +114,7 @@ class _AnimEditFuelPriceLineItemWidgetState extends State<AnimEditFuelPriceLineI
     if (widget.fuelAuthorityPriceMetadata != null) {
       final minPrice = _getMinPrice(widget.fuelAuthorityPriceMetadata);
       final maxPrice = _getMaxPrice(widget.fuelAuthorityPriceMetadata);
-      if (enteredPrice != null && (enteredPrice < minPrice || enteredPrice > maxPrice)) {
+      if (enteredPrice != null && (enteredPrice! < minPrice || enteredPrice! > maxPrice)) {
         hintMessage = 'Not in range $minPrice and $maxPrice';
         _priceBoxColor = _exceptionColor;
         _hintTextColor = _exceptionColor;
@@ -120,11 +122,9 @@ class _AnimEditFuelPriceLineItemWidgetState extends State<AnimEditFuelPriceLineI
         hintMessage = 'Price Range $minPrice - $maxPrice';
       }
     }
-    if (widget.currencyValueFormat != null) {
-      digitsAfterDecimal = int.parse(widget.currencyValueFormat.substring(2, 4));
-    }
+    digitsAfterDecimal = int.parse(widget.currencyValueFormat.substring(2, 4));
 
-    final bool enabled = widget.fuelQuote.fuelQuoteSource != 'F';
+    final bool enabled = widget.fuelQuote.fuelQuoteSource != 'F' && !widget.isFaStation;
     final CupertinoTextField fuelQuoteTextField = _buildFuelQuoteTextField(enabled);
     return AnimatedContainer(
         padding: const EdgeInsets.only(left: 30, right: 30, top: 3, bottom: 3),
@@ -189,25 +189,29 @@ class _AnimEditFuelPriceLineItemWidgetState extends State<AnimEditFuelPriceLineI
     return const Text('');
   }
 
+  static const _firstAllowedChar = 0;
+  static const _firstAllowedCharDecimalPos = 3;
+  static const _alternateDecimalPos = 3;
+
   CupertinoTextField _buildFuelQuoteTextField(final bool enabled) {
-    int firstAllowedChar = 0;
-    int firstAllowedCharDecimalPos = 3; //default value for decimal placement
-    int alternateDecimalPos = 3;
+    int? firstAllowedChar;
+    int? firstAllowedCharDecimalPos; //default value for decimal placement
+    int? alternateDecimalPos;
     if (widget.fuelAuthorityPriceMetadata != null) {
-      firstAllowedChar = widget.fuelAuthorityPriceMetadata.allowedMaxFirstChar;
-      firstAllowedCharDecimalPos = widget.fuelAuthorityPriceMetadata.decPosForAllowedMaxForChar;
-      alternateDecimalPos = widget.fuelAuthorityPriceMetadata.alternatePos;
+      firstAllowedChar = widget.fuelAuthorityPriceMetadata?.allowedMaxFirstChar;
+      firstAllowedCharDecimalPos = widget.fuelAuthorityPriceMetadata?.decPosForAllowedMaxForChar;
+      alternateDecimalPos = widget.fuelAuthorityPriceMetadata?.alternatePos;
     }
-    final int finalFirstAllowedChar = firstAllowedChar;
-    final int finalFirstAllowedCharDecimalPos = firstAllowedCharDecimalPos;
-    final int finalAlternateDecimalPos = alternateDecimalPos;
+    final int finalFirstAllowedChar = firstAllowedChar ?? _firstAllowedChar;
+    final int finalFirstAllowedCharDecimalPos = firstAllowedCharDecimalPos ?? _firstAllowedCharDecimalPos;
+    final int finalAlternateDecimalPos = alternateDecimalPos ?? _alternateDecimalPos;
     final String quoteValue = widget.fuelQuote.quoteValue == null ? '' : widget.fuelQuote.quoteValue.toString();
     final String currencyFormat = r'^\d+\.?\d{0,' + digitsAfterDecimal.toString() + '}';
     return CupertinoTextField(
         focusNode: _focus,
         decoration: BoxDecoration(
             color: Colors.white,
-            border: widget.fuelQuote.quoteValue == null
+            border: enabled
                 ? Border.all(color: _priceBoxColor)
                 : Border.all(color: Colors.grey),
             borderRadius: const BorderRadius.all(Radius.circular(3))),
@@ -233,11 +237,11 @@ class _AnimEditFuelPriceLineItemWidgetState extends State<AnimEditFuelPriceLineI
             } else {
               autoDecimalPlacement = finalAlternateDecimalPos;
             }
-            int countCharsChanged;
+            int? countCharsChanged;
             if (trackingValue != null) {
-              countCharsChanged = widget.fuelPriceEditingController.text.compareTo(trackingValue);
+              countCharsChanged = widget.fuelPriceEditingController.text.compareTo(trackingValue.toString());
             }
-            final String deletedChar = DataUtils.charDeleted(trackingValue, widget.fuelPriceEditingController.text);
+            final String deletedChar = DataUtils.charDeleted(trackingValue.toString(), widget.fuelPriceEditingController.text)!;
             decimalDeleted = decimalDeleted ? decimalDeleted : deletedChar == '.';
             if (!fuelPriceEntered.contains(".") &&
                 countCharsChanged != 0 &&
@@ -256,7 +260,7 @@ class _AnimEditFuelPriceLineItemWidgetState extends State<AnimEditFuelPriceLineI
             if (trackingValue == null || trackingValue == '') {
               enteredPrice = null;
             } else {
-              enteredPrice = double.parse(trackingValue);
+              enteredPrice = double.parse(trackingValue.toString());
             }
           });
           widget.quoteChangeListener(widget.fuelQuote.fuelType, enteredPrice);
@@ -264,32 +268,20 @@ class _AnimEditFuelPriceLineItemWidgetState extends State<AnimEditFuelPriceLineI
         key: PageStorageKey('edit-fuel-price${widget.fuelQuote.fuelType}'));
   }
 
-  double _getMaxPrice(final FuelAuthorityPriceMetadata metaData) {
+  double _getMaxPrice(final FuelAuthorityPriceMetadata? metaData) {
     if (metaData == null) {
       return _defaultMaxValue;
     }
-    if (null == metaData.maxPrice) {
-      return _defaultMaxValue;
-    }
     final double maxTolerancePercent = metaData.maxTolerancePercent;
-    if (null == maxTolerancePercent) {
-      return _defaultMaxValue;
-    }
     final double maxPrice = metaData.maxPrice + metaData.maxPrice * maxTolerancePercent / 100 - 0.1;
     return double.parse(maxPrice.toStringAsFixed(1));
   }
 
-  double _getMinPrice(final FuelAuthorityPriceMetadata metaData) {
+  double _getMinPrice(final FuelAuthorityPriceMetadata? metaData) {
     if (metaData == null) {
       return _defaultMinValue;
     }
-    if (null == metaData.minPrice) {
-      return _defaultMinValue;
-    }
     final double minTolerancePercent = metaData.minTolerancePercent;
-    if (null == minTolerancePercent) {
-      return _defaultMinValue;
-    }
     double minPrice = metaData.minPrice - metaData.minPrice * minTolerancePercent / 100 + 0.1;
     if (minPrice < 0) {
       minPrice = _defaultMinValue;
@@ -304,11 +296,11 @@ class _PriceTextInputFormatter implements TextInputFormatter {
 
   @override
   TextEditingValue formatEditUpdate(final TextEditingValue oldValue, final TextEditingValue newValue) {
-    final String newValueText = newValue.text ?? '';
-    final int newValueTextLength = newValue.text != null ? newValue.text.length : 0;
+    final String newValueText = newValue.text;
+    final int newValueTextLength = newValue.text.length;
 
-    final String oldValueText = oldValue.text ?? '';
-    final int oldValueTextLength = oldValue.text != null ? oldValue.text.length : 0;
+    final String oldValueText = oldValue.text;
+    final int oldValueTextLength = oldValue.text.length;
 
     if (newValueTextLength <= maxLength) {
       return TextEditingValue(text: newValueText, selection: TextSelection.collapsed(offset: newValueTextLength));

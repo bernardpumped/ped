@@ -16,29 +16,27 @@
  *     along with Pumped End Device.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'package:flutter/cupertino.dart';
-
 class FuelQuote {
-  final int fuelQuoteId;
+  final int? fuelQuoteId;
   final int fuelStationId;
   final String fuelType;
-  final String fuelMeasure;
-  double quoteValue;
-  final int fuelBrandId;
-  final String fuelQuoteSourceName;
-  String fuelQuoteSource;
-  int publishDate; //In seconds
+  final String? fuelMeasure;
+  double? quoteValue;
+  final int? fuelBrandId;
+  final String? fuelQuoteSourceName;
+  String? fuelQuoteSource;
+  int? publishDate; //In seconds
 
   FuelQuote(
       {this.fuelQuoteId,
-      @required this.fuelStationId,
-      @required this.fuelType,
+      required this.fuelStationId,
+      required this.fuelType,
       this.fuelMeasure,
-      @required this.quoteValue,
+      this.quoteValue,
       this.fuelBrandId,
       this.fuelQuoteSourceName,
       this.fuelQuoteSource,
-      @required this.publishDate});
+      this.publishDate});
 
   bool crowdSourced() => fuelQuoteSource == 'C';
 

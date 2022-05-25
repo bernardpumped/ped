@@ -37,26 +37,27 @@ abstract class HttpPostExecutor<I extends Request, O extends Response> {
   final ResponseParser<O> responseParser;
   final String tag;
   final int timeOutInMills;
-  Function onTimeOutFunction;
+  Function? onTimeOutFunction;
 
-  HttpPostExecutor(this.tag, this.responseParser, {this.timeOutInMills = defaultTimeOut, this.onTimeOutFunction}) {
-    onTimeOutFunction ??= () {
-        LogUtil.debug(tag, 'Timeout happened');
-      };
-  }
+  HttpPostExecutor(this.tag, this.responseParser, {this.timeOutInMills = defaultTimeOut, this.onTimeOutFunction});
 
   Future<O> execute(final I request) async {
     final String url = PumpedEndPoint.pumperBaseUrl + getUrl();
     LogUtil.debug(tag, 'execute::url is $url');
     var response;
-    int startTimeMills;
+    int startTimeMills = DateTime.now().millisecondsSinceEpoch;
     try {
-      startTimeMills = DateTime.now().millisecondsSinceEpoch;
       var requestBody = convert.jsonEncode(request.toJson());
       LogUtil.debug(tag, 'Request - $requestBody');
       response = await http
           .post(Uri.parse(url), body: requestBody, headers: headers)
-          .timeout(Duration(milliseconds: timeOutInMills), onTimeout: onTimeOutFunction);
+          .timeout(Duration(milliseconds: timeOutInMills), onTimeout: () {
+        if (onTimeOutFunction != null) {
+          (onTimeOutFunction!)();
+        }
+        LogUtil.debug(tag, 'Timeout happened');
+        return Future.value(null);
+      });
     } catch (e, s) {
       LogUtil.debug(tag, 'execute::Exception happened while making call to server $s ${e.toString()}');
       return getDefaultResponse(

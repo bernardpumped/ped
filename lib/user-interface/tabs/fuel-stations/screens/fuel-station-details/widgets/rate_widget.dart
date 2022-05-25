@@ -33,7 +33,7 @@ class RateWidget extends StatelessWidget {
 
   final FuelStationAddress address;
 
-  const RateWidget(this.address, {Key key}) : super(key: key);
+  const RateWidget(this.address, {Key? key}) : super(key: key);
 
   static const rateIcon = Icon(IconData(IconCodes.rateIconCode, fontFamily: 'MaterialIcons'), color: _buttonIconColor);
 
@@ -49,15 +49,16 @@ class RateWidget extends StatelessWidget {
   }
 
   Future<bool> _rateAction() async {
-    final String fsAddress = address.contactName +
-        ' ' +
-        address.addressLine1 +
-        ' ' +
-        address.locality +
-        ' ' +
-        address.region +
-        ' ' +
-        address.state;
+    String fsAddress = '${address.contactName} ${address.addressLine1}';
+    if (address.locality != null) {
+      fsAddress = '$fsAddress ${address.locality}';
+    }
+    if (address.region != null) {
+      fsAddress = '$fsAddress ${address.region}';
+    }
+    if (address.state != null) {
+      fsAddress = '$fsAddress ${address.state}';
+    }
     final String googleRatingUrl = Uri.encodeFull('https://www.google.com/maps/search/?api=1&query=$fsAddress');
     if (Platform.isIOS) {
       if (await canLaunch(googleRatingUrl)) {

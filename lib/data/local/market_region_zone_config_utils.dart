@@ -24,10 +24,12 @@ import 'package:pumped_end_device/models/pumped/fuel_type.dart';
 class MarketRegionZoneConfigUtils {
   Future<List<FuelType>> getFuelTypesForMarketRegion() async {
     final List<FuelType> allowedFuelTypes = [];
-    final MarketRegionZoneConfiguration config =
+    final MarketRegionZoneConfiguration? config =
         await MarketRegionZoneConfigDao.instance.getMarketRegionZoneConfiguration();
-    for (final FuelCategory fuelCategory in config.marketRegionConfig.allowedFuelCategories) {
-      allowedFuelTypes.addAll(fuelCategory.allowedFuelTypes);
+    if (config != null) {
+      for (final FuelCategory fuelCategory in config.marketRegionConfig.allowedFuelCategories) {
+        allowedFuelTypes.addAll(fuelCategory.allowedFuelTypes);
+      }
     }
     return allowedFuelTypes;
   }

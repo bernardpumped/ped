@@ -16,7 +16,6 @@
  *     along with Pumped End Device.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'package:flutter/cupertino.dart';
 import 'package:pumped_end_device/models/pumped/fuel_type.dart';
 
 class FuelCategory {
@@ -26,18 +25,16 @@ class FuelCategory {
   final Set<FuelType> allowedFuelTypes;
 
   FuelCategory({
-    @required this.categoryId,
-    this.categoryName,
-    this.defaultFuelType,
-    this.allowedFuelTypes,
+    required this.categoryId,
+    required this.categoryName,
+    required this.defaultFuelType,
+    required this.allowedFuelTypes,
   });
 
   factory FuelCategory.fromJson(Map<String, dynamic> data) {
-    Set<FuelType> allowedFuelTypesSet;
-    if (data['allowed_fuel_types'] != null) {
-      var allowedFuelTypesJson = data['allowed_fuel_types'] as List;
-      allowedFuelTypesSet = allowedFuelTypesJson.map((i) => FuelType.fromJson(i)).toSet();
-    }
+    Set<FuelType>? allowedFuelTypesSet;
+    var allowedFuelTypesJson = data['allowed_fuel_types'] as List;
+    allowedFuelTypesSet = allowedFuelTypesJson.map((i) => FuelType.fromJson(i)).toSet();
     return FuelCategory(
         categoryId: data['category_id'],
         categoryName: data['category_name'],
@@ -46,8 +43,8 @@ class FuelCategory {
   }
 
   Map<String, dynamic> toJson() {
-    List<Map<String, dynamic>> allowedFuelTypesSetStr;
-    if (allowedFuelTypes != null && allowedFuelTypes.isNotEmpty) {
+    List<Map<String, dynamic>>? allowedFuelTypesSetStr;
+    if (allowedFuelTypes.isNotEmpty) {
       allowedFuelTypesSetStr = allowedFuelTypes.map((i) => i.toJson()).toList();
     }
     Map<String, dynamic> map = {

@@ -43,7 +43,7 @@ class EditFuelStationFeatureWidget extends StatefulWidget {
   final Icon _leadingWidgetIcon;
 
   const EditFuelStationFeatureWidget(this._titleText, this._widgetKey, this._fuelStation,
-      this._fuelStationSource, this._widgetExpanded, this._setStateFunction, this._leadingWidgetIcon, {Key key}) : super(key: key);
+      this._fuelStationSource, this._widgetExpanded, this._setStateFunction, this._leadingWidgetIcon, {Key? key}) : super(key: key);
 
   @override
   _EditFuelStationFeatureWidgetState createState() => _EditFuelStationFeatureWidgetState();
@@ -148,7 +148,11 @@ class _EditFuelStationFeatureWidgetState extends State<EditFuelStationFeatureWid
         value: featureSelectStatusMap[fuelStationFeature.featureType],
         checkColor: Colors.teal,
         onChanged: (val) {
-          _valueChangeListenerFunction(fuelStationFeature.featureType, val);
+          if (val != null) {
+            _valueChangeListenerFunction(fuelStationFeature.featureType, val);
+          } else {
+            LogUtil.debug(_tag, '_getFeatureCard::ChangeListener had null value');
+          }
         },
         activeColor: Colors.white);
     return Card(
@@ -222,7 +226,7 @@ class _EditFuelStationFeatureWidgetState extends State<EditFuelStationFeatureWid
     });
   }
 
-  Future<int> _persistUpdateHistory(final EndDeviceUpdateFuelStationFeatureRequest request,
+  Future<dynamic> _persistUpdateHistory(final EndDeviceUpdateFuelStationFeatureRequest request,
       final EndDeviceUpdateFuelStationFeatureResponse response) {
     final Map<String, bool> originalValues = {};
     final Map<String, bool> updatedValues = {};
@@ -241,7 +245,7 @@ class _EditFuelStationFeatureWidgetState extends State<EditFuelStationFeatureWid
         fuelStation: widget._fuelStation.fuelStationName,
         fuelStationSource: request.fuelStationSource,
         updateEpoch: response.updateEpoch,
-        updateType: UpdateType.fuelStationFeatures.updateTypeName,
+        updateType: UpdateType.fuelStationFeatures.updateTypeName??'UnResolved-UpdateType',
         responseCode: response.responseCode,
         originalValues: originalValues,
         updateValues: updatedValues,

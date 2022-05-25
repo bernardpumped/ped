@@ -20,7 +20,7 @@ class FuelType {
   final String fuelType;
   final String fuelName;
 
-  FuelType({this.fuelType, this.fuelName});
+  FuelType({required this.fuelType, required this.fuelName});
 
   factory FuelType.fromJson(Map<String, dynamic> data) => FuelType(
     fuelType : data['fuel_type'],

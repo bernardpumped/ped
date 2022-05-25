@@ -23,5 +23,5 @@ class UpdateSuggestionResponse extends UpdateFuelStationDetailsResult {
   UpdateSuggestionResponse(final bool isUpdateSuccessful, final int updateEpoch)
       : super(UpdateFuelStationDetailType.suggestEdit, isUpdateSuccessful, updateEpoch);
 
-  String suggestion;
+  String? suggestion;
 }

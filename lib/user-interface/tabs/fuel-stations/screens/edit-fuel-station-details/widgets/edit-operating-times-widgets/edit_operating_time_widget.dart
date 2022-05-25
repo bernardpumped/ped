@@ -56,7 +56,7 @@ class EditOperatingTimeWidget extends StatefulWidget {
   final bool lazyLoaded;
 
   const EditOperatingTimeWidget(this._fuelStation, this.titleText, this.setStateFunction, this.widgetExpanded, this.widgetKey,
-      this.leadingWidgetIcon, this.cupertinoIcon, this.lazyLoaded, {Key key}) : super(key: key);
+      this.leadingWidgetIcon, this.cupertinoIcon, this.lazyLoaded, {Key? key}) : super(key: key);
 
   @override
   _EditOperatingTimeWidgetState createState() => _EditOperatingTimeWidgetState();
@@ -65,7 +65,7 @@ class EditOperatingTimeWidget extends StatefulWidget {
 class _EditOperatingTimeWidgetState extends State<EditOperatingTimeWidget> {
   static const _tag = 'EditOperatingTimeWidget';
   bool _backendUpdateInProgress = false;
-  Future<GetFuelStationOperatingHrsResponse> getFuelStationOperatingHrsResponseFuture;
+  Future<GetFuelStationOperatingHrsResponse>? getFuelStationOperatingHrsResponseFuture;
   Map<String, OperatingHours> _updatedOperatingTimeMap = {};
   bool _onValueChanged = false;
 
@@ -112,7 +112,7 @@ class _EditOperatingTimeWidgetState extends State<EditOperatingTimeWidget> {
           if (snapshot.hasError) {
             return const ListTile(title: Text('Error Loading', style: TextStyle(color: Colors.red)));
           } else if (snapshot.hasData) {
-            final GetFuelStationOperatingHrsResponse response = snapshot.data;
+            final GetFuelStationOperatingHrsResponse response = snapshot.data!;
             if (response.responseCode != 'SUCCESS') {
               return const ListTile(title: Text('Error Loading', style: TextStyle(color: Colors.red)));
             } else {
@@ -125,7 +125,7 @@ class _EditOperatingTimeWidgetState extends State<EditOperatingTimeWidget> {
         });
   }
 
-  ExpansionTile _buildOperatingHoursExpansionTile(final FuelStationOperatingHrs fuelStationOperatingHrs) {
+  ExpansionTile _buildOperatingHoursExpansionTile(final FuelStationOperatingHrs? fuelStationOperatingHrs) {
     return ExpansionTile(
         initiallyExpanded: widget.widgetExpanded(),
         leading : widget.leadingWidgetIcon,
@@ -139,19 +139,21 @@ class _EditOperatingTimeWidgetState extends State<EditOperatingTimeWidget> {
         });
   }
 
-  List<Widget> _editOperatingHoursExpansionTileWidgetTree(final FuelStationOperatingHrs fuelStationOperatingHrs) {
+  List<Widget> _editOperatingHoursExpansionTileWidgetTree(final FuelStationOperatingHrs? fuelStationOperatingHrs) {
     final List<Widget> columnContent = [];
     final List<String> daysOfWeek = DateTimeUtils.weekDayShortToLongName.keys.toList();
-    for (var operatingHrs in fuelStationOperatingHrs.weeklyOperatingHrs) {
-      final OperatingHours updatedOperatingHrs = _updatedOperatingTimeMap[operatingHrs.dayOfWeek];
-      daysOfWeek.remove(operatingHrs.dayOfWeek);
-      columnContent.add(EditOperatingTimeLineItemWidget(operatingHrs, updatedOperatingHrs, undoOperatingTimeChange,
-          onOperatingTimeRangeChanged, _backendUpdateInProgress));
+    if (fuelStationOperatingHrs != null) {
+      for (var operatingHrs in fuelStationOperatingHrs.weeklyOperatingHrs) {
+        final OperatingHours? updatedOperatingHrs = _updatedOperatingTimeMap[operatingHrs.dayOfWeek];
+        daysOfWeek.remove(operatingHrs.dayOfWeek);
+        columnContent.add(EditOperatingTimeLineItemWidget(widget._fuelStation.isFaStation, operatingHrs, updatedOperatingHrs, undoOperatingTimeChange,
+            onOperatingTimeRangeChanged, _backendUpdateInProgress));
+      }
     }
     for (var dayOfWeek in daysOfWeek) {
       final OperatingHours operatingHours = OperatingHours(dayOfWeek: dayOfWeek, status: Status.unknown);
-      final OperatingHours updatedOperatingHrs = _updatedOperatingTimeMap[dayOfWeek];
-      columnContent.add(EditOperatingTimeLineItemWidget(operatingHours, updatedOperatingHrs, undoOperatingTimeChange,
+      final OperatingHours? updatedOperatingHrs = _updatedOperatingTimeMap[dayOfWeek];
+      columnContent.add(EditOperatingTimeLineItemWidget(widget._fuelStation.isFaStation, operatingHours, updatedOperatingHrs, undoOperatingTimeChange,
           onOperatingTimeRangeChanged, _backendUpdateInProgress));
     }
     columnContent.add(Padding(
@@ -168,8 +170,8 @@ class _EditOperatingTimeWidgetState extends State<EditOperatingTimeWidget> {
   void onOperatingTimeRangeChanged(final Map<String, dynamic> operatingTimeParams, final String dayOfWeek) {
     setState(() {
       _onValueChanged = true;
-      OperatingHours uot = _updatedOperatingTimeMap.remove(dayOfWeek);
-      uot ??= OperatingHours(dayOfWeek: dayOfWeek);
+      OperatingHours? tmpUot = _updatedOperatingTimeMap.remove(dayOfWeek);
+      OperatingHours uot = tmpUot?? OperatingHours(dayOfWeek: dayOfWeek);
       if (operatingTimeParams.containsKey('OPEN_HOUR')) {
         uot.openingHrs = operatingTimeParams['OPEN_HOUR'];
       }
@@ -204,14 +206,11 @@ class _EditOperatingTimeWidgetState extends State<EditOperatingTimeWidget> {
       _updatedOperatingTimeMap.forEach((day, operatingHour) {
         updatedValues.putIfAbsent(day, () => jsonEncode(operatingHour.toJson()));
       });
-      final Map<String, OperatingHours> originalOperatingHoursMap = _getOriginalOperatingHoursMap();
+      final Map<String, OperatingHours?> originalOperatingHoursMap = _getOriginalOperatingHoursMap();
       Map<String, dynamic> originalPathAndValues = {};
       _updatedOperatingTimeMap.forEach((day, operatingHour) {
         if (originalOperatingHoursMap.containsKey(day)) {
-          originalPathAndValues.putIfAbsent(
-              day,
-              () =>
-                  originalOperatingHoursMap[day] != null ? jsonEncode(originalOperatingHoursMap[day].toJson()) : null);
+          originalPathAndValues.putIfAbsent(day, () => originalOperatingHoursMap[day] != null ? jsonEncode(originalOperatingHoursMap[day]!.toJson()) : null);
         }
       });
       final AlterOperatingTimeRequest request = AlterOperatingTimeRequest(
@@ -266,7 +265,7 @@ class _EditOperatingTimeWidgetState extends State<EditOperatingTimeWidget> {
         fuelStation: widget._fuelStation.fuelStationName,
         fuelStationSource: request.fuelStationSource,
         updateEpoch: response.updateEpoch,
-        updateType: UpdateType.operatingTime.updateTypeName,
+        updateType: UpdateType.operatingTime.updateTypeName!,
         responseCode: response.responseCode,
         originalValues: originalPathAndValues,
         updateValues: updatedValues,
@@ -295,12 +294,12 @@ class _EditOperatingTimeWidgetState extends State<EditOperatingTimeWidget> {
     });
   }
 
-  Map<String, OperatingHours> _getOriginalOperatingHoursMap() {
-    final Map<String, OperatingHours> originalOperatingHoursMap = {};
+  Map<String, OperatingHours?> _getOriginalOperatingHoursMap() {
+    final Map<String, OperatingHours?> originalOperatingHoursMap = {};
     final List<String> daysOfWeek = DateTimeUtils.weekDayShortToLongName.keys.toList();
     if (widget._fuelStation.fuelStationOperatingHrs != null &&
-        widget._fuelStation.fuelStationOperatingHrs.weeklyOperatingHrs != null) {
-      for (var operatingHour in widget._fuelStation.fuelStationOperatingHrs.weeklyOperatingHrs) {
+        widget._fuelStation.fuelStationOperatingHrs?.weeklyOperatingHrs != null) {
+      for (var operatingHour in widget._fuelStation.fuelStationOperatingHrs!.weeklyOperatingHrs) {
         originalOperatingHoursMap.putIfAbsent(operatingHour.dayOfWeek, () => operatingHour);
         daysOfWeek.remove(operatingHour.dayOfWeek);
       }
@@ -333,14 +332,13 @@ class _EditOperatingTimeWidgetState extends State<EditOperatingTimeWidget> {
     List<OperatingTimeVo> operatingTimeVos = [];
     LogUtil.debug(_tag, 'updatedOperatingTimeMap.length : ${updatedOperatingTimeMap.length}');
     updatedOperatingTimeMap.forEach((day, operatingHour) {
-      final OperatingTimeVo vo = OperatingTimeVo();
-      vo.dayOfWeek = operatingHour.dayOfWeek;
+      final String openingTime = sprintf('%02d:%02d', [operatingHour.openingHrs, operatingHour.openingMins]);
+      final String closingTime = sprintf('%02d:%02d', [operatingHour.closingHrs, operatingHour.closingMins]);
+      final OperatingTimeVo vo = OperatingTimeVo(dayOfWeek: operatingHour.dayOfWeek, openingTime: openingTime,
+          closingTime: closingTime, operatingTimeRange: operatingHour.operatingTimeRange, operatingTimeSource: 'C');
       LogUtil.debug(_tag,
-          'range ${operatingHour.status} openingHrs : ${operatingHour.openingHrs} openingMins : ${operatingHour.openingMins} closingHrs : ${operatingHour.closingHrs} closingMins ${operatingHour.closingMins}');
-      vo.openingTime = sprintf('%02d:%02d', [operatingHour.openingHrs, operatingHour.openingMins]);
-      vo.closingTime = sprintf('%02d:%02d', [operatingHour.closingHrs, operatingHour.closingMins]);
-      vo.operatingTimeSource = 'C';
-      vo.operatingTimeRange = operatingHour.operatingTimeRange;
+          'range ${operatingHour.status} openingHrs : ${operatingHour.openingHrs} openingMins : ${operatingHour.openingMins} '
+              'closingHrs : ${operatingHour.closingHrs} closingMins ${operatingHour.closingMins}');
       operatingTimeVos.add(vo);
     });
     return operatingTimeVos;

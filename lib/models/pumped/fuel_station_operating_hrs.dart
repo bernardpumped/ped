@@ -22,7 +22,7 @@ class FuelStationOperatingHrs {
   final int stationId;
   final List<OperatingHours> weeklyOperatingHrs;
 
-  FuelStationOperatingHrs({this.stationId, this.weeklyOperatingHrs});
+  FuelStationOperatingHrs({required this.stationId, required this.weeklyOperatingHrs});
 
   void updateOperatingHoursForDay(final String dayOfWeek, final OperatingHours operatingHours) {
     int j = -1;
@@ -39,7 +39,7 @@ class FuelStationOperatingHrs {
     }
   }
 
-  OperatingHours getOperatingHoursForDay(final String dayOfWeek) {
+  OperatingHours? getOperatingHoursForDay(final String dayOfWeek) {
     for (int i = 0; i < weeklyOperatingHrs.length; i++) {
       if (weeklyOperatingHrs[i].dayOfWeek == dayOfWeek) {
         return weeklyOperatingHrs[i];

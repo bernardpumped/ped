@@ -44,7 +44,7 @@ class SuggestEditWidget extends StatefulWidget {
   final String fuelStationName;
 
    const SuggestEditWidget(
-      this.setStateFunction, this.isWidgetExpanded, this.fuelStationId, this.fuelStationName, this.fuelStationSource, {Key key}) : super(key: key);
+      this.setStateFunction, this.isWidgetExpanded, this.fuelStationId, this.fuelStationName, this.fuelStationSource, {Key? key}) : super(key: key);
 
   @override
   _SuggestEditWidgetState createState() => _SuggestEditWidgetState();
@@ -57,7 +57,7 @@ class _SuggestEditWidgetState extends State<SuggestEditWidget> {
   bool _backendUpdateInProgress = false;
   bool _inputSuggestionValid = true;
 
-  String _suggestion;
+  String? _suggestion;
 
   static const suggestEditIcon = Icon(IconData(IconCodes.suggestEditIconCode, fontFamily: 'MaterialIcons', matchTextDirection: true),
       color: FontsAndColors.pumpedNonActionableIconColor, size: 30);
@@ -73,7 +73,7 @@ class _SuggestEditWidgetState extends State<SuggestEditWidget> {
         widget.setStateFunction);
   }
 
-  bool isValid(final String input) {
+  bool isValid(final String? input) {
     return DataUtils.isNotBlank(input);
   }
 
@@ -135,7 +135,7 @@ class _SuggestEditWidgetState extends State<SuggestEditWidget> {
         uuid: uuid.v1(),
         fuelStationId: widget.fuelStationId,
         fuelStationSource: widget.fuelStationSource,
-        suggestion: _suggestion);
+        suggestion: _suggestion!);
     SuggestEditResponse response;
     try {
       lockInputs();
@@ -174,14 +174,14 @@ class _SuggestEditWidgetState extends State<SuggestEditWidget> {
     Navigator.pop(context, _getUpdateResponse(request, response));
   }
 
-  Future<int> _persistUpdateHistory(final SuggestEditRequest request, final SuggestEditResponse response) {
+  Future<dynamic> _persistUpdateHistory(final SuggestEditRequest request, final SuggestEditResponse response) {
     final UpdateHistory updateHistory = UpdateHistory(
         updateHistoryId: request.uuid,
         fuelStationId: request.fuelStationId,
         fuelStation: widget.fuelStationName,
         fuelStationSource: request.fuelStationSource,
         updateEpoch: response.updateEpoch,
-        updateType: UpdateType.suggestEdit.updateTypeName,
+        updateType: UpdateType.suggestEdit.updateTypeName!,
         responseCode: response.responseCode,
         originalValues: {UpdateTypeAttributes.suggestion: ''},
         updateValues: {UpdateTypeAttributes.suggestion: request.suggestion},

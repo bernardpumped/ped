@@ -47,7 +47,7 @@ class DateTimeUtils {
     'SUN': 7
   };
 
-  static String getNextDay(final String day) {
+  static String? getNextDay(final String? day) {
     switch (day) {
       case 'MON':
         return 'TUE';

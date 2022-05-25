@@ -28,14 +28,13 @@ import 'package:pumped_end_device/util/log_util.dart';
 class UpdateButtonWidget extends StatelessWidget {
   static const _tag = 'UpdateButtonWidget';
 
-  static const _editIcon = Icon(IconData(IconCodes.editIconCode,
-      fontFamily: 'MaterialIcons', matchTextDirection: true),
+  static const _editIcon = Icon(IconData(IconCodes.editIconCode, fontFamily: 'MaterialIcons', matchTextDirection: true),
       color: FontsAndColors.pumpedNonActionableIconColor, size: 25);
 
-  static const _moreIcon = Icon(IconData(IconCodes.navigateNextIconCode,
-      fontFamily: 'MaterialIcons', matchTextDirection: true),
-      color: FontsAndColors.pumpedSecondaryIconColor, size: 25);
-
+  static const _moreIcon = Icon(
+      IconData(IconCodes.navigateNextIconCode, fontFamily: 'MaterialIcons', matchTextDirection: true),
+      color: FontsAndColors.pumpedSecondaryIconColor,
+      size: 25);
 
   final FuelStation fuelStation;
   final bool addressDetailsExpanded;
@@ -44,10 +43,12 @@ class UpdateButtonWidget extends StatelessWidget {
   final Function updateFuelStationDetailsScreenForChange;
 
   const UpdateButtonWidget(this.fuelStation,
-      {Key key, this.addressDetailsExpanded = false,
+      {Key? key,
+      this.addressDetailsExpanded = false,
       this.fuelPricesExpanded = false,
       this.expandSuggestEdit = false,
-      this.updateFuelStationDetailsScreenForChange}) : super(key: key);
+      required this.updateFuelStationDetailsScreenForChange})
+      : super(key: key);
 
   @override
   Widget build(final BuildContext context) {
@@ -56,7 +57,7 @@ class UpdateButtonWidget extends StatelessWidget {
         decoration: const BoxDecoration(color: Colors.white),
         child: ListTile(
             onTap: () {
-              final Future<bool> signInDialogOutput =
+              final Future<bool?> signInDialogOutput =
                   showDialog<bool>(context: context, builder: (context) => const SignInWidget());
               signInDialogOutput.then(
                   (output) => _handleLogin(
@@ -72,9 +73,9 @@ class UpdateButtonWidget extends StatelessWidget {
             trailing: _moreIcon));
   }
 
-  _handleLogin(final BuildContext context, final bool output, final FuelStation fuelStation,
+  _handleLogin(final BuildContext context, final bool? output, final FuelStation fuelStation,
       final bool addressDetailsExpanded, final bool fuelPricesExpanded, final bool expandSuggestEdit) async {
-    if (output) {
+    if (output != null && output) {
       var result = await Navigator.pushNamed(context, EditFuelStationDetails.routeName,
           arguments: EditFuelStationDetailsParams(
               lazyLoadOperatingHrs: true,
@@ -94,13 +95,14 @@ class UpdateButtonWidget extends StatelessWidget {
   }
 
   Widget _getUpdateDetailsSubtitle() {
-    return const Text('In case information is missing or incorrect', maxLines: 2, overflow: TextOverflow.ellipsis);
+    return const Text('In case information is missing or incorrect',
+        maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 14));
   }
 
   Widget _getUpdateDetailsTitle() {
     return const Text('Update Station Details',
         maxLines: 2,
         overflow: TextOverflow.ellipsis,
-        style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.black87));
+        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black87));
   }
 }

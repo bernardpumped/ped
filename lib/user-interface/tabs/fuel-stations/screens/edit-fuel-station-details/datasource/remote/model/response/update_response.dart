@@ -24,13 +24,13 @@ class UpdateResponse extends Response {
   final int fuelStationId;
   final String fuelStationSource;
   final bool successfulUpdate;
-  final List<dynamic> exceptionCodes;
+  final List<dynamic>? exceptionCodes;
   final Map<String, dynamic> updateResult;
 
   UpdateResponse(
       final String responseCode,
       final String responseDetails,
-      final Map<String, dynamic> invalidArguments,
+      final Map<String, dynamic>? invalidArguments,
       final int responseEpoch,
       this.exceptionCodes,
       this.updateResult,

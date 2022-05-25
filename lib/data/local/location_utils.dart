@@ -32,8 +32,8 @@ class LocationUtils {
 
   LocationUtils(this._locationDataSource);
 
-  Future<LocationServiceSubscription> configureLocationService(final Function onLocationChangeListener) async {
-    final MarketRegionZoneConfiguration config =
+  Future<LocationServiceSubscription?> configureLocationService(final Function onLocationChangeListener) async {
+    final MarketRegionZoneConfiguration? config =
         await MarketRegionZoneConfigDao.instance.getMarketRegionZoneConfiguration();
     if (config != null) {
       final double minDistanceInMetres = config.zoneConfig.minDistanceLocationUpdates;

@@ -28,5 +28,5 @@ extension UpdateTypeExt on UpdateType {
     UpdateType.fuelStationFeatures: 'FUEL_STATION_FEATURES'
   };
 
-  String get updateTypeName => _updateTypeNames[this];
+  String? get updateTypeName => _updateTypeNames[this];
 }

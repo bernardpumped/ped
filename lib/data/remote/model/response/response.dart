@@ -18,8 +18,8 @@
 
 class Response {
   String responseCode = 'SUCCESS';
-  final String responseDetails;
-  final Map<String, dynamic> invalidArguments;
+  final String? responseDetails;
+  final Map<String, dynamic>? invalidArguments;
   final int responseEpoch;
   Response(this.responseCode, this.responseDetails, this.invalidArguments, this.responseEpoch);
 }

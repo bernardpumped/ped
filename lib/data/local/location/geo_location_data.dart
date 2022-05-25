@@ -19,6 +19,6 @@
 class GeoLocationData {
   final double latitude;
   final double longitude;
-  final double altitude;
-  GeoLocationData({this.latitude, this.longitude, this.altitude});
+  final double? altitude;
+  GeoLocationData({required this.latitude, required this.longitude, this.altitude});
 }

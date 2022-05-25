@@ -19,10 +19,10 @@
 import 'package:flutter/material.dart';
 
 class ApplicationTitleTextWidget extends StatelessWidget {
-  const ApplicationTitleTextWidget({Key key}) : super(key: key);
+  const ApplicationTitleTextWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(final BuildContext context) {
-    return const Text('Pumped', style: TextStyle(fontSize: 24, color: Colors.black87, fontWeight: FontWeight.bold));
+    return const Text('Pumped', style: TextStyle(fontSize: 28, color: Colors.black87, fontWeight: FontWeight.bold));
   }
 }

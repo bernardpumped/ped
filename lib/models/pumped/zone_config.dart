@@ -38,19 +38,19 @@ class ZoneConfig {
   String zoneType;
 
   ZoneConfig ({
-    this.zoneId ,
-    this.marketRegion ,
-    this.maxRadius ,
-    this.configVersion ,
-    this.inProd ,
-    this.zoneStatus ,
-    this.minDistanceLocationUpdates ,
-    this.minTimeLocationUpdates ,
-    this.topLatitude ,
-    this.leftLongitude ,
-    this.bottomLatitude ,
-    this.rightLongitude ,
-    this.zoneType ,
+    required this.zoneId ,
+    required this.marketRegion ,
+    required this.maxRadius ,
+    required this.configVersion ,
+    required this.inProd ,
+    required this.zoneStatus ,
+    required this.minDistanceLocationUpdates ,
+    required this.minTimeLocationUpdates ,
+    required this.topLatitude ,
+    required this.leftLongitude ,
+    required this.bottomLatitude ,
+    required this.rightLongitude ,
+    required this.zoneType ,
   });
 
   Map<String, dynamic> toJson() => {

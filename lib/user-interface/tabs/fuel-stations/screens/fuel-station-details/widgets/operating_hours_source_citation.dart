@@ -21,6 +21,7 @@ import 'package:pumped_end_device/user-interface/tabs/fuel-stations/screens/fuel
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station.dart';
 import 'package:pumped_end_device/models/pumped/operating_hours.dart';
+import 'package:pumped_end_device/util/log_util.dart';
 
 class OperatingHoursSourceCitation extends StatelessWidget {
   static const _padding = 15.0;
@@ -29,7 +30,7 @@ class OperatingHoursSourceCitation extends StatelessWidget {
   final OperatingHours _operatingHours;
   final FuelStation _fuelStation;
 
-   const OperatingHoursSourceCitation(this._operatingHours, this._fuelStation, {Key key}) : super(key: key);
+   const OperatingHoursSourceCitation(this._operatingHours, this._fuelStation, {Key? key}) : super(key: key);
 
   @override
   Widget build(final BuildContext context) {
@@ -42,13 +43,8 @@ class OperatingHoursSourceCitation extends StatelessWidget {
   }
 
   Widget _dialogContent(final BuildContext context) {
-    final String operatingTimeSource = _operatingHours.operatingTimeSource;
-    Widget child;
-    if (operatingTimeSource == 'G' || operatingTimeSource == 'C') {
-      child = _getOperatingHrsSourceMessage(context, operatingTimeSource);
-    } else {
-      child = const SizedBox(height: 0);
-    }
+    final String? operatingTimeSource = _operatingHours.operatingTimeSource;
+    LogUtil.debug('OperatingHoursSourceCitation', 'operatingTimeSourceName : ${_operatingHours.operatingTimeSourceName}');
     return SingleChildScrollView(
         child: Container(
             padding: const EdgeInsets.all(_padding),
@@ -58,15 +54,17 @@ class OperatingHoursSourceCitation extends StatelessWidget {
                 shape: BoxShape.rectangle,
                 borderRadius: BorderRadius.circular(_padding),
                 boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 10.0, offset: Offset(0.0, 10.0))]),
-            child: child));
+            child: _getOperatingHrsSourceMessage(context, operatingTimeSource, _operatingHours.operatingTimeSourceName)));
   }
 
-  Column _getOperatingHrsSourceMessage(final BuildContext context, final String operatingTimeSource) {
+  Column _getOperatingHrsSourceMessage(final BuildContext context, final String? operatingTimeSource, final String? operatingTimeSourceName) {
     String sourceMessage;
     if (operatingTimeSource == 'C') {
       sourceMessage = 'Operating time Crowd Sourced';
-    } else {
+    } else if (operatingTimeSource == 'G') {
       sourceMessage = 'Operating time Google Source';
+    } else {
+      sourceMessage = 'Operating time $operatingTimeSourceName Source';
     }
     return Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: <Widget>[
       Padding(
@@ -95,7 +93,7 @@ class OperatingHoursSourceCitation extends StatelessWidget {
             Navigator.pop(context);
           }),
       const SizedBox(width: 10),
-      EmailWidget(emailBody: _getEmailBody(), emailSubject: _getEmailSubject(), emailAddress: 'bernard@pumpedfuel.com')
+      _getNotificationWidget(),
     ], mainAxisAlignment: MainAxisAlignment.spaceEvenly);
   }
 
@@ -106,5 +104,17 @@ class OperatingHoursSourceCitation extends StatelessWidget {
   String _getEmailBody() {
     return 'For the fuelStation ${_fuelStation.fuelStationName} [${_fuelStation.stationId} | ${_fuelStation.getFuelStationSource()}],'
         'we have found incorrect Operating Hours ${_operatingHours.operatingTimeRange} for fuel ${_operatingHours.dayOfWeek}';
+  }
+
+  Widget _getNotificationWidget() {
+    final source = _operatingHours.operatingTimeSource;
+    LogUtil.debug('OperatingHoursSourceCitation', 'source : $source, sourceName : ${_operatingHours.operatingTimeSourceName}');
+    if (source == 'G' || source == 'C') {
+      return EmailNotificationWidget(emailBody: _getEmailBody(), emailSubject: _getEmailSubject(), source: source!);
+    } else if (source == 'F') {
+      return EmailNotificationWidget(emailBody: _getEmailBody(), emailSubject: _getEmailSubject(), source: _operatingHours.operatingTimeSourceName!);
+    }  else {
+      return const SizedBox(width: 0);
+    }
   }
 }

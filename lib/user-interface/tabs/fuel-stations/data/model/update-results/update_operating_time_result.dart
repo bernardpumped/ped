@@ -24,8 +24,8 @@ class UpdateOperatingTimeResult extends UpdateFuelStationDetailsResult {
       {this.originalValues, this.updateValues, this.invalidArguments, this.recordLevelExceptionCodes})
       : super(UpdateFuelStationDetailType.operatingHours, isUpdateSuccessful, updateEpoch);
 
-  final Map<String, dynamic> originalValues;
-  final Map<String, dynamic> updateValues;
-  final Map<String, dynamic> invalidArguments;
-  final Map<String, dynamic> recordLevelExceptionCodes;
+  final Map<String, dynamic>? originalValues;
+  final Map<String, dynamic>? updateValues;
+  final Map<String, dynamic>? invalidArguments;
+  final Map<String, dynamic>? recordLevelExceptionCodes;
 }

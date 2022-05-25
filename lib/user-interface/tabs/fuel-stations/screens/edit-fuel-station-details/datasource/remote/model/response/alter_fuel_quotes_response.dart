@@ -30,17 +30,18 @@ class AlterFuelQuotesResponse extends UpdateResponse {
   /// There is only no case, when there is partial success.
   ///
   AlterFuelQuotesResponse(
-      {final String responseCode,
-      final String responseDetails,
-      final Map<String, dynamic> invalidArguments,
-      final int responseEpoch,
-      final List<dynamic> exceptionCodes,
-      final Map<String, dynamic> updateResult,
-      final int fuelStationId,
-      final String fuelStationSource,
-      final int updateEpoch,
-      final String uuid,
-      final bool successfulUpdate})
+      {
+        required final String responseCode,
+        required final String responseDetails,
+        final Map<String, dynamic>? invalidArguments,
+        required final int responseEpoch,
+        final List<dynamic>? exceptionCodes,
+        required final Map<String, dynamic> updateResult,
+        required final int fuelStationId,
+        required final String fuelStationSource,
+        required final int updateEpoch,
+        required final String uuid,
+        required final bool successfulUpdate})
       : super(responseCode, responseDetails, invalidArguments, responseEpoch, exceptionCodes, updateResult,
             fuelStationId, fuelStationSource, updateEpoch, uuid, successfulUpdate);
 

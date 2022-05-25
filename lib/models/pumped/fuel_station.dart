@@ -16,7 +16,6 @@
  *     along with Pumped End Device.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'package:flutter/cupertino.dart';
 import 'package:pumped_end_device/models/pumped/fuel_quote.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station_address.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station_operating_hrs.dart';
@@ -28,22 +27,25 @@ class FuelStation {
   String fuelStationName;
   final FuelStationAddress fuelStationAddress;
 
-  final bool managed;
-  final double rating;
-  final bool hasPromos;
-  final bool hasServices;
-  final String stationType;
-  final List<String> imgUrls;
+  final bool? managed;
+  final double? rating;
+  // final bool hasPromos;
+  int promos = 0;
+  // final bool hasServices;
+  int services = 0;
+  final String? stationType;
+  final List<String>? imgUrls;
 
-  Status status; //open / close
-  OperatingHours operatingHours;
+  Status? status; //open / close
+  OperatingHours? operatingHours;
 
   final bool isFaStation;
-  final String fuelAuthMatchStatus;
+  final String? fuelAuthMatchStatus;
+  final String? fuelAuthorityStationCode;
 
   Map<String, FuelQuote> fuelTypeFuelQuoteMap;
 
-  final String merchant;
+  final String? merchant;
   final String merchantLogoUrl;
 
   final double distance;
@@ -51,43 +53,61 @@ class FuelStation {
 
   // This field gets populated, when the application lands on the overview tab
   // in fuel station details screen page.
-  FuelStationOperatingHrs fuelStationOperatingHrs;
+  FuelStationOperatingHrs? fuelStationOperatingHrs;
 
   FuelStation(
-      {@required this.stationId,
-      @required this.fuelStationName,
-      @required this.fuelStationAddress,
+      {required this.stationId,
+      required this.fuelStationName,
+      required this.fuelStationAddress,
       this.status,
-      this.distance,
+      required this.distance,
       this.rating,
-      this.merchantLogoUrl,
+      required this.merchantLogoUrl,
       this.managed,
-      this.fuelTypeFuelQuoteMap,
+      required this.fuelTypeFuelQuoteMap,
       this.fuelAuthMatchStatus,
-      this.isFaStation,
-      this.hasPromos = false,
-      this.hasServices = false,
+      this.fuelAuthorityStationCode,
+      required this.isFaStation,
       this.imgUrls,
       this.stationType,
       this.operatingHours,
-      this.merchant,
-      this.distanceUnit});
+      required this.merchant,
+      required this.distanceUnit});
 
-  Set<String> fuelQuoteSources() {
-    if (fuelTypeFuelQuoteMap != null && fuelTypeFuelQuoteMap.isNotEmpty) {
+  Set<String?> fuelQuoteSources() {
+    if (fuelTypeFuelQuoteMap.isNotEmpty) {
       return fuelTypeFuelQuoteMap.values.map((fq) => fq.fuelQuoteSourceName).where((source) => source != 'C').toSet();
     }
     return {};
   }
 
   List<FuelQuote> fuelQuotes() {
-    if (fuelTypeFuelQuoteMap != null) {
-      return fuelTypeFuelQuoteMap.values.toList();
-    }
-    return [];
+    return fuelTypeFuelQuoteMap.values.toList();
   }
 
   String getFuelStationSource() {
     return isFaStation ? "F" : "G";
+  }
+
+  bool hasFuelPrices() {
+    if (fuelTypeFuelQuoteMap.isEmpty) {
+      return false;
+    }
+    bool pricePresent = false;
+    for (var fq in fuelTypeFuelQuoteMap.values) {
+      pricePresent = pricePresent || fq.quoteValue != null && fq.quoteValue! > 0;
+      if (pricePresent) {
+        break;
+      }
+    }
+    return pricePresent;
+  }
+
+  set setPromos(int promos){
+    this.promos = promos;
+  }
+
+  set setServices(int services){
+    this.services = services;
   }
 }

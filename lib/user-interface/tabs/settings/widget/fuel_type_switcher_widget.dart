@@ -29,7 +29,7 @@ class FuelTypeSwitcher extends StatefulWidget {
   final FuelCategory selectedFuelCategory;
   final FuelType selectedFuelType;
 
-  const FuelTypeSwitcher(this.selectedFuelType, this.selectedFuelCategory, {Key key}) : super(key: key);
+  const FuelTypeSwitcher(this.selectedFuelType, this.selectedFuelCategory, {Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -47,10 +47,10 @@ class _FuelTypeSwitcher extends State<FuelTypeSwitcher> {
 
   final SettingsService _settingsDataSource = SettingsService();
 
-  Future<DropDownValues<FuelCategory>> _fuelCategoryDropdownValues;
-  FuelCategory _fuelCategorySelectedValue;
-  FuelType _fuelTypeSelectedValue;
-  Future<DropDownValues<FuelType>> _fuelTypeDropdownValues;
+  FuelType? _fuelTypeSelectedValue;
+  FuelCategory? _fuelCategorySelectedValue;
+  Future<DropDownValues<FuelType>>? _fuelTypeDropdownValues;
+  Future<DropDownValues<FuelCategory>>? _fuelCategoryDropdownValues;
 
   @override
   void initState() {
@@ -120,17 +120,17 @@ class _FuelTypeSwitcher extends State<FuelTypeSwitcher> {
             LogUtil.debug(_tag, 'Error loading ${snapshot.error}');
             return const Text('Error loading');
           } else if (snapshot.hasData) {
-            if (snapshot.data.noDataFound) {
+            final DropDownValues<FuelType> dropDownValues = snapshot.data!;
+            if (dropDownValues.noDataFound) {
               return const Text('No data found');
             } else {
-              final DropDownValues<FuelType> dropDownValues = snapshot.data;
               _fuelTypeSelectedValue = __fuelTypeSelectedValue(dropDownValues);
               return DropdownButton<FuelType>(
                 value: _fuelTypeSelectedValue,
                 icon: const Icon(Icons.keyboard_arrow_down),
                 iconSize: 20,
                 style: const TextStyle(color: Colors.black),
-                onChanged: (FuelType newValue) {
+                onChanged: (FuelType? newValue) {
                   setState(() {
                     _fuelTypeSelectedValue = newValue;
                   });
@@ -150,7 +150,7 @@ class _FuelTypeSwitcher extends State<FuelTypeSwitcher> {
 
   FuelType __fuelTypeSelectedValue(final DropDownValues<FuelType> dropDownValues) {
     if (_fuelTypeSelectedValue != null && dropDownValues.values.contains(_fuelTypeSelectedValue)) {
-      return _fuelTypeSelectedValue;
+      return _fuelTypeSelectedValue!;
     } else {
       return dropDownValues.values[dropDownValues.selectedIndex];
     }
@@ -164,14 +164,14 @@ class _FuelTypeSwitcher extends State<FuelTypeSwitcher> {
             LogUtil.debug(_tag, 'Error loading ${snapshot.error}');
             return const Text('Error loading');
           } else if (snapshot.hasData) {
-            final DropDownValues<FuelCategory> dropDownValues = snapshot.data;
+            final DropDownValues<FuelCategory> dropDownValues = snapshot.data!;
             _fuelCategorySelectedValue = _fuelCategorySelectedValue ?? dropDownValues.values[dropDownValues.selectedIndex];
             return DropdownButton<FuelCategory>(
               value: _fuelCategorySelectedValue,
               icon: const Icon(Icons.keyboard_arrow_down),
               iconSize: 20,
               style: const TextStyle(color: Colors.black),
-              onChanged: (FuelCategory newValue) {
+              onChanged: (FuelCategory? newValue) {
                 setState(() {
                   _fuelTypeSelectedValue = null;
                   _fuelCategorySelectedValue = newValue;
@@ -197,8 +197,7 @@ class _FuelTypeSwitcher extends State<FuelTypeSwitcher> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              TextButton(
-                child: const Text(cancelButtonText),
+              TextButton(child: const Text(cancelButtonText),
                 onPressed: () {
                   Navigator.pop(context);
                 },
@@ -208,10 +207,13 @@ class _FuelTypeSwitcher extends State<FuelTypeSwitcher> {
                   style: ButtonStyle(foregroundColor: MaterialStateProperty.all(Colors.black)),
                   child: const Text(okButtonText),
                   onPressed: () {
-                    Navigator.pop(
-                        context,
-                        FuelTypeSwitcherResponseParams(
-                            fuelCategory: _fuelCategorySelectedValue, fuelType: _fuelTypeSelectedValue));
+                    if (_fuelCategorySelectedValue != null && _fuelTypeSelectedValue != null) {
+                      Navigator.pop(context, FuelTypeSwitcherResponseParams(
+                          fuelCategory: _fuelCategorySelectedValue!, fuelType: _fuelTypeSelectedValue!));
+                    } else {
+                      LogUtil.debug(_tag, '_getButtonRow::Not popping as _fuelCategorySelectedValue : '
+                          '$_fuelCategorySelectedValue and _fuelTypeSelectedValue : $_fuelTypeSelectedValue');
+                    }
                   })
             ]));
   }

@@ -21,24 +21,23 @@ import 'package:pumped_end_device/models/pumped/operating_hours.dart';
 import 'package:pumped_end_device/models/status.dart';
 
 class OperatingHoursResponseParseUtils {
-  static OperatingHours getOperatingHours(final Map<String, dynamic> operatingHoursJsonVal, final bool holidayToday) {
-    OperatingHours operatingHours;
+  static OperatingHours? getOperatingHours(final Map<String, dynamic>? operatingHoursJsonVal, final bool? holidayToday) {
+    OperatingHours? operatingHours;
     if (operatingHoursJsonVal != null) {
-      final String openingTime = operatingHoursJsonVal['openingTime'];
-      final String closingTime = operatingHoursJsonVal['closingTime'];
-      final int openingHrs = _getHoursFromTimeString(openingTime);
-      final int openingMinutes = _getMinutesFromTimeString(openingTime);
-      int closingHrs = _getHoursFromTimeString(closingTime);
+      final String? openingTime = operatingHoursJsonVal['openingTime'];
+      final String? closingTime = operatingHoursJsonVal['closingTime'];
+      final int? openingHrs = _getHoursFromTimeString(openingTime);
+      final int? openingMinutes = _getMinutesFromTimeString(openingTime);
+      int? closingHrs = _getHoursFromTimeString(closingTime);
       if (closingHrs == 0 || closingHrs == null) {
         closingHrs = 23;
       }
-      int closingMinutes = _getMinutesFromTimeString(closingTime);
+      int? closingMinutes = _getMinutesFromTimeString(closingTime);
       if (closingMinutes == 0 || closingMinutes == null) {
         closingMinutes = 59;
       }
-      final DateTime publishDateTime = operatingHoursJsonVal['publishDate'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(operatingHoursJsonVal['publishDate'] * 1000)
-          : null;
+      var publishDate = operatingHoursJsonVal['publishDate'];
+      final DateTime? publishDateTime = publishDate != null ? DateTime.fromMillisecondsSinceEpoch(publishDate * 1000) : null;
       operatingHours = OperatingHours(
           dayOfWeek: operatingHoursJsonVal['dayOfWeek'],
           openingHrs: openingHrs,
@@ -47,6 +46,7 @@ class OperatingHoursResponseParseUtils {
           closingMins: closingMinutes,
           operatingTimeRange: _getOperatingTimeRange(operatingHoursJsonVal, openingTime, closingTime),
           operatingTimeSource: operatingHoursJsonVal['operatingTimeSource'],
+          operatingTimeSourceName: operatingHoursJsonVal['operatingTimeSourceName'],
           publishDate: publishDateTime,
           isHolidayToday: holidayToday);
       operatingHours.status = getStatus(operatingHours, holidayToday: holidayToday);
@@ -55,15 +55,17 @@ class OperatingHoursResponseParseUtils {
   }
 
   static _getOperatingTimeRange(
-      final Map<String, dynamic> operatingHoursJsonVal, final String openingTime, final String closingTime) {
-    String operatingTimeRangeVal = operatingHoursJsonVal['operatingTimeRange'];
+      final Map<String, dynamic>? operatingHoursJsonVal, final String? openingTime, final String? closingTime) {
+    String? operatingTimeRangeVal;
     if (operatingHoursJsonVal == null && openingTime != null && closingTime != null) {
       operatingTimeRangeVal = openingTime + '-' + closingTime;
+    } else if (operatingHoursJsonVal != null) {
+      operatingTimeRangeVal = operatingHoursJsonVal['operatingTimeRange'];
     }
     return operatingTimeRangeVal;
   }
 
-  static int _getHoursFromTimeString(final String timeString) {
+  static int? _getHoursFromTimeString(final String? timeString) {
     if (timeString != null) {
       final int len = timeString.length;
       return int.parse(timeString.substring(0, len == 3 ? 1 : 2));
@@ -71,7 +73,7 @@ class OperatingHoursResponseParseUtils {
     return null;
   }
 
-  static int _getMinutesFromTimeString(final String timeString) {
+  static int? _getMinutesFromTimeString(final String? timeString) {
     if (timeString != null) {
       final int len = timeString.length;
       return int.parse(timeString.substring(len - 2));
@@ -79,7 +81,7 @@ class OperatingHoursResponseParseUtils {
     return null;
   }
 
-  static Status getStatus(final OperatingHours operatingHours, {bool holidayToday = false}) {
+  static Status getStatus(final OperatingHours? operatingHours, {bool? holidayToday = false}) {
     Status status = Status.unknown;
     if (holidayToday != null && holidayToday) {
       status = Status.closed;
@@ -91,10 +93,10 @@ class OperatingHoursResponseParseUtils {
         } else if (OperatingTimeRange.closed == operatingTimeRange) {
           status = Status.closed;
         } else {
-          final int openingHrs = operatingHours.openingHrs;
-          final int openingMins = operatingHours.openingMins;
-          int closingHrs = operatingHours.closingHrs;
-          int closingMins = operatingHours.closingMins;
+          final int? openingHrs = operatingHours.openingHrs;
+          final int? openingMins = operatingHours.openingMins;
+          int? closingHrs = operatingHours.closingHrs;
+          int? closingMins = operatingHours.closingMins;
 
           if (closingHrs == 0 && closingMins == 0 || (closingHrs == null && closingMins == null)) {
             closingHrs = 23;

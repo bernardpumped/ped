@@ -37,8 +37,8 @@ extension FuelStationStatus on Status {
     Status.unknown: 'UNKNOWN'
   };
 
-  String get statusName => _statusName[this];
-  String get statusStr => _statusStr[this];
+  String? get statusName => _statusName[this];
+  String? get statusStr => _statusStr[this];
 
   static Status getStatus(final String statusStr) {
     switch(statusStr) {

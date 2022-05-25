@@ -23,12 +23,12 @@ class UpdateHistoryUpdatePhoneNumberItemWidget extends StatelessWidget {
   final String valueType;
   final dynamic originalValue;
   final dynamic updateValue;
-  final Map<String, dynamic> serverExceptions;
-  final List<dynamic> recordLevelExceptions;
+  final Map<String, dynamic>? serverExceptions;
+  final List<dynamic>? recordLevelExceptions;
 
   const UpdateHistoryUpdatePhoneNumberItemWidget(
-      {Key key,
-      this.valueType,
+      {Key? key,
+      required this.valueType,
       this.originalValue,
       this.updateValue,
       this.serverExceptions,
@@ -120,8 +120,8 @@ class UpdateHistoryUpdatePhoneNumberItemWidget extends StatelessWidget {
   }
 
   String _getUpdateResult() {
-    if (serverExceptions == null || serverExceptions.isEmpty) {
-      if (recordLevelExceptions == null || recordLevelExceptions.isEmpty) {
+    if (serverExceptions == null || serverExceptions!.isEmpty) {
+      if (recordLevelExceptions == null || recordLevelExceptions!.isEmpty) {
         return 'Success';
       }
       return _getTranslatedUpdateResult();

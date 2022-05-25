@@ -24,7 +24,7 @@ class FavoriteFuelStation {
   @required
   final String fuelStationSource;
 
-  FavoriteFuelStation({this.favoriteFuelStationId, this.fuelStationSource});
+  FavoriteFuelStation({required this.favoriteFuelStationId, required this.fuelStationSource});
 
   factory FavoriteFuelStation.fromJson(final Map<String, dynamic> data) {
     return FavoriteFuelStation(
