@@ -25,8 +25,9 @@ import 'package:pumped_end_device/util/log_util.dart';
 
 class FavoriteFuelStationBookmark extends StatefulWidget {
   final FuelStation _fuelStation;
+  final Function _onFavouriteStatusChange;
 
-  const FavoriteFuelStationBookmark(this._fuelStation, {Key? key}) : super(key: key);
+  const FavoriteFuelStationBookmark(this._fuelStation, this._onFavouriteStatusChange, {Key? key}) : super(key: key);
 
   @override
   State<FavoriteFuelStationBookmark> createState() => _FavoriteFuelStationBookmarkState();
@@ -37,7 +38,7 @@ class _FavoriteFuelStationBookmarkState extends State<FavoriteFuelStationBookmar
   final FavoriteFuelStationsDao dao = FavoriteFuelStationsDao.instance;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final FavoriteFuelStation station = FavoriteFuelStation(
         favoriteFuelStationId: widget._fuelStation.stationId,
         fuelStationSource: (widget._fuelStation.getFuelStationSource()));
@@ -52,9 +53,11 @@ class _FavoriteFuelStationBookmarkState extends State<FavoriteFuelStationBookmar
               return isFavoriteFuelStation
                   ? _getWidget(Icons.heart_broken_outlined, 'Unfavourite', () {
                       _favoriteRemoveAction(station);
+                      widget._onFavouriteStatusChange(); // This is to enable refresh of the home screen.
                     })
                   : _getWidget(Icons.favorite_border_outlined, 'Favourite', () {
                       _favoriteAddAction(station);
+                      widget._onFavouriteStatusChange(); // This is to enable refresh of the home screen.
                     });
             } else if (snapshot.hasError) {
               return const Text('Error Loading');
@@ -67,18 +70,16 @@ class _FavoriteFuelStationBookmarkState extends State<FavoriteFuelStationBookmar
 
   Widget _getWidget(final IconData icon, final String text, final GestureTapCallback callback) {
     return GestureDetector(
-      onTap: callback,
-      child: Column(children: [
-        Card(
-            elevation: 2,
-            color: Colors.indigo,
-            // color: Color(0xFFF0EDFF),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15), side: const BorderSide(color: Colors.indigo, width: 1)),
-            child: Padding(padding: const EdgeInsets.all(14.0), child: Icon(icon, color: Colors.white))),
-        Text(text, style: const TextStyle(color: Colors.indigo, fontSize: 14, fontWeight: FontWeight.w500))
-      ]),
-    );
+        onTap: callback,
+        child: Column(children: [
+          Card(
+              elevation: 2,
+              color: Colors.indigo,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15), side: const BorderSide(color: Colors.indigo, width: 1)),
+              child: Padding(padding: const EdgeInsets.all(14.0), child: Icon(icon, color: Colors.white))),
+          Text(text, style: const TextStyle(color: Colors.indigo, fontSize: 14, fontWeight: FontWeight.w500))
+        ]));
   }
 
   void _favoriteRemoveAction(final FavoriteFuelStation station) {

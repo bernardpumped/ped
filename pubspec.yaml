@@ -48,6 +48,7 @@ dependencies:
   google_sign_in: ^5.3.1
   flutter_facebook_auth: ^4.3.4
   twitter_login: ^4.2.3
+  webview_flutter: ^3.0.4
 
 dev_dependencies:
   test: any

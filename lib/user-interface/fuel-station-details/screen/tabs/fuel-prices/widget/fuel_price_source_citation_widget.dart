@@ -55,7 +55,8 @@ class FuelPriceSourceCitationWidget extends StatelessWidget {
   }
 
   String _getPublishDateFormatted(final int publishDateSeconds) {
-    final formatter = DateFormat('dd-MM-yy HH:mm');
+
+    final formatter = DateFormat('dd-MMM-yy HH:mm');
     return formatter.format(DateTime.fromMillisecondsSinceEpoch(publishDateSeconds * 1000));
   }
 
@@ -112,7 +113,11 @@ class FuelPriceSourceCitationWidget extends StatelessWidget {
   Row _getOkActionButton(final BuildContext context) {
     return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
       WidgetUtils.getRoundedElevatedButton(
-          child: const Text('Cancel', style: TextStyle(color: Colors.white)),
+          child: Row(children: const [
+            Icon(Icons.cancel_outlined, size: 24, color: Colors.white),
+            SizedBox(width: 10),
+            Text('Cancel', style: TextStyle(color: Colors.white))
+          ]),
           onPressed: () {
             Navigator.pop(context);
           },

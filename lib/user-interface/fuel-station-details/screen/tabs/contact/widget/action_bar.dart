@@ -29,7 +29,8 @@ import 'package:pumped_end_device/util/data_utils.dart';
 
 class ActionBar extends StatelessWidget {
   final FuelStation fuelStation;
-  ActionBar({Key? key, required this.fuelStation}) : super(key: key);
+  final Function onFavouriteStatusChange;
+  ActionBar({Key? key, required this.fuelStation, required this.onFavouriteStatusChange}) : super(key: key);
 
   final FuelStationDetailsScreenColorScheme colorScheme =
       getIt.get<FuelStationDetailsScreenColorScheme>(instanceName: fsDetailsScreenColorSchemeName);
@@ -62,7 +63,8 @@ class ActionBar extends StatelessWidget {
                     padding: const EdgeInsets.only(left: 12, right: 12),
                     child: RateWidget(fuelStation.fuelStationAddress)),
                 Padding(
-                    padding: const EdgeInsets.only(left: 12, right: 15), child: FavoriteFuelStationBookmark(fuelStation))
+                    padding: const EdgeInsets.only(left: 12, right: 15),
+                    child: FavoriteFuelStationBookmark(fuelStation, onFavouriteStatusChange))
               ])),
     );
   }

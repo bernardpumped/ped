@@ -30,56 +30,64 @@ import 'package:pumped_end_device/user-interface/fuel-stations/screens/widgets/f
 import 'package:pumped_end_device/user-interface/fuel-station-details/params/fuel_station_details_param.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/screen/fuel_station_details_screen.dart';
 import 'package:pumped_end_device/util/data_utils.dart';
+import 'package:pumped_end_device/util/log_util.dart';
 
 class FuelStationListItemWidget extends StatelessWidget {
-  static const _defaultTextSize = 14.0;
+  static const _tag = 'FuelStationListItemWidget';
   final FuelStation fuelStation;
   final FuelType selectedFuelType;
-  final double chipTextSize;
+  final Function parentRefresh;
 
   final FuelStationCardColorScheme colorScheme =
       getIt.get<FuelStationCardColorScheme>(instanceName: fsCardColorSchemeName);
 
   FuelStationListItemWidget(
-      {Key? key, required this.fuelStation, required this.selectedFuelType, this.chipTextSize = _defaultTextSize})
+      {Key? key, required this.fuelStation, required this.selectedFuelType, required this.parentRefresh})
       : super(key: key);
 
   @override
   Widget build(final BuildContext context) {
     final FuelQuote? selectedFuelQuote = fuelStation.fuelTypeFuelQuoteMap[selectedFuelType.fuelType];
     return GestureDetector(
-      onTap: () {
-        Navigator.pushNamed(context, FuelStationDetailsScreen.routeName,
-            arguments: FuelStationDetailsParam(fuelStation));
-      },
-      child: Card(
-          surfaceTintColor: Colors.white,
-          margin: const EdgeInsets.only(left: 4, right: 4, top: 4, bottom: 3),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
-          elevation: 1.5,
-          child: Padding(
-              padding: const EdgeInsets.all(8),
-              child: Column(children: [
-                Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                  FuelStationLogoWidget(width: 95, height: 95, image: NetworkImage(fuelStation.merchantLogoUrl)),
-                  Expanded(
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                        _getOpenCloseRatingDistanceWidget(context),
-                        Padding(padding: const EdgeInsets.only(left: 13, top: 13), child: _getStationNameWidget()),
-                        Padding(padding: const EdgeInsets.only(left: 13, top: 13), child: _getStationAddressWidget())
-                      ]))
-                ]),
-                const SizedBox(height: 10),
-                Row(mainAxisAlignment: MainAxisAlignment.end, crossAxisAlignment: CrossAxisAlignment.end, children: [
-                  IntrinsicHeight(child: _getOffersWidget()),
-                  const SizedBox(width: 15),
-                  IntrinsicHeight(child: _getPriceWithDetailsWidget(selectedFuelQuote))
-                ])
-              ]))),
-    );
+        onTap: () async {
+          await Navigator.pushNamed(context, FuelStationDetailsScreen.routeName,
+                  arguments: FuelStationDetailsParam(fuelStation))
+              .then((val) {
+            final bool? homeScreenRefreshNeeded = val as bool?;
+            LogUtil.debug(_tag, 'homeScreenRefreshNeeded : $homeScreenRefreshNeeded');
+            if (homeScreenRefreshNeeded != null && homeScreenRefreshNeeded) {
+              parentRefresh();
+              LogUtil.debug(_tag, 'Refreshed the parent');
+            }
+          });
+        },
+        child: Card(
+            surfaceTintColor: Colors.white,
+            margin: const EdgeInsets.only(left: 4, right: 4, top: 4, bottom: 3),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+            elevation: 1.5,
+            child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: Column(children: [
+                  Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                    FuelStationLogoWidget(width: 95, height: 95, image: NetworkImage(fuelStation.merchantLogoUrl)),
+                    Expanded(
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                          _getOpenCloseRatingDistanceWidget(context),
+                          Padding(padding: const EdgeInsets.only(left: 13, top: 13), child: _getStationNameWidget()),
+                          Padding(padding: const EdgeInsets.only(left: 13, top: 13), child: _getStationAddressWidget())
+                        ]))
+                  ]),
+                  const SizedBox(height: 10),
+                  Row(mainAxisAlignment: MainAxisAlignment.end, crossAxisAlignment: CrossAxisAlignment.end, children: [
+                    IntrinsicHeight(child: _getOffersWidget()),
+                    const SizedBox(width: 15),
+                    IntrinsicHeight(child: _getPriceWithDetailsWidget(selectedFuelQuote))
+                  ])
+                ]))));
   }
 
   Widget _getOpenCloseRatingDistanceWidget(final BuildContext context) {
@@ -161,7 +169,7 @@ class FuelStationListItemWidget extends StatelessWidget {
           Icon(Icons.shopping_cart, color: colorScheme.primaryTextColor, size: 20),
           const SizedBox(width: 5),
           Text(fuelStation.promos.toString(),
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: colorScheme.primaryTextColor)),
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: colorScheme.primaryTextColor))
         ]);
       }
       Widget? child3;
@@ -215,7 +223,7 @@ class FuelStationListItemWidget extends StatelessWidget {
       DateTime curDate = DateTime.now();
       String publishDateString;
       if (publishDate.year != curDate.year) {
-        publishDateString = DateFormat('dd/MMM/yyyy').format(publishDate);
+        publishDateString = DateFormat('dd-MMM-yyyy').format(publishDate);
       } else {
         publishDateString = DateFormat('dd-MMM HH:mm').format(publishDate);
       }

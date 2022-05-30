@@ -35,9 +35,9 @@ class EmailNotificationWidget extends StatelessWidget {
   Widget build(final BuildContext context) {
     return WidgetUtils.getRoundedElevatedButton(
         child: Row(children: const [
-          Text('Email', style: TextStyle(color: Colors.white)),
+          Icon(Icons.email_outlined, size: 24, color: Colors.white),
           SizedBox(width: 10),
-          Icon(Icons.email_rounded, size: 24, color: Colors.white)
+          Text('Email', style: TextStyle(color: Colors.white)),
         ]),
         onPressed: () {
           _sendEmail(() {

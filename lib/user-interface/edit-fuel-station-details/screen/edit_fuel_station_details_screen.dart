@@ -17,7 +17,6 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:pumped_end_device/main.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station.dart';
 import 'package:pumped_end_device/user-interface/edit-fuel-station-details/params/edit_fuel_station_details_params.dart';
 import 'package:pumped_end_device/user-interface/edit-fuel-station-details/screen/widget/edit-contact/edit_contact_widget.dart';
@@ -25,13 +24,11 @@ import 'package:pumped_end_device/user-interface/edit-fuel-station-details/scree
 import 'package:pumped_end_device/user-interface/edit-fuel-station-details/screen/widget/edit-fuel-price-widgets/edit_fuel_price_widget.dart';
 import 'package:pumped_end_device/user-interface/edit-fuel-station-details/screen/widget/edit-operating-time-widget/edit_operating_time_widget.dart';
 import 'package:pumped_end_device/user-interface/edit-fuel-station-details/screen/widget/suggest-edit/suggest_edit_widget.dart';
-import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/user-interface/widgets/expanded_header_widget.dart';
 import 'package:pumped_end_device/user-interface/widgets/pumped_app_bar.dart';
-import 'package:pumped_end_device/util/log_util.dart';
 
 class EditFuelStationDetailsScreen extends StatefulWidget {
-  static const routeName = '/editFuelStationDetails2';
+  static const routeName = '/ped/fuel-stations/details/edit';
   const EditFuelStationDetailsScreen({Key? key}) : super(key: key);
 
   @override
@@ -40,18 +37,7 @@ class EditFuelStationDetailsScreen extends StatefulWidget {
 
 class _EditFuelStationDetailsScreenState extends State<EditFuelStationDetailsScreen>
     with SingleTickerProviderStateMixin {
-  static const _tag = 'EditFuelStationDetailsScreen';
   late EditFuelStationDetailsParams params;
-
-  @override
-  void initState() {
-    super.initState();
-    underMaintenanceDocRef.snapshots().listen((event) {
-      if (!mounted) return;
-      WidgetUtils.showPumpedUnavailabilityMessage(event, context);
-      LogUtil.debug(_tag, '${event.data}');
-    });
-  }
 
   @override
   Widget build(final BuildContext context) {
@@ -71,15 +57,15 @@ class _EditFuelStationDetailsScreenState extends State<EditFuelStationDetailsScr
 
   Widget _bodyContentWidget(final FuelStation fuelStation) {
     if (params.editFuelPrices) {
-      return EditFuelPriceWidget(params.fuelStation, 250);
+      return EditFuelPriceWidget(params, 250);
     } else if (params.editDetails) {
-      return EditContactWidget(params.fuelStation, 250);
+      return EditContactWidget(params, 250);
     } else if (params.editOperatingTime) {
-      return EditOperatingTimeWidget(params.fuelStation, 250);
-    } else if (params.editFeatures){
-      return EditFeaturesWidget(params.fuelStation, 250);
+      return EditOperatingTimeWidget(params, 250);
+    } else if (params.editFeatures) {
+      return EditFeaturesWidget(params, 250);
     } else if (params.suggestEdit) {
-      return SuggestEditWidget(params.fuelStation, 250);
+      return SuggestEditWidget(params, 250);
     }
     return const Text('Some Error Happened');
   }

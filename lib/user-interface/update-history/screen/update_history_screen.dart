@@ -16,18 +16,24 @@
  *     along with Pumped End Device.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import 'dart:async';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:pumped_end_device/data/local/dao/update_history_dao.dart';
+import 'package:pumped_end_device/main.dart';
 import 'package:pumped_end_device/models/update_type.dart';
 import 'package:pumped_end_device/user-interface/nav-drawer/nav_drawer_widget.dart';
 import 'package:pumped_end_device/user-interface/update-history/model/update_tile_data.dart';
 import 'package:pumped_end_device/user-interface/update-history/screen/widget/update_distribution_pie_chart.dart';
 import 'package:pumped_end_device/models/update_history.dart';
 import 'package:pumped_end_device/user-interface/update-history/screen/widget/update_tile.dart';
+import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/user-interface/widgets/pumped_app_bar.dart';
+import 'package:pumped_end_device/util/log_util.dart';
 
 class UpdateHistoryScreen extends StatefulWidget {
-  static const routeName = 'UpdateHistoryScreen';
+  static const routeName = '/ped/edit-history/summary';
   const UpdateHistoryScreen({Key? key}) : super(key: key);
 
   @override
@@ -37,11 +43,28 @@ class UpdateHistoryScreen extends StatefulWidget {
 }
 
 class _UpdateHistoryScreenState extends State<UpdateHistoryScreen> {
+  static const _tag = 'UpdateHistoryScreen';
   Future<List<UpdateHistory>>? updateHistoryFuture;
+  StreamSubscription<DocumentSnapshot>? _underMaintenanceSubscription;
+
   @override
   void initState() {
     super.initState();
+    _underMaintenanceSubscription = underMaintenanceDocRef.snapshots().listen((event) {
+      if (!mounted) return;
+      WidgetUtils.showPumpedUnavailabilityMessage(event, context);
+      LogUtil.debug(_tag, '${event.data}');
+    });
     updateHistoryFuture = UpdateHistoryDao.instance.getAllUpdateHistory();
+  }
+
+  @override
+  void dispose() {
+    if (_underMaintenanceSubscription != null) {
+      _underMaintenanceSubscription!.cancel();
+      LogUtil.debug(_tag, 'Cancelled under-maintenance subscription');
+    }
+    super.dispose();
   }
 
   @override

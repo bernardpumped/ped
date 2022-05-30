@@ -97,7 +97,11 @@ class QldFuelStationSourceCitation extends StatelessWidget {
   Row _getOkActionButton(final BuildContext context) {
     return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
       WidgetUtils.getRoundedElevatedButton(
-          child: const Text('Cancel'),
+          child: Row(children: const [
+            Icon(Icons.cancel_outlined, size: 24, color: Colors.white),
+            SizedBox(width: 10),
+            Text('Cancel', style: TextStyle(color: Colors.white))
+          ]),
           foreGroundColor: colorScheme.actionBtnTextColor,
           backgroundColor: colorScheme.actionBtnBackgroundColor,
           borderRadius: 10.0,

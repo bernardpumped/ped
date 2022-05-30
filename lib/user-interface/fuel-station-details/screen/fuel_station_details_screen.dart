@@ -25,7 +25,6 @@ import 'package:pumped_end_device/user-interface/fuel-station-details/screen/wid
 import 'package:pumped_end_device/user-interface/fuel-station-details/utils/fuel_station_update_merge_util.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/params/fuel_station_details_param.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/screen/tabs/fuel-prices/fuel_prices_tab.dart';
-import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/user-interface/widgets/collapsed_header_widget.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/screen/tabs/promos/widget/no_promotions_widget.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/screen/tabs/promos/widget/promotions_widget.dart';
@@ -36,7 +35,7 @@ import 'package:pumped_end_device/user-interface/widgets/pumped_app_bar.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
 class FuelStationDetailsScreen extends StatefulWidget {
-  static const routeName = '/fuelStationDetails';
+  static const routeName = '/ped/fuel-stations/details';
 
   const FuelStationDetailsScreen({Key? key}) : super(key: key);
 
@@ -59,6 +58,10 @@ class _FuelStationDetailsScreenState extends State<FuelStationDetailsScreen> {
   int _selectedTabIndex = 0;
   bool homeScreenRefreshNeeded = false;
 
+  /*
+    This method is invoked for the results of the updates which
+    are sent to the backend.
+   */
   void onUpdateResult(
       final FuelStation fuelStation, final UpdateFuelStationDetailsResult updateFuelStationDetailsResult) {
     LogUtil.debug(_tag,
@@ -69,14 +72,8 @@ class _FuelStationDetailsScreenState extends State<FuelStationDetailsScreen> {
     });
   }
 
-  @override
-  void initState() {
-    super.initState();
-    underMaintenanceDocRef.snapshots().listen((event) {
-      if (!mounted) return;
-      WidgetUtils.showPumpedUnavailabilityMessage(event, context);
-      LogUtil.debug(_tag, '${event.data}');
-    });
+  void onFavouriteStatusChange() {
+    homeScreenRefreshNeeded = true;
   }
 
   @override
@@ -84,11 +81,12 @@ class _FuelStationDetailsScreenState extends State<FuelStationDetailsScreen> {
     final FuelStationDetailsParam param = ModalRoute.of(context)?.settings.arguments as FuelStationDetailsParam;
     final FuelStation fuelStation = param.fuelStation;
     return WillPopScope(
-        onWillPop: () async {
+        onWillPop: () {
           bool tmp = homeScreenRefreshNeeded;
           homeScreenRefreshNeeded = false;
+          LogUtil.debug(_tag, 'Returning value of homeScreenRefreshNeeded as $tmp');
           Navigator.pop(context, tmp);
-          return false;
+          return Future.value(false);
         },
         child: Scaffold(
             floatingActionButton: _selectedTabIndex == 2 || _selectedTabIndex == 0
@@ -149,7 +147,7 @@ class _FuelStationDetailsScreenState extends State<FuelStationDetailsScreen> {
     Widget? tabWidget;
     switch (tabName) {
       case _contactTabHeader:
-        tabWidget = ContactTabWidget(fuelStation);
+        tabWidget = ContactTabWidget(fuelStation, onFavouriteStatusChange);
         break;
       case _fuelPricesTabHeader:
         tabWidget = FuelPricesTabWidget(fuelStation);

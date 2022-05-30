@@ -23,7 +23,7 @@ import 'package:pumped_end_device/user-interface/nav-drawer/nav_drawer_widget.da
 import 'package:pumped_end_device/user-interface/widgets/pumped_app_bar.dart';
 
 class AboutScreen extends StatelessWidget {
-  static const routeName = '/about-screen';
+  static const routeName = '/ped/about';
   AboutScreen({Key? key}) : super(key: key);
 
   @override

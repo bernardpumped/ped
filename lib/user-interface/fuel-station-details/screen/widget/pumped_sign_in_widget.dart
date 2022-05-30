@@ -20,10 +20,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/button_list.dart';
 import 'package:flutter_signin_button/button_view.dart';
+import 'package:pumped_end_device/main.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/utils/firebase_service.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
+import 'package:pumped_end_device/util/log_util.dart';
 
 class PumpedSignInWidget extends StatelessWidget {
+  static const _tag = 'PumpedSignInWidget';
   const PumpedSignInWidget({Key? key}) : super(key: key);
 
   @override
@@ -39,29 +42,25 @@ class PumpedSignInWidget extends StatelessWidget {
               image: AssetImage('assets/images/ic_pumped_black_text.png'), width: 100, height: 86, fit: BoxFit.fill),
           const SizedBox(height: 15.0),
           SignInButton(Buttons.GoogleDark, onPressed: () {
-            _onButtonPressed(context, 'Google (dark)');
-            _loginUsingGoogle(context);
+            _signInUsingIdProvider(context, FirebaseService.googleIdProvider);
           }),
           const SizedBox(height: 10),
           SignInButton(Buttons.Facebook, onPressed: () {
-            _onButtonPressed(context, 'Facebook');
+            _signInUsingIdProvider(context, FirebaseService.facebookIdProvider);
           }),
           const SizedBox(height: 10),
           SignInButton(Buttons.Twitter, onPressed: () {
-            _onButtonPressed(context, 'Twitter');
+            _signInUsingIdProvider(context, FirebaseService.twitterIdProvider);
           })
         ]));
   }
 
-  void _onButtonPressed(final BuildContext context, final String s) {
-    Navigator.of(context).pop(true);
-  }
-
-  void _loginUsingGoogle(final BuildContext context) async {
-    final FirebaseService service = FirebaseService();
+  void _signInUsingIdProvider(final BuildContext context, final String idProvider) async {
+    final FirebaseService service = getIt.get<FirebaseService>(instanceName: firebaseServiceInstanceName);
     try {
-      await service.signInwWithGoogle();
-      Navigator.of(context).pop(true);
+      final bool signedIn = await service.signIn(idProvider);
+      LogUtil.debug(_tag, 'signedIn = $signedIn');
+      Navigator.of(context).pop(signedIn);
     } catch (e) {
       if (e is FirebaseAuthException) {
         ScaffoldMessenger.of(context).showSnackBar(

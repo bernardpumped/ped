@@ -47,7 +47,6 @@ class _FuelStationContextMenuState extends State<FuelStationContextMenu> {
 
   @override
   Widget build(final BuildContext context) {
-    LogUtil.debug(_tag, 'Reading data from db for fuelStationId ${widget.fuelStation.stationId}');
     final Future<bool> isFavoriteFuelStationFuture =
         dao.containsFavoriteFuelStation(widget.fuelStation.stationId, widget.fuelStation.getFuelStationSource());
     return FutureBuilder<bool>(

@@ -116,11 +116,16 @@ class FuelStationDetailsResponseParseUtils {
       for (var jsonVal in fuelQuotesJsonVal) {
         final String? fuelQuoteSource = jsonVal['fuelQuoteSource'];
         String? fuelQuoteSourceName = (fuelQuoteSource == 'C') ? "Crowd" : fuelAuthorityId;
+        int? publishDate = jsonVal['publishDate'];
+        if (publishDate != null && publishDate > 1700000000) {
+          //Ths is interim, till the Pumped fix is not pushed back.
+          publishDate = jsonVal['publishDate'] ~/ 1000;
+        }
         final FuelQuote fuelQuote = FuelQuote(
             fuelType: jsonVal['fuelType'],
             fuelMeasure: jsonVal['fuelMeasure'],
             fuelStationId: jsonVal['fuelStationId'],
-            publishDate: jsonVal['publishDate'],
+            publishDate: publishDate,
             quoteValue: jsonVal['quoteValue'],
             fuelBrandId: jsonVal['fuelBrandId'],
             fuelQuoteId: jsonVal['id'],

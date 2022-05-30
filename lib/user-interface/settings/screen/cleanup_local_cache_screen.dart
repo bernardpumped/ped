@@ -27,7 +27,7 @@ import 'package:pumped_end_device/user-interface/widgets/pumped_app_bar.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
 class CleanupLocalCacheScreen extends StatefulWidget {
-  static const routeName = '/cleanUpLocalCache';
+  static const routeName = '/ped/settings/clean-cache';
 
   const CleanupLocalCacheScreen({Key? key}) : super(key: key);
 

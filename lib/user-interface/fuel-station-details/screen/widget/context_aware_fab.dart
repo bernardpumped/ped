@@ -16,15 +16,16 @@
  *     along with Pumped End Device.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:floating_action_bubble/floating_action_bubble.dart';
 import 'package:flutter/material.dart';
+import 'package:pumped_end_device/main.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station_address.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station_operating_hrs.dart';
 import 'package:pumped_end_device/user-interface/edit-fuel-station-details/params/edit_fuel_station_details_params.dart';
 import 'package:pumped_end_device/user-interface/edit-fuel-station-details/screen/edit_fuel_station_details_screen.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/screen/widget/pumped_sign_in_widget.dart';
+import 'package:pumped_end_device/user-interface/fuel-station-details/utils/firebase_service.dart';
 import 'package:pumped_end_device/user-interface/splash/screen/splash_screen.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/util/data_utils.dart';
@@ -47,11 +48,14 @@ class _ContextAwareFabState extends State<ContextAwareFab> with SingleTickerProv
   late Animation<double> _animation;
   late AnimationController _animationController;
 
+  late FirebaseService service;
+
   @override
   void initState() {
     _animationController = AnimationController(vsync: this, duration: const Duration(milliseconds: 260));
     final curvedAnimation = CurvedAnimation(curve: Curves.easeInOut, parent: _animationController);
     _animation = Tween<double>(begin: 0, end: 1).animate(curvedAnimation);
+    service = getIt.get<FirebaseService>(instanceName: firebaseServiceInstanceName);
     super.initState();
   }
 
@@ -229,21 +233,22 @@ class _ContextAwareFabState extends State<ContextAwareFab> with SingleTickerProv
       final bool editFeatures = false,
       final bool suggestEdit = false}) {
     //https://petercoding.com/firebase/2021/05/24/using-google-sign-in-with-firebase-in-flutter/
-    User? currentUser = FirebaseAuth.instance.currentUser;
-    if (currentUser == null) {
+
+    final SignedInUser? signedInUser = service.getSignedInUser();
+    if (signedInUser == null) {
       final Future<bool?> signInDialogOutput = showModalBottomSheet(
           context: context,
           backgroundColor: Colors.white,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
           builder: (context) => const PumpedSignInWidget());
-      signInDialogOutput.then(
-          (signInResult) => _handleLogin(context, signInResult, widget._fuelStation,
-              editDetails: editDetails,
-              editOperatingTime: editOperatingTime,
-              editFuelPrices: editFuelPrices,
-              editFeatures: editFeatures,
-              suggestEdit: suggestEdit),
-          onError: (errorOutput) => LogUtil.debug(_tag, 'error output'));
+      signInDialogOutput.then((signInResult) {
+        _handleLogin(context, signInResult, widget._fuelStation,
+            editDetails: editDetails,
+            editOperatingTime: editOperatingTime,
+            editFuelPrices: editFuelPrices,
+            editFeatures: editFeatures,
+            suggestEdit: suggestEdit);
+      }, onError: (errorOutput) => LogUtil.debug(_tag, 'error output'));
     } else {
       _handleLogin(context, true, widget._fuelStation,
           editDetails: editDetails,
@@ -261,21 +266,33 @@ class _ContextAwareFabState extends State<ContextAwareFab> with SingleTickerProv
       final bool editFeatures = false,
       final bool suggestEdit = false}) async {
     if (signInResult != null && signInResult) {
-      var result = await Navigator.pushNamed(context, EditFuelStationDetailsScreen.routeName,
-          arguments: EditFuelStationDetailsParams(
-              fuelStation: fuelStation,
-              editDetails: editDetails,
-              editOperatingTime: editOperatingTime,
-              editFuelPrices: editFuelPrices,
-              editFeatures: editFeatures,
-              suggestEdit: suggestEdit));
-      if (result != null) {
-        widget._updateFuelStationDetailsScreenForChange(fuelStation, result);
-      } else {
-        LogUtil.debug(_tag, 'returned results was null, nothing to merge. Seems user pressed back button');
+      final SignedInUser? signedInUser = service.getSignedInUser();
+      if (signedInUser == null) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(WidgetUtils.buildSnackBar(context, 'Cannot edit without signing in', 10, 'DISMISS', () => {}));
+        return;
       }
+      signedInUser.getToken().then((token) async {
+        final String userId = signedInUser.getUserId();
+        var result = await Navigator.pushNamed(context, EditFuelStationDetailsScreen.routeName,
+            arguments: EditFuelStationDetailsParams(
+                userId: userId,
+                oauthToken: token,
+                fuelStation: fuelStation,
+                editDetails: editDetails,
+                editOperatingTime: editOperatingTime,
+                editFuelPrices: editFuelPrices,
+                editFeatures: editFeatures,
+                suggestEdit: suggestEdit));
+        if (result != null) {
+          widget._updateFuelStationDetailsScreenForChange(fuelStation, result);
+        } else {
+          LogUtil.debug(_tag, 'returned results was null, nothing to merge. Seems user pressed back button');
+        }
+      });
     } else {
-      // show signIn failure dialog.
+      ScaffoldMessenger.of(context)
+          .showSnackBar(WidgetUtils.buildSnackBar(context, 'Cannot edit without signing in', 10, 'DISMISS', () => {}));
     }
   }
 

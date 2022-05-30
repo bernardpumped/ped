@@ -18,6 +18,7 @@
 
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:pumped_end_device/data/local/dao/market_region_zone_config_dao.dart';
 import 'package:pumped_end_device/data/local/location/geo_location_wrapper.dart';
@@ -31,11 +32,12 @@ import 'package:pumped_end_device/models/pumped/fuel_station.dart';
 import 'package:pumped_end_device/models/pumped/fuel_type.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/fuel_station_screen_color_scheme.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/screens/favourite/favourite_stations_screen.dart';
+import 'package:pumped_end_device/user-interface/fuel-stations/screens/widgets/fuel-station-sorter/fuel_station_sortater_widget.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/screens/widgets/fuel-type-switcher/fuel_type_switcher_btn.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/screens/widgets/fuel_station_switcher_widget.dart';
-import 'package:pumped_end_device/user-interface/fuel-stations/screens/widgets/floating_panel_widget.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/screens/widgets/fuel-type-switcher/fuel_type_switcher_widget.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/screens/widgets/fuel_station_list_widget.dart';
+import 'package:pumped_end_device/user-interface/fuel-stations/screens/widgets/fuel_station_type.dart';
 import 'package:pumped_end_device/user-interface/nav-drawer/nav_drawer_widget.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/model/fuel_type_switcher_data.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/model/nearby_fuel_stations.dart';
@@ -48,7 +50,7 @@ import 'package:pumped_end_device/user-interface/widgets/pumped_app_bar.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
 class NearbyStationsScreen extends StatefulWidget {
-  static const routeName = '/nearby-stations';
+  static const routeName = '/ped/fuel-stations/nearby';
   const NearbyStationsScreen({Key? key}) : super(key: key);
 
   @override
@@ -66,13 +68,6 @@ class _NearbyStationsScreenState extends State<NearbyStationsScreen> {
   final LocationUtils _locationUtils =
       LocationUtils(getIt.get<LocationDataSource>(instanceName: locationDataSourceInstanceName));
   final FuelTypeSwitcherService _fuelTypeSwitcherDataSource = FuelTypeSwitcherService();
-
-  static const Map<int, IconData> sortHeaders = {
-    0: Icons.label,
-    1: Icons.attach_money,
-    2: Icons.navigation,
-    3: Icons.shopping_cart,
-  };
 
   final FuelStationsScreenColorScheme colorScheme =
       getIt.get<FuelStationsScreenColorScheme>(instanceName: fsScreenColorSchemeName);
@@ -93,6 +88,7 @@ class _NearbyStationsScreenState extends State<NearbyStationsScreen> {
 
   LocationServiceSubscription? _locationServiceSubscription;
   bool _locationServiceSubscriptionActive = false;
+  StreamSubscription<DocumentSnapshot>? _underMaintenanceSubscription;
 
   @override
   void initState() {
@@ -105,7 +101,7 @@ class _NearbyStationsScreenState extends State<NearbyStationsScreen> {
       whenNearbyFuelStationFutureComplete();
     });
     _nearbyFuelStationsFuture?.then((value) => showDisclaimer(value));
-    underMaintenanceDocRef.snapshots().listen((event) {
+    _underMaintenanceSubscription = underMaintenanceDocRef.snapshots().listen((event) {
       if (!mounted) return;
       WidgetUtils.showPumpedUnavailabilityMessage(event, context);
       LogUtil.debug(_tag, '${event.data}');
@@ -118,6 +114,10 @@ class _NearbyStationsScreenState extends State<NearbyStationsScreen> {
       _locationServiceSubscription?.cancel(() => _locationServiceSubscriptionActive = false);
     }
     _fuelTypeSwitcherDataStreamController.close();
+    if (_underMaintenanceSubscription != null) {
+      _underMaintenanceSubscription!.cancel();
+      LogUtil.debug(_tag, 'Cancelled under-maintenance subscription');
+    }
     super.dispose();
   }
 
@@ -129,21 +129,16 @@ class _NearbyStationsScreenState extends State<NearbyStationsScreen> {
         appBar: const PumpedAppBar(),
         drawer: const NavDrawerWidget(),
         body: _drawBody(),
-        floatingActionButton: FloatBoxPanelWidget(
-            panelIcon: Icons.sort_outlined,
-            backgroundColor: colorScheme.floatingBoxPanelBackgroundColor,
-            contentColor: colorScheme.floatingBoxPanelSelectedColor,
-            nonSelColor: colorScheme.floatingBoxPanelNonSelectedColor,
-            buttons: sortHeaders.values.toList(),
-            selIndex: sortOrder,
-            onPressed: (index) {
-              setState(() {
-                sortOrder = index;
-                if (_nearByFuelStations.isNotEmpty) {
-                  _scrollController.animateTo(0.0, curve: Curves.easeOut, duration: const Duration(milliseconds: 500));
-                }
-              });
-            }));
+        floatingActionButton: FuelStationSorterWidget(parentUpdateFunction: scrollFuelStations));
+  }
+
+  void scrollFuelStations(final int sortOrder) {
+    setState(() {
+      this.sortOrder = sortOrder;
+      if (_nearByFuelStations.isNotEmpty) {
+        _scrollController.animateTo(0.0, curve: Curves.easeOut, duration: const Duration(milliseconds: 500));
+      }
+    });
   }
 
   void whenNearbyFuelStationFutureComplete() async {
@@ -181,7 +176,7 @@ class _NearbyStationsScreenState extends State<NearbyStationsScreen> {
         color: colorScheme.stationFuelTypeSwitcherColor,
         child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           FuelStationSwitcherWidget(
-              fuelStationType: 'near-by-fuel-station', onChangeCallback: _handleFuelStationSwitch),
+              fuelStationType: FuelStationType.nearby, onChangeCallback: _handleFuelStationSwitch),
           _getFuelTypeSwitcherStreamBuilder()
         ]));
   }
@@ -276,7 +271,8 @@ class _NearbyStationsScreenState extends State<NearbyStationsScreen> {
           _fuelTypeSwitcherDataSource.addFuelTypeSwitcherDataToStream(_fuelTypeSwitcherDataStreamController);
           _selectedFuelType = data.defaultFuelType;
         }
-        return FuelStationListWidget(_scrollController, _nearByFuelStations, _selectedFuelType!, sortOrder);
+        return FuelStationListWidget(
+            _scrollController, _nearByFuelStations, _selectedFuelType!, sortOrder, FuelStationType.nearby);
       }
     }
   }
@@ -333,9 +329,9 @@ class _NearbyStationsScreenState extends State<NearbyStationsScreen> {
     }
   }
 
-  void _handleFuelStationSwitch(final String? fuelStationType) {
+  void _handleFuelStationSwitch(final FuelStationType? fuelStationType) {
     LogUtil.debug(_tag, 'fuelStationType found as $fuelStationType');
-    if (fuelStationType != null && fuelStationType == 'favourite-fuel-station') {
+    if (fuelStationType != null && fuelStationType == FuelStationType.favourite) {
       LogUtil.debug(_tag, 'Named Replacement for ${FavouriteStationsScreen.routeName}');
       Navigator.pushReplacementNamed(context, FavouriteStationsScreen.routeName);
     }

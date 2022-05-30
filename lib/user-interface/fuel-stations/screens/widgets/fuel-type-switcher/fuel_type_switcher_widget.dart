@@ -72,23 +72,6 @@ class _FuelTypeSwitcherWidgetState extends State<FuelTypeSwitcherWidget> {
               builder: _modalBottomSheetBuilder,
               backgroundColor: colorScheme.fuelTypeSwitcherWidgetBackgroundColor);
         },
-        // child: Chip(
-        //     elevation: 5,
-        //     backgroundColor: colorScheme.fuelTypeSwitcherBtnBackgroundColor,
-        //     avatar: CircleAvatar(
-        //         backgroundColor: colorScheme.fuelTypeSwitcherBtnBackgroundColor,
-        //         child: Icon(Icons.workspaces, color: colorScheme.fuelTypeSwitcherBtnForegroundColor)),
-        //     label: Text(txtToDisplay, overflow: TextOverflow.ellipsis),
-        //     labelStyle: TextStyle(
-        //         fontSize: 16, fontWeight: FontWeight.normal, color: colorScheme.fuelTypeSwitcherBtnForegroundColor),
-        //     labelPadding: const EdgeInsets.all(3),
-        //     onDeleted: () {
-        //       showModalBottomSheet(
-        //           context: context,
-        //           builder: _modalBottomSheetBuilder,
-        //           backgroundColor: colorScheme.fuelTypeSwitcherWidgetBackgroundColor);
-        //     },
-        //     deleteIcon: Icon(Icons.chevron_right, color: colorScheme.fuelTypeSwitcherWidgetBackgroundColor))
         child: FuelTypeSwitcherButton(txtToDisplay, () {
           showModalBottomSheet(
               context: context,

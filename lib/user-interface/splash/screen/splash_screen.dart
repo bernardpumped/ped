@@ -19,7 +19,6 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pumped_end_device/data/local/location/geo_location_data.dart';
@@ -80,11 +79,9 @@ class _SplashScreenState extends State<SplashScreen> {
                           style:
                               TextStyle(fontSize: 22, color: colorScheme.appDescColor, fontWeight: FontWeight.w500))),
                   Container(
-                      margin: const EdgeInsets.only(top: 20),
-                      width: 150,
-                      child: CupertinoTheme(
-                          data: CupertinoTheme.of(context).copyWith(brightness: Brightness.dark),
-                          child: const CupertinoActivityIndicator(radius: 20))),
+                      width: 120,
+                      margin: const EdgeInsets.only(top: 40),
+                      child: const LinearProgressIndicator(color: Colors.white)),
                   const SizedBox(height: 100),
                   Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
                     AnimatedOpacity(

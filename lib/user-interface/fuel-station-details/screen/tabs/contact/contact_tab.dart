@@ -34,8 +34,9 @@ import 'package:uuid/uuid.dart';
 
 class ContactTabWidget extends StatefulWidget {
   final FuelStation _fuelStation;
+  final Function onFavouriteStatusChange;
 
-  const ContactTabWidget(this._fuelStation, {Key? key}) : super(key: key);
+  const ContactTabWidget(this._fuelStation, this.onFavouriteStatusChange, {Key? key}) : super(key: key);
 
   @override
   State<ContactTabWidget> createState() => _ContactTabWidgetState();
@@ -83,7 +84,7 @@ class _ContactTabWidgetState extends State<ContactTabWidget> {
           ? const Divider(color: Colors.black45, indent: 15, endIndent: 15, height: 0)
           : const SizedBox(width: 0),
       const SizedBox(height: 5),
-      ActionBar(fuelStation: fuelStation),
+      ActionBar(fuelStation: fuelStation, onFavouriteStatusChange: widget.onFavouriteStatusChange),
       _getFuelStationAddressWidget(fuelStationAddress),
       Card(
           margin: const EdgeInsets.only(left: 5, right: 5, top: 5),

@@ -26,10 +26,13 @@ import 'package:pumped_end_device/user-interface/about/screen/about_screen.dart'
 import 'package:pumped_end_device/user-interface/edit-fuel-station-details/screen/edit_fuel_station_details_screen.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/fuel_station_details_screen_color_scheme.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/screen/fuel_station_details_screen.dart';
+import 'package:pumped_end_device/user-interface/fuel-station-details/utils/firebase_service.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/fuel_station_screen_color_scheme.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/screens/favourite/favourite_stations_screen.dart';
+import 'package:pumped_end_device/user-interface/help/screen/help_screen.dart';
 import 'package:pumped_end_device/user-interface/nav-drawer/nav_drawer_color_scheme.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/screens/nearby/nearby_stations_screen.dart';
+import 'package:pumped_end_device/user-interface/send-feedback/screens/send_feedback_screen.dart';
 import 'package:pumped_end_device/user-interface/settings/screen/cleanup_local_cache_screen.dart';
 import 'package:pumped_end_device/user-interface/settings/screen/customize_search_settings_screen.dart';
 import 'package:pumped_end_device/user-interface/settings/screen/settings_screen.dart';
@@ -49,10 +52,11 @@ GetIt getIt = GetIt.instance;
 DocumentReference underMaintenanceDocRef = FirebaseFirestore.instance.collection("pumped-documents").doc("under-maintenance");
 // Set this variable to false when in release mode.
 bool enrichOffers = true;
-const appVersion = "26";
+const appVersion = "27";
 const getLocationWrapperInstanceName = 'geoLocationWrapper';
 const platformWrapperInstanceName = 'platformWrapper';
 const locationDataSourceInstanceName = 'locationDataSource';
+const firebaseServiceInstanceName = 'firebaseService';
 
 const appBarColorSchemeName = 'appBarColorScheme';
 const splashScreenColorSchemeName = 'splashScreenColorScheme';
@@ -94,7 +98,9 @@ class PumpedApp extends StatelessWidget {
       CleanupLocalCacheScreen.routeName: (context) => const CleanupLocalCacheScreen(),
       EditFuelStationDetailsScreen.routeName: (context) => const EditFuelStationDetailsScreen(),
       UpdateHistoryScreen.routeName: (context) => const UpdateHistoryScreen(),
-      UpdateHistoryDetailsScreen.routeName: (context) => const UpdateHistoryDetailsScreen()
+      UpdateHistoryDetailsScreen.routeName: (context) => const UpdateHistoryDetailsScreen(),
+      SendFeedbackScreen.routeName: (context) => const SendFeedbackScreen(),
+      HelpScreen.routeName: (context) => const HelpScreen()
     });
   }
 
@@ -134,6 +140,13 @@ class PumpedApp extends StatelessWidget {
           instanceName: locationDataSourceInstanceName);
     } else {
       LogUtil.debug(_tag, 'Instance of $platformWrapperInstanceName is already registered');
+    }
+
+    if (!getIt.isRegistered<FirebaseService>(instanceName: firebaseServiceInstanceName)) {
+      LogUtil.debug(_tag, 'Registering instance of $firebaseServiceInstanceName');
+      getIt.registerSingleton<FirebaseService>(FirebaseService(), instanceName: firebaseServiceInstanceName);
+    } else {
+      LogUtil.debug(_tag, 'Instance of $firebaseServiceInstanceName is already registered');
     }
   }
 

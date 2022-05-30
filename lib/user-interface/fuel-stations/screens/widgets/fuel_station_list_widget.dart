@@ -19,9 +19,11 @@
 import 'package:flutter/material.dart';
 import 'package:implicitly_animated_reorderable_list/implicitly_animated_reorderable_list.dart';
 import 'package:implicitly_animated_reorderable_list/transitions.dart';
+import 'package:pumped_end_device/user-interface/fuel-stations/screens/widgets/fuel_station_type.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/utils/fuel_stations_sorter.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station.dart';
 import 'package:pumped_end_device/models/pumped/fuel_type.dart';
+import 'package:pumped_end_device/util/log_util.dart';
 import 'fuel_station_list_item_widget.dart';
 
 class FuelStationListWidget extends StatefulWidget {
@@ -29,8 +31,10 @@ class FuelStationListWidget extends StatefulWidget {
   final List<FuelStation> _fuelStations;
   final FuelType _selectedFuelType;
   final int sortOrder;
+  final FuelStationType fuelStationType;
 
-  const FuelStationListWidget(this._scrollController, this._fuelStations, this._selectedFuelType, this.sortOrder,
+  const FuelStationListWidget(
+      this._scrollController, this._fuelStations, this._selectedFuelType, this.sortOrder, this.fuelStationType,
       {Key? key})
       : super(key: key);
 
@@ -41,11 +45,18 @@ class FuelStationListWidget extends StatefulWidget {
 }
 
 class _FuelStationListWidgetState extends State<FuelStationListWidget> with TickerProviderStateMixin {
+  static const _tag = 'FuelStationListWidget';
   final FuelStationsSorter _fuelStationsSorter = FuelStationsSorter();
 
   @override
   void initState() {
     super.initState();
+  }
+
+  fuelStationListRefresh() {
+    setState(() {
+      LogUtil.debug(_tag, 'Refreshing screen for ${widget.fuelStationType}');
+    });
   }
 
   @override
@@ -67,7 +78,10 @@ class _FuelStationListWidgetState extends State<FuelStationListWidget> with Tick
               sizeFraction: 0.7,
               curve: Curves.easeInOut,
               animation: animation,
-              child: FuelStationListItemWidget(fuelStation: fuelStation, selectedFuelType: widget._selectedFuelType));
+              child: FuelStationListItemWidget(
+                  fuelStation: fuelStation,
+                  selectedFuelType: widget._selectedFuelType,
+                  parentRefresh: fuelStationListRefresh));
         });
   }
 }

@@ -32,9 +32,9 @@ class NotificationWidget extends StatelessWidget {
   Widget build(final BuildContext context) {
     return WidgetUtils.getRoundedElevatedButton(
         child: Row(children: const [
-          Text('Notify', style: TextStyle(color: Colors.white)),
+          Icon(Icons.email_outlined, size: 24, color: Colors.white),
           SizedBox(width: 10),
-          Icon(Icons.email_outlined, size: 24, color: Colors.white)
+          Text('Notify', style: TextStyle(color: Colors.white))
         ]),
         onPressed: () {
           _sendNotification(() {

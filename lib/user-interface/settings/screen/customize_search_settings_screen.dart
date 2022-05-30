@@ -31,7 +31,7 @@ import 'package:pumped_end_device/models/quote_sort_order.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
 class CustomizeSearchSettingsScreen extends StatefulWidget {
-  static const routeName = '/customizeSearchSettings';
+  static const routeName = '/ped/settings/edit';
 
   const CustomizeSearchSettingsScreen({Key? key}) : super(key: key);
 
@@ -72,11 +72,6 @@ class _CustomizeSearchSettingsScreenState extends State<CustomizeSearchSettingsS
         UserConfigurationDao.instance.getUserConfigurationVersion(UserConfiguration.defaultUserConfigId);
     _numSearchResultsDropdownValues = _settingsDataSource.searchFuelStationDropDownValues(5);
     _searchRadiusDropdownValues = _settingsDataSource.searchRadiusDropDownValues(5);
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 
   @override
