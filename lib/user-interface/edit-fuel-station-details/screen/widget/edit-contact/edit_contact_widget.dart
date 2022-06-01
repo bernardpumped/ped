@@ -26,6 +26,7 @@ import 'package:pumped_end_device/user-interface/edit-fuel-station-details/data/
 import 'package:pumped_end_device/user-interface/edit-fuel-station-details/data/remote/reponse-parser/end_device_update_fuel_station_response_parser.dart';
 import 'package:pumped_end_device/user-interface/edit-fuel-station-details/model/updatable_address_components.dart';
 import 'package:pumped_end_device/user-interface/edit-fuel-station-details/model/update-results/update_address_details_result.dart';
+import 'package:pumped_end_device/user-interface/edit-fuel-station-details/params/edit_fuel_station_details_params.dart';
 import 'package:pumped_end_device/user-interface/edit-fuel-station-details/screen/widget/edit-contact/edit_fuel_station_address_line_item.dart';
 import 'package:pumped_end_device/user-interface/edit-fuel-station-details/screen/widget/edit-contact/edit_phone_number_line_item.dart';
 import 'package:pumped_end_device/user-interface/edit-fuel-station-details/screen/widget/edit_action_buttons_widget.dart';
@@ -36,10 +37,10 @@ import 'package:pumped_end_device/util/log_util.dart';
 import 'package:uuid/uuid.dart';
 
 class EditContactWidget extends StatefulWidget {
-  final FuelStation _fuelStation;
+  final EditFuelStationDetailsParams _params;
   final double _heightHeaderWidget;
 
-  const EditContactWidget(this._fuelStation, this._heightHeaderWidget, {Key? key}) : super(key: key);
+  const EditContactWidget(this._params, this._heightHeaderWidget, {Key? key}) : super(key: key);
 
   @override
   State<EditContactWidget> createState() => _EditContactWidgetState();
@@ -69,10 +70,13 @@ class _EditContactWidgetState extends State<EditContactWidget> {
   String? _enteredPhone1;
   String? _enteredPhone2;
 
+  late FuelStation _fuelStation;
+
   @override
   void initState() {
     super.initState();
-    final FuelStationAddress fuelStationAddress = widget._fuelStation.fuelStationAddress;
+    _fuelStation = widget._params.fuelStation;
+    final FuelStationAddress fuelStationAddress = _fuelStation.fuelStationAddress;
     _enteredName = fuelStationAddress.contactName;
     _enteredAddress = fuelStationAddress.addressLine1;
     _enteredLocality = fuelStationAddress.locality;
@@ -121,7 +125,7 @@ class _EditContactWidgetState extends State<EditContactWidget> {
   }
 
   _buildFutureBuilder() {
-    final FuelStationAddress fuelStationAddress = widget._fuelStation.fuelStationAddress;
+    final FuelStationAddress fuelStationAddress = _fuelStation.fuelStationAddress;
     List<Widget> columnContent = [];
     columnContent.add(Padding(
         padding: const EdgeInsets.only(left: 10, right: 10, bottom: 5),
@@ -189,7 +193,7 @@ class _EditContactWidgetState extends State<EditContactWidget> {
           break;
       }
     }
-    final FuelStationAddress fuelStationAddress = widget._fuelStation.fuelStationAddress;
+    final FuelStationAddress fuelStationAddress = _fuelStation.fuelStationAddress;
 
     final bool showSaveUndoButton = !DataUtils.stringEqual(_enteredName, fuelStationAddress.contactName, true) ||
         !DataUtils.stringEqual(_enteredAddress, fuelStationAddress.addressLine1, true) ||
@@ -217,7 +221,7 @@ class _EditContactWidgetState extends State<EditContactWidget> {
 
   _onAddressChangeSave() async {
     var uuid = const Uuid();
-    final FuelStationAddress fuelStationAddress = widget._fuelStation.fuelStationAddress;
+    final FuelStationAddress fuelStationAddress = _fuelStation.fuelStationAddress;
     final Map<String, dynamic> updatePathAndValues = {};
     final Map<String, dynamic> originalPathAndValues = {};
     List<String> invalidInputs = [];
@@ -248,11 +252,11 @@ class _EditContactWidgetState extends State<EditContactWidget> {
         final EndDeviceUpdateFuelStationRequest request = EndDeviceUpdateFuelStationRequest(
             updatePathAndValues: updatePathAndValues,
             uuid: uuid.v1(),
-            fuelStationSource: widget._fuelStation.getFuelStationSource(),
-            fuelStationId: widget._fuelStation.stationId,
+            fuelStationSource: _fuelStation.getFuelStationSource(),
+            fuelStationId: _fuelStation.stationId,
             identityProvider: 'FIREBASE',
-            oauthToken: 'my-dummy-oath-token',
-            oauthTokenSecret: 'my-dummy-oauth-token-secret');
+            oauthToken: widget._params.oauthToken,
+            oauthTokenSecret: '');
         EndDeviceUpdateFuelStationResponse response;
         try {
           _lockInputs();
@@ -358,12 +362,17 @@ class _EditContactWidgetState extends State<EditContactWidget> {
 
   Future<dynamic> _persistUpdateHistory(final EndDeviceUpdateFuelStationRequest request,
       final EndDeviceUpdateFuelStationResponse response, final Map<String, dynamic> originalPathAndValues) {
+    int updateEpoch = response.updateEpoch;
+    if (response.updateEpoch > 1700000000) {
+      //Ths is interim, till the Pumped fix is not pushed back.
+      updateEpoch = response.updateEpoch ~/ 1000;
+    }
     final UpdateHistory updateHistory = UpdateHistory(
         updateHistoryId: request.uuid,
         fuelStationId: request.fuelStationId,
-        fuelStation: widget._fuelStation.fuelStationName,
+        fuelStation: _fuelStation.fuelStationName,
         fuelStationSource: request.fuelStationSource,
-        updateEpoch: response.updateEpoch,
+        updateEpoch: updateEpoch,
         updateType: UpdateType.addressDetails.updateTypeName!,
         responseCode: response.responseCode,
         originalValues: originalPathAndValues,
@@ -377,7 +386,12 @@ class _EditContactWidgetState extends State<EditContactWidget> {
 
   UpdateAddressDetailsResult _getUpdateResponse(final EndDeviceUpdateFuelStationRequest request,
       final EndDeviceUpdateFuelStationResponse response, final Map<String, dynamic> originalPathAndValues) {
-    return UpdateAddressDetailsResult(response.successfulUpdate, response.updateEpoch,
+    int updateEpoch = response.updateEpoch;
+    if (response.updateEpoch > 1700000000) {
+      //Ths is interim, till the Pumped fix is not pushed back.
+      updateEpoch = response.updateEpoch ~/ 1000;
+    }
+    return UpdateAddressDetailsResult(response.successfulUpdate, updateEpoch,
         addressComponentUpdateStatus: response.updateResult, addressComponentNewValue: request.updatePathAndValues);
   }
 }

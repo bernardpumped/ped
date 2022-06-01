@@ -32,6 +32,7 @@ import 'package:pumped_end_device/user-interface/edit-fuel-station-details/data/
 import 'package:pumped_end_device/user-interface/edit-fuel-station-details/data/remote/post_operating_time_update.dart';
 import 'package:pumped_end_device/user-interface/edit-fuel-station-details/data/remote/reponse-parser/alter_operating_time_response_parser.dart';
 import 'package:pumped_end_device/user-interface/edit-fuel-station-details/model/update-results/update_operating_time_result.dart';
+import 'package:pumped_end_device/user-interface/edit-fuel-station-details/params/edit_fuel_station_details_params.dart';
 import 'package:pumped_end_device/user-interface/edit-fuel-station-details/screen/widget/edit-operating-time-widget/edit_operating_time_line_item_widget.dart';
 import 'package:pumped_end_device/user-interface/edit-fuel-station-details/screen/widget/edit_action_buttons_widget.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
@@ -42,10 +43,10 @@ import 'package:sprintf/sprintf.dart';
 import 'package:uuid/uuid.dart';
 
 class EditOperatingTimeWidget extends StatefulWidget {
-  final FuelStation _fuelStation;
+  final EditFuelStationDetailsParams _params;
   final double _heightHeaderWidget;
 
-  const EditOperatingTimeWidget(this._fuelStation, this._heightHeaderWidget, {Key? key}) : super(key: key);
+  const EditOperatingTimeWidget(this._params, this._heightHeaderWidget, {Key? key}) : super(key: key);
 
   @override
   State<EditOperatingTimeWidget> createState() => _EditOperatingTimeWidgetState();
@@ -57,10 +58,12 @@ class _EditOperatingTimeWidgetState extends State<EditOperatingTimeWidget> {
   bool _backendUpdateInProgress = false;
   bool _onValueChanged = false;
   bool _fabVisible = false;
+  late FuelStation _fuelStation;
 
   @override
   void initState() {
     super.initState();
+    _fuelStation = widget._params.fuelStation;
   }
 
   @override
@@ -72,7 +75,7 @@ class _EditOperatingTimeWidgetState extends State<EditOperatingTimeWidget> {
         SizedBox(
             height: MediaQuery.of(context).size.height - widget._heightHeaderWidget,
             child: SingleChildScrollView(
-                child: Column(children: _buildOperatingTimeGrid(widget._fuelStation.fuelStationOperatingHrs)))),
+                child: Column(children: _buildOperatingTimeGrid(_fuelStation.fuelStationOperatingHrs)))),
         Positioned(
             bottom: 25,
             right: 25,
@@ -123,13 +126,13 @@ class _EditOperatingTimeWidgetState extends State<EditOperatingTimeWidget> {
       });
       final AlterOperatingTimeRequest request = AlterOperatingTimeRequest(
           uuid: const Uuid().v1(),
-          fuelStationId: widget._fuelStation.stationId,
+          fuelStationId: _fuelStation.stationId,
           featureType: 'FUEL-FILL',
-          fuelStationSource: widget._fuelStation.isFaStation ? "F" : "G",
+          fuelStationSource: _fuelStation.isFaStation ? "F" : "G",
           authValidatorType: 'FIREBASE',
           identityProvider: 'FIREBASE',
-          oauthToken: 'my-dummy-oauth-token',
-          oauthTokenSecret: 'my-dummy-oauth-token-secret',
+          oauthToken: widget._params.oauthToken,
+          oauthTokenSecret: '',
           operatingTimeVos: _getOperatingTimeVos(_updatedOperatingTimeMap));
       AlterOperatingTimeResponse response;
       try {
@@ -167,12 +170,17 @@ class _EditOperatingTimeWidgetState extends State<EditOperatingTimeWidget> {
       final AlterOperatingTimeResponse response,
       final Map<String, dynamic> originalPathAndValues,
       final Map<String, dynamic> updatedValues) async {
+    int updateEpoch = response.updateEpoch;
+    if (response.updateEpoch > 1700000000) {
+      //Ths is interim, till the Pumped fix is not pushed back.
+      updateEpoch = response.updateEpoch ~/ 1000;
+    }
     final UpdateHistory updateHistory = UpdateHistory(
         updateHistoryId: request.uuid,
         fuelStationId: request.fuelStationId,
-        fuelStation: widget._fuelStation.fuelStationName,
+        fuelStation: _fuelStation.fuelStationName,
         fuelStationSource: request.fuelStationSource,
-        updateEpoch: response.updateEpoch,
+        updateEpoch: updateEpoch,
         updateType: UpdateType.operatingTime.updateTypeName!,
         responseCode: response.responseCode,
         originalValues: originalPathAndValues,
@@ -259,9 +267,9 @@ class _EditOperatingTimeWidgetState extends State<EditOperatingTimeWidget> {
   Map<String, OperatingHours?> _getOriginalOperatingHoursMap() {
     final Map<String, OperatingHours?> originalOperatingHoursMap = {};
     final List<String> daysOfWeek = DateTimeUtils.weekDayShortToLongName.keys.toList();
-    if (widget._fuelStation.fuelStationOperatingHrs != null &&
-        widget._fuelStation.fuelStationOperatingHrs?.weeklyOperatingHrs != null) {
-      for (var operatingHour in widget._fuelStation.fuelStationOperatingHrs!.weeklyOperatingHrs) {
+    if (_fuelStation.fuelStationOperatingHrs != null &&
+        _fuelStation.fuelStationOperatingHrs?.weeklyOperatingHrs != null) {
+      for (var operatingHour in _fuelStation.fuelStationOperatingHrs!.weeklyOperatingHrs) {
         originalOperatingHoursMap.putIfAbsent(operatingHour.dayOfWeek, () => operatingHour);
         daysOfWeek.remove(operatingHour.dayOfWeek);
       }
@@ -289,7 +297,7 @@ class _EditOperatingTimeWidgetState extends State<EditOperatingTimeWidget> {
         daysOfWeek.remove(operatingHrs.dayOfWeek);
         columnContent.add(Padding(
             padding: const EdgeInsets.only(left: 6.0, right: 6.0, top: 3, bottom: 3),
-            child: EditOperatingTimeLineItemWidget(widget._fuelStation.isFaStation, operatingHrs, updatedOperatingHrs,
+            child: EditOperatingTimeLineItemWidget(_fuelStation.isFaStation, operatingHrs, updatedOperatingHrs,
                 _undoOperatingTimeChange, _onOperatingTimeRangeChanged, _backendUpdateInProgress)));
       }
     }
@@ -298,7 +306,7 @@ class _EditOperatingTimeWidgetState extends State<EditOperatingTimeWidget> {
       final OperatingHours? updatedOperatingHrs = _updatedOperatingTimeMap[dayOfWeek];
       columnContent.add(Padding(
           padding: const EdgeInsets.only(left: 6.0, right: 6.0, top: 3, bottom: 3),
-          child: EditOperatingTimeLineItemWidget(widget._fuelStation.isFaStation, operatingHours, updatedOperatingHrs,
+          child: EditOperatingTimeLineItemWidget(_fuelStation.isFaStation, operatingHours, updatedOperatingHrs,
               _undoOperatingTimeChange, _onOperatingTimeRangeChanged, _backendUpdateInProgress)));
     }
     columnContent.add(const SizedBox(height: 200));
@@ -357,7 +365,12 @@ class _EditOperatingTimeWidgetState extends State<EditOperatingTimeWidget> {
       final AlterOperatingTimeResponse response,
       final Map<String, dynamic> originalPathAndValues,
       final Map<String, dynamic> updatedValues) {
-    return UpdateOperatingTimeResult(true, response.updateEpoch,
+    int updateEpoch = response.updateEpoch;
+    if (response.updateEpoch > 1700000000) {
+      //Ths is interim, till the Pumped fix is not pushed back.
+      updateEpoch = response.updateEpoch ~/ 1000;
+    }
+    return UpdateOperatingTimeResult(true, updateEpoch,
         updateValues: updatedValues,
         originalValues: originalPathAndValues,
         invalidArguments: response.invalidArguments,

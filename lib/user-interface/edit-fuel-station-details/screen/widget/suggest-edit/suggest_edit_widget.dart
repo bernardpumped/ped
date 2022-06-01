@@ -26,6 +26,7 @@ import 'package:pumped_end_device/user-interface/edit-fuel-station-details/data/
 import 'package:pumped_end_device/user-interface/edit-fuel-station-details/data/remote/post_suggest_edit.dart';
 import 'package:pumped_end_device/user-interface/edit-fuel-station-details/data/remote/reponse-parser/suggest_edit_response_parser.dart';
 import 'package:pumped_end_device/user-interface/edit-fuel-station-details/model/update-results/update_suggestion_result.dart';
+import 'package:pumped_end_device/user-interface/edit-fuel-station-details/params/edit_fuel_station_details_params.dart';
 import 'package:pumped_end_device/user-interface/edit-fuel-station-details/screen/widget/edit_action_buttons_widget.dart';
 import 'package:pumped_end_device/user-interface/update-history/screen/widget/update_type_attributes.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
@@ -34,10 +35,10 @@ import 'package:pumped_end_device/util/log_util.dart';
 import 'package:uuid/uuid.dart';
 
 class SuggestEditWidget extends StatefulWidget {
-  final FuelStation _fuelStation;
+  final EditFuelStationDetailsParams _params;
   final double _heightHeaderWidget;
 
-  const SuggestEditWidget(this._fuelStation, this._heightHeaderWidget, {Key? key}) : super(key: key);
+  const SuggestEditWidget(this._params, this._heightHeaderWidget, {Key? key}) : super(key: key);
 
   @override
   State<SuggestEditWidget> createState() => _SuggestEditWidgetState();
@@ -52,6 +53,7 @@ class _SuggestEditWidgetState extends State<SuggestEditWidget> {
 
   bool _fabVisible = false;
   String? _suggestion;
+  late FuelStation _fuelStation;
 
   @override
   Widget build(final BuildContext context) {
@@ -90,11 +92,11 @@ class _SuggestEditWidgetState extends State<SuggestEditWidget> {
     var uuid = const Uuid();
     final SuggestEditRequest request = SuggestEditRequest(
         identityProvider: 'FIREBASE',
-        oauthToken: 'dummy-token',
-        oauthTokenSecret: 'dummy-token-secret',
+        oauthToken: widget._params.oauthToken,
+        oauthTokenSecret: '',
         uuid: uuid.v1(),
-        fuelStationId: widget._fuelStation.stationId,
-        fuelStationSource: widget._fuelStation.getFuelStationSource(),
+        fuelStationId: _fuelStation.stationId,
+        fuelStationSource: _fuelStation.getFuelStationSource(),
         suggestion: _suggestion!);
     SuggestEditResponse response;
     try {
@@ -205,12 +207,17 @@ class _SuggestEditWidgetState extends State<SuggestEditWidget> {
   }
 
   Future<dynamic> _persistUpdateHistory(final SuggestEditRequest request, final SuggestEditResponse response) {
+    int updateEpoch = response.updateEpoch;
+    if (response.updateEpoch > 1700000000) {
+      //Ths is interim, till the Pumped fix is not pushed back.
+      updateEpoch = response.updateEpoch ~/ 1000;
+    }
     final UpdateHistory updateHistory = UpdateHistory(
         updateHistoryId: request.uuid,
         fuelStationId: request.fuelStationId,
-        fuelStation: widget._fuelStation.fuelStationName,
+        fuelStation: _fuelStation.fuelStationName,
         fuelStationSource: request.fuelStationSource,
-        updateEpoch: response.updateEpoch,
+        updateEpoch: updateEpoch,
         updateType: UpdateType.suggestEdit.updateTypeName!,
         responseCode: response.responseCode,
         originalValues: {UpdateTypeAttributes.suggestion: ''},
@@ -223,6 +230,11 @@ class _SuggestEditWidgetState extends State<SuggestEditWidget> {
   }
 
   UpdateSuggestionResponse _getUpdateResponse(final SuggestEditRequest request, final SuggestEditResponse response) {
-    return UpdateSuggestionResponse(true, response.updateEpoch);
+    int updateEpoch = response.updateEpoch;
+    if (response.updateEpoch > 1700000000) {
+      //Ths is interim, till the Pumped fix is not pushed back.
+      updateEpoch = response.updateEpoch ~/ 1000;
+    }
+    return UpdateSuggestionResponse(true, updateEpoch);
   }
 }

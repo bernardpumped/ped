@@ -28,6 +28,7 @@ import 'package:pumped_end_device/user-interface/edit-fuel-station-details/data/
 import 'package:pumped_end_device/user-interface/edit-fuel-station-details/data/remote/post_end_device_fuel_station_feature_update.dart';
 import 'package:pumped_end_device/user-interface/edit-fuel-station-details/data/remote/reponse-parser/end_device_update_fuel_station_feature_response_parser.dart';
 import 'package:pumped_end_device/user-interface/edit-fuel-station-details/model/update-results/update_feature_result.dart';
+import 'package:pumped_end_device/user-interface/edit-fuel-station-details/params/edit_fuel_station_details_params.dart';
 import 'package:pumped_end_device/user-interface/edit-fuel-station-details/screen/widget/edit_action_buttons_widget.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/util/data_utils.dart';
@@ -35,10 +36,10 @@ import 'package:pumped_end_device/util/log_util.dart';
 import 'package:uuid/uuid.dart';
 
 class EditFeaturesWidget extends StatefulWidget {
-  final FuelStation _fuelStation;
+  final EditFuelStationDetailsParams _params;
   final double _heightHeaderWidget;
 
-  const EditFeaturesWidget(this._fuelStation, this._heightHeaderWidget, {Key? key}) : super(key: key);
+  const EditFeaturesWidget(this._params, this._heightHeaderWidget, {Key? key}) : super(key: key);
 
   @override
   State<EditFeaturesWidget> createState() => _EditFeaturesWidgetState();
@@ -53,10 +54,12 @@ class _EditFeaturesWidgetState extends State<EditFeaturesWidget> {
   final Map<String, bool> featureSelectStatusMap = {};
   Map<String, bool> updatedFeatureSelectStatusMap = {};
   bool _onValueChanged = false;
+  late FuelStation _fuelStation;
 
   @override
   void initState() {
     super.initState();
+    _fuelStation = widget._params.fuelStation;
     _copySelectionStatus();
   }
 
@@ -176,10 +179,10 @@ class _EditFeaturesWidgetState extends State<EditFeaturesWidget> {
       const Uuid uuid = Uuid();
       final EndDeviceUpdateFuelStationFeatureRequest request = EndDeviceUpdateFuelStationFeatureRequest(
           uuid: uuid.v1(),
-          fuelStationId: widget._fuelStation.stationId,
-          fuelStationSource: widget._fuelStation.getFuelStationSource(),
-          oauthToken: 'my-dummy-oauth-token',
-          oauthTokenSecret: 'my-dymmy-oauth-token-secret',
+          fuelStationId: _fuelStation.stationId,
+          fuelStationSource: _fuelStation.getFuelStationSource(),
+          oauthToken: widget._params.oauthToken,
+          oauthTokenSecret: '',
           identityProvider: 'FIREBASE',
           enabledFeatures: enabledFeatures,
           disabledFeatures: disabledFeatures);
@@ -215,7 +218,12 @@ class _EditFeaturesWidgetState extends State<EditFeaturesWidget> {
 
   UpdateFeatureResult _getUpdateResponse(final EndDeviceUpdateFuelStationFeatureRequest request,
       final EndDeviceUpdateFuelStationFeatureResponse response) {
-    return UpdateFeatureResult(true, response.updateEpoch);
+    int updateEpoch = response.updateEpoch;
+    if (response.updateEpoch > 1700000000) {
+      //Ths is interim, till the Pumped fix is not pushed back.
+      updateEpoch = response.updateEpoch ~/ 1000;
+    }
+    return UpdateFeatureResult(true, updateEpoch);
   }
 
   Future<dynamic> _persistUpdateHistory(final EndDeviceUpdateFuelStationFeatureRequest request,
@@ -230,13 +238,17 @@ class _EditFeaturesWidgetState extends State<EditFeaturesWidget> {
       originalValues.putIfAbsent(featureType, () => false);
       updatedValues.putIfAbsent(featureType, () => true);
     }
-
+    int updateEpoch = response.updateEpoch;
+    if (response.updateEpoch > 1700000000) {
+      //Ths is interim, till the Pumped fix is not pushed back.
+      updateEpoch = response.updateEpoch ~/ 1000;
+    }
     final UpdateHistory updateHistory = UpdateHistory(
         updateHistoryId: request.uuid,
         fuelStationId: request.fuelStationId,
-        fuelStation: widget._fuelStation.fuelStationName,
+        fuelStation: _fuelStation.fuelStationName,
         fuelStationSource: request.fuelStationSource,
-        updateEpoch: response.updateEpoch,
+        updateEpoch: updateEpoch,
         updateType: UpdateType.fuelStationFeatures.updateTypeName ?? 'UnResolved-UpdateType',
         responseCode: response.responseCode,
         originalValues: originalValues,

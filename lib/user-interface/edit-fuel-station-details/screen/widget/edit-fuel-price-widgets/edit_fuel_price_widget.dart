@@ -25,6 +25,7 @@ import 'package:pumped_end_device/user-interface/edit-fuel-station-details/data/
 import 'package:pumped_end_device/user-interface/edit-fuel-station-details/data/remote/post_fuel_quotes_update.dart';
 import 'package:pumped_end_device/user-interface/edit-fuel-station-details/data/remote/reponse-parser/alter_fuel_quotes_response_parser.dart';
 import 'package:pumped_end_device/user-interface/edit-fuel-station-details/model/update-results/update_fuel_quote_result.dart';
+import 'package:pumped_end_device/user-interface/edit-fuel-station-details/params/edit_fuel_station_details_params.dart';
 import 'package:pumped_end_device/user-interface/edit-fuel-station-details/screen/widget/edit-fuel-price-widgets/utils/edit_fuel_price_widget_data.dart';
 import 'package:pumped_end_device/user-interface/edit-fuel-station-details/screen/widget/edit_action_buttons_widget.dart';
 import 'package:pumped_end_device/models/update_type.dart';
@@ -41,10 +42,10 @@ import 'package:uuid/uuid.dart';
 import 'anim_edit_fuel_price_line_item_widget.dart';
 
 class EditFuelPriceWidget extends StatefulWidget {
-  final FuelStation _fuelStation;
+  final EditFuelStationDetailsParams _params;
   final double _heightHeaderWidget;
 
-  const EditFuelPriceWidget(this._fuelStation, this._heightHeaderWidget, {Key? key}) : super(key: key);
+  const EditFuelPriceWidget(this._params, this._heightHeaderWidget, {Key? key}) : super(key: key);
 
   @override
   State<EditFuelPriceWidget> createState() => _EditFuelPriceWidgetState();
@@ -59,16 +60,18 @@ class _EditFuelPriceWidgetState extends State<EditFuelPriceWidget> {
   bool _onValueChanged = false;
   bool _fabVisible = false;
   bool _backendUpdateInProgress = false;
+  late FuelStation _fuelStation;
 
   @override
   void initState() {
     super.initState();
     _editFuelPriceWidgetDataFuture = _editFuelPriceUtils.editFuelPriceWidgetData();
+    _fuelStation = widget._params.fuelStation;
   }
 
   @override
   Widget build(final BuildContext context) {
-    widget._fuelStation.fuelQuotes().forEach((fuelQuote) {
+    _fuelStation.fuelQuotes().forEach((fuelQuote) {
       _fuelTypeFuelQuote.putIfAbsent(fuelQuote.fuelType, () => fuelQuote);
     });
     return Column(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -136,13 +139,13 @@ class _EditFuelPriceWidgetState extends State<EditFuelPriceWidget> {
     for (var element in priceMetadata) {
       fuelTypePriceMetadata.putIfAbsent(element.fuelType, () => element);
     }
-    _sortFuelQuotes(widget._fuelStation.fuelQuotes());
+    _sortFuelQuotes(_fuelStation.fuelQuotes());
     final List<Widget> children = [];
 
-    for (var fuelQuote in widget._fuelStation.fuelQuotes()) {
+    for (var fuelQuote in _fuelStation.fuelQuotes()) {
       final String fuelType = fuelQuote.fuelType;
       TextEditingController? fuelPriceEditingController;
-      if (fuelQuote.fuelQuoteSource != 'F' && !widget._fuelStation.isFaStation) {
+      if (fuelQuote.fuelQuoteSource != 'F' && !_fuelStation.isFaStation) {
         if (!fuelPriceEditingControllers.containsKey(fuelType)) {
           fuelPriceEditingController = fuelPriceEditingControllers.putIfAbsent(fuelType, () => TextEditingController());
         } else {
@@ -153,8 +156,8 @@ class _EditFuelPriceWidgetState extends State<EditFuelPriceWidget> {
         }
       }
       var fuelPriceLineItemWidget = AnimEditFuelPriceLineItemWidget(
-          key: PageStorageKey('$fuelType-${widget._fuelStation.stationId}'),
-          isFaStation: widget._fuelStation.isFaStation,
+          key: PageStorageKey('$fuelType-${_fuelStation.stationId}'),
+          isFaStation: _fuelStation.isFaStation,
           fuelQuote: fuelQuote,
           quoteChangeListener: _onFuelPriceChange,
           fuelName: allowedFuelTypesMap[fuelType]?.fuelName as String,
@@ -209,11 +212,11 @@ class _EditFuelPriceWidgetState extends State<EditFuelPriceWidget> {
         updatedFuelQuoteVos.add(FuelQuoteVo.getFuelQuoteVo(updatedFuelQuotes));
       }
       final AlterFuelQuotesRequest request = AlterFuelQuotesRequest(
-          fuelStationId: widget._fuelStation.stationId,
-          fuelStationSource: widget._fuelStation.getFuelStationSource(),
+          fuelStationId: _fuelStation.stationId,
+          fuelStationSource: _fuelStation.getFuelStationSource(),
           fuelQuoteVos: updatedFuelQuoteVos,
-          oauthToken: 'my-dummy-oauth-token',
-          oauthTokenSecret: 'my-dummy-oauth-token-secret',
+          oauthToken: widget._params.oauthToken,
+          oauthTokenSecret: '',
           uuid: const Uuid().v1(),
           identityProvider: 'FIREBASE',
           oauthValidatorType: 'FIREBASE');
@@ -250,12 +253,17 @@ class _EditFuelPriceWidgetState extends State<EditFuelPriceWidget> {
 
   Future<dynamic> _persistUpdateHistory(final AlterFuelQuotesResponse response, final AlterFuelQuotesRequest request,
       final Map<String, dynamic> originalPrices, final Map<String, dynamic> updatedPrices) async {
+    int updateEpoch = response.updateEpoch;
+    if (response.updateEpoch > 1700000000) {
+      //Ths is interim, till the Pumped fix is not pushed back.
+      updateEpoch = response.updateEpoch ~/ 1000;
+    }
     final UpdateHistory updateHistory = UpdateHistory(
         updateHistoryId: request.uuid,
         fuelStationId: request.fuelStationId,
-        fuelStation: widget._fuelStation.fuelStationName,
+        fuelStation: _fuelStation.fuelStationName,
         fuelStationSource: request.fuelStationSource,
-        updateEpoch: response.updateEpoch,
+        updateEpoch: updateEpoch,
         updateType: UpdateType.price.updateTypeName!,
         responseCode: response.responseCode,
         originalValues: originalPrices,
@@ -316,9 +324,14 @@ class _EditFuelPriceWidgetState extends State<EditFuelPriceWidget> {
 
   UpdateFuelQuoteResult _getUpdateResponse(final AlterFuelQuotesResponse response,
       final Map<String, dynamic> originalPrices, final Map<String, dynamic> updatedPrices) {
+    int updateEpoch = response.updateEpoch;
+    if (response.updateEpoch > 1700000000) {
+      //Ths is interim, till the Pumped fix is not pushed back.
+      updateEpoch = response.updateEpoch ~/ 1000;
+    }
     return UpdateFuelQuoteResult(
         isUpdateSuccessful: response.successfulUpdate,
-        updateEpoch: response.updateEpoch,
+        updateEpoch: updateEpoch,
         originalValues: originalPrices,
         updateValues: updatedPrices,
         invalidArguments: response.invalidArguments,

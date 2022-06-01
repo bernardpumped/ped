@@ -25,27 +25,13 @@ class EditFuelStationDetailsParams {
   final bool editDetails;
   final bool editFeatures;
   final bool suggestEdit;
-
-  final bool expandFuelPrices;
-  final bool expandSuggestEdit;
-  final bool expandPhoneNumber;
-  final bool expandAddressDetails;
-  final bool expandOperatingHours;
-  final bool expandFuelStationFeatures;
-  // If this is true, then edit screen needs to pull the operating time from backend.
-  final bool lazyLoadOperatingHrs;
-  // If this is true, then edit screen needs to pull the fuel quotes from backend.
-  bool lazyLoadFuelQuotes = false;
+  final String oauthToken;
+  final String userId;
 
   EditFuelStationDetailsParams(
-      {required this.fuelStation,
-      this.expandFuelPrices = false,
-      this.expandSuggestEdit = false,
-      this.expandPhoneNumber = false,
-      this.expandAddressDetails = false,
-      this.expandOperatingHours = false,
-      this.expandFuelStationFeatures = false,
-      this.lazyLoadOperatingHrs = false,
+      {required this.oauthToken,
+      required this.userId,
+      required this.fuelStation,
       this.editFuelPrices = false,
       this.editOperatingTime = false,
       this.editDetails = false,
