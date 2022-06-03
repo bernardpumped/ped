@@ -56,3 +56,5 @@ pubspec.lock
 pumped_end_device.iml
 desktop.ini
 test/widget_test.dart
+
+android/app/google-services.json
