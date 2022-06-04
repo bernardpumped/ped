@@ -23,7 +23,18 @@
 hs_err_pid*
 .dart_tool
 .idea
-
+!android
+android/*
+!android/app
+android/app/*
+!android/app/src
+android/app/src/*
+!android/app/src/debug/
+android/app/src/debug/*
+!android/app/src/main/
+android/app/src/main/*
+!android/app/src/profile/
+android/app/src/profile/*
 build
 !ios/
 ios/*
@@ -56,5 +67,3 @@ pubspec.lock
 pumped_end_device.iml
 desktop.ini
 test/widget_test.dart
-
-android/app/google-services.json
