@@ -52,7 +52,7 @@ GetIt getIt = GetIt.instance;
 DocumentReference underMaintenanceDocRef = FirebaseFirestore.instance.collection("pumped-documents").doc("under-maintenance");
 // Set this variable to false when in release mode.
 bool enrichOffers = true;
-const appVersion = "27";
+const appVersion = "6";
 const getLocationWrapperInstanceName = 'geoLocationWrapper';
 const platformWrapperInstanceName = 'platformWrapper';
 const locationDataSourceInstanceName = 'locationDataSource';
