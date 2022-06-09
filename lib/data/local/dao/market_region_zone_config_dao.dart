@@ -43,19 +43,25 @@ class MarketRegionZoneConfigDao {
       final String versionId = versionIdMap[_versionId];
       LogUtil.debug(_tag, 'versionId $versionId found from db.');
       LogUtil.debug(_tag, 'MarketRegionConfigId key - ${_getMarketRegionConfigDocId(versionId)}');
-      final Map<String, dynamic>? mktRegionDataAsMap = await db.collection(_collectionMarketRegionConfig)
-          .doc(_getMarketRegionConfigDocId(versionId)).get();
+      final Map<String, dynamic>? mktRegionDataAsMap =
+          await db.collection(_collectionMarketRegionConfig).doc(_getMarketRegionConfigDocId(versionId)).get();
 
       LogUtil.debug(_tag, 'ZoneConfigId key - ${_getZoneConfigDocId(versionId)}');
-      final Map<String, dynamic>? zoneDataAsMap = await db.collection(_collectionZoneConfig)
-          .doc(_getZoneConfigDocId(versionId)).get();
+      final Map<String, dynamic>? zoneDataAsMap =
+          await db.collection(_collectionZoneConfig).doc(_getZoneConfigDocId(versionId)).get();
 
-      if (mktRegionDataAsMap != null && mktRegionDataAsMap.isNotEmpty && zoneDataAsMap != null && zoneDataAsMap.isNotEmpty) {
-        LogUtil.debug(_tag, 'Creating MarketRegionZoneConfiguration response');
-        return MarketRegionZoneConfiguration(marketRegionConfig: MarketRegionConfig.fromMap(mktRegionDataAsMap),
-            zoneConfig: ZoneConfig.fromJson(zoneDataAsMap), version: versionId);
+      if (mktRegionDataAsMap != null &&
+          mktRegionDataAsMap.isNotEmpty &&
+          zoneDataAsMap != null &&
+          zoneDataAsMap.isNotEmpty) {
+        LogUtil.debug(_tag, 'Returning MarketRegionZoneConfiguration response');
+        return MarketRegionZoneConfiguration(
+            marketRegionConfig: MarketRegionConfig.fromMap(mktRegionDataAsMap),
+            zoneConfig: ZoneConfig.fromJson(zoneDataAsMap),
+            version: versionId);
       } else {
-        LogUtil.debug(_tag, 'Size of mktRegionDataAsMap from db ${mktRegionDataAsMap != null ? mktRegionDataAsMap.length : 0}');
+        LogUtil.debug(
+            _tag, 'Size of mktRegionDataAsMap from db ${mktRegionDataAsMap != null ? mktRegionDataAsMap.length : 0}');
         LogUtil.debug(_tag, 'Size of zoneDataAsMap from db ${zoneDataAsMap != null ? zoneDataAsMap.length : 0}');
       }
     }
@@ -64,12 +70,19 @@ class MarketRegionZoneConfigDao {
 
   insertMarketRegionZoneConfiguration(final MarketRegionZoneConfiguration configuration) async {
     final db = Localstore.instance;
-    LogUtil.debug(_tag, 'Inserting MarketRegionConfigDoc using key ${_getMarketRegionConfigDocId(configuration.version)}');
-    db.collection(_collectionMarketRegionConfig).doc(_getMarketRegionConfigDocId(configuration.version)).set(configuration.marketRegionConfig.toMap());
+    LogUtil.debug(
+        _tag, 'Inserting MarketRegionConfigDoc using key ${_getMarketRegionConfigDocId(configuration.version)}');
+    db
+        .collection(_collectionMarketRegionConfig)
+        .doc(_getMarketRegionConfigDocId(configuration.version))
+        .set(configuration.marketRegionConfig.toMap());
     LogUtil.debug(_tag, 'Inserting ZoneConfigDoc using key ${_getZoneConfigDocId(configuration.version)}');
-    db.collection(_collectionZoneConfig).doc(_getZoneConfigDocId(configuration.version)).set(configuration.zoneConfig.toMap());
+    db
+        .collection(_collectionZoneConfig)
+        .doc(_getZoneConfigDocId(configuration.version))
+        .set(configuration.zoneConfig.toMap());
     LogUtil.debug(_tag, 'Inserting versionId doc using key $_versionId');
-    db.collection(_collectionVersion).doc(_versionId).set({_versionId : configuration.version});
+    db.collection(_collectionVersion).doc(_versionId).set({_versionId: configuration.version});
   }
 
   Future<Set<FuelCategory>?> getFuelCategoriesFromMarketRegionZoneConfig() async {
@@ -78,13 +91,12 @@ class MarketRegionZoneConfigDao {
     if (versionIdMap != null && versionIdMap.isNotEmpty) {
       final String versionId = versionIdMap[_versionId];
       LogUtil.debug(_tag, 'VersionId read from database $versionId');
-      final Map<String, dynamic>? mktRegionDataAsMap = await db.collection(_collectionMarketRegionConfig)
-          .doc(_getMarketRegionConfigDocId(versionId)).get();
+      final Map<String, dynamic>? mktRegionDataAsMap =
+          await db.collection(_collectionMarketRegionConfig).doc(_getMarketRegionConfigDocId(versionId)).get();
       LogUtil.debug(_tag, 'MktRegionDataAsMap size ${mktRegionDataAsMap != null ? mktRegionDataAsMap.length : 0}');
       if (mktRegionDataAsMap != null && mktRegionDataAsMap.isNotEmpty) {
         final MarketRegionConfig mktRegionConfig = MarketRegionConfig.fromMap(mktRegionDataAsMap);
-        LogUtil.debug(_tag, 'AllowedFuelCategories size '
-            '${mktRegionConfig.allowedFuelCategories != null ? mktRegionConfig.allowedFuelCategories.length : 0}');
+        LogUtil.debug(_tag, 'AllowedFuelCategories size ${mktRegionConfig.allowedFuelCategories.length}');
         return mktRegionConfig.allowedFuelCategories;
       }
     }

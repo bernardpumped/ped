@@ -21,13 +21,11 @@ import 'package:flutter/material.dart';
 class FuelStationFeature {
   final String featureType;
   final String featureName;
-  final String iconType;
-  final Icon icon;
+  final IconData icon;
   bool selected = true;
   FuelStationFeature(
       {required this.featureType,
         required this.featureName,
-        required this.iconType,
         required this.icon,
         required this.selected});
 }

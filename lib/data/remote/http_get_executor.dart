@@ -37,14 +37,14 @@ abstract class HttpGetExecutor<I extends Request, O extends Response> {
     final String url = PumpedEndPoint.pumperBaseUrl + getUrl(request);
     LogUtil.debug(tag, 'execute::url is $url');
     http.Response response;
-    int startTimeMills = DateTime.now().millisecondsSinceEpoch;;
+    int startTimeMills = DateTime.now().millisecondsSinceEpoch;
     try {
       response = await http.get(Uri.parse(url)).timeout(Duration(milliseconds: timeOutInMills), onTimeout: () {
         if (onTimeOutFunction != null) {
           (onTimeOutFunction as Function)();
         }
         LogUtil.debug(tag, 'Timeout happened');
-        return Future.value(null);
+        return Future.value(http.Response("", 408));
       });
     } catch (e, s) {
       LogUtil.debug(tag, 'execute::Exception happened while making call to server $s ${e.toString()}');

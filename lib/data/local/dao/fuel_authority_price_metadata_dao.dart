@@ -86,7 +86,7 @@ class FuelAuthorityPriceMetadataDao {
     final db = Localstore.instance;
     final Map<String, dynamic>? fuelTypeIds = await db.collection(_collectionFuelAuthorityFuelType).doc(metadata.fuelAuthority).get();
     if (fuelTypeIds == null || fuelTypeIds.isEmpty) {
-      LogUtil.debug(_tag, 'No FuelTypeIds for fuel-authority : ' + metadata.fuelAuthority);
+      LogUtil.debug(_tag, 'No FuelTypeIds for fuel-authority : ${metadata.fuelAuthority}');
     } else {
       final String? fapmId = fuelTypeIds[metadata.fuelType];
       if (fapmId == null) {

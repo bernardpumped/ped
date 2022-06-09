@@ -40,8 +40,8 @@ class UserConfiguration {
         'id': id,
         'version': version,
         'num_search_results': numSearchResults,
-        'default_fuel_type': defaultFuelType != null ? defaultFuelType.toJson() : defaultFuelType,
-        'default_fuel_category': defaultFuelCategory != null ? defaultFuelCategory.toJson() : defaultFuelCategory,
+        'default_fuel_type': defaultFuelType.toJson(),
+        'default_fuel_category': defaultFuelCategory.toJson(),
         'search_radius': searchRadius,
         'search_criteria': searchCriteria
       };
@@ -63,8 +63,8 @@ class UserConfiguration {
         'id': id,
         'version': version,
         'num_search_results': numSearchResults,
-        'default_fuel_type': defaultFuelType != null ? defaultFuelType.toJson() : defaultFuelType,
-        'default_fuel_category': defaultFuelCategory != null ? defaultFuelCategory.toJson() : defaultFuelCategory,
+        'default_fuel_type': defaultFuelType.toJson(),
+        'default_fuel_category': defaultFuelCategory.toJson(),
         'search_radius': searchRadius,
         'search_criteria': searchCriteria
       };

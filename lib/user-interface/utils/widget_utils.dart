@@ -16,147 +16,86 @@
  *     along with Pumped End Device.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'package:flutter/cupertino.dart';
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pumped_end_device/util/log_util.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class WidgetUtils {
   static const _tag = 'WidgetUtils';
 
-  static Widget getTabHeaderWidget(
-      final BuildContext context, final String title) {
-    return Padding(
-        padding: const EdgeInsets.only(top: 10, bottom: 10, left: 10),
-        child: Text(title,
-            style: TextStyle(
-                fontSize: 18,
-                color: Theme.of(context).primaryColor,
-                fontWeight: FontWeight.w600),
-            textAlign: TextAlign.center));
-  }
-
-  static Icon buildCupertinoIcon(final int iconCode,
-      {required final double size, required final Color color}) {
-    return Icon(
-        IconData(iconCode,
-            fontFamily: CupertinoIcons.iconFont,
-            fontPackage: CupertinoIcons.iconFontPackage),
-        size: size,
-        color: color);
-  }
-
   static Widget getRating(final double? rating, final double size) {
-    return rating != null ? RatingBarIndicator(
-      rating: rating,
-      itemBuilder: (context, index) => const Icon(Icons.star, color: Colors.amber),
-      itemCount: 5,
-      itemSize: size,
-      direction: Axis.horizontal
-    ) : const SizedBox(width: 0);
+    return rating != null
+        ? RatingBarIndicator(
+            rating: rating,
+            itemBuilder: (context, index) => const Icon(Icons.star, color: Colors.amber),
+            itemCount: 5,
+            itemSize: size,
+            direction: Axis.horizontal)
+        : const SizedBox(width: 0);
   }
 
-  static Widget getActionIconCircular(final Icon icon, final String description,
-      final Color backgroundColor, final Color textColor,
-      {final Function()? onTap}) {
-    return GestureDetector(
-        onTap: onTap,
-        child: Column(children: <Widget>[
-          CircleAvatar(child: icon, backgroundColor: backgroundColor),
-          const SizedBox(height: 7),
-          Text(description,
-              style: TextStyle(color: textColor, fontSize: 12),
-              textAlign: TextAlign.center)
-        ]));
-  }
-
-  static void showToastMessage(
-      final BuildContext context, final String message, final Color color) {
+  static void showToastMessage(final BuildContext context, final String message, final Color color) {
     final FToast fToast = FToast();
     fToast.init(context);
     final Widget toast = Container(
-      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(25.0), color: color),
-      child: Text(message,
-          style: const TextStyle(color: Colors.white), textAlign: TextAlign.center),
-    );
+        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(25.0), color: color),
+        child: Text(message, style: const TextStyle(color: Colors.white), textAlign: TextAlign.center));
     fToast.removeQueuedCustomToasts();
-    fToast.showToast(
-        child: toast,
-        gravity: ToastGravity.BOTTOM,
-        toastDuration: const Duration(seconds: 3));
+    fToast.showToast(child: toast, gravity: ToastGravity.BOTTOM, toastDuration: const Duration(seconds: 3));
   }
 
-  static void launchCaller(
-      final String phone, final Function onFailureFunction) async {
-    final String phoneUrl = Uri.encodeFull("tel:$phone");
-    try {
-      if (await canLaunch(phoneUrl)) {
-        await launch(phoneUrl);
-      } else {
-        LogUtil.debug(_tag, 'Could not launch $phoneUrl');
-        onFailureFunction.call();
-      }
-    } on Exception catch (e) {
-      LogUtil.debug(_tag, 'Exception invoking phoneUrl $phoneUrl $e');
-      onFailureFunction.call();
-    }
-  }
-
-  static SnackBar buildSnackBar(
-      final BuildContext context,
-      final String text,
-      final int durationToFadeIn,
-      final String actionLabel,
-      final Function() onPressedFunction) {
+  static SnackBar buildSnackBar(final BuildContext context, final String text, final int durationToFadeIn,
+      final String actionLabel, final Function() onPressedFunction,
+      {final Color? snackbarColor, final Color? snackBarTextColor, final Color? actionLabelColor}) {
     var snackBar = SnackBar(
-      backgroundColor: Theme.of(context).dialogBackgroundColor,
-      content:
-          Text(text, style: TextStyle(color: Theme.of(context).primaryColor)),
-      duration: Duration(seconds: durationToFadeIn),
-      behavior: SnackBarBehavior.floating,
-      action: SnackBarAction(label: actionLabel, onPressed: onPressedFunction),
-    );
+        backgroundColor: snackbarColor ?? Theme.of(context).dialogBackgroundColor,
+        content: Text(text, style: TextStyle(color: snackBarTextColor ?? Colors.indigo, fontWeight: FontWeight.w500)),
+        duration: Duration(seconds: durationToFadeIn),
+        behavior: SnackBarBehavior.floating,
+        action: SnackBarAction(label: actionLabel, onPressed: onPressedFunction, textColor: actionLabelColor));
     return snackBar;
   }
 
-  static ElevatedButton getRoundedElevatedButton({
-    final Function()? onPressed,
-    final Widget? child,
-    required final Color backgroundColor,
-    final Color foreGroundColor = Colors.white,
-    required final double borderRadius}) {
-    return ElevatedButton(onPressed: onPressed,
-        child: Padding(child: child, padding: const EdgeInsets.only(left: 15, right: 15)),
-        style: ButtonStyle(
-          foregroundColor: MaterialStateProperty.all(foreGroundColor),
-          backgroundColor:
-          MaterialStateProperty.all(backgroundColor),
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(borderRadius))),
-        ));
+  static void showPumpedUnavailabilityMessage(
+      final DocumentSnapshot underMaintenanceDocSnap, final BuildContext context) {
+    bool? underMaintenance = underMaintenanceDocSnap['underMaintenance'];
+    if (underMaintenance != null && underMaintenance) {
+      final String underMaintenanceMsg = underMaintenanceDocSnap['maintenanceMessage'];
+      ScaffoldMessenger.of(context)
+          .showSnackBar(WidgetUtils.buildSnackBar(context, underMaintenanceMsg, 12 * 60 * 60 * 30, 'Exit', () {
+        if (Platform.isIOS) {
+          // Apple does not like  this, as it is against their Human Interface Guidelines.
+          exit(0);
+        } else if (Platform.isAndroid) {
+          SystemNavigator.pop();
+        } else {
+          // Not sure if SystemNavigator.pop(); would work
+        }
+      }, snackbarColor: Colors.indigo, snackBarTextColor: Colors.white, actionLabelColor: Colors.red));
+    } else {
+      LogUtil.debug(_tag, 'Pumped Backend is not under maintenance');
+    }
   }
 
-  static TextButton getRoundedTextButton({
-      final Function()? onPressed,
+  static ElevatedButton getRoundedElevatedButton(
+      {final Function()? onPressed,
       final Widget? child,
       required final Color backgroundColor,
       final Color foreGroundColor = Colors.white,
       required final double borderRadius}) {
-    return TextButton(
+    return ElevatedButton(
         onPressed: onPressed,
-        child: Padding(child: child, padding: const EdgeInsets.only(left: 15, right: 15)),
         style: ButtonStyle(
-          foregroundColor: MaterialStateProperty.all(foreGroundColor),
-          backgroundColor:
-              MaterialStateProperty.all(backgroundColor),
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(borderRadius))),
-        ));
+            foregroundColor: MaterialStateProperty.all(foreGroundColor),
+            backgroundColor: MaterialStateProperty.all(backgroundColor),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(borderRadius)))),
+        child: Padding(padding: const EdgeInsets.only(left: 15, right: 15), child: child));
   }
 }

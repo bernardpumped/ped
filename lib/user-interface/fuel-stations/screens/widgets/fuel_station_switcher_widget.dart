@@ -21,12 +21,13 @@ import 'package:pumped_end_device/main.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/fuel_station_screen_color_scheme.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
+import 'fuel_station_type.dart';
+
 class FuelStationSwitcherWidget extends StatefulWidget {
-  final String fuelStationType;
+  final FuelStationType fuelStationType;
   final Function onChangeCallback;
 
-  const FuelStationSwitcherWidget(
-      {Key? key, required this.fuelStationType, required this.onChangeCallback})
+  const FuelStationSwitcherWidget({Key? key, required this.fuelStationType, required this.onChangeCallback})
       : super(key: key);
 
   @override
@@ -35,7 +36,7 @@ class FuelStationSwitcherWidget extends StatefulWidget {
 
 class _FuelStationSwitcherWidgetState extends State<FuelStationSwitcherWidget> {
   static const _tag = 'FuelStationSwitcherWidget';
-  String? fuelStationType;
+  FuelStationType? fuelStationType;
 
   final FuelStationsScreenColorScheme colorScheme =
       getIt.get<FuelStationsScreenColorScheme>(instanceName: fsScreenColorSchemeName);
@@ -44,7 +45,7 @@ class _FuelStationSwitcherWidgetState extends State<FuelStationSwitcherWidget> {
   Widget build(final BuildContext context) {
     String labelText;
     IconData iconData;
-    if (widget.fuelStationType == 'near-by-fuel-station') {
+    if (widget.fuelStationType == FuelStationType.nearby) {
       labelText = 'Nearby Fuel';
       iconData = Icons.near_me;
     } else {
@@ -54,6 +55,7 @@ class _FuelStationSwitcherWidgetState extends State<FuelStationSwitcherWidget> {
     return GestureDetector(
       onTap: () {
         showModalBottomSheet(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
             context: context,
             builder: _modalBottomSheetBuilder,
             backgroundColor: colorScheme.fuelStationSwitcherWidgetBackgroundColor);
@@ -70,6 +72,7 @@ class _FuelStationSwitcherWidgetState extends State<FuelStationSwitcherWidget> {
               fontSize: 16, fontWeight: FontWeight.normal, color: colorScheme.fuelStationSwitcherBtnForegroundColor),
           onDeleted: () {
             showModalBottomSheet(
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
                 context: context,
                 builder: _modalBottomSheetBuilder,
                 backgroundColor: colorScheme.fuelStationSwitcherWidgetBackgroundColor);
@@ -90,10 +93,11 @@ class _FuelStationSwitcherWidgetState extends State<FuelStationSwitcherWidget> {
                 style: TextStyle(
                     fontSize: 20, fontWeight: FontWeight.bold, color: colorScheme.fuelStationSwitcherWidgetTextColor))),
         Card(
+            surfaceTintColor: colorScheme.fuelStationSwitcherWidgetBackgroundColor,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            child: RadioListTile<String>(
-                selected: 'near-by-fuel-station' == fuelStationType,
-                value: 'near-by-fuel-station',
+            child: RadioListTile<FuelStationType>(
+                selected: FuelStationType.nearby == fuelStationType,
+                value: FuelStationType.nearby,
                 activeColor: colorScheme.fuelStationSwitcherWidgetTextColor,
                 title: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                   Text('Nearby Fuel Stations',
@@ -104,14 +108,15 @@ class _FuelStationSwitcherWidgetState extends State<FuelStationSwitcherWidget> {
                 groupValue: fuelStationType,
                 onChanged: (changedCat) {
                   mystate(() {
-                    fuelStationType = 'near-by-fuel-station';
+                    fuelStationType = FuelStationType.nearby;
                   });
                 })),
         Card(
+            surfaceTintColor: colorScheme.fuelStationSwitcherWidgetBackgroundColor,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            child: RadioListTile<String>(
-                selected: 'favourite-fuel-station' == fuelStationType,
-                value: 'favourite-fuel-station',
+            child: RadioListTile<FuelStationType>(
+                selected: FuelStationType.favourite == fuelStationType,
+                value: FuelStationType.favourite,
                 activeColor: colorScheme.fuelStationSwitcherWidgetTextColor,
                 title: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                   Text('Favourite Fuel Stations',
@@ -122,12 +127,14 @@ class _FuelStationSwitcherWidgetState extends State<FuelStationSwitcherWidget> {
                 groupValue: fuelStationType,
                 onChanged: (changedCat) {
                   mystate(() {
-                    fuelStationType = 'favourite-fuel-station';
+                    fuelStationType = FuelStationType.favourite;
                   });
                 })),
         Row(mainAxisAlignment: MainAxisAlignment.end, children: [
           ElevatedButton(
-              style: ElevatedButton.styleFrom(primary: colorScheme.fuelStationSwitcherWidgetTextColor),
+              style: ElevatedButton.styleFrom(
+                  primary: colorScheme.fuelStationSwitcherWidgetTextColor,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15))),
               onPressed: () {
                 Navigator.pop(context);
                 updateSelectedFuelStation();
