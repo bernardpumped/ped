@@ -19,7 +19,6 @@
 import 'package:flutter/material.dart';
 import 'package:pumped_end_device/main.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/fuel_station_screen_color_scheme.dart';
-import 'package:pumped_end_device/user-interface/widgets/pumped_icons.dart';
 
 class NoNearByStationsWidget extends StatelessWidget {
   const NoNearByStationsWidget({Key? key}) : super(key: key);
@@ -45,7 +44,7 @@ class NoNearByStationsWidget extends StatelessWidget {
                 TextSpan(
                     text: "\nYou can refine your Search Options. Tap on ",
                     style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: colorScheme.noDataScreenTextColor)),
-                const WidgetSpan(child: PumpedIcons.settingsIconBlack54Size24),
+                const WidgetSpan(child: Icon(Icons.settings, color: Colors.indigo, size: 24)),
                 TextSpan(
                     text: " icon on bottom bar, to customize search.",
                     style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: colorScheme.noDataScreenTextColor))

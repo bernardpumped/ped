@@ -1,0 +1,71 @@
+/*
+ *     Copyright (c) 2022.
+ *     This file is part of Pumped End Device.
+ *
+ *     Pumped End Device is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     Pumped End Device is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with Pumped End Device.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+import 'dart:async';
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:pumped_end_device/main.dart';
+import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
+import 'package:pumped_end_device/util/log_util.dart';
+import 'package:webview_flutter/webview_flutter.dart';
+
+class HelpScreen extends StatefulWidget {
+  static const routeName = '/ped/help';
+  const HelpScreen({Key? key}) : super(key: key);
+
+  @override
+  State<HelpScreen> createState() => _HelpScreenState();
+}
+
+class _HelpScreenState extends State<HelpScreen> {
+  static const _tag = 'HelpScreen';
+  StreamSubscription<DocumentSnapshot>? _underMaintenanceSubscription;
+
+  @override
+  void initState() {
+    super.initState();
+    // Enable virtual display.
+    if (Platform.isAndroid) WebView.platform = AndroidWebView();
+    _underMaintenanceSubscription = underMaintenanceDocRef.snapshots().listen((event) {
+      if (!mounted) return;
+      WidgetUtils.showPumpedUnavailabilityMessage(event, context);
+      LogUtil.debug(_tag, '${event.data}');
+    });
+  }
+
+  @override
+  void dispose() {
+    if (_underMaintenanceSubscription != null) {
+      _underMaintenanceSubscription!.cancel();
+      LogUtil.debug(_tag, 'Cancelled under-maintenance subscription');
+    }
+    super.dispose();
+  }
+
+
+  @override
+  Widget build(final BuildContext context) {
+    /*
+      Current implementation is an interim implementation to show the pumpefuel.com website in Help screen.
+      This would get replaced with a proper implementation for send feedback implementation
+     */
+    return const WebView(initialUrl: 'https://pumpedfuel.com', javascriptMode: JavascriptMode.unrestricted);
+  }
+}

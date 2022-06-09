@@ -23,7 +23,7 @@ import 'package:pumped_end_device/data/local/dao/user_configuration_dao.dart';
 import 'package:pumped_end_device/data/local/model/market_region_zone_config.dart';
 import 'package:pumped_end_device/data/local/model/user_configuration.dart';
 import 'package:pumped_end_device/models/pumped_exception.dart';
-import 'package:pumped_end_device/user-interface/tabs/fuel-stations/data/model/fuel_type_switcher_data.dart';
+import 'package:pumped_end_device/user-interface/fuel-stations/model/fuel_type_switcher_data.dart';
 import 'package:pumped_end_device/models/pumped/fuel_category.dart';
 import 'package:pumped_end_device/models/pumped/fuel_type.dart';
 import 'package:pumped_end_device/models/pumped/market_region_config.dart';
@@ -32,25 +32,29 @@ import 'package:pumped_end_device/util/log_util.dart';
 class FuelTypeSwitcherService {
   static const _tag = 'FuelTypeSwitcherService';
 
-  void addFuelTypeSwitcherDataToStream(final StreamController<FuelTypeSwitcherData> streamController) async {
+  void addFuelTypeSwitcherDataToStream(final StreamController<FuelTypeSwitcherData> streamController,
+      {bool throwError = true}) async {
     try {
       final FuelCategory defaultFuelCategory = await _getDefaultFuelCategory();
       final FuelType fuelType = await _getDefaultFuelType() ?? defaultFuelCategory.defaultFuelType;
-      final int userSettingsVersion = await UserConfigurationDao.instance
-          .getUserConfigurationVersion(UserConfiguration.defaultUserConfigId);
+      final int userSettingsVersion =
+          await UserConfigurationDao.instance.getUserConfigurationVersion(UserConfiguration.defaultUserConfigId);
       streamController.add(FuelTypeSwitcherData(fuelType, defaultFuelCategory, userSettingsVersion));
     } catch (error, s) {
       LogUtil.debug(_tag, 'Error fetching the defaultFuelCategory / defaultFuelType $s');
-      streamController.addError(FuelTypeSwitcherDataError('Error fetching the defaultFuelCategory / defaultFuelType $s'));
+      if (throwError) {
+        streamController
+            .addError(FuelTypeSwitcherDataError('Error fetching the defaultFuelCategory / defaultFuelType $s'));
+      }
     }
   }
 
   Future<FuelCategory> _getDefaultFuelCategory() async {
     final MarketRegionZoneConfiguration? marketRegionZoneConfig =
         await MarketRegionZoneConfigDao.instance.getMarketRegionZoneConfiguration();
-    final UserConfiguration? userConfiguration = await UserConfigurationDao.instance
-        .getUserConfiguration(UserConfiguration.defaultUserConfigId);
-    if (marketRegionZoneConfig!= null && userConfiguration != null) {
+    final UserConfiguration? userConfiguration =
+        await UserConfigurationDao.instance.getUserConfiguration(UserConfiguration.defaultUserConfigId);
+    if (marketRegionZoneConfig != null && userConfiguration != null) {
       return _getFuelCategory(marketRegionZoneConfig, userConfiguration);
     } else {
       if (marketRegionZoneConfig != null) {
@@ -65,8 +69,8 @@ class FuelTypeSwitcherService {
   Future<FuelType?> _getDefaultFuelType() async {
     final MarketRegionZoneConfiguration? marketRegionZoneConfig =
         await MarketRegionZoneConfigDao.instance.getMarketRegionZoneConfiguration();
-    final UserConfiguration? userConfiguration = await UserConfigurationDao.instance
-        .getUserConfiguration(UserConfiguration.defaultUserConfigId);
+    final UserConfiguration? userConfiguration =
+        await UserConfigurationDao.instance.getUserConfiguration(UserConfiguration.defaultUserConfigId);
     return _getDefaultFuelTypeForMarketRegionAndUserConfig(
         marketRegionZoneConfig?.marketRegionConfig, userConfiguration);
   }
@@ -85,7 +89,8 @@ class FuelTypeSwitcherService {
   FuelCategory _getFuelCategory(
       final MarketRegionZoneConfiguration marketRegionZoneConfig, final UserConfiguration userConfiguration) {
     final FuelCategory userFuelCategory = userConfiguration.defaultFuelCategory;
-    final List<FuelCategory> allFuelCategories = marketRegionZoneConfig.marketRegionConfig.allowedFuelCategories.toList();
+    final List<FuelCategory> allFuelCategories =
+        marketRegionZoneConfig.marketRegionConfig.allowedFuelCategories.toList();
     for (final FuelCategory fuelCategory in allFuelCategories) {
       if (fuelCategory == userFuelCategory) {
         return fuelCategory;

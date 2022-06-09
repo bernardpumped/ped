@@ -26,9 +26,7 @@ void main() {
       driver = await FlutterDriver.connect();
     });
     ft.tearDownAll(() async {
-      if (driver != null) {
-        driver.close();
-      }
+      driver.close();
     });
     ft.test('verify the text on fuel stations screen', () async {
       SerializableFinder message = find.text("Pumped");

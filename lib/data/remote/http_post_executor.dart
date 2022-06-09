@@ -44,7 +44,7 @@ abstract class HttpPostExecutor<I extends Request, O extends Response> {
   Future<O> execute(final I request) async {
     final String url = PumpedEndPoint.pumperBaseUrl + getUrl();
     LogUtil.debug(tag, 'execute::url is $url');
-    var response;
+    http.Response response;
     int startTimeMills = DateTime.now().millisecondsSinceEpoch;
     try {
       var requestBody = convert.jsonEncode(request.toJson());
@@ -56,7 +56,7 @@ abstract class HttpPostExecutor<I extends Request, O extends Response> {
           (onTimeOutFunction!)();
         }
         LogUtil.debug(tag, 'Timeout happened');
-        return Future.value(null);
+        return Future.value(http.Response("", 408));
       });
     } catch (e, s) {
       LogUtil.debug(tag, 'execute::Exception happened while making call to server $s ${e.toString()}');
@@ -66,19 +66,16 @@ abstract class HttpPostExecutor<I extends Request, O extends Response> {
       LogUtil.debug(tag, 'execute::Time taken ${DateTime.now().millisecondsSinceEpoch - startTimeMills}');
     }
     LogUtil.debug(tag, 'execute::response.statusCode : ${response.statusCode}');
-    if (response != null) {
-      if (response.statusCode == 200) {
-        LogUtil.debug(tag, 'execute::response : ${response.body}');
-        return responseParser.parseResponse(response.body);
-      } else {
-        throw pumpedHttpException(response.httpStatusCode, response.reasonPhrase, url);
-      }
+
+    if (response.statusCode == 200) {
+      LogUtil.debug(tag, 'execute::response : ${response.body}');
+      return responseParser.parseResponse(response.body);
     } else {
-      throw pumpedHttpException(408, 'Timed out', url);
+      throw pumpedHttpException(response.statusCode, response.reasonPhrase, url);
     }
   }
 
-  PumpedHttpException pumpedHttpException(final int httpStatusCode, final String reasonPhrase, String url) {
+  PumpedHttpException pumpedHttpException(final int httpStatusCode, final String? reasonPhrase, String url) {
     return PumpedHttpException(
         httpStatusCode: httpStatusCode,
         httpStatusDescription: reasonPhrase,

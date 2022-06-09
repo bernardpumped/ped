@@ -31,18 +31,18 @@ class GetFuelStationDetailsBatch
     String url = '/enddevice/getFuelStationDetailsBatch' '?';
     String? param1;
     if (request.fuelStationIds != null && request.fuelStationIds!.isNotEmpty) {
-      param1 = 'fuelStationId=' + request.fuelStationIds!.join('&fuelStationId=');
+      param1 = 'fuelStationId=${request.fuelStationIds!.join('&fuelStationId=')}';
     }
     String? param2;
     if (request.fuelAuthorityStationIds != null && request.fuelAuthorityStationIds!.isNotEmpty) {
-      param2 = 'fuelAuthorityStationId=' + request.fuelAuthorityStationIds!.join('&fuelAuthorityStationId=');
+      param2 = 'fuelAuthorityStationId=${request.fuelAuthorityStationIds!.join('&fuelAuthorityStationId=')}';
     }
     if (param1 != null) {
       url = url + param1;
     }
     if (param2 != null) {
       if (param1 != null) {
-        url = url + '&' + param2;
+        url = '$url&$param2';
       } else {
         url = url + param2;
       }

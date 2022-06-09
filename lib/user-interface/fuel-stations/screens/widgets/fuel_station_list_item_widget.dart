@@ -25,111 +25,79 @@ import 'package:pumped_end_device/models/pumped/fuel_station.dart';
 import 'package:pumped_end_device/models/pumped/fuel_type.dart';
 import 'package:pumped_end_device/models/status.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/fuel_station_screen_color_scheme.dart';
+import 'package:pumped_end_device/user-interface/fuel-stations/screens/widgets/fuel_station_context_menu.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/screens/widgets/fuel_station_logo_widget.dart';
-import 'package:pumped_end_device/user-interface/tabs/fuel-stations/data/params/fuel_station_details_param.dart';
+import 'package:pumped_end_device/user-interface/fuel-station-details/params/fuel_station_details_param.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/screen/fuel_station_details_screen.dart';
 import 'package:pumped_end_device/util/data_utils.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
 class FuelStationListItemWidget extends StatelessWidget {
-  static const _tag = 'FuelStationListItem';
-  static const _defaultTextSize = 14.0;
+  static const _tag = 'FuelStationListItemWidget';
   final FuelStation fuelStation;
   final FuelType selectedFuelType;
-  final double chipTextSize;
+  final Function parentRefresh;
 
   final FuelStationCardColorScheme colorScheme =
       getIt.get<FuelStationCardColorScheme>(instanceName: fsCardColorSchemeName);
 
   FuelStationListItemWidget(
-      {Key? key, required this.fuelStation, required this.selectedFuelType, this.chipTextSize = _defaultTextSize})
+      {Key? key, required this.fuelStation, required this.selectedFuelType, required this.parentRefresh})
       : super(key: key);
 
   @override
   Widget build(final BuildContext context) {
     final FuelQuote? selectedFuelQuote = fuelStation.fuelTypeFuelQuoteMap[selectedFuelType.fuelType];
     return GestureDetector(
-      onTap: () {
-        LogUtil.debug(_tag, 'Navigator.pushNamed on GestureDetector');
-        Navigator.pushNamed(context, FuelStationDetailsScreen.routeName,
-            arguments: FuelStationDetailsParam(fuelStation));
-      },
-      child: Card(
-          margin: const EdgeInsets.only(left: 7, right: 7, top: 7, bottom: 3),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
-          elevation: 1.5,
-          child: Padding(
-              padding: const EdgeInsets.all(12),
-              child: Column(children: [
-                Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                  FuelStationLogoWidget(width: 95, height: 95, image: NetworkImage(fuelStation.merchantLogoUrl)),
-                  Expanded(
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                        _getOpenCloseRatingDistanceWidget(context),
-                        Padding(padding: const EdgeInsets.only(left: 13, top: 13), child: _getStationNameWidget()),
-                        Padding(padding: const EdgeInsets.only(left: 13, top: 13), child: _getStationAddressWidget())
-                      ]))
-                ]),
-                const SizedBox(height: 10),
-                Row(mainAxisAlignment: MainAxisAlignment.end, crossAxisAlignment: CrossAxisAlignment.end, children: [
-                  IntrinsicHeight(child: _getOffersWidget()),
-                  const SizedBox(width: 15),
-                  IntrinsicHeight(child: _getPriceWithDetailsWidget(selectedFuelQuote)),
-                ])
-              ]))),
-    );
-  }
-
-  Widget _getPopupMenu(final BuildContext context) {
-    return PopupMenuButton<String>(
-        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15))),
-        color: colorScheme.contextMenuBackgroundColor,
-        padding: EdgeInsets.zero,
-        onSelected: (value) {
-          LogUtil.debug(_tag, 'Selected Value $value');
-          if (value == 'preview') {
-            LogUtil.debug(_tag, 'calling pushNamed for FuelStationDetailsScreen.routeName');
-            Navigator.pushNamed(context, FuelStationDetailsScreen.routeName,
-                arguments: FuelStationDetailsParam(fuelStation));
-          }
-          if (value == 'favourite') {
-            LogUtil.debug(_tag, 'Taking action for favourite');
-          }
-          if (value == 'hide') {
-            LogUtil.debug(_tag, 'Taking action for hide');
-          }
+        onTap: () async {
+          await Navigator.pushNamed(context, FuelStationDetailsScreen.routeName,
+                  arguments: FuelStationDetailsParam(fuelStation))
+              .then((val) {
+            final bool? homeScreenRefreshNeeded = val as bool?;
+            LogUtil.debug(_tag, 'homeScreenRefreshNeeded : $homeScreenRefreshNeeded');
+            if (homeScreenRefreshNeeded != null && homeScreenRefreshNeeded) {
+              parentRefresh();
+              LogUtil.debug(_tag, 'Refreshed the parent');
+            }
+          });
         },
-        itemBuilder: (context) => <PopupMenuEntry<String>>[
-              PopupMenuItem<String>(
-                  value: 'preview',
-                  child: ListTile(
-                      leading: Icon(Icons.visibility, color: colorScheme.contextMenuForegroundColor),
-                      title: Text('Preview', style: TextStyle(color: colorScheme.contextMenuForegroundColor)))),
-              PopupMenuItem<String>(
-                  value: 'favourite',
-                  child: ListTile(
-                      leading: Icon(Icons.favorite_border_outlined, color: colorScheme.contextMenuForegroundColor),
-                      title: Text('Favourite', style: TextStyle(color: colorScheme.contextMenuForegroundColor)))),
-              const PopupMenuDivider(),
-              PopupMenuItem<String>(
-                  value: 'hide',
-                  child: ListTile(
-                      leading: Icon(Icons.hide_source_outlined, color: colorScheme.openCloseWidgetCloseColor),
-                      title: Text('Hide', style: TextStyle(color: colorScheme.openCloseWidgetCloseColor)))),
-            ]);
+        child: Card(
+            surfaceTintColor: Colors.white,
+            margin: const EdgeInsets.only(left: 4, right: 4, top: 4, bottom: 3),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+            elevation: 1.5,
+            child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: Column(children: [
+                  Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                    FuelStationLogoWidget(width: 95, height: 95, image: NetworkImage(fuelStation.merchantLogoUrl)),
+                    Expanded(
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                          _getOpenCloseRatingDistanceWidget(context),
+                          Padding(padding: const EdgeInsets.only(left: 13, top: 13), child: _getStationNameWidget()),
+                          Padding(padding: const EdgeInsets.only(left: 13, top: 13), child: _getStationAddressWidget())
+                        ]))
+                  ]),
+                  const SizedBox(height: 10),
+                  Row(mainAxisAlignment: MainAxisAlignment.end, crossAxisAlignment: CrossAxisAlignment.end, children: [
+                    IntrinsicHeight(child: _getOffersWidget()),
+                    const SizedBox(width: 15),
+                    IntrinsicHeight(child: _getPriceWithDetailsWidget(selectedFuelQuote))
+                  ])
+                ]))));
   }
 
   Widget _getOpenCloseRatingDistanceWidget(final BuildContext context) {
     return Row(mainAxisAlignment: MainAxisAlignment.end, children: [
       _getOpenCloseWidget(),
-      const SizedBox(width: 10),
+      const SizedBox(width: 5),
       _getRatingWidget(),
-      const SizedBox(width: 10),
+      const SizedBox(width: 5),
       _getDistanceWidget(),
-      _getPopupMenu(context)
+      FuelStationContextMenu(fuelStation: fuelStation)
     ]);
   }
 
@@ -201,7 +169,7 @@ class FuelStationListItemWidget extends StatelessWidget {
           Icon(Icons.shopping_cart, color: colorScheme.primaryTextColor, size: 20),
           const SizedBox(width: 5),
           Text(fuelStation.promos.toString(),
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: colorScheme.primaryTextColor)),
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: colorScheme.primaryTextColor))
         ]);
       }
       Widget? child3;
@@ -255,7 +223,7 @@ class FuelStationListItemWidget extends StatelessWidget {
       DateTime curDate = DateTime.now();
       String publishDateString;
       if (publishDate.year != curDate.year) {
-        publishDateString = DateFormat('dd/MMM/yyyy').format(publishDate);
+        publishDateString = DateFormat('dd-MMM-yyyy').format(publishDate);
       } else {
         publishDateString = DateFormat('dd-MMM HH:mm').format(publishDate);
       }

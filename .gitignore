@@ -44,7 +44,7 @@ build
 ios/*
 !ios/Runner
 ios/Runner/*
-!ios/Runner/Info.plist
+!ios/Runner/Info-Debug.plist
 .metadata
 .packages
 *.iml

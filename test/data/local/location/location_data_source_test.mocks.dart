@@ -20,10 +20,9 @@
 // in pumped_end_device/test/data/local/location/location_data_source_test.dart.
 // Do not manually edit this file.
 
-import 'package:mockito/mockito.dart' as _i1;
-import 'package:pumped_end_device/data/local/location/geo_location_wrapper.dart'
-    as _i3;
-import 'package:pumped_end_device/util/platform_wrapper.dart' as _i2;
+import 'package:mockito/mockito.dart' as i1;
+import 'package:pumped_end_device/data/local/location/geo_location_wrapper.dart' as i3;
+import 'package:pumped_end_device/util/platform_wrapper.dart' as i2;
 
 // ignore_for_file: avoid_redundant_argument_values
 // ignore_for_file: avoid_setters_without_getters
@@ -37,18 +36,17 @@ import 'package:pumped_end_device/util/platform_wrapper.dart' as _i2;
 /// A class which mocks [PlatformWrapper].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockPlatformWrapper extends _i1.Mock implements _i2.PlatformWrapper {
+class MockPlatformWrapper extends i1.Mock implements i2.PlatformWrapper {
   MockPlatformWrapper() {
-    _i1.throwOnMissingStub(this);
+    i1.throwOnMissingStub(this);
   }
 }
 
 /// A class which mocks [GeoLocationWrapper].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockGeoLocationWrapper extends _i1.Mock
-    implements _i3.GeoLocationWrapper {
+class MockGeoLocationWrapper extends i1.Mock implements i3.GeoLocationWrapper {
   MockGeoLocationWrapper() {
-    _i1.throwOnMissingStub(this);
+    i1.throwOnMissingStub(this);
   }
 }

@@ -28,7 +28,7 @@ class LogUtil {
   static void debug(final String tag, final String logStatement) {
     if (_debug >= _logLevel) {
       // debugPrint('[${DateTime.now()}]: DEBUG: $tag : $logStatement');
-      print('[${DateTime.now()}]: DEBUG: $tag : $logStatement');
+      debugPrint('[${DateTime.now()}]: DEBUG: $tag : $logStatement');
     }
   }
 
