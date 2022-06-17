@@ -61,6 +61,8 @@ lib/.DS_Store
 lib/datasource/.DS_Store
 lib/datasource/local/.DS_Store
 lib/models/.DS_Store
+lib/data/remote/pumped_end_point-prd.dart
+lib/firebase_options-prd.dart
 
 linux/
 web/
@@ -72,4 +74,3 @@ pubspec.lock
 pumped_end_device.iml
 desktop.ini
 test/widget_test.dart
-lib/data/remote/pumped_end_point-prd.dart
