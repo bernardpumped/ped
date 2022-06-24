@@ -16,9 +16,6 @@
  *     along with Pumped End Device.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'dart:async';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:pumped_end_device/main.dart';
 import 'package:pumped_end_device/user-interface/nav-drawer/nav_drawer_widget.dart';
@@ -27,6 +24,7 @@ import 'package:pumped_end_device/user-interface/settings/screen/widget/text_loc
 import 'package:pumped_end_device/user-interface/settings/screen/widget/text_scaling_menu_item_widget.dart';
 import 'package:pumped_end_device/user-interface/settings/screen/widget/theme_menu_item_widget.dart';
 import 'package:pumped_end_device/user-interface/settings/screen/widget/server_version_widget.dart';
+import 'package:pumped_end_device/user-interface/utils/under_maintenance_service.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/user-interface/widgets/pumped_app_bar.dart';
 import 'package:pumped_end_device/util/log_util.dart';
@@ -46,13 +44,13 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   static const _tag = 'SettingsScreen';
-
-  StreamSubscription<DocumentSnapshot>? _underMaintenanceSubscription;
+  final UnderMaintenanceService _underMaintenanceService =
+      getIt.get<UnderMaintenanceService>(instanceName: underMaintenanceServiceName);
 
   @override
   void initState() {
     super.initState();
-    _underMaintenanceSubscription = underMaintenanceDocRef.snapshots().listen((event) {
+    _underMaintenanceService.registerSubscription(_tag, context, (event, context) {
       if (!mounted) return;
       WidgetUtils.showPumpedUnavailabilityMessage(event, context);
       LogUtil.debug(_tag, '${event.data}');
@@ -61,10 +59,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   void dispose() {
-    if (_underMaintenanceSubscription != null) {
-      _underMaintenanceSubscription!.cancel();
-      LogUtil.debug(_tag, 'Cancelled under-maintenance subscription');
-    }
+    _underMaintenanceService.cancelSubscription(_tag);
     super.dispose();
   }
 

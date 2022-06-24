@@ -38,12 +38,12 @@ class LocationDataSource {
   LocationDataSource(this._geoLocationWrapper, this._platformWrapper);
 
   Future<GetLocationResult> getLocationData({String thread = 'default'}) async {
-    if (!_platformWrapper.deviceIsBrowser() && _platformWrapper.platformIsLinux()) {
-      return Future.value(GetLocationResult(
-          LocationInitResultCode.success,
-          Future.value(GeoLocationData(
-              latitude: Places.fishBurnerSydney.latitude, longitude: Places.fishBurnerSydney.longitude, altitude: 0))));
-    }
+    // if (!_platformWrapper.deviceIsBrowser() && _platformWrapper.platformIsLinux()) {
+    //   return Future.value(GetLocationResult(
+    //       LocationInitResultCode.success,
+    //       Future.value(GeoLocationData(
+    //           latitude: Places.fishBurnerSydney.latitude, longitude: Places.fishBurnerSydney.longitude, altitude: 0))));
+    // }
     LogUtil.debug(_tag, "Checking Location Service Enabled");
     bool serviceEnabled = await _geoLocationWrapper.isLocationServiceEnabled();
     LogUtil.debug(_tag, "Location Service is Enabled ? $serviceEnabled");
@@ -76,16 +76,16 @@ class LocationDataSource {
                 altitude: 0))));
       } else {
         LogUtil.debug(_tag, 'Returning from !kIsWeb');
-        // return Future.value(GetLocationResult(
-        //     LocationInitResultCode.success,
-        //     Future.value(GeoLocationData(
-        //         latitude: position.latitude, longitude: position.longitude, altitude: position.altitude))));
-        return Future.value(GetLocationResult(LocationInitResultCode.success,
+        return Future.value(GetLocationResult(
+            LocationInitResultCode.success,
             Future.value(GeoLocationData(
-              latitude: Places.cairnsQld.latitude,
-              longitude: Places.cairnsQld.longitude,
-              altitude: 1,
-            ))));
+                latitude: position.latitude, longitude: position.longitude, altitude: position.altitude))));
+        // return Future.value(GetLocationResult(LocationInitResultCode.success,
+        //     Future.value(GeoLocationData(
+        //       latitude: Places.cairnsQld.latitude,
+        //       longitude: Places.cairnsQld.longitude,
+        //       altitude: 1,
+        //     ))));
       }
     } catch (e) {
       return Future.value(GetLocationResult(LocationInitResultCode.failure, null));

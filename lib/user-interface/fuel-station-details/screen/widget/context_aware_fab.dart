@@ -233,6 +233,7 @@ class _ContextAwareFabState extends State<ContextAwareFab> with SingleTickerProv
       final bool editFeatures = false,
       final bool suggestEdit = false}) {
     //https://petercoding.com/firebase/2021/05/24/using-google-sign-in-with-firebase-in-flutter/
+    //https://petercoding.com/firebase/2021/06/14/using-facebook-authentication-with-firebase-in-flutter/
 
     final SignedInUser? signedInUser = service.getSignedInUser();
     if (signedInUser == null) {

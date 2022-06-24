@@ -77,8 +77,21 @@ class FirebaseService {
     'windows': []
   };
 
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  late FirebaseAuth _auth;
+  late GoogleSignIn _googleSignIn;
+
+  FirebaseService() {
+    final List<String>? platformSupport = _platformSupport[Platform.operatingSystem];
+    if (platformSupport != null && platformSupport.isNotEmpty) {
+      _auth = FirebaseAuth.instance;
+      if (platformSupport.contains(googleIdProvider)) {
+        _googleSignIn = GoogleSignIn();
+      }
+    } else {
+      LogUtil.debug(_tag, 'Platform does not support firebase');
+    }
+  }
+
   String? idProviderUsed;
 
   SignedInUser? getSignedInUser() {

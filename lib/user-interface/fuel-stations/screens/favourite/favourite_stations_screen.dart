@@ -18,7 +18,6 @@
 
 import 'dart:async';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:pumped_end_device/data/local/location/location_data_source.dart';
 import 'package:pumped_end_device/main.dart';
@@ -40,6 +39,7 @@ import 'package:pumped_end_device/user-interface/fuel-stations/params/fuel_type_
 import 'package:pumped_end_device/user-interface/fuel-stations/service/favorite_fuel_stations_service.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/screens/widgets/no_favourite_stations_widget.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/service/fuel_type_switcher_service.dart';
+import 'package:pumped_end_device/user-interface/utils/under_maintenance_service.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/user-interface/widgets/pumped_app_bar.dart';
 import 'package:pumped_end_device/util/log_util.dart';
@@ -56,6 +56,8 @@ class _FavouriteStationsScreenState extends State<FavouriteStationsScreen> {
   static const _tag = 'FavouriteStationsScreen';
   final FavoriteFuelStationsService _favoriteFuelStationsDataSource =
       FavoriteFuelStationsService(getIt.get<LocationDataSource>(instanceName: locationDataSourceInstanceName));
+  final UnderMaintenanceService _underMaintenanceService =
+      getIt.get<UnderMaintenanceService>(instanceName: underMaintenanceServiceName);
   ScrollController _scrollController = ScrollController();
   final FuelTypeSwitcherService _fuelTypeSwitcherDataSource = FuelTypeSwitcherService();
 
@@ -70,7 +72,6 @@ class _FavouriteStationsScreenState extends State<FavouriteStationsScreen> {
   List<FuelStation> _favouriteStations = [];
   FuelType? _selectedFuelType;
   FuelCategory? _selectedFuelCategory;
-  StreamSubscription<DocumentSnapshot>? _underMaintenanceSubscription;
 
   @override
   void initState() {
@@ -78,7 +79,7 @@ class _FavouriteStationsScreenState extends State<FavouriteStationsScreen> {
     _scrollController = ScrollController();
     _favoriteFuelStationsFuture = _favoriteFuelStationsDataSource.getFuelStations();
     _fuelTypeSwitcherDataStreamController = StreamController<FuelTypeSwitcherData>.broadcast();
-    _underMaintenanceSubscription = underMaintenanceDocRef.snapshots().listen((event) {
+    _underMaintenanceService.registerSubscription(_tag, context, (event, context) {
       if (!mounted) return;
       WidgetUtils.showPumpedUnavailabilityMessage(event, context);
       LogUtil.debug(_tag, '${event.data}');
@@ -88,10 +89,7 @@ class _FavouriteStationsScreenState extends State<FavouriteStationsScreen> {
   @override
   void dispose() {
     _fuelTypeSwitcherDataStreamController.close();
-    if (_underMaintenanceSubscription != null) {
-      _underMaintenanceSubscription!.cancel();
-      LogUtil.debug(_tag, 'Cancelled under-maintenance subscription');
-    }
+    _underMaintenanceService.cancelSubscription(_tag);
     super.dispose();
   }
 

@@ -20,35 +20,34 @@ dependencies:
   flutter:
     sdk: flutter
 
-  cupertino_icons: ^1.0.3
   intl: ^0.17.0
-  flutter_rating_bar: 4.0.0
+  flutter_rating_bar: ^4.0.1
   flutter_svg: ^1.0.3
   provider: ^6.0.0
   sprintf: ^6.0.0
   flutter_signin_button: ^2.0.0
   geolocator: ^8.2.1
+  geolocator_linux: ^0.1.0
   localstore: ^1.2.0
   path: ^1.8.0
   implicitly_animated_reorderable_list: ^0.4.1
   http: ^0.13.3
   fluttertoast: ^8.0.9
-  geodesy: ^0.4.0-nullsafety.0
   basic_utils: ^4.2.2
   url_launcher: ^6.0.11
   uuid: ^3.0.4
-  bottom_navy_bar: ^6.0.0
   get_it: ^7.2.0
   device_info_plus: ^3.2.1
   floating_action_bubble: ^1.1.4
-  fl_chart: ^0.50.6
+  fl_chart: ^0.51.0
   firebase_core: ^1.17.0
   cloud_firestore: ^3.1.15
-  firebase_auth: 3.3.18
+  firebase_auth: ^3.3.19
   google_sign_in: ^5.3.1
   flutter_facebook_auth: ^4.3.4
   twitter_login: ^4.2.3
   webview_flutter: ^3.0.4
+
 
 dev_dependencies:
   test: any

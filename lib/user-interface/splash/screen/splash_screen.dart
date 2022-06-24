@@ -18,7 +18,6 @@
 
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pumped_end_device/data/local/location/geo_location_data.dart';
@@ -28,6 +27,7 @@ import 'package:pumped_end_device/data/local/location/location_data_source.dart'
 import 'package:pumped_end_device/main.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/screens/nearby/nearby_stations_screen.dart';
 import 'package:pumped_end_device/user-interface/splash/screen/splash_screen_color_scheme.dart';
+import 'package:pumped_end_device/user-interface/utils/under_maintenance_service.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
@@ -42,6 +42,7 @@ class _SplashScreenState extends State<SplashScreen> {
   static const _tag = 'SplashScreen';
   final SplashScreenColorScheme colorScheme =
       getIt.get<SplashScreenColorScheme>(instanceName: splashScreenColorSchemeName);
+  final UnderMaintenanceService underMaintenanceService = getIt.get(instanceName: underMaintenanceServiceName);
 
   bool _locationDetectionTriggered = false;
   bool _checkingPumpedAvailabilityTextVisible = false;
@@ -135,11 +136,14 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void _checkPumpedAvailability() async {
-    var document = FirebaseFirestore.instance.collection("pumped-documents").doc("under-maintenance");
-    document.get().then((value) {
-      bool? underMaintenance = value['underMaintenance'];
-      if (underMaintenance != null && underMaintenance) {
-        final String underMaintenanceMsg = value['maintenanceMessage'];
+    if (Platform.isLinux) {
+      _getLocation();
+      return;
+    }
+    underMaintenanceService.isUnderMaintenance().then((underMaintenanceR) {
+      bool isUnderMaintenance = underMaintenanceR.isUnderMaintenance;
+      if (isUnderMaintenance) {
+        final String underMaintenanceMsg = underMaintenanceR.underMaintenanceMessage;
         ScaffoldMessenger.of(context)
             .showSnackBar(WidgetUtils.buildSnackBar(context, underMaintenanceMsg, 12 * 60 * 60 * 30, 'Exit', () {
           if (Platform.isIOS) {
@@ -148,7 +152,7 @@ class _SplashScreenState extends State<SplashScreen> {
           } else if (Platform.isAndroid) {
             SystemNavigator.pop();
           } else {
-            // Not sure if SystemNavigator.pop(); would work
+            // Not sure if SystemNavigator.pop(); would work for other platforms
           }
         }));
       } else {
