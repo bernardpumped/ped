@@ -18,6 +18,7 @@
 
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pumped_end_device/data/local/location/geo_location_data.dart';
 import 'package:pumped_end_device/data/local/location/get_location_result.dart';
@@ -26,6 +27,8 @@ import 'package:pumped_end_device/data/local/location/location_data_source.dart'
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import 'feature_support.dart';
 
 class DirectionsWidget extends StatelessWidget {
   static const _tag = 'DirectionsWidget';
@@ -36,6 +39,7 @@ class DirectionsWidget extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
+    final Color snackBarColor = Theme.of(context).dialogBackgroundColor;
     return GestureDetector(
         child: Column(children: [
           Card(
@@ -48,20 +52,31 @@ class DirectionsWidget extends StatelessWidget {
           const Text('Directions', style: TextStyle(color: Colors.indigo, fontSize: 14, fontWeight: FontWeight.w500))
         ]),
         onTap: () async {
+          if (kIsWeb) {
+            if (!FeatureSupport.webPlatform.contains(FeatureSupport.directionsFeature)) {
+              LogUtil.debug(_tag, 'Web does not yet support ${FeatureSupport.directionsFeature}');
+              return;
+            }
+          }
+          if (!FeatureSupport.directions.contains(Platform.operatingSystem)) {
+            LogUtil.debug(_tag, '${Platform.operatingSystem} does not yet support ${FeatureSupport.directionsFeature}');
+            return;
+          }
           final GetLocationResult locationResult = await _locationDataSource.getLocationData();
           final LocationInitResultCode resultCode = locationResult.locationInitResultCode;
+
           switch (resultCode) {
             case LocationInitResultCode.locationServiceDisabled:
-              WidgetUtils.buildSnackBar(context, 'Location Service is disabled', 2, '', () {});
+              WidgetUtils.buildSnackBar2('Location Service is disabled', snackBarColor, 2, '', () {});
               break;
             case LocationInitResultCode.permissionDenied:
-              WidgetUtils.buildSnackBar(context, 'Location Permission denied', 2, '', () {});
+              WidgetUtils.buildSnackBar2('Location Permission denied', snackBarColor, 2, '', () {});
               break;
             case LocationInitResultCode.notFound:
-              WidgetUtils.buildSnackBar(context, 'Location Not Found', 2, '', () {});
+              WidgetUtils.buildSnackBar2('Location Not Found', snackBarColor, 2, '', () {});
               break;
             case LocationInitResultCode.failure:
-              WidgetUtils.buildSnackBar(context, 'Location Failure', 2, '', () {});
+              WidgetUtils.buildSnackBar2('Location Failure', snackBarColor, 2, '', () {});
               break;
             case LocationInitResultCode.success:
               {
@@ -73,7 +88,7 @@ class DirectionsWidget extends StatelessWidget {
                     WidgetUtils.showToastMessage(context, 'Cannot call phone', Colors.indigo);
                   });
                 } else {
-                  WidgetUtils.buildSnackBar(context, 'Location Failure', 2, '', () {});
+                  WidgetUtils.buildSnackBar2('Location Failure', snackBarColor, 2, '', () {});
                 }
               }
               break;
@@ -119,27 +134,27 @@ class DirectionsWidget extends StatelessWidget {
   }
 
   Future<bool> _launchGoogleMaps(final double slat, final double slng, final double dlat, final double dlng) async {
-    final String googleMapsUrl = "https://www.google.com/maps/dir/?api=1&origin=$slat,$slng&destination=$dlat,$dlng";
+    final Uri googleMapsUrl = Uri.parse("https://www.google.com/maps/dir/?api=1&origin=$slat,$slng&destination=$dlat,$dlng");
     if (Platform.isIOS) {
-      if (await canLaunch(googleMapsUrl)) {
-        final bool nativeAppLaunchSucceeded = await launch(
+      if (await canLaunchUrl(googleMapsUrl)) {
+        final bool nativeAppLaunchSucceeded = await launchUrl(
           googleMapsUrl,
-          forceSafariVC: false,
-          universalLinksOnly: true,
+          // forceSafariVC: false,
+          // universalLinksOnly: true,
         );
         bool nonNativeAppLaunchSucceeded = false;
         if (!nativeAppLaunchSucceeded) {
-          nonNativeAppLaunchSucceeded = await launch(
+          nonNativeAppLaunchSucceeded = await launchUrl(
             googleMapsUrl,
-            forceSafariVC: true,
+            // forceSafariVC: true,
           );
         }
         return nativeAppLaunchSucceeded || nonNativeAppLaunchSucceeded;
       }
       return false;
     } else {
-      if (await canLaunch(googleMapsUrl)) {
-        bool launchSuccessful = await launch(googleMapsUrl);
+      if (await canLaunchUrl(googleMapsUrl)) {
+        bool launchSuccessful = await launchUrl(googleMapsUrl);
         return launchSuccessful;
       } else {
         return false;
@@ -149,7 +164,7 @@ class DirectionsWidget extends StatelessWidget {
 
   Future<bool> _launchAppleMaps(final double slat, final double slng, final double dlat, final double dlng) async {
     if (!Platform.isIOS) return false;
-    var urlAppleMaps = 'http://maps.apple.com/maps?saddr=$slat,$slng&daddr=$dlat,$dlng';
+    String urlAppleMaps = 'http://maps.apple.com/maps?saddr=$slat,$slng&daddr=$dlat,$dlng';
     if (await canLaunch(urlAppleMaps)) {
       LogUtil.debug(_tag, 'Attempting native launch of apple maps');
       final bool nativeAppLaunchSucceeded = await launch(urlAppleMaps, forceSafariVC: false, universalLinksOnly: true);

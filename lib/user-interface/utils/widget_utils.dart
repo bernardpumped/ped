@@ -50,11 +50,11 @@ class WidgetUtils {
     fToast.showToast(child: toast, gravity: ToastGravity.BOTTOM, toastDuration: const Duration(seconds: 3));
   }
 
-  static SnackBar buildSnackBar(final BuildContext context, final String text, final int durationToFadeIn,
+  static SnackBar buildSnackBar2(final String text, final Color snackbarColor, final int durationToFadeIn,
       final String actionLabel, final Function() onPressedFunction,
-      {final Color? snackbarColor, final Color? snackBarTextColor, final Color? actionLabelColor}) {
+      {final Color? snackBarTextColor, final Color? actionLabelColor}) {
     var snackBar = SnackBar(
-        backgroundColor: snackbarColor ?? Theme.of(context).dialogBackgroundColor,
+        backgroundColor: snackbarColor,
         content: Text(text, style: TextStyle(color: snackBarTextColor ?? Colors.indigo, fontWeight: FontWeight.w500)),
         duration: Duration(seconds: durationToFadeIn),
         behavior: SnackBarBehavior.floating,
@@ -68,7 +68,7 @@ class WidgetUtils {
     if (underMaintenance != null && underMaintenance) {
       final String underMaintenanceMsg = underMaintenanceDocSnap['maintenanceMessage'];
       ScaffoldMessenger.of(context)
-          .showSnackBar(WidgetUtils.buildSnackBar(context, underMaintenanceMsg, 12 * 60 * 60 * 30, 'Exit', () {
+          .showSnackBar(WidgetUtils.buildSnackBar2(underMaintenanceMsg, Colors.indigo, 12 * 60 * 60 * 30, 'Exit', () {
         if (Platform.isIOS) {
           // Apple does not like  this, as it is against their Human Interface Guidelines.
           exit(0);
@@ -77,7 +77,7 @@ class WidgetUtils {
         } else {
           // Not sure if SystemNavigator.pop(); would work
         }
-      }, snackbarColor: Colors.indigo, snackBarTextColor: Colors.white, actionLabelColor: Colors.red));
+      }, snackBarTextColor: Colors.white, actionLabelColor: Colors.red));
     } else {
       LogUtil.debug(_tag, 'Pumped Backend is not under maintenance');
     }

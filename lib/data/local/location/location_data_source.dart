@@ -17,6 +17,7 @@
  */
 
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
@@ -66,8 +67,15 @@ class LocationDataSource {
     try {
       final Position position = await _geoLocationWrapper.getCurrentPosition();
       LogUtil.debug(_tag, "Location found as : $position");
-      if (kIsWeb) {
-        LogUtil.debug(_tag, 'Returning from kIsWeb');
+      // final List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
+      // String? isoCountryCode;
+      // if (placemarks.isNotEmpty) {
+      //   isoCountryCode = placemarks[0].isoCountryCode;
+      //   LogUtil.debug(_tag, 'CountryCode found is $isoCountryCode');
+      // }
+      if (kIsWeb || Platform.isLinux) {
+        // LogUtil.debug(_tag, 'Overriding the location, as the current country is not AU/Australia');
+        LogUtil.debug(_tag, 'Overriding the actual location with static one, as the Browser / Linux does not allow mocking the location');
         return Future.value(GetLocationResult(
             LocationInitResultCode.success,
             Future.value(GeoLocationData(

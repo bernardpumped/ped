@@ -49,7 +49,7 @@ class UnderMaintenanceService {
         return UnderMaintenance(underMaintenance, underMaintenanceMsg);
       }
     }
-    return UnderMaintenance(false, 'Not Under Maintenance');;
+    return UnderMaintenance(false, 'Not Under Maintenance');
   }
 
   void registerSubscription(final String key, final BuildContext context, final Function function) {

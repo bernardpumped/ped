@@ -146,8 +146,8 @@ class _SplashScreenState extends State<SplashScreen> {
       bool isUnderMaintenance = underMaintenanceR.isUnderMaintenance;
       if (isUnderMaintenance) {
         final String underMaintenanceMsg = underMaintenanceR.underMaintenanceMessage;
-        ScaffoldMessenger.of(context)
-            .showSnackBar(WidgetUtils.buildSnackBar(context, underMaintenanceMsg, 12 * 60 * 60 * 30, 'Exit', () {
+        ScaffoldMessenger.of(context).showSnackBar(WidgetUtils.buildSnackBar2(
+            underMaintenanceMsg, Theme.of(context).dialogBackgroundColor, 12 * 60 * 60 * 30, 'Exit', () {
           if (Platform.isIOS) {
             // Apple does not like  this, as it is against their Human Interface Guidelines.
             exit(0);
@@ -174,18 +174,18 @@ class _SplashScreenState extends State<SplashScreen> {
       final LocationInitResultCode code = locationResult.locationInitResultCode;
       switch (code) {
         case LocationInitResultCode.locationServiceDisabled:
-          ScaffoldMessenger.of(context)
-              .showSnackBar(WidgetUtils.buildSnackBar(context, 'Location Service is disabled', 2, '', () {}));
+          ScaffoldMessenger.of(context).showSnackBar(WidgetUtils.buildSnackBar2(
+              'Location Service is disabled', Theme.of(context).dialogBackgroundColor, 2, '', () {}));
           break;
         case LocationInitResultCode.permissionDenied:
-          ScaffoldMessenger.of(context)
-              .showSnackBar(WidgetUtils.buildSnackBar(context, 'Location Service is disabled', 2, '', () {}));
+          ScaffoldMessenger.of(context).showSnackBar(WidgetUtils.buildSnackBar2(
+              'Location Service is disabled', Theme.of(context).dialogBackgroundColor, 2, '', () {}));
           break;
         case LocationInitResultCode.notFound:
-          WidgetUtils.buildSnackBar(context, 'Location Not Found', 2, '', () {});
+          WidgetUtils.buildSnackBar2('Location Not Found', Theme.of(context).dialogBackgroundColor, 2, '', () {});
           break;
         case LocationInitResultCode.failure:
-          WidgetUtils.buildSnackBar(context, 'Location Failure', 2, '', () {});
+          WidgetUtils.buildSnackBar2('Location Failure', Theme.of(context).dialogBackgroundColor, 2, '', () {});
           break;
         case LocationInitResultCode.success:
           _takeActionOnLocation(locationResult);

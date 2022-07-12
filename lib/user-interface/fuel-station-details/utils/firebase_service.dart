@@ -24,7 +24,6 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
 class SignedInUser {
-  static const _tag = 'SignedInUser';
   bool isMockUser = false;
   User? user;
 
@@ -87,7 +86,7 @@ class FirebaseService {
     'windows': []
   };
 
-  static final List<String> _webSupport = [googleIdProvider];
+  static final List<String> _webSupport = [/*googleIdProvider*/];
 
   late FirebaseAuth _auth;
   late GoogleSignIn _googleSignIn;
@@ -101,7 +100,7 @@ class FirebaseService {
         _googleSignIn = GoogleSignIn();
       }
     } else {
-      LogUtil.debug(_tag, 'Platform does not support firebase');
+      LogUtil.debug(_tag, 'Platform does not yet support firebase');
     }
   }
 

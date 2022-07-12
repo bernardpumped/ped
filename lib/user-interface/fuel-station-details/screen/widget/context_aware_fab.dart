@@ -269,8 +269,8 @@ class _ContextAwareFabState extends State<ContextAwareFab> with SingleTickerProv
     if (signInResult != null && signInResult) {
       final SignedInUser? signedInUser = service.getSignedInUser();
       if (signedInUser == null) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(WidgetUtils.buildSnackBar(context, 'Cannot edit without signing in', 10, 'DISMISS', () => {}));
+        ScaffoldMessenger.of(context).showSnackBar(WidgetUtils.buildSnackBar2(
+            'Cannot edit without signing in', Theme.of(context).dialogBackgroundColor, 10, 'DISMISS', () => {}));
         return;
       }
       signedInUser.getToken().then((token) async {
@@ -292,8 +292,8 @@ class _ContextAwareFabState extends State<ContextAwareFab> with SingleTickerProv
         }
       });
     } else {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(WidgetUtils.buildSnackBar(context, 'Cannot edit without signing in', 10, 'DISMISS', () => {}));
+      ScaffoldMessenger.of(context).showSnackBar(WidgetUtils.buildSnackBar2(
+          'Cannot edit without signing in', Theme.of(context).dialogBackgroundColor, 10, 'DISMISS', () => {}));
     }
   }
 

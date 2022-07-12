@@ -63,8 +63,8 @@ class PumpedSignInWidget extends StatelessWidget {
       Navigator.of(context).pop(signedIn);
     } catch (e) {
       if (e is FirebaseAuthException) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            WidgetUtils.buildSnackBar(context, 'Error happened while logging in', 10, 'DISMISS', () => {}));
+        ScaffoldMessenger.of(context).showSnackBar(WidgetUtils.buildSnackBar2(
+            'Error happened while logging in', Theme.of(context).dialogBackgroundColor, 10, 'DISMISS', () => {}));
       }
     }
   }

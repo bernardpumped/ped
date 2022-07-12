@@ -18,10 +18,13 @@
 
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station_address.dart';
+import 'package:pumped_end_device/user-interface/fuel-station-details/screen/tabs/contact/widget/feature_support.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class RateWidget extends StatelessWidget {
   static const _tag = 'RateWidget';
@@ -44,6 +47,16 @@ class RateWidget extends StatelessWidget {
           const Text('Rate', style: TextStyle(color: Colors.indigo, fontSize: 14, fontWeight: FontWeight.w500))
         ]),
         onTap: () async {
+          if (kIsWeb) {
+            if (!FeatureSupport.webPlatform.contains(FeatureSupport.ratingFeature)) {
+              LogUtil.debug(_tag, 'Web does not yet support ${FeatureSupport.ratingFeature}');
+              return;
+            }
+          }
+          if (!FeatureSupport.rating.contains(Platform.operatingSystem)) {
+            LogUtil.debug(_tag, '${Platform.operatingSystem} does not yet support ${FeatureSupport.ratingFeature}');
+            return;
+          }
           final bool launchRateAction = await _rateAction();
           if (!launchRateAction) {
             LogUtil.debug(_tag, 'Unable to launch Rating action');
@@ -88,8 +101,8 @@ class RateWidget extends StatelessWidget {
         return false;
       }
     } else {
-      if (await canLaunch(googleRatingUrl)) {
-        return await launch(googleRatingUrl);
+      if (await canLaunchUrlString(googleRatingUrl)) {
+        return await canLaunchUrlString(googleRatingUrl);
       } else {
         return false;
       }
