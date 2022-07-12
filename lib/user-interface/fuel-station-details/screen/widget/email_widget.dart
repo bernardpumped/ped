@@ -72,7 +72,7 @@ class EmailNotificationWidget extends StatelessWidget {
     'qld': ['bernard@pumpedfuel.com'],
     'sa': ['bernard@pumpedfuel.com'],
     'fwa': ['bernard@pumpedfuel.com'],
-    'tas': ['bernard@pumpedfuel.com],
+    'tas': ['bernard@pumpedfuel.com'],
     'nt': ['bernard@pumpedfuel.com']
   };
 }
