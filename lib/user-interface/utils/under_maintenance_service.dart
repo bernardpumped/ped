@@ -20,6 +20,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
@@ -33,14 +34,14 @@ class UnderMaintenanceService {
   static final UnderMaintenanceService instance = UnderMaintenanceService._();
 
   UnderMaintenanceService._(){
-    if (Platform.isAndroid || Platform.isIOS) {
+    if (kIsWeb || Platform.isAndroid || Platform.isIOS) {
       underMaintenanceDocRef = FirebaseFirestore.instance.collection("pumped-documents").doc("under-maintenance");
       initialized = true;
     }
   }
 
   Future<UnderMaintenance> isUnderMaintenance() async {
-    if (Platform.isAndroid || Platform.isIOS) {
+    if (kIsWeb || Platform.isAndroid || Platform.isIOS) {
       final DocumentSnapshot snapshot = await underMaintenanceDocRef.get();
       final bool underMaintenance = snapshot['underMaintenance'] ?? false;
       if (underMaintenance) {
@@ -52,7 +53,7 @@ class UnderMaintenanceService {
   }
 
   void registerSubscription(final String key, final BuildContext context, final Function function) {
-    if (Platform.isAndroid || Platform.isIOS) {
+    if (kIsWeb || Platform.isAndroid || Platform.isIOS) {
       if (subscriptionMap.containsKey(key)) {
         LogUtil.debug(_tag, 'Subscription already registered for key $key');
       } else {
@@ -69,7 +70,7 @@ class UnderMaintenanceService {
   }
 
   void cancelSubscription(final String key) {
-    if (Platform.isAndroid || Platform.isIOS) {
+    if (kIsWeb || Platform.isAndroid || Platform.isIOS) {
       if (subscriptionMap.containsKey(key)) {
         subscriptionMap[key]?.cancel();
         LogUtil.debug(_tag, 'Cancelled subscription with key $key');

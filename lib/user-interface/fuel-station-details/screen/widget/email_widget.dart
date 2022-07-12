@@ -52,27 +52,27 @@ class EmailNotificationWidget extends StatelessWidget {
     final List<String>? toEmailAddresses = _faToEmailAddressMap[sourceName];
     final String emailAddress =
         (toEmailAddresses == null || toEmailAddresses.isEmpty) ? 'bernard@pumpedfuel.com' : toEmailAddresses.join(',');
-    final String emailUrl =
-        Uri.encodeFull("mailto:$emailAddress?subject=$emailSubject&body=$emailBody&cc:bernard@pumpedfuel.com");
+    final Uri emailUri =
+        Uri.parse("mailto:$emailAddress?subject=$emailSubject&body=$emailBody&cc=bernard@pumpedfuel.com");
     try {
-      if (await canLaunch(emailUrl)) {
-        await launch(emailUrl);
+      if (await canLaunchUrl(emailUri)) {
+        await launchUrl(emailUri);
       } else {
-        LogUtil.debug(_tag, 'Cannot send email $emailUrl');
+        LogUtil.debug(_tag, 'Cannot send email $emailUri');
         function.call();
       }
     } on Exception catch (e) {
-      LogUtil.debug(_tag, 'Exception invoking emailUrl $emailUrl $e');
+      LogUtil.debug(_tag, 'Exception invoking emailUrl $emailUri $e');
       function.call();
     }
   }
 
   static const _faToEmailAddressMap = {
-    'nsw': ['support@onegov.nsw.gov.au', 'fuelchecknews@customerservice.nsw.gov.au'],
-    'qld': ['fuelprices@dnrme.qld.gov.au', 'support@fuelpricesqld.com.au'],
-    'sa': ['fuelpricingscheme@sa.gov.au', 'support@safuelpricinginformation.com.au'],
-    'fwa': ['fuelwatch@dmirs.wa.gov.au', 'fuelwatch@commerce.wa.gov.au'],
-    'tas': ['support@onegov.nsw.gov.au', 'fuelchecknews@customerservice.nsw.gov.au'],
-    'nt': ['consumer@nt.gov.au']
+    'nsw': ['bernard@pumpedfuel.com'],
+    'qld': ['bernard@pumpedfuel.com'],
+    'sa': ['bernard@pumpedfuel.com'],
+    'fwa': ['bernard@pumpedfuel.com'],
+    'tas': ['bernard@pumpedfuel.com],
+    'nt': ['bernard@pumpedfuel.com']
   };
 }

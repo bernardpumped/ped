@@ -86,7 +86,7 @@ class _EditFuelPriceWidgetState extends State<EditFuelPriceWidget> {
             right: 25,
             child: Visibility(
                 visible: _fabVisible,
-                child: EditActionButton(undoButtonAction: _onFuelPriceChangeUndo, saveButtonAction: _onFuelPriceSave)))
+                child: EditActionButton(undoButtonAction: _onFuelPriceChangeUndo, saveButtonAction: _onFuelPriceSave, tag: _tag)))
       ])
     ]);
   }

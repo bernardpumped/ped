@@ -225,11 +225,13 @@ class _NearbyStationsScreenState extends State<NearbyStationsScreen> {
 
   RenderObjectWidget _getIntermediateUI(final NearByFuelStations? data) {
     if (data != null) {
+      LogUtil.debug(_tag, 'Data was NOT found to be null');
       return Stack(children: [
         _nearbyFuelStationsWidget(data),
         const Center(child: RefreshProgressIndicator(backgroundColor: Colors.indigo, color: Colors.white))
       ]);
     } else {
+      LogUtil.debug(_tag, 'Data was found to be null');
       return const Center(child: RefreshProgressIndicator(backgroundColor: Colors.indigo, color: Colors.white));
     }
   }

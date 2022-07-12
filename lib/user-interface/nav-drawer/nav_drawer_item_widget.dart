@@ -31,7 +31,14 @@ class NavDrawerItemWidget extends StatelessWidget {
   final bool selected;
   final NavDrawerColorScheme colorScheme = getIt.get<NavDrawerColorScheme>(instanceName: navDrawerColorSchemeName);
 
-  NavDrawerItemWidget({Key? key, required this.itemIndex, required this.label, required this.icon, required this.callback, required this.selected}) : super(key: key);
+  NavDrawerItemWidget(
+      {Key? key,
+      required this.itemIndex,
+      required this.label,
+      required this.icon,
+      required this.callback,
+      required this.selected})
+      : super(key: key);
 
   @override
   Widget build(final BuildContext context) {
@@ -39,26 +46,22 @@ class NavDrawerItemWidget extends StatelessWidget {
     final textColor = selected ? colorScheme.selectedTextColor : colorScheme.textColor;
     final iconColor = selected ? colorScheme.selectedIconColor : colorScheme.iconColor;
     return GestureDetector(
-      onTap: () {
-        LogUtil.debug(_tag, '$label is currently selected');
-        callback();
-      },
-      child: Container(
-        margin: const EdgeInsets.only(right: 25),
-        padding: const EdgeInsets.all(15),
-        decoration: BoxDecoration(
-            color: backgroundColor,
-            shape: BoxShape.rectangle,
-            borderRadius: const BorderRadius.horizontal(right: Radius.circular(50.0))),
-        child: Row(children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 20),
-            child: Icon(icon, color: iconColor),
-          ),
-          Padding(
-              padding: const EdgeInsets.only(left: 20),
-              child: Text(label, style: TextStyle(color: textColor, fontSize: 16)))]),
-      ),
-    );
+        onTap: () {
+          LogUtil.debug(_tag, '$label is currently selected');
+          callback();
+        },
+        child: Container(
+            margin: const EdgeInsets.only(right: 25),
+            padding: const EdgeInsets.all(15),
+            decoration: BoxDecoration(
+                color: backgroundColor,
+                shape: BoxShape.rectangle,
+                borderRadius: const BorderRadius.horizontal(right: Radius.circular(50.0))),
+            child: Row(children: [
+              Padding(padding: const EdgeInsets.only(left: 20), child: Icon(icon, color: iconColor)),
+              Padding(
+                  padding: const EdgeInsets.only(left: 20),
+                  child: Text(label, style: TextStyle(color: textColor, fontSize: 16)))
+            ])));
   }
 }

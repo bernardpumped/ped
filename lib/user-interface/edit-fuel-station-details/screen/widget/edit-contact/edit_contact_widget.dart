@@ -102,7 +102,7 @@ class _EditContactWidgetState extends State<EditContactWidget> {
             child: Visibility(
                 visible: _fabVisible,
                 child:
-                    EditActionButton(undoButtonAction: _onContactChangeUndo, saveButtonAction: _onAddressChangeSave)))
+                    EditActionButton(undoButtonAction: _onContactChangeUndo, saveButtonAction: _onAddressChangeSave, tag: _tag)))
       ])
     ]);
   }

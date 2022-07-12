@@ -18,6 +18,7 @@
 
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pumped_end_device/data/local/location/geo_location_data.dart';
@@ -136,7 +137,8 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void _checkPumpedAvailability() async {
-    if (Platform.isLinux) {
+    // On browsers, checks like Platform.isLinux throw exceptions.
+    if (!kIsWeb && Platform.isLinux) {
       _getLocation();
       return;
     }

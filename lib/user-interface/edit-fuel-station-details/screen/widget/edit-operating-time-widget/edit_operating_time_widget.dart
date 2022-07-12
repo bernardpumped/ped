@@ -82,7 +82,7 @@ class _EditOperatingTimeWidgetState extends State<EditOperatingTimeWidget> {
             child: Visibility(
                 visible: _fabVisible,
                 child: EditActionButton(
-                    undoButtonAction: _onOperatingTimeChangeUndo, saveButtonAction: _onOperatingTimeSave)))
+                    undoButtonAction: _onOperatingTimeChangeUndo, saveButtonAction: _onOperatingTimeSave, tag: _tag)))
       ])
     ]);
   }

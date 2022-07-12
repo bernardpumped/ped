@@ -19,6 +19,7 @@
 import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pumped_end_device/data/local/location/location_data_source.dart';
@@ -70,7 +71,7 @@ const fsDetailsScreenColorSchemeName = 'fsDetailsScreenColorScheme';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  if (Platform.isIOS || Platform.isAndroid) {
+  if (kIsWeb || Platform.isIOS || Platform.isAndroid) {
     await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   }
   runApp(const PumpedApp());
