@@ -18,7 +18,6 @@
 
 import 'dart:async';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:pumped_end_device/data/local/dao/market_region_zone_config_dao.dart';
 import 'package:pumped_end_device/data/local/location/geo_location_wrapper.dart';
@@ -45,6 +44,7 @@ import 'package:pumped_end_device/user-interface/fuel-stations/params/fuel_type_
 import 'package:pumped_end_device/user-interface/fuel-stations/service/near_by_fuel_stations_service.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/screens/widgets/no_near_by_stations_widget.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/service/fuel_type_switcher_service.dart';
+import 'package:pumped_end_device/user-interface/utils/under_maintenance_service.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/user-interface/widgets/pumped_app_bar.dart';
 import 'package:pumped_end_device/util/log_util.dart';
@@ -65,6 +65,8 @@ class _NearbyStationsScreenState extends State<NearbyStationsScreen> {
 
   final NearByFuelStationsService _nearByFuelStationsService =
       NearByFuelStationsService(getIt.get<LocationDataSource>(instanceName: locationDataSourceInstanceName));
+  final UnderMaintenanceService _underMaintenanceService =
+      getIt.get<UnderMaintenanceService>(instanceName: underMaintenanceServiceName);
   final LocationUtils _locationUtils =
       LocationUtils(getIt.get<LocationDataSource>(instanceName: locationDataSourceInstanceName));
   final FuelTypeSwitcherService _fuelTypeSwitcherDataSource = FuelTypeSwitcherService();
@@ -88,7 +90,6 @@ class _NearbyStationsScreenState extends State<NearbyStationsScreen> {
 
   LocationServiceSubscription? _locationServiceSubscription;
   bool _locationServiceSubscriptionActive = false;
-  StreamSubscription<DocumentSnapshot>? _underMaintenanceSubscription;
 
   @override
   void initState() {
@@ -101,7 +102,7 @@ class _NearbyStationsScreenState extends State<NearbyStationsScreen> {
       whenNearbyFuelStationFutureComplete();
     });
     _nearbyFuelStationsFuture?.then((value) => showDisclaimer(value));
-    _underMaintenanceSubscription = underMaintenanceDocRef.snapshots().listen((event) {
+    _underMaintenanceService.registerSubscription(_tag, context, (event, context) {
       if (!mounted) return;
       WidgetUtils.showPumpedUnavailabilityMessage(event, context);
       LogUtil.debug(_tag, '${event.data}');
@@ -114,10 +115,7 @@ class _NearbyStationsScreenState extends State<NearbyStationsScreen> {
       _locationServiceSubscription?.cancel(() => _locationServiceSubscriptionActive = false);
     }
     _fuelTypeSwitcherDataStreamController.close();
-    if (_underMaintenanceSubscription != null) {
-      _underMaintenanceSubscription!.cancel();
-      LogUtil.debug(_tag, 'Cancelled under-maintenance subscription');
-    }
+    _underMaintenanceService.cancelSubscription(_tag);
     super.dispose();
   }
 
@@ -181,6 +179,8 @@ class _NearbyStationsScreenState extends State<NearbyStationsScreen> {
         ]));
   }
 
+  NearByFuelStations? data;
+
   Widget _getNearbyFuelStationsFutureBuilder() {
     return FutureBuilder<NearByFuelStations>(
         future: _nearbyFuelStationsFuture,
@@ -189,16 +189,16 @@ class _NearbyStationsScreenState extends State<NearbyStationsScreen> {
             case ConnectionState.none:
             case ConnectionState.waiting:
             case ConnectionState.active:
-              return const Center(child: CircularProgressIndicator());
+              return _getIntermediateUI(data);
             case ConnectionState.done:
             default:
               if (snapshot.hasError) {
                 LogUtil.debug(_tag, 'Error loading nearby fuel stations ${snapshot.error}');
                 return const NoNearByStationsWidget();
               } else if (snapshot.hasData) {
-                final NearByFuelStations data = snapshot.data!;
-                lastQueryLatitude = data.latitude;
-                lastQueryLongitude = data.longitude;
+                data = snapshot.data!;
+                lastQueryLatitude = data!.latitude;
+                lastQueryLongitude = data!.longitude;
                 return RefreshIndicator(
                     color: Colors.blue,
                     onRefresh: () async {
@@ -215,12 +215,25 @@ class _NearbyStationsScreenState extends State<NearbyStationsScreen> {
                         LogUtil.debug(_tag, 'Not triggering the search as time has not yet passed');
                       }
                     },
-                    child: _nearbyFuelStationsWidget(data));
+                    child: _nearbyFuelStationsWidget(data!));
               } else {
-                return const Center(child: CircularProgressIndicator());
+                return _getIntermediateUI(data);
               }
           }
         });
+  }
+
+  RenderObjectWidget _getIntermediateUI(final NearByFuelStations? data) {
+    if (data != null) {
+      LogUtil.debug(_tag, 'Data was NOT found to be null');
+      return Stack(children: [
+        _nearbyFuelStationsWidget(data),
+        const Center(child: RefreshProgressIndicator(backgroundColor: Colors.indigo, color: Colors.white))
+      ]);
+    } else {
+      LogUtil.debug(_tag, 'Data was found to be null');
+      return const Center(child: RefreshProgressIndicator(backgroundColor: Colors.indigo, color: Colors.white));
+    }
   }
 
   void _locationChangeListener(final double latitude, final double longitude) async {

@@ -56,6 +56,12 @@ class _SuggestEditWidgetState extends State<SuggestEditWidget> {
   late FuelStation _fuelStation;
 
   @override
+  void initState() {
+    super.initState();
+    _fuelStation = widget._params.fuelStation;
+  }
+
+  @override
   Widget build(final BuildContext context) {
     return Column(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.start, children: [
       _getTitleWidget(),
@@ -67,7 +73,7 @@ class _SuggestEditWidgetState extends State<SuggestEditWidget> {
             right: 25,
             child: Visibility(
                 visible: _fabVisible,
-                child: EditActionButton(undoButtonAction: _onFeaturesEditUndo, saveButtonAction: _onFeaturesEditSave)))
+                child: EditActionButton(undoButtonAction: _onFeaturesEditUndo, saveButtonAction: _onFeaturesEditSave, tag: _tag)))
       ])
     ]);
   }
@@ -181,6 +187,8 @@ class _SuggestEditWidgetState extends State<SuggestEditWidget> {
             onChanged: _onChangeListener,
             cursorColor: Colors.indigo,
             decoration: const InputDecoration(
+                filled: true,
+                fillColor: Colors.white,
                 focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.indigo, width: 1.5)),
                 border: OutlineInputBorder(borderSide: BorderSide(color: Colors.indigo)),
                 hintText: 'Enter your suggestion',

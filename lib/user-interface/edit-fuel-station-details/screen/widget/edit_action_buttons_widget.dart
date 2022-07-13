@@ -19,9 +19,10 @@
 import 'package:flutter/material.dart';
 
 class EditActionButton extends StatelessWidget {
+  final String tag;
   final Function undoButtonAction;
   final Function saveButtonAction;
-  const EditActionButton({required this.undoButtonAction, required this.saveButtonAction, Key? key}) : super(key: key);
+  const EditActionButton({required this.undoButtonAction, required this.saveButtonAction, required this.tag, Key? key}) : super(key: key);
 
   @override
   Widget build(final BuildContext context) {
@@ -32,6 +33,7 @@ class EditActionButton extends StatelessWidget {
           width: 120,
           height: 40,
           child: FloatingActionButton.extended(
+              heroTag: 'undo$tag',
               backgroundColor: Colors.indigo,
               onPressed: () {
                 undoButtonAction();
@@ -45,6 +47,7 @@ class EditActionButton extends StatelessWidget {
           width: 120,
           height: 40,
           child: FloatingActionButton.extended(
+              heroTag: 'save$tag',
               backgroundColor: Colors.indigo,
               onPressed: () {
                 saveButtonAction();

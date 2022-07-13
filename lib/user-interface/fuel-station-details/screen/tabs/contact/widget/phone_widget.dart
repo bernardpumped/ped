@@ -16,7 +16,11 @@
  *     along with Pumped End Device.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:pumped_end_device/user-interface/fuel-station-details/screen/tabs/contact/widget/feature_support.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -48,6 +52,16 @@ class PhoneWidget extends StatelessWidget {
   }
 
   static void _launchCaller(final String phone, final Function function) async {
+    if (kIsWeb) {
+      if (!FeatureSupport.webPlatform.contains(FeatureSupport.callFeature)) {
+        LogUtil.debug(_tag, 'Web does not yet support ${FeatureSupport.callFeature}');
+        return;
+      }
+    }
+    if (!FeatureSupport.call.contains(Platform.operatingSystem)) {
+      LogUtil.debug(_tag, '${Platform.operatingSystem} does not yet support ${FeatureSupport.callFeature}');
+      return;
+    }
     final String phoneUrl = Uri.encodeFull("tel:$phone");
     try {
       if (await canLaunch(phoneUrl)) {

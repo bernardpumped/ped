@@ -130,7 +130,17 @@ class _FuelStationSwitcherWidgetState extends State<FuelStationSwitcherWidget> {
                     fuelStationType = FuelStationType.favourite;
                   });
                 })),
+        const SizedBox(height: 20),
         Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+          ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  primary: colorScheme.fuelStationSwitcherWidgetTextColor,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15))),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('Cancel', style: TextStyle(color: colorScheme.fuelStationSwitcherWidgetButtonTextColor))),
+          const SizedBox(width: 40),
           ElevatedButton(
               style: ElevatedButton.styleFrom(
                   primary: colorScheme.fuelStationSwitcherWidgetTextColor,

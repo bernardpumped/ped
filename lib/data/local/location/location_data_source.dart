@@ -17,6 +17,7 @@
  */
 
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
@@ -38,12 +39,12 @@ class LocationDataSource {
   LocationDataSource(this._geoLocationWrapper, this._platformWrapper);
 
   Future<GetLocationResult> getLocationData({String thread = 'default'}) async {
-    if (!_platformWrapper.deviceIsBrowser() && _platformWrapper.platformIsLinux()) {
-      return Future.value(GetLocationResult(
-          LocationInitResultCode.success,
-          Future.value(GeoLocationData(
-              latitude: Places.fishBurnerSydney.latitude, longitude: Places.fishBurnerSydney.longitude, altitude: 0))));
-    }
+    // if (!_platformWrapper.deviceIsBrowser() && _platformWrapper.platformIsLinux()) {
+    //   return Future.value(GetLocationResult(
+    //       LocationInitResultCode.success,
+    //       Future.value(GeoLocationData(
+    //           latitude: Places.fishBurnerSydney.latitude, longitude: Places.fishBurnerSydney.longitude, altitude: 0))));
+    // }
     LogUtil.debug(_tag, "Checking Location Service Enabled");
     bool serviceEnabled = await _geoLocationWrapper.isLocationServiceEnabled();
     LogUtil.debug(_tag, "Location Service is Enabled ? $serviceEnabled");
@@ -66,8 +67,15 @@ class LocationDataSource {
     try {
       final Position position = await _geoLocationWrapper.getCurrentPosition();
       LogUtil.debug(_tag, "Location found as : $position");
-      if (kIsWeb) {
-        LogUtil.debug(_tag, 'Returning from kIsWeb');
+      // final List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
+      // String? isoCountryCode;
+      // if (placemarks.isNotEmpty) {
+      //   isoCountryCode = placemarks[0].isoCountryCode;
+      //   LogUtil.debug(_tag, 'CountryCode found is $isoCountryCode');
+      // }
+      if (kIsWeb || Platform.isLinux) {
+        // LogUtil.debug(_tag, 'Overriding the location, as the current country is not AU/Australia');
+        LogUtil.debug(_tag, 'Overriding the actual location with static one, as the Browser / Linux does not allow mocking the location');
         return Future.value(GetLocationResult(
             LocationInitResultCode.success,
             Future.value(GeoLocationData(
@@ -76,16 +84,16 @@ class LocationDataSource {
                 altitude: 0))));
       } else {
         LogUtil.debug(_tag, 'Returning from !kIsWeb');
-        // return Future.value(GetLocationResult(
-        //     LocationInitResultCode.success,
-        //     Future.value(GeoLocationData(
-        //         latitude: position.latitude, longitude: position.longitude, altitude: position.altitude))));
-        return Future.value(GetLocationResult(LocationInitResultCode.success,
+        return Future.value(GetLocationResult(
+            LocationInitResultCode.success,
             Future.value(GeoLocationData(
-              latitude: Places.cairnsQld.latitude,
-              longitude: Places.cairnsQld.longitude,
-              altitude: 1,
-            ))));
+                latitude: position.latitude, longitude: position.longitude, altitude: position.altitude))));
+        // return Future.value(GetLocationResult(LocationInitResultCode.success,
+        //     Future.value(GeoLocationData(
+        //       latitude: Places.cairnsQld.latitude,
+        //       longitude: Places.cairnsQld.longitude,
+        //       altitude: 1,
+        //     ))));
       }
     } catch (e) {
       return Future.value(GetLocationResult(LocationInitResultCode.failure, null));

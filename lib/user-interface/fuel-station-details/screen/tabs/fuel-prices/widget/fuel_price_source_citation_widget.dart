@@ -170,7 +170,7 @@ class FuelPriceSourceCitationWidget extends StatelessWidget {
     if (fuelQuote.publishDate != null) {
       publishDate = dateFormat.format(DateTime.fromMillisecondsSinceEpoch(fuelQuote.publishDate! * 1000).toUtc());
     }
-    String publishDateTxt = publishDate != null ? 'publish date : $publishDate' : '';
+    String publishDateTxt = publishDate != null ? ' publish date : $publishDate' : '';
     final String deviceDate = dateFormat.format(DateTime.now().toUtc());
     String message =
         'Hello fuel support it appears fuelStation Id: ${fuelStation.stationId} name : ${fuelStation.fuelStationName}'

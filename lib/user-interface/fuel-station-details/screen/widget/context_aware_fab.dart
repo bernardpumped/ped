@@ -233,6 +233,7 @@ class _ContextAwareFabState extends State<ContextAwareFab> with SingleTickerProv
       final bool editFeatures = false,
       final bool suggestEdit = false}) {
     //https://petercoding.com/firebase/2021/05/24/using-google-sign-in-with-firebase-in-flutter/
+    //https://petercoding.com/firebase/2021/06/14/using-facebook-authentication-with-firebase-in-flutter/
 
     final SignedInUser? signedInUser = service.getSignedInUser();
     if (signedInUser == null) {
@@ -268,8 +269,8 @@ class _ContextAwareFabState extends State<ContextAwareFab> with SingleTickerProv
     if (signInResult != null && signInResult) {
       final SignedInUser? signedInUser = service.getSignedInUser();
       if (signedInUser == null) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(WidgetUtils.buildSnackBar(context, 'Cannot edit without signing in', 10, 'DISMISS', () => {}));
+        ScaffoldMessenger.of(context).showSnackBar(WidgetUtils.buildSnackBar2(
+            'Cannot edit without signing in', Theme.of(context).dialogBackgroundColor, 10, 'DISMISS', () => {}));
         return;
       }
       signedInUser.getToken().then((token) async {
@@ -291,8 +292,8 @@ class _ContextAwareFabState extends State<ContextAwareFab> with SingleTickerProv
         }
       });
     } else {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(WidgetUtils.buildSnackBar(context, 'Cannot edit without signing in', 10, 'DISMISS', () => {}));
+      ScaffoldMessenger.of(context).showSnackBar(WidgetUtils.buildSnackBar2(
+          'Cannot edit without signing in', Theme.of(context).dialogBackgroundColor, 10, 'DISMISS', () => {}));
     }
   }
 

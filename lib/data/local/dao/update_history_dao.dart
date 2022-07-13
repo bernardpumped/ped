@@ -27,7 +27,7 @@ class UpdateHistoryDao {
   static final UpdateHistoryDao instance = UpdateHistoryDao._();
   UpdateHistoryDao._();
 
-  Future<dynamic> deleteUpdateHistory() async {
+  Future<int> deleteUpdateHistory() async {
     final db = Localstore.instance;
     final Map<String, dynamic>? records = await db.collection(_collectionUpdateHistory).get();
     if (records != null && records.isNotEmpty) {
@@ -37,7 +37,9 @@ class UpdateHistoryDao {
         LogUtil.debug(_tag, 'Deleting UpdateHistory record with id $updateHistoryRecordId');
         db.collection(_collectionUpdateHistory).doc(updateHistoryRecordId).delete();
       }
+      return records.length;
     }
+    return 0;
   }
 
   Future<dynamic> insertUpdateHistory(final UpdateHistory updateHistory) async {

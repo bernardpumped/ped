@@ -20,7 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/util/log_util.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class NotificationWidget extends StatelessWidget {
   static const _tag = 'NotificationWidget';
@@ -48,8 +48,8 @@ class NotificationWidget extends StatelessWidget {
   void _sendNotification(final Function function) async {
     final String notificationUrl = _getNotificationUrl();
     try {
-      if (await canLaunch(notificationUrl)) {
-        await launch(notificationUrl);
+      if (await canLaunchUrlString(notificationUrl)) {
+        await canLaunchUrlString(notificationUrl);
       } else {
         LogUtil.debug(_tag, 'Cannot send email $notificationUrl');
         function.call();

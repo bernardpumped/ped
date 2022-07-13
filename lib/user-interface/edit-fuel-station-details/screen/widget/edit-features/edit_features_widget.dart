@@ -86,7 +86,7 @@ class _EditFeaturesWidgetState extends State<EditFeaturesWidget> {
             right: 25,
             child: Visibility(
                 visible: _fabVisible,
-                child: EditActionButton(undoButtonAction: _onFeaturesEditUndo, saveButtonAction: _onFeaturesEditSave)))
+                child: EditActionButton(undoButtonAction: _onFeaturesEditUndo, saveButtonAction: _onFeaturesEditSave, tag: _tag)))
       ])
     ]);
   }

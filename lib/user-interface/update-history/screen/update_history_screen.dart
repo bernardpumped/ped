@@ -18,7 +18,6 @@
 
 import 'dart:async';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:pumped_end_device/data/local/dao/update_history_dao.dart';
 import 'package:pumped_end_device/main.dart';
@@ -28,6 +27,7 @@ import 'package:pumped_end_device/user-interface/update-history/model/update_til
 import 'package:pumped_end_device/user-interface/update-history/screen/widget/update_distribution_pie_chart.dart';
 import 'package:pumped_end_device/models/update_history.dart';
 import 'package:pumped_end_device/user-interface/update-history/screen/widget/update_tile.dart';
+import 'package:pumped_end_device/user-interface/utils/under_maintenance_service.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/user-interface/widgets/pumped_app_bar.dart';
 import 'package:pumped_end_device/util/log_util.dart';
@@ -45,12 +45,13 @@ class UpdateHistoryScreen extends StatefulWidget {
 class _UpdateHistoryScreenState extends State<UpdateHistoryScreen> {
   static const _tag = 'UpdateHistoryScreen';
   Future<List<UpdateHistory>>? updateHistoryFuture;
-  StreamSubscription<DocumentSnapshot>? _underMaintenanceSubscription;
+  final UnderMaintenanceService _underMaintenanceService =
+      getIt.get<UnderMaintenanceService>(instanceName: underMaintenanceServiceName);
 
   @override
   void initState() {
     super.initState();
-    _underMaintenanceSubscription = underMaintenanceDocRef.snapshots().listen((event) {
+    _underMaintenanceService.registerSubscription(_tag, context, (event, context) {
       if (!mounted) return;
       WidgetUtils.showPumpedUnavailabilityMessage(event, context);
       LogUtil.debug(_tag, '${event.data}');
@@ -60,10 +61,7 @@ class _UpdateHistoryScreenState extends State<UpdateHistoryScreen> {
 
   @override
   void dispose() {
-    if (_underMaintenanceSubscription != null) {
-      _underMaintenanceSubscription!.cancel();
-      LogUtil.debug(_tag, 'Cancelled under-maintenance subscription');
-    }
+    _underMaintenanceService.cancelSubscription(_tag);
     super.dispose();
   }
 

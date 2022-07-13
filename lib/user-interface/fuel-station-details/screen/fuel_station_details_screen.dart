@@ -25,6 +25,8 @@ import 'package:pumped_end_device/user-interface/fuel-station-details/screen/wid
 import 'package:pumped_end_device/user-interface/fuel-station-details/utils/fuel_station_update_merge_util.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/params/fuel_station_details_param.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/screen/tabs/fuel-prices/fuel_prices_tab.dart';
+import 'package:pumped_end_device/user-interface/utils/under_maintenance_service.dart';
+import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/user-interface/widgets/collapsed_header_widget.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/screen/tabs/promos/widget/no_promotions_widget.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/screen/tabs/promos/widget/promotions_widget.dart';
@@ -51,12 +53,30 @@ class _FuelStationDetailsScreenState extends State<FuelStationDetailsScreen> {
 
   final FuelStationDetailsScreenColorScheme colorScheme =
       getIt.get<FuelStationDetailsScreenColorScheme>(instanceName: fsDetailsScreenColorSchemeName);
+  final UnderMaintenanceService _underMaintenanceService =
+      getIt.get<UnderMaintenanceService>(instanceName: underMaintenanceServiceName);
 
   final FuelStationUpdateMergeUtil _fuelStationUpdateMergeUtil = FuelStationUpdateMergeUtil();
 
   final List<String> _tabs = [_fuelPricesTabHeader, _promotionsTabHeader, _contactTabHeader];
   int _selectedTabIndex = 0;
   bool homeScreenRefreshNeeded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _underMaintenanceService.registerSubscription(_tag, context, (event, context) {
+      if (!mounted) return;
+      WidgetUtils.showPumpedUnavailabilityMessage(event, context);
+      LogUtil.debug(_tag, '${event.data}');
+    });
+  }
+
+  @override
+  void dispose() {
+    _underMaintenanceService.cancelSubscription(_tag);
+    super.dispose();
+  }
 
   /*
     This method is invoked for the results of the updates which

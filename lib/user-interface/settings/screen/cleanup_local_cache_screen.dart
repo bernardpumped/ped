@@ -101,8 +101,43 @@ class _CleanupLocalCacheScreenState extends State<CleanupLocalCacheScreen> {
                 ListTile(
                     contentPadding: const EdgeInsets.only(left: 10, right: 15),
                     trailing: ElevatedButton(
-                        onPressed: () {
-                          cleanUp(context);
+                        onPressed: () async {
+                          List<String> dataToClean = _dataToClean();
+                          if (dataToClean.isNotEmpty) {
+                            String msg = 'Cleaning up ${dataToClean.join(", ")}';
+                            BuildContext? dialogContext;
+                            showDialog(
+                                barrierDismissible: false,
+                                context: context,
+                                builder: (BuildContext context) {
+                                  dialogContext = context;
+                                  return AlertDialog(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(10), side: const BorderSide(width: 0.2)),
+                                      title: const Text("Cleaning data", style: TextStyle(color: Colors.indigo)),
+                                      content: Row(children: [
+                                        Expanded(
+                                            child: Text(msg,
+                                                style:
+                                                    const TextStyle(fontSize: 15, height: 1.4, color: Colors.indigo))),
+                                        const RefreshProgressIndicator(
+                                            backgroundColor: Colors.indigo, color: Colors.white)
+                                      ]));
+                                });
+                            String failedString  = await _cleanUp(context);
+                            if (dialogContext != null) {
+                              Navigator.pop(dialogContext!);
+                            }
+                            if (mounted) {
+                              if (failedString.isNotEmpty) {
+                                WidgetUtils.showToastMessage(context, failedString, Colors.indigo);
+                              } else {
+                                Navigator.pop(context);
+                              }
+                            }
+                          } else {
+                            WidgetUtils.showToastMessage(context, 'Nothing selected to clean', Colors.indigo);
+                          }
                         },
                         style: ButtonStyle(
                             foregroundColor: MaterialStateProperty.all(Colors.white),
@@ -114,72 +149,73 @@ class _CleanupLocalCacheScreenState extends State<CleanupLocalCacheScreen> {
             ])));
   }
 
-  void cleanUp(final BuildContext context) {
+  Future<String> _cleanUp(final BuildContext context) async {
+    bool searchSettingsDeleted = true;
+    bool updateHistoryDeleted = true;
+    bool favouriteStationsDeleted = true;
+    bool hiddenFuelStationsDeleted = true;
     if (_clearSearchSettings || _clearApplicationData) {
-      _cleanUpSearchSettings(context, showToast: false);
+      searchSettingsDeleted = await _cleanUpSearchSettings();
     }
     if (_clearUpdateHistory || _clearApplicationData) {
-      _cleanUpUpdateHistory(context, showToast: false);
+      updateHistoryDeleted = await _cleanUpUpdateHistory();
     }
     if (_clearFavouriteStations || _clearApplicationData) {
-      _cleanUpFavouriteStations(context, showToast: false);
+      favouriteStationsDeleted = await _cleanUpFavouriteStations();
     }
     if (_clearHiddenFuelStations || _clearApplicationData) {
-      _cleanUpHiddenStations(context, showToast: false);
+      hiddenFuelStationsDeleted = await _cleanUpHiddenStations();
     }
+    return _getFailedString(searchSettingsDeleted, updateHistoryDeleted, favouriteStationsDeleted, hiddenFuelStationsDeleted);
+    // Navigator.pop(context);
   }
 
-  void _cleanUpSearchSettings(final BuildContext context, {final bool showToast = true}) {
-    final Future<dynamic> deleteUserConfigFuture =
-        UserConfigurationDao.instance.deleteUserConfiguration(UserConfiguration.defaultUserConfigId);
-    deleteUserConfigFuture.then((result) {
-      LogUtil.debug(_tag, 'User Configuration successfully deleted');
-      if (showToast) {
-        WidgetUtils.showToastMessage(context, 'Search settings reset', Colors.indigo);
-      }
-    }, onError: (error, s) {
+  Future<bool> _cleanUpSearchSettings() async {
+    try {
+      await UserConfigurationDao.instance.deleteUserConfiguration(UserConfiguration.defaultUserConfigId);
+      LogUtil.debug(_tag, '${UserConfiguration.defaultUserConfigId} User Config successfully deleted');
+      await Future.delayed(const Duration(milliseconds: 300));
+    } catch (error, s) {
       LogUtil.debug(_tag, 'Error deleting user configuration $s');
-      WidgetUtils.showToastMessage(context, 'Error resetting Search settings', Colors.indigo);
-    });
+      return false;
+    }
+    return true;
   }
 
-  void _cleanUpUpdateHistory(final BuildContext context, {final bool showToast = true}) {
-    final Future<dynamic> deleteUpdateHistoryFuture = UpdateHistoryDao.instance.deleteUpdateHistory();
-    deleteUpdateHistoryFuture.then((result) {
-      LogUtil.debug(_tag, 'Update History successfully deleted');
-      if (showToast) {
-        WidgetUtils.showToastMessage(context, 'Update History deleted', Colors.indigo);
-      }
-    }, onError: (error, s) {
+  Future<bool> _cleanUpUpdateHistory() async {
+    try {
+      int result = await UpdateHistoryDao.instance.deleteUpdateHistory();
+      LogUtil.debug(_tag, '$result Update History records successfully deleted');
+      await Future.delayed(const Duration(milliseconds: 300));
+    } catch (error, s) {
       LogUtil.debug(_tag, 'Error deleting Update History $s');
-      WidgetUtils.showToastMessage(context, 'Error deleting Update History', Colors.indigo);
-    });
+      return false;
+    }
+    return true;
   }
 
-  void _cleanUpFavouriteStations(final BuildContext context, {final bool showToast = true}) {
-    final Future<int> deleteFavoriteFuelStationsFuture = FavoriteFuelStationsDao.instance.dropFavoriteFuelStations();
-    deleteFavoriteFuelStationsFuture.then((result) {
+  Future<bool> _cleanUpFavouriteStations() async {
+    try {
+      int result = await FavoriteFuelStationsDao.instance.dropFavoriteFuelStations();
       LogUtil.debug(_tag, '$result Favorite fuel-stations successfully deleted');
-      if (showToast) {
-        WidgetUtils.showToastMessage(context, 'Favorite fuel stations deleted', Colors.indigo);
-      }
-    }, onError: (error, s) {
+      await Future.delayed(const Duration(milliseconds: 500));
+    } catch (error, s) {
       LogUtil.debug(_tag, 'Error deleting Favorite fuel stations $s');
-      WidgetUtils.showToastMessage(context, 'Error deleting Favorite fuel stations', Colors.indigo);
-    });
+      return false;
+    }
+    return true;
   }
 
-  void _cleanUpHiddenStations(final BuildContext context, {final bool showToast = true}) {
-    final Future<int> deleteAllHiddenResultsFuture = HiddenResultDao.instance.deleteAllHiddenResults();
-    deleteAllHiddenResultsFuture.then((result) {
+  Future<bool> _cleanUpHiddenStations() async {
+    try {
+      int result = await HiddenResultDao.instance.deleteAllHiddenResults();
       LogUtil.debug(_tag, '$result Hidden fuel-stations successfully deleted');
-      if (showToast) {
-        WidgetUtils.showToastMessage(context, 'Hidden fuel-stations deleted', Colors.indigo);
-      }
-    }, onError: (error, s) {
+      await Future.delayed(const Duration(milliseconds: 300));
+    } catch (error, s) {
       LogUtil.debug(_tag, 'Error deleting Hidden Fuel Stations $s');
-      WidgetUtils.showToastMessage(context, 'Error deleting Hidden Fuel Stations', Colors.indigo);
-    });
+      return false;
+    }
+    return true;
   }
 
   bool _clearSearchSettings = false;
@@ -205,5 +241,60 @@ class _CleanupLocalCacheScreenState extends State<CleanupLocalCacheScreen> {
                 onChanged: onChangeFunction,
                 activeColor: Colors.indigo,
                 focusColor: Colors.indigo)));
+  }
+
+  List<String> _dataToClean() {
+    if (_clearApplicationData) {
+      return [favFuelStations, hdnFuelStations, srchSettings, updtHistory];
+    } else {
+      List<String> dataToClean = [];
+      if (_clearFavouriteStations) {
+        dataToClean.add(favFuelStations);
+      }
+      if (_clearUpdateHistory) {
+        dataToClean.add(updtHistory);
+      }
+      if (_clearSearchSettings) {
+        dataToClean.add(srchSettings);
+      }
+      if (_clearHiddenFuelStations) {
+        dataToClean.add(hdnFuelStations);
+      }
+      return dataToClean;
+    }
+  }
+
+  static const favFuelStations = 'Favourite Fuel Stations';
+  static const hdnFuelStations = 'Hidden Fuel Stations';
+  static const srchSettings = 'Search Settings';
+  static const updtHistory = 'Update History';
+
+  String _getFailedString(bool searchSettingsDeleted, bool updateHistoryDeleted, bool favouriteStationsDeleted,
+      bool hiddenFuelStationsDeleted) {
+    var failed = [];
+    if ((_clearApplicationData || _clearFavouriteStations)) {
+      if (!favouriteStationsDeleted) {
+        failed.add('Favourite Fuel Stations');
+      }
+    }
+    if ((_clearApplicationData || _clearHiddenFuelStations)) {
+      if (!hiddenFuelStationsDeleted) {
+        failed.add('Hidden Fuel Stations');
+      }
+    }
+    if ((_clearApplicationData || _clearSearchSettings)) {
+      if (!searchSettingsDeleted) {
+        failed.add('Search Settings');
+      }
+    }
+    if ((_clearApplicationData || _clearUpdateHistory)) {
+      if (!updateHistoryDeleted) {
+        failed.add('Update History');
+      }
+    }
+    if (failed.isNotEmpty) {
+      return 'Failed deleting ${failed.join(",")}.';
+    }
+    return '';
   }
 }

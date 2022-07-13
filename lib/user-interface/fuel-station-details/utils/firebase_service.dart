@@ -19,6 +19,7 @@
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
@@ -53,10 +54,18 @@ class SignedInUser {
     if (isMockUser) {
       return 'regression@email.com';
     }
+    List<UserInfo>? providerData = user?.providerData;
+    if (providerData != null && providerData.isNotEmpty) {
+      return providerData[0].email;
+    }
     return user?.email;
   }
 
   String? getPhotoUrl() {
+    List<UserInfo>? providerData = user?.providerData;
+    if (providerData != null && providerData.isNotEmpty) {
+      return providerData[0].photoURL;
+    }
     return user?.photoURL;
   }
 }
@@ -68,7 +77,7 @@ class FirebaseService {
   static const twitterIdProvider = 'twitter-signin';
   static const _idProviders = [googleIdProvider, facebookIdProvider, twitterIdProvider];
 
-  static final Map<String, List<String>> _platformSupport = {
+  static final Map<String, List<String>> _osSupport = {
     'android': [googleIdProvider],
     'ios': [],
     'fuchsia': [],
@@ -77,15 +86,41 @@ class FirebaseService {
     'windows': []
   };
 
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  static final List<String> _webSupport = [/*googleIdProvider*/];
+
+  late FirebaseAuth _auth;
+  late GoogleSignIn _googleSignIn;
+
+  FirebaseService() {
+    List<String>? platformSupport = _getPlatformSupport();
+    LogUtil.debug(_tag, 'platformSupport is $platformSupport');
+    if (platformSupport != null && platformSupport.isNotEmpty) {
+      _auth = FirebaseAuth.instance;
+      if (platformSupport.contains(googleIdProvider)) {
+        _googleSignIn = GoogleSignIn();
+      }
+    } else {
+      LogUtil.debug(_tag, 'Platform does not yet support firebase');
+    }
+  }
+
+  List<String>? _getPlatformSupport() {
+    List<String>? platformSupport;
+    if (kIsWeb) {
+      platformSupport = _webSupport;
+    } else {
+      platformSupport = _osSupport[Platform.operatingSystem];
+    }
+    return platformSupport;
+  }
+
   String? idProviderUsed;
 
   SignedInUser? getSignedInUser() {
     if (idProviderUsed == null) {
       return null;
     }
-    final List<String>? platformSupport = _platformSupport[Platform.operatingSystem];
+    final List<String>? platformSupport =_getPlatformSupport();
     if (platformSupport != null && platformSupport.contains(idProviderUsed)) {
       return SignedInUser(false, user: FirebaseAuth.instance.currentUser);
     }
@@ -97,7 +132,7 @@ class FirebaseService {
       throw FirebaseAuthException(message: 'Unknown idProviderType $idProviderType', code: 'unknown-idProvider');
     }
     idProviderUsed = idProviderType;
-    final List<String>? platformSupport = _platformSupport[Platform.operatingSystem];
+    final List<String>? platformSupport = _getPlatformSupport();
     if (platformSupport != null) {
       if (platformSupport.contains(idProviderType)) {
         switch (idProviderType) {

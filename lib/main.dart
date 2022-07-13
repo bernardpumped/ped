@@ -16,8 +16,10 @@
  *     along with Pumped End Device.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:io';
+
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pumped_end_device/data/local/location/location_data_source.dart';
@@ -40,6 +42,7 @@ import 'package:pumped_end_device/user-interface/splash/screen/splash_screen_col
 import 'package:pumped_end_device/user-interface/splash/screen/splash_screen.dart';
 import 'package:pumped_end_device/user-interface/update-history/screen/update_history_details_screen.dart';
 import 'package:pumped_end_device/user-interface/update-history/screen/update_history_screen.dart';
+import 'package:pumped_end_device/user-interface/utils/under_maintenance_service.dart';
 import 'package:pumped_end_device/user-interface/widgets/pumped_app_bar_color_scheme.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 import 'package:pumped_end_device/util/platform_wrapper.dart';
@@ -49,15 +52,15 @@ import 'data/local/location/geo_location_wrapper.dart';
 import 'firebase_options.dart';
 
 GetIt getIt = GetIt.instance;
-DocumentReference underMaintenanceDocRef = FirebaseFirestore.instance.collection("pumped-documents").doc("under-maintenance");
 // Set this variable to false when in release mode.
 bool enrichOffers = true;
-const appVersion = "6";
+const appVersion = "7";
 const getLocationWrapperInstanceName = 'geoLocationWrapper';
 const platformWrapperInstanceName = 'platformWrapper';
 const locationDataSourceInstanceName = 'locationDataSource';
-const firebaseServiceInstanceName = 'firebaseService';
+const underMaintenanceServiceName = 'underMaintenanceService';
 
+const firebaseServiceInstanceName = 'firebaseService';
 const appBarColorSchemeName = 'appBarColorScheme';
 const splashScreenColorSchemeName = 'splashScreenColorScheme';
 const navDrawerColorSchemeName = 'navDrawerColorScheme';
@@ -68,9 +71,9 @@ const fsDetailsScreenColorSchemeName = 'fsDetailsScreenColorScheme';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  if (kIsWeb || Platform.isIOS || Platform.isAndroid) {
+    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  }
   runApp(const PumpedApp());
 }
 
@@ -147,6 +150,13 @@ class PumpedApp extends StatelessWidget {
       getIt.registerSingleton<FirebaseService>(FirebaseService(), instanceName: firebaseServiceInstanceName);
     } else {
       LogUtil.debug(_tag, 'Instance of $firebaseServiceInstanceName is already registered');
+    }
+
+    if (!getIt.isRegistered<UnderMaintenanceService>(instanceName: underMaintenanceServiceName)) {
+      LogUtil.debug(_tag, 'Registering instance of $underMaintenanceServiceName');
+      getIt.registerSingleton<UnderMaintenanceService>(UnderMaintenanceService.instance, instanceName: underMaintenanceServiceName);
+    } else {
+      LogUtil.debug(_tag, 'Instance of $underMaintenanceServiceName is already registered');
     }
   }
 

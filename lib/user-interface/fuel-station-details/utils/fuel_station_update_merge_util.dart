@@ -44,7 +44,7 @@ class FuelStationUpdateMergeUtil {
         _mergeUpdateFuelQuotesResponse(fuelStation, updateFuelStationDetailsResult as UpdateFuelQuoteResult);
         break;
       case UpdateFuelStationDetailType.fuelStationFeature:
-        LogUtil.debug(_tag, 'Fuel Station feature update merge is driven by backend and is not implemented here.');
+        LogUtil.debug(_tag, 'Fuel Station feature update merge is driven by backend and not yet implemented on device.');
         break;
       case UpdateFuelStationDetailType.operatingHours:
         _mergeUpdateOperatingTimeResult(fuelStation, updateFuelStationDetailsResult as UpdateOperatingTimeResult);
@@ -53,7 +53,7 @@ class FuelStationUpdateMergeUtil {
         _mergeUpdateAddressDetailsResult(fuelStation, updateFuelStationDetailsResult as UpdateAddressDetailsResult);
         break;
       case UpdateFuelStationDetailType.suggestEdit:
-        LogUtil.debug(_tag, 'Suggest edit merge does not change anything on device. Skipping');
+        LogUtil.debug(_tag, 'Suggest edit merge updates the backend but does not yet change anything on device. Skipping');
         break;
     }
   }
