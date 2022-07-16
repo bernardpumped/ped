@@ -20,47 +20,50 @@ dependencies:
   flutter:
     sdk: flutter
 
-  intl: ^0.17.0
-  flutter_rating_bar: ^4.0.1
-  flutter_svg: ^1.0.3
-#  provider: ^6.0.0
-  sprintf: ^6.0.0
-  flutter_signin_button: ^2.0.0
-  geolocator: ^9.0.0
-  geolocator_linux: ^0.1.0
-  geocoding: ^2.0.4
-  localstore: ^1.2.0
-  path: ^1.8.0
-  implicitly_animated_reorderable_list: ^0.4.1
-  http: ^0.13.3
-  fluttertoast: ^8.0.9
+# packages
   basic_utils: ^4.2.2
-  url_launcher: ^6.0.11
-  uuid: ^3.0.4
-  get_it: ^7.2.0
-  device_info_plus: ^4.0.0
   floating_action_bubble: ^1.1.4
+  flutter_rating_bar: ^4.0.1
+  flutter_signin_button: ^2.0.0
+  flutter_svg: ^1.0.3
   fl_chart: ^0.55.0
-  firebase_core: ^1.17.0
+  get_it: ^7.2.0
+  http: ^0.13.3
+  implicitly_animated_reorderable_list: ^0.4.1
+  intl: ^0.17.0
+  localstore: ^1.2.0
+  sprintf: ^6.0.0
+  uuid: ^3.0.4
+
+# plugins firebase (android and ios)
   cloud_firestore: ^3.1.15
   firebase_auth: ^3.3.19
-  google_sign_in: ^5.3.1
+  firebase_core: ^1.17.0
   flutter_facebook_auth: ^4.3.4
+  google_sign_in: ^5.3.1
   twitter_login: ^4.2.3
+
+# plugins general
+  device_info_plus: ^4.0.0
+  fluttertoast: ^8.0.9
+  geocoding: ^2.0.4
+  geolocator: ^9.0.0
+  geolocator_linux: ^0.1.0
+  path: ^1.8.0
+  url_launcher: ^6.0.11
   webview_flutter: ^3.0.4
 
-
 dev_dependencies:
-  test: any
-  flutter_lints: ^2.0.1
-  flutter_test:
-    sdk: flutter
-  pedantic: ^1.11.1
-  mockito: ^5.0.16
   build_runner: ^2.1.5
   change_app_package_name: ^1.0.0
   flutter_driver:
     sdk: flutter
+  flutter_lints: ^2.0.1
+  flutter_test:
+    sdk: flutter
+  mockito: ^5.0.16
+  pedantic: ^1.11.1
+  test: any
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
