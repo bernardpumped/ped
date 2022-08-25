@@ -104,7 +104,7 @@ class _NavDrawerWidgetState extends State<NavDrawerWidget> {
                   callback: () => _selectItem(context, 5, HelpScreen.routeName),
                   selected: selectedIndex == 5),
               Divider(color: colorScheme.dividerColor),
-              signedInUser != null
+              signedInUser != null && signedInUser.isSignedIn()
                   ? NavDrawerItemWidget(
                       itemIndex: 6,
                       label: 'Logout',

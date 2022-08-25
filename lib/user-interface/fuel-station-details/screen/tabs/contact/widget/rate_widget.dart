@@ -77,21 +77,21 @@ class RateWidget extends StatelessWidget {
     }
     final String googleRatingUrl = Uri.encodeFull('https://www.google.com/maps/search/?api=1&query=$fsAddress');
     if (Platform.isIOS) {
-      if (await canLaunch(googleRatingUrl)) {
+      if (await canLaunchUrlString(googleRatingUrl)) {
         LogUtil.debug(_tag, 'Attempting native launch of Google Maps/rate url');
         bool nativeAppLaunchSucceeded = false;
-        nativeAppLaunchSucceeded = await launch(
+        nativeAppLaunchSucceeded = await launchUrlString(
           googleRatingUrl,
-          forceSafariVC: false,
-          universalLinksOnly: true,
+          // forceSafariVC: false,
+          // universalLinksOnly: true,
         );
         LogUtil.debug(_tag, 'Native launch of Google Maps/rate successful $nativeAppLaunchSucceeded');
         bool nonNativeAppLaunchSucceeded = false;
         if (!nativeAppLaunchSucceeded) {
           LogUtil.debug(_tag, 'Attempting non-native launch of Google Maps/rate successful');
-          nonNativeAppLaunchSucceeded = await launch(
+          nonNativeAppLaunchSucceeded = await launchUrlString(
             googleRatingUrl,
-            forceSafariVC: true,
+            // forceSafariVC: true,
           );
           LogUtil.debug(_tag, 'Non-Native launch of Google Maps/rate successful $nativeAppLaunchSucceeded');
         }
@@ -102,7 +102,7 @@ class RateWidget extends StatelessWidget {
       }
     } else {
       if (await canLaunchUrlString(googleRatingUrl)) {
-        return await canLaunchUrlString(googleRatingUrl);
+        return await launchUrlString(googleRatingUrl);
       } else {
         return false;
       }

@@ -16,10 +16,7 @@
  *     along with Pumped End Device.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'dart:io';
-
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pumped_end_device/data/local/location/location_data_source.dart';
@@ -54,7 +51,7 @@ import 'firebase_options.dart';
 GetIt getIt = GetIt.instance;
 // Set this variable to false when in release mode.
 bool enrichOffers = true;
-const appVersion = "7";
+const appVersion = "29";
 const getLocationWrapperInstanceName = 'geoLocationWrapper';
 const platformWrapperInstanceName = 'platformWrapper';
 const locationDataSourceInstanceName = 'locationDataSource';
@@ -71,8 +68,10 @@ const fsDetailsScreenColorSchemeName = 'fsDetailsScreenColorScheme';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  if (kIsWeb || Platform.isIOS || Platform.isAndroid) {
+  if (Firebase.apps.isEmpty) {
     await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  } else {
+    Firebase.app();
   }
   runApp(const PumpedApp());
 }
@@ -91,20 +90,24 @@ class PumpedApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSwatch(accentColor: Colors.indigoAccent),
         textTheme: Theme.of(context).textTheme.apply(fontFamily: 'SF-Pro-Display'));
     _registerThemes(themeData);
-    return MaterialApp(debugShowCheckedModeBanner: false, theme: themeData, home: const SplashScreen(), routes: {
-      NearbyStationsScreen.routeName: (context) => const NearbyStationsScreen(),
-      FavouriteStationsScreen.routeName: (context) => const FavouriteStationsScreen(),
-      AboutScreen.routeName: (context) => AboutScreen(),
-      SettingsScreen.routeName: (context) => const SettingsScreen(),
-      FuelStationDetailsScreen.routeName: (context) => const FuelStationDetailsScreen(),
-      CustomizeSearchSettingsScreen.routeName: (context) => const CustomizeSearchSettingsScreen(),
-      CleanupLocalCacheScreen.routeName: (context) => const CleanupLocalCacheScreen(),
-      EditFuelStationDetailsScreen.routeName: (context) => const EditFuelStationDetailsScreen(),
-      UpdateHistoryScreen.routeName: (context) => const UpdateHistoryScreen(),
-      UpdateHistoryDetailsScreen.routeName: (context) => const UpdateHistoryDetailsScreen(),
-      SendFeedbackScreen.routeName: (context) => const SendFeedbackScreen(),
-      HelpScreen.routeName: (context) => const HelpScreen()
-    });
+    return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: themeData,
+        home: const SplashScreen(),
+        routes: {
+          NearbyStationsScreen.routeName: (context) => const NearbyStationsScreen(),
+          FavouriteStationsScreen.routeName: (context) => const FavouriteStationsScreen(),
+          AboutScreen.routeName: (context) => AboutScreen(),
+          SettingsScreen.routeName: (context) => const SettingsScreen(),
+          FuelStationDetailsScreen.routeName: (context) => const FuelStationDetailsScreen(),
+          CustomizeSearchSettingsScreen.routeName: (context) => const CustomizeSearchSettingsScreen(),
+          CleanupLocalCacheScreen.routeName: (context) => const CleanupLocalCacheScreen(),
+          EditFuelStationDetailsScreen.routeName: (context) => const EditFuelStationDetailsScreen(),
+          UpdateHistoryScreen.routeName: (context) => const UpdateHistoryScreen(),
+          UpdateHistoryDetailsScreen.routeName: (context) => const UpdateHistoryDetailsScreen(),
+          SendFeedbackScreen.routeName: (context) => const SendFeedbackScreen(),
+          HelpScreen.routeName: (context) => const HelpScreen()
+        });
   }
 
   void _deviceInfo() async {
@@ -154,7 +157,8 @@ class PumpedApp extends StatelessWidget {
 
     if (!getIt.isRegistered<UnderMaintenanceService>(instanceName: underMaintenanceServiceName)) {
       LogUtil.debug(_tag, 'Registering instance of $underMaintenanceServiceName');
-      getIt.registerSingleton<UnderMaintenanceService>(UnderMaintenanceService.instance, instanceName: underMaintenanceServiceName);
+      getIt.registerSingleton<UnderMaintenanceService>(UnderMaintenanceService.instance,
+          instanceName: underMaintenanceServiceName);
     } else {
       LogUtil.debug(_tag, 'Instance of $underMaintenanceServiceName is already registered');
     }

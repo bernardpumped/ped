@@ -134,18 +134,19 @@ class DirectionsWidget extends StatelessWidget {
   }
 
   Future<bool> _launchGoogleMaps(final double slat, final double slng, final double dlat, final double dlng) async {
-    final Uri googleMapsUrl = Uri.parse("https://www.google.com/maps/dir/?api=1&origin=$slat,$slng&destination=$dlat,$dlng");
+    final urlString = "https://www.google.com/maps/dir/?api=1&origin=$slat,$slng&destination=$dlat,$dlng";
+    final Uri googleMapsUrl = Uri.parse(urlString);
     if (Platform.isIOS) {
       if (await canLaunchUrl(googleMapsUrl)) {
         final bool nativeAppLaunchSucceeded = await launchUrl(
-          googleMapsUrl,
+          googleMapsUrl, mode: LaunchMode.externalApplication
           // forceSafariVC: false,
           // universalLinksOnly: true,
         );
         bool nonNativeAppLaunchSucceeded = false;
         if (!nativeAppLaunchSucceeded) {
           nonNativeAppLaunchSucceeded = await launchUrl(
-            googleMapsUrl,
+              googleMapsUrl
             // forceSafariVC: true,
           );
         }
@@ -154,7 +155,8 @@ class DirectionsWidget extends StatelessWidget {
       return false;
     } else {
       if (await canLaunchUrl(googleMapsUrl)) {
-        bool launchSuccessful = await launchUrl(googleMapsUrl);
+        // launchUrl(url)
+        bool launchSuccessful = await launchUrl(googleMapsUrl, mode: LaunchMode.externalApplication);
         return launchSuccessful;
       } else {
         return false;
@@ -164,47 +166,44 @@ class DirectionsWidget extends StatelessWidget {
 
   Future<bool> _launchAppleMaps(final double slat, final double slng, final double dlat, final double dlng) async {
     if (!Platform.isIOS) return false;
-    String urlAppleMaps = 'http://maps.apple.com/maps?saddr=$slat,$slng&daddr=$dlat,$dlng';
-    if (await canLaunch(urlAppleMaps)) {
+    String urlString = 'http://maps.apple.com/maps?saddr=$slat,$slng&daddr=$dlat,$dlng';
+    final Uri appleMapsUrl = Uri.parse(urlString);
+    if (await canLaunchUrl(appleMapsUrl)) {
       LogUtil.debug(_tag, 'Attempting native launch of apple maps');
-      final bool nativeAppLaunchSucceeded = await launch(urlAppleMaps, forceSafariVC: false, universalLinksOnly: true);
+      final bool nativeAppLaunchSucceeded = await launchUrl(appleMapsUrl, mode: LaunchMode.externalApplication /*forceSafariVC: false, universalLinksOnly: true*/);
       LogUtil.debug(_tag, 'Native launch for apple map successful $nativeAppLaunchSucceeded');
 
       bool nonNativeAppLaunchSucceeded = false;
       if (!nativeAppLaunchSucceeded) {
         LogUtil.debug(_tag, 'Attempting non-native launch of apple maps');
-        nonNativeAppLaunchSucceeded = await launch(urlAppleMaps, forceSafariVC: true);
+        nonNativeAppLaunchSucceeded = await launchUrl(appleMapsUrl);
         LogUtil.debug(_tag, 'Non-Native launch for apple map successful $nonNativeAppLaunchSucceeded');
       }
       return nativeAppLaunchSucceeded || nonNativeAppLaunchSucceeded;
     } else {
-      LogUtil.debug(_tag, 'Could not launch $urlAppleMaps');
+      LogUtil.debug(_tag, 'Could not launch $urlString');
       return false;
     }
   }
 
   Future<bool> _launchWazeMaps(final double slat, final double slng, final double dlat, final double dlng) async {
-    final String wazeMapsUrl = "https://waze.com/ul?ll=$dlat,$dlng&navigate=yes";
-    if (Platform.isIOS) {
-      if (await canLaunch(wazeMapsUrl)) {
-        final bool nativeAppLaunchSucceeded = await launch(
-          wazeMapsUrl,
-          forceSafariVC: false,
-          universalLinksOnly: true,
+    final String urlString = "https://waze.com/ul?ll=$dlat,$dlng&navigate=yes";
+    Uri wazeMapUrl = Uri.parse(urlString);
+    if (Platform.isIOS || Platform.isAndroid) {
+      if (await canLaunchUrl(wazeMapUrl)) {
+        final bool nativeAppLaunchSucceeded = await launchUrl(
+          wazeMapUrl, mode: LaunchMode.externalApplication
         );
         bool nonNativeAppLaunchSucceeded = false;
         if (!nativeAppLaunchSucceeded) {
-          nonNativeAppLaunchSucceeded = await launch(
-            wazeMapsUrl,
-            forceSafariVC: true,
-          );
+          nonNativeAppLaunchSucceeded = await launchUrl(wazeMapUrl);
         }
         return nativeAppLaunchSucceeded || nonNativeAppLaunchSucceeded;
       }
       return false;
     } else {
-      if (await canLaunch(wazeMapsUrl)) {
-        bool launchSuccessful = await launch(wazeMapsUrl);
+      if (await canLaunchUrl(wazeMapUrl)) {
+        bool launchSuccessful = await launchUrl(wazeMapUrl);
         return launchSuccessful;
       } else {
         return false;
