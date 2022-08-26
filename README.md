@@ -16,12 +16,13 @@
 |<a href="#12-ped-testability">12. PED Testability</a>
 |<a href="#13-faq">13. FAQ</a>
 
-## Important Information
-This branch is now primarily focused for iOS and Android mobile phones and is wired to firebase for backend SaaS including social logins for Google, Meta and Twitter, as such if you wish to adopt this branch you "must" configre each of the aforementioned using your own account, or remove as you see fit and of course we're happy to customise for your requirements
 
-Concerning in-vehicle infotainment (IVI) we will fork new branches as necessitates commencing with AGL branch for https://www.automotivelinux.org/
-IVI by nature maintained by vehicle manufacture and partners will not initially be configured with firebase, social logins or other backend SaaS Apps
+## Important Note - Please Read
+This branch now only supports iOS and Android mobile phones and is wired to firebase for backend SaaS including social logins for Google, Meta and Twitter, as such if you wish to adopt this branch you "must" configre each of the aforementioned services using your own account, or remove as you see fit and of course we're happy to customise for your requirements
 
+Concerning automotive in-vehicle infotainment (IVI) we will fork new branches as necessitates commencing with AGL branch for https://www.automotivelinux.org/
+IVI by design maintained via vehicle manufactures and partners will not "by default" be pre-configured with backend software services
+##
 
 ## 1. Introduction
 ### Background
