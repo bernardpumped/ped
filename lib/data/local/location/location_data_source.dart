@@ -73,7 +73,7 @@ class LocationDataSource {
       //   isoCountryCode = placemarks[0].isoCountryCode;
       //   LogUtil.debug(_tag, 'CountryCode found is $isoCountryCode');
       // }
-      if (kIsWeb || Platform.isLinux) {
+      if (kIsWeb || Platform.isLinux || Platform.isAndroid) {
         // LogUtil.debug(_tag, 'Overriding the location, as the current country is not AU/Australia');
         LogUtil.debug(_tag, 'Overriding the actual location with static one, as the Browser / Linux does not allow mocking the location');
         return Future.value(GetLocationResult(

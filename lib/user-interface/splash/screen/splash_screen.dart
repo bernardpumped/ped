@@ -137,11 +137,6 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void _checkPumpedAvailability() async {
-    // On browsers, checks like Platform.isLinux throw exceptions.
-    if (!kIsWeb && Platform.isLinux) {
-      _getLocation();
-      return;
-    }
     underMaintenanceService.isUnderMaintenance().then((underMaintenanceR) {
       bool isUnderMaintenance = underMaintenanceR.isUnderMaintenance;
       if (isUnderMaintenance) {

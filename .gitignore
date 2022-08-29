@@ -39,6 +39,7 @@ android/app/src/main/*
 android/app/src/profile/*
 !android/app/src/profile/AndroidManifest.xml
 !android/AndroidManifest.xml
+
 build
 !ios/
 ios/*
@@ -63,6 +64,7 @@ lib/datasource/local/.DS_Store
 lib/models/.DS_Store
 lib/data/remote/pumped_end_point-prd.dart
 lib/firebase_options-prd.dart
+lib/firebase_options-null.dart
 
 linux/
 web/

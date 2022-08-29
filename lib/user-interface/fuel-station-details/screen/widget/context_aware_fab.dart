@@ -102,14 +102,7 @@ class _ContextAwareFabState extends State<ContextAwareFab> with SingleTickerProv
             onPress: () {
               _animationController.reverse();
               if (_shouldEdit(widget._fuelStation, editOperatingTime: true)) {
-                final Future<bool?> signInDialogOutput = showModalBottomSheet(
-                    context: context,
-                    backgroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
-                    builder: (context) => const PumpedSignInWidget());
-                signInDialogOutput.then(
-                    (output) => _handleLogin(context, output, widget._fuelStation, editOperatingTime: true),
-                    onError: (errorOutput) => LogUtil.debug(_tag, 'error output'));
+                _attemptLogin(context, widget._fuelStation, editOperatingTime: true);
               }
             }),
         Bubble(
@@ -121,14 +114,7 @@ class _ContextAwareFabState extends State<ContextAwareFab> with SingleTickerProv
             onPress: () {
               _animationController.reverse();
               if (_shouldEdit(widget._fuelStation, editDetails: true)) {
-                final Future<bool?> signInDialogOutput = showModalBottomSheet(
-                    context: context,
-                    backgroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
-                    builder: (context) => const PumpedSignInWidget());
-                signInDialogOutput.then(
-                    (output) => _handleLogin(context, output, widget._fuelStation, editDetails: true),
-                    onError: (errorOutput) => LogUtil.debug(_tag, 'error output'));
+                _attemptLogin(context, widget._fuelStation, editDetails: true);
               }
             }),
         Bubble(
@@ -140,14 +126,7 @@ class _ContextAwareFabState extends State<ContextAwareFab> with SingleTickerProv
             onPress: () {
               _animationController.reverse();
               if (_shouldEdit(widget._fuelStation, editFeatures: true)) {
-                final Future<bool?> signInDialogOutput = showModalBottomSheet(
-                    context: context,
-                    backgroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
-                    builder: (context) => const PumpedSignInWidget());
-                signInDialogOutput.then(
-                    (output) => _handleLogin(context, output, widget._fuelStation, editFeatures: true),
-                    onError: (errorOutput) => LogUtil.debug(_tag, 'error output'));
+                _attemptLogin(context, widget._fuelStation, editFeatures: true);
               }
             }),
         Bubble(
@@ -159,14 +138,7 @@ class _ContextAwareFabState extends State<ContextAwareFab> with SingleTickerProv
             onPress: () {
               _animationController.reverse();
               if (_shouldEdit(widget._fuelStation, suggestEdit: true)) {
-                final Future<bool?> signInDialogOutput = showModalBottomSheet(
-                    context: context,
-                    backgroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
-                    builder: (context) => const PumpedSignInWidget());
-                signInDialogOutput.then(
-                    (output) => _handleLogin(context, output, widget._fuelStation, suggestEdit: true),
-                    onError: (errorOutput) => LogUtil.debug(_tag, 'error output'));
+                _attemptLogin(context, widget._fuelStation, suggestEdit: true);
               }
             })
       ];
@@ -234,14 +206,16 @@ class _ContextAwareFabState extends State<ContextAwareFab> with SingleTickerProv
       final bool suggestEdit = false}) {
     //https://petercoding.com/firebase/2021/05/24/using-google-sign-in-with-firebase-in-flutter/
     //https://petercoding.com/firebase/2021/06/14/using-facebook-authentication-with-firebase-in-flutter/
+    //https://medium.com/inspireui/setup-facebook-login-for-flutter-apps-4e7bd031479d
 
     final SignedInUser? signedInUser = service.getSignedInUser();
-    if (signedInUser == null) {
+    if (signedInUser == null || !signedInUser.isSignedIn()) {
       final Future<bool?> signInDialogOutput = showModalBottomSheet(
           context: context,
           backgroundColor: Colors.white,
+          isDismissible: false,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
-          builder: (context) => const PumpedSignInWidget());
+          builder: (context) => PumpedSignInWidget(cancelButtonAction: () => Navigator.of(context).pop()));
       signInDialogOutput.then((signInResult) {
         _handleLogin(context, signInResult, widget._fuelStation,
             editDetails: editDetails,

@@ -68,11 +68,11 @@ class EmailNotificationWidget extends StatelessWidget {
   }
 
   static const _faToEmailAddressMap = {
-    'nsw': ['bernard@pumpedfuel.com'],
-    'qld': ['bernard@pumpedfuel.com'],
-    'sa': ['bernard@pumpedfuel.com'],
-    'fwa': ['bernard@pumpedfuel.com'],
-    'tas': ['bernard@pumpedfuel.com'],
-    'nt': ['bernard@pumpedfuel.com']
+    'nsw': ['support@nsw-email.com'],
+    'qld': ['support@qld-email.com'],
+    'sa':  ['support@sa-email.com'],
+    'fwa': ['support@fwa-email.com'],
+    'tas': ['support@tas-email.com'],
+    'nt':  ['support@nt-email.com']
   };
 }

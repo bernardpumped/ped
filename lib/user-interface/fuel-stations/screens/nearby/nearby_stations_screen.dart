@@ -123,11 +123,7 @@ class _NearbyStationsScreenState extends State<NearbyStationsScreen> {
   Widget build(final BuildContext context) {
     _fuelTypeSwitcherDataSource.addFuelTypeSwitcherDataToStream(_fuelTypeSwitcherDataStreamController,
         throwError: false);
-    return Scaffold(
-        appBar: const PumpedAppBar(),
-        drawer: const NavDrawerWidget(),
-        body: _drawBody(),
-        floatingActionButton: FuelStationSorterWidget(parentUpdateFunction: scrollFuelStations));
+    return Scaffold(appBar: const PumpedAppBar(), drawer: const NavDrawerWidget(), body: _nearByStationsScreenBody());
   }
 
   void scrollFuelStations(final int sortOrder) {
@@ -159,13 +155,13 @@ class _NearbyStationsScreenState extends State<NearbyStationsScreen> {
         'and minTimeBetweenSearches $minTimeBetweenSearches');
   }
 
-  _drawBody() {
+  _nearByStationsScreenBody() {
     return Container(
         color: colorScheme.bodyBackgroundColor,
         child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
           Padding(
               padding: const EdgeInsets.only(top: 5.0, left: 20, right: 20), child: _getStationTypeFuelTypeSwitcher()),
-          Expanded(child: _getNearbyFuelStationsFutureBuilder()),
+          Expanded(child: _getNearbyFuelStationsFutureBuilder())
         ]));
   }
 
@@ -215,7 +211,13 @@ class _NearbyStationsScreenState extends State<NearbyStationsScreen> {
                         LogUtil.debug(_tag, 'Not triggering the search as time has not yet passed');
                       }
                     },
-                    child: _nearbyFuelStationsWidget(data!));
+                    child: Stack(children: [
+                      _nearbyFuelStationsWidget(data!),
+                      Positioned(
+                          bottom: 20,
+                          right: 20,
+                          child: FuelStationSorterWidget(parentUpdateFunction: scrollFuelStations))
+                    ]));
               } else {
                 return _getIntermediateUI(data);
               }
@@ -225,13 +227,11 @@ class _NearbyStationsScreenState extends State<NearbyStationsScreen> {
 
   RenderObjectWidget _getIntermediateUI(final NearByFuelStations? data) {
     if (data != null) {
-      LogUtil.debug(_tag, 'Data was NOT found to be null');
       return Stack(children: [
         _nearbyFuelStationsWidget(data),
         const Center(child: RefreshProgressIndicator(backgroundColor: Colors.indigo, color: Colors.white))
       ]);
     } else {
-      LogUtil.debug(_tag, 'Data was found to be null');
       return const Center(child: RefreshProgressIndicator(backgroundColor: Colors.indigo, color: Colors.white));
     }
   }

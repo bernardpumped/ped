@@ -20,8 +20,10 @@ import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:pumped_end_device/util/log_util.dart';
+import 'package:twitter_login/twitter_login.dart';
 
 class SignedInUser {
   bool isMockUser = false;
@@ -68,6 +70,11 @@ class SignedInUser {
     }
     return user?.photoURL;
   }
+
+  bool isSignedIn() {
+    return user != null;
+  }
+
 }
 
 class FirebaseService {
@@ -78,18 +85,20 @@ class FirebaseService {
   static const _idProviders = [googleIdProvider, facebookIdProvider, twitterIdProvider];
 
   static final Map<String, List<String>> _osSupport = {
-    'android': [googleIdProvider],
-    'ios': [],
+    'android': [googleIdProvider, facebookIdProvider, twitterIdProvider],
+    'ios': [googleIdProvider, facebookIdProvider, twitterIdProvider],
     'fuchsia': [],
     'linux': [],
     'macos': [],
     'windows': []
   };
 
-  static final List<String> _webSupport = [/*googleIdProvider*/];
+  static final List<String> _webSupport = [twitterIdProvider];
 
   late FirebaseAuth _auth;
   late GoogleSignIn _googleSignIn;
+  late FacebookAuth _facebookAuth;
+  late TwitterLogin _twitterLogin;
 
   FirebaseService() {
     List<String>? platformSupport = _getPlatformSupport();
@@ -98,6 +107,13 @@ class FirebaseService {
       _auth = FirebaseAuth.instance;
       if (platformSupport.contains(googleIdProvider)) {
         _googleSignIn = GoogleSignIn();
+      }
+      if (platformSupport.contains(facebookIdProvider)) {
+        _facebookAuth = FacebookAuth.instance;
+      }
+      if (platformSupport.contains(twitterIdProvider)) {
+        _twitterLogin = TwitterLogin(
+            apiKey: "", apiSecretKey: "", redirectURI: "twittersdk://");
       }
     } else {
       LogUtil.debug(_tag, 'Platform does not yet support firebase');
@@ -120,7 +136,7 @@ class FirebaseService {
     if (idProviderUsed == null) {
       return null;
     }
-    final List<String>? platformSupport =_getPlatformSupport();
+    final List<String>? platformSupport = _getPlatformSupport();
     if (platformSupport != null && platformSupport.contains(idProviderUsed)) {
       return SignedInUser(false, user: FirebaseAuth.instance.currentUser);
     }
@@ -137,11 +153,11 @@ class FirebaseService {
       if (platformSupport.contains(idProviderType)) {
         switch (idProviderType) {
           case googleIdProvider:
-            return _signInWithGoogle();
+            return (await _signInWithGoogleInternal()).status == Status.success;
           case facebookIdProvider:
-            throw UnimplementedError('$idProviderType mechanism not implemented yet');
+            return (await _signInWithFacebookInternal()).status == Status.success;
           case twitterIdProvider:
-            throw UnimplementedError('$idProviderType mechanism not implemented yet');
+            return (await _signInWithTwitterInternal()).status == Status.success;
           default:
             throw UnimplementedError('$idProviderType mechanism not implemented yet');
         }
@@ -150,18 +166,7 @@ class FirebaseService {
     return true;
   }
 
-  Future<bool> _signInWithGoogle() async {
-    final UserCredential userCred = await _signInWithGoogleInternal();
-    if (userCred.user != null) {
-      LogUtil.debug(_tag, 'userCred.user.displayName = ${userCred.user?.displayName}');
-      return true;
-    } else {
-      LogUtil.debug(_tag, 'userCred.user is null');
-      return false;
-    }
-  }
-
-  Future<UserCredential> _signInWithGoogleInternal() async {
+  Future<Resource> _signInWithGoogleInternal() async {
     try {
       final GoogleSignInAccount? googleSignInAccount = await _googleSignIn.signIn();
       final GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount!.authentication;
@@ -169,10 +174,78 @@ class FirebaseService {
         accessToken: googleSignInAuthentication.accessToken,
         idToken: googleSignInAuthentication.idToken,
       );
-      return await _auth.signInWithCredential(credential);
+      final UserCredential userCredential = await _auth.signInWithCredential(credential);
+      if (userCredential.user != null) {
+        LogUtil.debug(_tag, '_signInWithGoogleInternal::signin successful');
+        return Resource(status: Status.success);
+      } else {
+        LogUtil.debug(_tag, '_signInWithGoogleInternal::signin failed :: user null');
+        return Resource(status: Status.error);
+      }
     } on FirebaseAuthException catch (e) {
-      LogUtil.error(_tag, 'Error happened : ${e.message}');
-      rethrow;
+      LogUtil.debug(_tag, '_signInWithGoogleInternal::Error happened : ${e.message}');
+      return Resource(status: Status.error);
+    }
+  }
+
+  Future<Resource> _signInWithFacebookInternal() async {
+    try {
+      LogUtil.debug(_tag, '_signInWithFacebookInternal::attempting');
+      final LoginResult result = await _facebookAuth.login();
+      LogUtil.debug(_tag, '_signInWithFacebookInternal::LoginResult received $result');
+      switch (result.status) {
+        case LoginStatus.success:
+          final AuthCredential facebookCredential = FacebookAuthProvider.credential(result.accessToken!.token);
+          UserCredential userCredential = await _auth.signInWithCredential(facebookCredential);
+          if (userCredential.user != null) {
+            LogUtil.debug(_tag, '_signInWithFacebookInternal::signin successful');
+            return Resource(status: Status.success);
+          } else {
+            LogUtil.debug(_tag, '_signInWithFacebookInternal::signin failed :: user null');
+            return Resource(status: Status.error);
+          }
+        case LoginStatus.cancelled:
+          LogUtil.debug(_tag, '_signInWithFacebookInternal::signin cancelled');
+          return Resource(status: Status.cancelled);
+        case LoginStatus.failed:
+        default:
+          LogUtil.debug(_tag, '_signInWithFacebookInternal::signin failed');
+          return Resource(status: Status.error);
+      }
+    } on FirebaseAuthException catch (e) {
+      LogUtil.debug(_tag, '_signInWithFacebookInternal::Error happened : ${e.message}');
+      return Resource(status: Status.error);
+    }
+  }
+//https://stackoverflow.com/questions/70937933/how-to-set-up-firebase-authentication-with-twitter-login-4-0-1-and-f
+  Future<Resource> _signInWithTwitterInternal() async {
+    try {
+      LogUtil.debug(_tag, '_signInWithTwitterInternal::attempting');
+      final result = await _twitterLogin.login();
+      LogUtil.debug(_tag, '_signInWithTwitterInternal::LoginResult received ${result.authToken} ${result.errorMessage}');
+      switch (result.status) {
+        case TwitterLoginStatus.loggedIn:
+          final AuthCredential twitterAuthCredential =
+              TwitterAuthProvider.credential(accessToken: result.authToken!, secret: result.authTokenSecret!);
+          final userCredential = await _auth.signInWithCredential(twitterAuthCredential);
+          if (userCredential.user != null) {
+            LogUtil.debug(_tag, '_signInWithTwitterInternal::signin successful');
+            return Resource(status: Status.success);
+          } else {
+            LogUtil.debug(_tag, '_signInWithTwitterInternal::signin failed :: user null');
+            return Resource(status: Status.error);
+          }
+        case TwitterLoginStatus.cancelledByUser:
+          LogUtil.debug(_tag, '_signInWithTwitterInternal::signin cancelled');
+          return Resource(status: Status.cancelled);
+        case TwitterLoginStatus.error:
+        default:
+          LogUtil.debug(_tag, '_signInWithTwitterInternal::signin failed');
+          return Resource(status: Status.error);
+      }
+    } on FirebaseAuthException catch (e) {
+      LogUtil.debug(_tag, '_signInWithTwitterInternal::Error happened : ${e.message}');
+      return Resource(status: Status.error);
     }
   }
 
@@ -182,17 +255,27 @@ class FirebaseService {
       final String? providerId = userDetails.providerData.isNotEmpty ? userDetails.providerData[0].providerId : null;
       if (providerId != null) {
         if (providerId.contains('google')) {
-          await _googleSignIn.signOut();
+          bool isGoogleSignedIn = await _googleSignIn.isSignedIn();
+          if (isGoogleSignedIn) {
+            await _googleSignIn.signOut();
+          }
         }
-        // TODO extend this logic for twitter and facebook
+        if (providerId.contains('facebook')) {
+          await _facebookAuth.logOut();
+        }
+        if (providerId.contains('twitter')) {
+          // Twitter login does not expose any API for logout.
+        }
       }
-      bool isGoogleSignedIn = await _googleSignIn.isSignedIn();
-      if (isGoogleSignedIn) {
-        await _googleSignIn.signOut();
-      }
-      // TODO extend this logic for twitter and facebook
       await _auth.signOut();
     }
     idProviderUsed = null;
   }
 }
+
+class Resource {
+  final Status status;
+  Resource({required this.status});
+}
+
+enum Status { success, error, cancelled }
