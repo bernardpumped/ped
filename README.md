@@ -8,6 +8,9 @@ If you're primarily interested in android or iOS switch to main branch https://g
 Install, Setup and configure https://docs.flutter.dev/get-started/install/linux as you woud normally, clone this branch
 
   $ flutter clean
+  
   $ flutter pub get
+  
   $ flutter create .
+  
   $ flutter run -d linux
