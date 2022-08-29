@@ -18,7 +18,7 @@
 
 
 ## Important Note - Please Read
-This branch now only supports iOS and Android mobile phones and is wired to firebase for backend SaaS including social logins for Google, Meta and Twitter, as such if you wish to adopt this branch you "must" configre each of the aforementioned services using your own account, or remove as you see fit and of course we're happy to customise for your requirements
+This branch now only supports iOS and Android mobile phones and is wired to firebase for backend SaaS including social logins for Google, Meta and Twitter, as such if you wish to adopt this branch into your environment you "must" configre each of the aforementioned services using your own account, or remove as you see fit and of course we're happy to customise for your requirements
 
 Concerning automotive in-vehicle infotainment (IVI) we will fork new branches as necessitates commencing with AGL branch for https://www.automotivelinux.org/
 IVI by design maintained via vehicle manufactures and partners will not "by default" be pre-configured with backend software services
