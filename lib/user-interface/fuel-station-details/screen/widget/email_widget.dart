@@ -33,19 +33,15 @@ class EmailNotificationWidget extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    return WidgetUtils.getRoundedElevatedButton(
-        child: Row(children: const [
-          Icon(Icons.email_outlined, size: 24, color: Colors.white),
-          SizedBox(width: 10),
-          Text('Email', style: TextStyle(color: Colors.white)),
-        ]),
-        onPressed: () {
+    return WidgetUtils.getRoundedButton(
+        context: context,
+        buttonText: 'Email',
+        iconData: Icons.email_outlined,
+        onTapFunction: () {
           _sendEmail(() {
-            WidgetUtils.showToastMessage(context, 'Cannot send email', Colors.indigo);
+            WidgetUtils.showToastMessage(context, 'Cannot send email');
           });
-        },
-        borderRadius: 10.0,
-        backgroundColor: Colors.indigo);
+        });
   }
 
   void _sendEmail(final Function function) async {

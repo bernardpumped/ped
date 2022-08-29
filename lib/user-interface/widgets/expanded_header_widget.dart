@@ -17,8 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:pumped_end_device/main.dart';
-import 'package:pumped_end_device/user-interface/fuel-station-details/fuel_station_details_screen_color_scheme.dart';
+import 'package:pumped_end_device/user-interface/fuel-station-details/screen/tabs/contact/widget/action_bar.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/screens/widgets/fuel_station_logo_widget.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/screen/widget/qld_fuel_station_source_citation.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
@@ -28,20 +27,19 @@ import 'package:pumped_end_device/util/data_utils.dart';
 class ExpandedHeaderWidget extends StatelessWidget {
   final FuelStation fuelStation;
   final bool showPriceSource;
-  ExpandedHeaderWidget({Key? key, required this.fuelStation, this.showPriceSource = true}) : super(key: key);
-
-  final FuelStationDetailsScreenColorScheme colorScheme =
-      getIt.get<FuelStationDetailsScreenColorScheme>(instanceName: fsDetailsScreenColorSchemeName);
+  final Function onFavouriteStatusChange;
+  const ExpandedHeaderWidget(
+      {Key? key, required this.fuelStation, this.showPriceSource = true, required this.onFavouriteStatusChange})
+      : super(key: key);
 
   @override
   Widget build(final BuildContext context) {
     return Container(
-        color: colorScheme.backgroundColor,
         padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
           Row(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.center, children: <
               Widget>[
-            FuelStationLogoWidget(width: 75, height: 75, image: NetworkImage(fuelStation.merchantLogoUrl)),
+            FuelStationLogoWidget(width: 130, height: 130, image: NetworkImage(fuelStation.merchantLogoUrl)),
             Expanded(
                 child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -57,7 +55,8 @@ class ExpandedHeaderWidget extends StatelessWidget {
                       : const SizedBox(width: 0),
                   _getRatingWidget(fuelStation)
                 ]))
-          ])
+          ]),
+          ActionBar(fuelStation: fuelStation, onFavouriteStatusChange: onFavouriteStatusChange)
         ]));
   }
 
@@ -70,7 +69,7 @@ class ExpandedHeaderWidget extends StatelessWidget {
     }
     fsName = fsName.toTitleCase();
     return Text(fsName,
-        style: TextStyle(fontSize: 19, color: colorScheme.fuelStationTitleTextColor, fontWeight: FontWeight.w700),
+        style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w500),
         overflow: TextOverflow.ellipsis,
         maxLines: 2);
   }
@@ -85,8 +84,7 @@ class ExpandedHeaderWidget extends StatelessWidget {
       if (publishers.isNotEmpty) {
         return Row(children: [
           Text('Fuel Price Source ${publishers[0]} ',
-              style:
-                  TextStyle(fontSize: 16, color: colorScheme.fuelStationDetailsTextColor, fontWeight: FontWeight.w500)),
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
           _getFuelStationSourceCitationIcon(publishers, context, fuelStation)
         ]);
       }
@@ -99,14 +97,18 @@ class ExpandedHeaderWidget extends StatelessWidget {
     if (publishers[0] == 'qld') {
       return GestureDetector(
           onTap: () {
-            showModalBottomSheet(
-                isScrollControlled: true,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
+            showDialog(
+                barrierDismissible: false,
                 context: context,
-                builder: (context) => QldFuelStationSourceCitation(fuelStation: fuelStation),
-                backgroundColor: colorScheme.backgroundColor);
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                      backgroundColor: Colors.transparent,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10), side: const BorderSide(width: 0.2)),
+                      content: QldFuelStationSourceCitation(fuelStation: fuelStation));
+                });
           },
-          child: Icon(Icons.info_outline, color: colorScheme.fuelStationDetailsTextColor, size: 20)); // Info icon
+          child: const Icon(Icons.info_outline, size: 24)); // Info icon
     } else {
       return const SizedBox(width: 0);
     }
@@ -114,11 +116,10 @@ class ExpandedHeaderWidget extends StatelessWidget {
 
   Widget _getDistanceWidget(final FuelStation fuelStation) {
     return Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
-      Text('Petrol Station', style: TextStyle(fontSize: 16, color: colorScheme.fuelStationDetailsTextColor)),
+      const Text('Petrol Station', style: TextStyle(fontSize: 20)),
       const SizedBox(width: 10),
-      Icon(Icons.drive_eta, color: colorScheme.fuelStationDetailsTextColor, size: 20), // drive_eta icon
-      Text(' ${DataUtils.toPrecision(fuelStation.distance, 2)} km',
-          style: TextStyle(fontSize: 16, color: colorScheme.fuelStationDetailsTextColor))
+      const Icon(Icons.drive_eta, size: 20), // drive_eta icon
+      Text(' ${DataUtils.toPrecision(fuelStation.distance, 2)} km', style: const TextStyle(fontSize: 20))
     ]);
   }
 
@@ -127,10 +128,9 @@ class ExpandedHeaderWidget extends StatelessWidget {
         ? Padding(
             padding: const EdgeInsets.only(bottom: 3, left: 8),
             child: Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
-              Text(' ${fuelStation.rating}',
-                  style: TextStyle(fontSize: 14, color: colorScheme.fuelStationDetailsTextColor)),
+              Text(' ${fuelStation.rating}', style: const TextStyle(fontSize: 20)),
               const SizedBox(width: 3),
-              WidgetUtils.getRating(fuelStation.rating, 16)
+              WidgetUtils.getRating(fuelStation.rating, 20)
             ]))
         : const SizedBox(width: 0);
   }

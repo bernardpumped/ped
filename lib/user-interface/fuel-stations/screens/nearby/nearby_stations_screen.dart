@@ -29,28 +29,24 @@ import 'package:pumped_end_device/main.dart';
 import 'package:pumped_end_device/models/pumped/fuel_category.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station.dart';
 import 'package:pumped_end_device/models/pumped/fuel_type.dart';
-import 'package:pumped_end_device/user-interface/fuel-stations/fuel_station_screen_color_scheme.dart';
-import 'package:pumped_end_device/user-interface/fuel-stations/screens/favourite/favourite_stations_screen.dart';
+import 'package:pumped_end_device/user-interface/fuel-station-details/screen/fuel_station_details_screen.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/screens/widgets/fuel-station-sorter/fuel_station_sortater_widget.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/screens/widgets/fuel-type-switcher/fuel_type_switcher_btn.dart';
-import 'package:pumped_end_device/user-interface/fuel-stations/screens/widgets/fuel_station_switcher_widget.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/screens/widgets/fuel-type-switcher/fuel_type_switcher_widget.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/screens/widgets/fuel_station_list_widget.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/screens/widgets/fuel_station_type.dart';
-import 'package:pumped_end_device/user-interface/nav-drawer/nav_drawer_widget.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/model/fuel_type_switcher_data.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/model/nearby_fuel_stations.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/params/fuel_type_switcher_response_params.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/service/near_by_fuel_stations_service.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/screens/widgets/no_near_by_stations_widget.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/service/fuel_type_switcher_service.dart';
+import 'package:pumped_end_device/user-interface/ped_base_page_view.dart';
 import 'package:pumped_end_device/user-interface/utils/under_maintenance_service.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
-import 'package:pumped_end_device/user-interface/widgets/pumped_app_bar.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
 class NearbyStationsScreen extends StatefulWidget {
-  static const routeName = '/ped/fuel-stations/nearby';
   const NearbyStationsScreen({Key? key}) : super(key: key);
 
   @override
@@ -71,8 +67,6 @@ class _NearbyStationsScreenState extends State<NearbyStationsScreen> {
       LocationUtils(getIt.get<LocationDataSource>(instanceName: locationDataSourceInstanceName));
   final FuelTypeSwitcherService _fuelTypeSwitcherDataSource = FuelTypeSwitcherService();
 
-  final FuelStationsScreenColorScheme colorScheme =
-      getIt.get<FuelStationsScreenColorScheme>(instanceName: fsScreenColorSchemeName);
   late StreamController<FuelTypeSwitcherData> _fuelTypeSwitcherDataStreamController;
   Future<NearByFuelStations>? _nearbyFuelStationsFuture;
 
@@ -91,6 +85,10 @@ class _NearbyStationsScreenState extends State<NearbyStationsScreen> {
   LocationServiceSubscription? _locationServiceSubscription;
   bool _locationServiceSubscriptionActive = false;
 
+  bool _displayFuelTypeSwitcher = false;
+  FuelStation? _fuelStationToDisplay;
+  NearByFuelStations? data;
+
   @override
   void initState() {
     super.initState();
@@ -101,7 +99,7 @@ class _NearbyStationsScreenState extends State<NearbyStationsScreen> {
     _nearbyFuelStationsFuture?.whenComplete(() {
       whenNearbyFuelStationFutureComplete();
     });
-    _nearbyFuelStationsFuture?.then((value) => showDisclaimer(value));
+    _nearbyFuelStationsFuture?.then((value) => _showDisclaimer(value));
     _underMaintenanceService.registerSubscription(_tag, context, (event, context) {
       if (!mounted) return;
       WidgetUtils.showPumpedUnavailabilityMessage(event, context);
@@ -123,7 +121,7 @@ class _NearbyStationsScreenState extends State<NearbyStationsScreen> {
   Widget build(final BuildContext context) {
     _fuelTypeSwitcherDataSource.addFuelTypeSwitcherDataToStream(_fuelTypeSwitcherDataStreamController,
         throwError: false);
-    return Scaffold(appBar: const PumpedAppBar(), drawer: const NavDrawerWidget(), body: _nearByStationsScreenBody());
+    return Scaffold(body: SafeArea(child: _nearByStationsScreenBody()));
   }
 
   void scrollFuelStations(final int sortOrder) {
@@ -156,26 +154,46 @@ class _NearbyStationsScreenState extends State<NearbyStationsScreen> {
   }
 
   _nearByStationsScreenBody() {
-    return Container(
-        color: colorScheme.bodyBackgroundColor,
-        child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-          Padding(
-              padding: const EdgeInsets.only(top: 5.0, left: 20, right: 20), child: _getStationTypeFuelTypeSwitcher()),
-          Expanded(child: _getNearbyFuelStationsFutureBuilder())
+    return SizedBox(
+        width: MediaQuery.of(context).size.width - drawerWidth,
+        child: Row(children: [
+          Expanded(
+              flex: 2,
+              child: Stack(children: [
+                _getNearbyFuelStationsFutureBuilder(),
+                Positioned(right: 20, bottom: 20, child: _getFuelTypeSwitcherStreamBuilder())
+              ])),
+          Expanded(flex: 3, child: _getDetailsSectionWidget())
         ]));
   }
 
-  Widget _getStationTypeFuelTypeSwitcher() {
-    return Material(
-        color: colorScheme.stationFuelTypeSwitcherColor,
-        child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          FuelStationSwitcherWidget(
-              fuelStationType: FuelStationType.nearby, onChangeCallback: _handleFuelStationSwitch),
-          _getFuelTypeSwitcherStreamBuilder()
-        ]));
+  _getDetailsSectionWidget() {
+    if (_fuelStationToDisplay != null) {
+      return FuelStationDetailsScreen(selectedFuelStation: _fuelStationToDisplay!);
+    } else if (_displayFuelTypeSwitcher) {
+      return FuelTypeSwitcherWidget(
+          selectedFuelType: _selectedFuelType!,
+          selectedFuelCategory: _selectedFuelCategory!,
+          onChangeCallback: _handleFuelTypeSwitch,
+          onCancelCallback: () {
+            setState(() {
+              _fuelStationToDisplay = null;
+              _displayFuelTypeSwitcher = false;
+            });
+          });
+    } else {
+      return _selectStationMessage();
+    }
   }
 
-  NearByFuelStations? data;
+  Card _selectStationMessage() {
+    return Card(
+        margin: const EdgeInsets.all(8),
+        child: Container(
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: Colors.white),
+            child: const Center(
+                child: Text('Select a Fuel Station', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500)))));
+  }
 
   Widget _getNearbyFuelStationsFutureBuilder() {
     return FutureBuilder<NearByFuelStations>(
@@ -196,13 +214,12 @@ class _NearbyStationsScreenState extends State<NearbyStationsScreen> {
                 lastQueryLatitude = data!.latitude;
                 lastQueryLongitude = data!.longitude;
                 return RefreshIndicator(
-                    color: Colors.blue,
                     onRefresh: () async {
                       if ((DateTime.now().millisecondsSinceEpoch - timeOfLastNearbySearch) > minTimeBetweenSearches) {
                         setState(() {
                           timeOfLastNearbySearch = DateTime.now().millisecondsSinceEpoch;
                           _nearbyFuelStationsFuture = _nearByFuelStationsService.getFuelStations();
-                          _nearbyFuelStationsFuture?.then((value) => showDisclaimer(value));
+                          _nearbyFuelStationsFuture?.then((value) => _showDisclaimer(value));
                           _nearbyFuelStationsFuture?.whenComplete(() {
                             whenNearbyFuelStationFutureComplete();
                           });
@@ -214,7 +231,7 @@ class _NearbyStationsScreenState extends State<NearbyStationsScreen> {
                     child: Stack(children: [
                       _nearbyFuelStationsWidget(data!),
                       Positioned(
-                          bottom: 20,
+                          bottom: 80,
                           right: 20,
                           child: FuelStationSorterWidget(parentUpdateFunction: scrollFuelStations))
                     ]));
@@ -227,12 +244,14 @@ class _NearbyStationsScreenState extends State<NearbyStationsScreen> {
 
   RenderObjectWidget _getIntermediateUI(final NearByFuelStations? data) {
     if (data != null) {
+      LogUtil.debug(_tag, 'Data was NOT found to be null');
       return Stack(children: [
         _nearbyFuelStationsWidget(data),
-        const Center(child: RefreshProgressIndicator(backgroundColor: Colors.indigo, color: Colors.white))
+        const Center(child: RefreshProgressIndicator())
       ]);
     } else {
-      return const Center(child: RefreshProgressIndicator(backgroundColor: Colors.indigo, color: Colors.white));
+      LogUtil.debug(_tag, 'Data was found to be null');
+      return const Center(child: RefreshProgressIndicator());
     }
   }
 
@@ -259,7 +278,7 @@ class _NearbyStationsScreenState extends State<NearbyStationsScreen> {
       setState(() {
         timeOfLastNearbySearch = DateTime.now().millisecondsSinceEpoch;
         _nearbyFuelStationsFuture = _nearByFuelStationsService.getFuelStations();
-        _nearbyFuelStationsFuture?.then((value) => showDisclaimer(value));
+        _nearbyFuelStationsFuture?.then((value) => _showDisclaimer(value));
         _nearbyFuelStationsFuture?.whenComplete(() {
           whenNearbyFuelStationFutureComplete();
         });
@@ -284,19 +303,25 @@ class _NearbyStationsScreenState extends State<NearbyStationsScreen> {
           _fuelTypeSwitcherDataSource.addFuelTypeSwitcherDataToStream(_fuelTypeSwitcherDataStreamController);
           _selectedFuelType = data.defaultFuelType;
         }
-        return FuelStationListWidget(
-            _scrollController, _nearByFuelStations, _selectedFuelType!, sortOrder, FuelStationType.nearby);
+        return FuelStationListWidget(_scrollController, _nearByFuelStations, _selectedFuelType!, sortOrder,
+            FuelStationType.nearby, _setSelectedFuelStation);
       }
     }
   }
 
-  void showDisclaimer(final NearByFuelStations value) {
+  void _setSelectedFuelStation(final FuelStation fuelStation) {
+    setState(() {
+      _displayFuelTypeSwitcher = false;
+      _fuelStationToDisplay = fuelStation;
+    });
+  }
+
+  void _showDisclaimer(final NearByFuelStations value) {
     if (value.hiddenResultsFilteredCount != 0) {
       WidgetUtils.showToastMessage(
           context,
           '${value.hiddenResultsFilteredCount} hidden fuel stations filtered for result. '
-          'To view clear hidden list in settings.',
-          Colors.indigo);
+          'To view clear hidden list in settings.');
     }
   }
 
@@ -324,29 +349,27 @@ class _NearbyStationsScreenState extends State<NearbyStationsScreen> {
       _selectedFuelType = _selectedFuelType ?? data.defaultFuelType;
       _selectedFuelCategory = _selectedFuelCategory ?? data.defaultFuelCategory;
     }
-    return FuelTypeSwitcherWidget(
-        selectedFuelType: _selectedFuelType!,
-        selectedFuelCategory: _selectedFuelCategory!,
-        onChangeCallback: _handleFuelTypeSwitch);
+    String txtToDisplay = _selectedFuelType!.fuelName;
+    if (txtToDisplay.length > 15) {
+      txtToDisplay = _selectedFuelType!.fuelName.substring(0, 15);
+    }
+    return FuelTypeSwitcherButton(txtToDisplay, () {
+      setState(() {
+        _fuelStationToDisplay = null;
+        _displayFuelTypeSwitcher = true;
+      });
+    });
   }
 
   void _handleFuelTypeSwitch(final FuelTypeSwitcherResponseParams? params) {
     if (params != null) {
-      LogUtil.debug(_tag, 'Params received : ${params.fuelType} ${params.fuelType}');
+      LogUtil.debug(_tag, 'Params received : ${params.fuelType.fuelType} ${params.fuelCategory.categoryName}');
       setState(() {
         _selectedFuelCategory = params.fuelCategory;
         _selectedFuelType = params.fuelType;
       });
     } else {
       LogUtil.debug(_tag, 'handleFuelTypeSwitch::No response returned from FuelTypeSwitcher');
-    }
-  }
-
-  void _handleFuelStationSwitch(final FuelStationType? fuelStationType) {
-    LogUtil.debug(_tag, 'fuelStationType found as $fuelStationType');
-    if (fuelStationType != null && fuelStationType == FuelStationType.favourite) {
-      LogUtil.debug(_tag, 'Named Replacement for ${FavouriteStationsScreen.routeName}');
-      Navigator.pushReplacementNamed(context, FavouriteStationsScreen.routeName);
     }
   }
 }

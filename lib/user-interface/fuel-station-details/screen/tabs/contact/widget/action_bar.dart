@@ -20,9 +20,9 @@ import 'package:flutter/material.dart';
 import 'package:pumped_end_device/data/local/location/location_data_source.dart';
 import 'package:pumped_end_device/main.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station.dart';
-import 'package:pumped_end_device/user-interface/fuel-station-details/fuel_station_details_screen_color_scheme.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/screen/tabs/contact/widget/directions_widget.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/screen/tabs/contact/widget/favorite_fuel_station_bookmark.dart';
+import 'package:pumped_end_device/user-interface/fuel-station-details/screen/tabs/contact/widget/hide_fuel_station_widget.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/screen/tabs/contact/widget/phone_widget.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/screen/tabs/contact/widget/rate_widget.dart';
 import 'package:pumped_end_device/util/data_utils.dart';
@@ -30,42 +30,38 @@ import 'package:pumped_end_device/util/data_utils.dart';
 class ActionBar extends StatelessWidget {
   final FuelStation fuelStation;
   final Function onFavouriteStatusChange;
-  ActionBar({Key? key, required this.fuelStation, required this.onFavouriteStatusChange}) : super(key: key);
-
-  final FuelStationDetailsScreenColorScheme colorScheme =
-      getIt.get<FuelStationDetailsScreenColorScheme>(instanceName: fsDetailsScreenColorSchemeName);
+  const ActionBar({Key? key, required this.fuelStation, required this.onFavouriteStatusChange}) : super(key: key);
 
   @override
   Widget build(final BuildContext context) {
     final String? phone = DataUtils.isNotBlank(fuelStation.fuelStationAddress.phone1)
         ? fuelStation.fuelStationAddress.phone1
         : fuelStation.fuelStationAddress.phone2;
-    return Card(
-      color: Colors.white,
-      surfaceTintColor: Colors.white,
-      child: Container(
-          padding: const EdgeInsets.only(top: 10, bottom: 10),
-          margin: const EdgeInsets.only(left: 5, right: 5),
-          child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Padding(
-                    padding: const EdgeInsets.only(left: 15, right: 12),
-                    child: DirectionsWidget(
-                        fuelStation.fuelStationAddress.latitude,
-                        fuelStation.fuelStationAddress.longitude,
-                        getIt.get<LocationDataSource>(instanceName: locationDataSourceInstanceName))),
-                (phone != null)
-                    ? Padding(padding: const EdgeInsets.only(left: 12, right: 12), child: PhoneWidget(phone))
-                    : const SizedBox(width: 0),
-                Padding(
-                    padding: const EdgeInsets.only(left: 12, right: 12),
-                    child: RateWidget(fuelStation.fuelStationAddress)),
-                Padding(
-                    padding: const EdgeInsets.only(left: 12, right: 15),
-                    child: FavoriteFuelStationBookmark(fuelStation, onFavouriteStatusChange))
-              ])),
-    );
+    return Container(
+        padding: const EdgeInsets.only(top: 10, bottom: 10),
+        margin: const EdgeInsets.only(left: 5, right: 5),
+        child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Padding(
+                  padding: const EdgeInsets.only(left: 15, right: 12),
+                  child: DirectionsWidget(
+                      fuelStation.fuelStationAddress.latitude,
+                      fuelStation.fuelStationAddress.longitude,
+                      getIt.get<LocationDataSource>(instanceName: locationDataSourceInstanceName))),
+              (phone != null)
+                  ? Padding(padding: const EdgeInsets.only(left: 12, right: 12), child: PhoneWidget(phone))
+                  : const SizedBox(width: 0),
+              Padding(
+                  padding: const EdgeInsets.only(left: 12, right: 12),
+                  child: RateWidget(fuelStation.fuelStationAddress)),
+              Padding(
+                  padding: const EdgeInsets.only(left: 12, right: 15),
+                  child: FavoriteFuelStationBookmark(fuelStation, onFavouriteStatusChange)),
+              Padding(
+                  padding: const EdgeInsets.only(left: 12, right: 15),
+                  child: HideFuelStationWidget(fuelStation, onFavouriteStatusChange))
+            ]));
   }
 }

@@ -18,28 +18,21 @@
 
 import 'package:flutter/material.dart';
 import 'package:pumped_end_device/main.dart';
-import 'package:pumped_end_device/user-interface/edit-fuel-station-details/model/update-results/update_fuel_station_details_result.dart';
-import 'package:pumped_end_device/user-interface/fuel-station-details/fuel_station_details_screen_color_scheme.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/screen/tabs/contact/contact_tab.dart';
-import 'package:pumped_end_device/user-interface/fuel-station-details/screen/widget/context_aware_fab.dart';
-import 'package:pumped_end_device/user-interface/fuel-station-details/utils/fuel_station_update_merge_util.dart';
-import 'package:pumped_end_device/user-interface/fuel-station-details/params/fuel_station_details_param.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/screen/tabs/fuel-prices/fuel_prices_tab.dart';
 import 'package:pumped_end_device/user-interface/utils/under_maintenance_service.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
-import 'package:pumped_end_device/user-interface/widgets/collapsed_header_widget.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/screen/tabs/promos/widget/no_promotions_widget.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/screen/tabs/promos/widget/promotions_widget.dart';
 import 'package:pumped_end_device/user-interface/widgets/expanded_header_widget.dart';
-import 'package:pumped_end_device/user-interface/widgets/sliver_app_bar_title.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station.dart';
-import 'package:pumped_end_device/user-interface/widgets/pumped_app_bar.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
 class FuelStationDetailsScreen extends StatefulWidget {
   static const routeName = '/ped/fuel-stations/details';
+  final FuelStation selectedFuelStation;
 
-  const FuelStationDetailsScreen({Key? key}) : super(key: key);
+  const FuelStationDetailsScreen({Key? key, required this.selectedFuelStation}) : super(key: key);
 
   @override
   State<FuelStationDetailsScreen> createState() => _FuelStationDetailsScreenState();
@@ -51,12 +44,8 @@ class _FuelStationDetailsScreenState extends State<FuelStationDetailsScreen> {
   static const _promotionsTabHeader = "Offers";
   static const _contactTabHeader = "Contact";
 
-  final FuelStationDetailsScreenColorScheme colorScheme =
-      getIt.get<FuelStationDetailsScreenColorScheme>(instanceName: fsDetailsScreenColorSchemeName);
   final UnderMaintenanceService _underMaintenanceService =
       getIt.get<UnderMaintenanceService>(instanceName: underMaintenanceServiceName);
-
-  final FuelStationUpdateMergeUtil _fuelStationUpdateMergeUtil = FuelStationUpdateMergeUtil();
 
   final List<String> _tabs = [_fuelPricesTabHeader, _promotionsTabHeader, _contactTabHeader];
   int _selectedTabIndex = 0;
@@ -78,28 +67,13 @@ class _FuelStationDetailsScreenState extends State<FuelStationDetailsScreen> {
     super.dispose();
   }
 
-  /*
-    This method is invoked for the results of the updates which
-    are sent to the backend.
-   */
-  void onUpdateResult(
-      final FuelStation fuelStation, final UpdateFuelStationDetailsResult updateFuelStationDetailsResult) {
-    LogUtil.debug(_tag,
-        'onUpdateResult :: Received response from edit screen : ${updateFuelStationDetailsResult.updateFuelStationDetailType}');
-    setState(() {
-      _fuelStationUpdateMergeUtil.mergeFuelStationUpdateResult(fuelStation, updateFuelStationDetailsResult);
-      homeScreenRefreshNeeded = true;
-    });
-  }
-
   void onFavouriteStatusChange() {
     homeScreenRefreshNeeded = true;
   }
 
   @override
   Widget build(final BuildContext context) {
-    final FuelStationDetailsParam param = ModalRoute.of(context)?.settings.arguments as FuelStationDetailsParam;
-    final FuelStation fuelStation = param.fuelStation;
+    final FuelStation fuelStation = widget.selectedFuelStation;
     return WillPopScope(
         onWillPop: () {
           bool tmp = homeScreenRefreshNeeded;
@@ -108,58 +82,47 @@ class _FuelStationDetailsScreenState extends State<FuelStationDetailsScreen> {
           Navigator.pop(context, tmp);
           return Future.value(false);
         },
-        child: Scaffold(
-            floatingActionButton: _selectedTabIndex == 2 || _selectedTabIndex == 0
-                ? ContextAwareFab(fuelStation, _selectedTabIndex, onUpdateResult)
-                : const SizedBox(width: 0),
-            backgroundColor: colorScheme.backgroundColor,
-            appBar: const PumpedAppBar(),
-            body: DefaultTabController(
-                length: _tabs.length,
-                child: NestedScrollView(
-                    headerSliverBuilder: (context, innerBoxIsScrolled) {
-                      return <Widget>[
-                        SliverAppBar(
-                            pinned: true,
-                            surfaceTintColor: colorScheme.backgroundColor,
-                            expandedHeight: 140,
-                            automaticallyImplyLeading: false,
-                            backgroundColor: colorScheme.backgroundColor,
-                            elevation: 0,
-                            centerTitle: false,
-                            collapsedHeight: 65,
-                            title: SliverAppBarTitle(child: CollapsedHeaderWidget(fuelStation: fuelStation)),
-                            flexibleSpace:
-                                FlexibleSpaceBar(background: ExpandedHeaderWidget(fuelStation: fuelStation))),
-                        SliverPersistentHeader(
-                            pinned: true,
-                            delegate: _SliverAppBarDelegate(TabBar(
-                                onTap: (tapIndex) {
-                                  setState(() {
-                                    _selectedTabIndex = tapIndex;
-                                  });
-                                },
-                                labelColor: Colors.white,
-                                indicator: const BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
-                                    color: Colors.indigo),
-                                indicatorColor: Colors.indigo,
-                                unselectedLabelColor: Colors.indigo,
-                                labelPadding: const EdgeInsets.only(left: 5, right: 5),
-                                labelStyle: const TextStyle(fontSize: 14),
-                                padding: const EdgeInsets.only(left: 8, right: 8),
-                                tabs: _tabs.map((tabName) {
-                                  return Tab(
-                                      child: Text(tabName,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 17)));
-                                }).toList())))
-                      ];
-                    },
-                    body: CustomScrollView(key: PageStorageKey<String>(_tabs[_selectedTabIndex]), slivers: <Widget>[
-                      SliverToBoxAdapter(child: _getChildTabContent(fuelStation, _tabs[_selectedTabIndex]))
-                    ])))));
+        child: _fuelStationDetailsView(fuelStation));
+  }
+
+  DefaultTabController _fuelStationDetailsView(FuelStation fuelStation) {
+    return DefaultTabController(
+        length: _tabs.length,
+        child: NestedScrollView(
+            headerSliverBuilder: (context, innerBoxIsScrolled) {
+              return <Widget>[
+                SliverAppBar(
+                    pinned: true,
+                    expandedHeight: 240,
+                    automaticallyImplyLeading: false,
+                    centerTitle: false,
+                    collapsedHeight: 240,
+                    flexibleSpace: FlexibleSpaceBar(
+                        background: Card(
+                            margin: const EdgeInsets.all(6),
+                            child: ExpandedHeaderWidget(
+                                fuelStation: fuelStation, onFavouriteStatusChange: onFavouriteStatusChange)))),
+                SliverPersistentHeader(
+                    pinned: true,
+                    delegate: _SliverTabBarDelegate(TabBar(
+                        onTap: (tapIndex) {
+                          setState(() {
+                            _selectedTabIndex = tapIndex;
+                          });
+                        },
+                        labelPadding: const EdgeInsets.only(left: 5, right: 5),
+                        padding: const EdgeInsets.only(left: 8, right: 8, top: 8),
+                        tabs: _tabs.map((tabName) {
+                          return Tab(
+                              child: Text(tabName,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 22)));
+                        }).toList())))
+              ];
+            },
+            body: CustomScrollView(key: PageStorageKey<String>(_tabs[_selectedTabIndex]), slivers: <Widget>[
+              SliverToBoxAdapter(child: _getChildTabContent(fuelStation, _tabs[_selectedTabIndex]))
+            ])));
   }
 
   Widget? _getChildTabContent(final FuelStation fuelStation, final String tabName) {
@@ -167,7 +130,7 @@ class _FuelStationDetailsScreenState extends State<FuelStationDetailsScreen> {
     Widget? tabWidget;
     switch (tabName) {
       case _contactTabHeader:
-        tabWidget = ContactTabWidget(fuelStation, onFavouriteStatusChange);
+        tabWidget = ContactTabWidget(fuelStation);
         break;
       case _fuelPricesTabHeader:
         tabWidget = FuelPricesTabWidget(fuelStation);
@@ -180,8 +143,8 @@ class _FuelStationDetailsScreenState extends State<FuelStationDetailsScreen> {
   }
 }
 
-class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
-  _SliverAppBarDelegate(this._tabBar);
+class _SliverTabBarDelegate extends SliverPersistentHeaderDelegate {
+  _SliverTabBarDelegate(this._tabBar);
   final TabBar _tabBar;
 
   @override
@@ -191,11 +154,11 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
 
   @override
   Widget build(final BuildContext context, final double shrinkOffset, final bool overlapsContent) {
-    return Container(decoration: const BoxDecoration(color: Color(0xFFF0EDFF)), child: _tabBar);
+    return Container(child: _tabBar);
   }
 
   @override
-  bool shouldRebuild(final _SliverAppBarDelegate oldDelegate) {
+  bool shouldRebuild(final _SliverTabBarDelegate oldDelegate) {
     return false;
   }
 }

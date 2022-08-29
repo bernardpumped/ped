@@ -17,37 +17,32 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:pumped_end_device/main.dart';
-import 'package:pumped_end_device/user-interface/fuel-stations/fuel_station_screen_color_scheme.dart';
 
 class NoNearByStationsWidget extends StatelessWidget {
   const NoNearByStationsWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(final BuildContext context) {
-    final FuelStationsScreenColorScheme colorScheme =
-        getIt.get<FuelStationsScreenColorScheme>(instanceName: fsScreenColorSchemeName);
     return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Text('No Nearby Stations',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: colorScheme.noDataScreenTextColor),
-              textAlign: TextAlign.center),
+          const Text('No Nearby Stations',
+              style: TextStyle(fontSize: 26, fontWeight: FontWeight.w500), textAlign: TextAlign.center),
           const SizedBox(height: 20),
           RichText(
               textAlign: TextAlign.center,
-              text: TextSpan(children: [
+              text: const TextSpan(children: [
                 TextSpan(
                     text: "Sorry your neighbourhood not yet covered by Pumped. We have informed Pumped admin.\n",
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: colorScheme.noDataScreenTextColor)),
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal)),
                 TextSpan(
                     text: "\nYou can refine your Search Options. Tap on ",
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: colorScheme.noDataScreenTextColor)),
-                const WidgetSpan(child: Icon(Icons.settings, color: Colors.indigo, size: 24)),
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal)),
+                WidgetSpan(child: Icon(Icons.settings, size: 24)),
                 TextSpan(
                     text: " icon on bottom bar, to customize search.",
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: colorScheme.noDataScreenTextColor))
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal))
               ]))
         ]);
   }

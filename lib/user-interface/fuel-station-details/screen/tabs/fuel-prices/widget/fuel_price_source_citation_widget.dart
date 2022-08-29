@@ -63,22 +63,22 @@ class FuelPriceSourceCitationWidget extends StatelessWidget {
   Column _getFuelAuthorityMessage(final BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: <Widget>[
       Row(children: [
-        Text(fuelTypeName, style: const TextStyle(fontSize: 22, color: Colors.indigo, fontWeight: FontWeight.bold)),
+        Text(fuelTypeName, style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w500)),
         const SizedBox(width: 10),
         Text(fuelQuote.quoteValue.toString(),
-            style: const TextStyle(fontSize: 22, color: Colors.indigo, fontWeight: FontWeight.bold))
+            style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w500))
       ]),
-      const SizedBox(height: 12),
-      const Divider(color: Colors.indigo, height: 1),
-      const SizedBox(height: 8),
+      const SizedBox(height: 14),
+      const Divider(height: 1),
+      const SizedBox(height: 10),
       Text('Price Source ${_getFuelAuthorityQuotePublisher()}',
-          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500, color: Colors.indigo)),
-      const SizedBox(height: 8),
+          style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w500)),
+      const SizedBox(height: 12),
       Text('Price updated near realtime ${_getPublishDateFormatted(fuelQuote.publishDate!)}',
-          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.indigo)),
-      const SizedBox(height: 12),
-      const Divider(color: Colors.indigo, height: 1),
-      const SizedBox(height: 12),
+          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.normal)),
+      const SizedBox(height: 14),
+      const Divider(height: 1),
+      const SizedBox(height: 14),
       _getAdminContactMessage(),
       const SizedBox(height: 12),
       _getOkActionButton(context)
@@ -88,21 +88,21 @@ class FuelPriceSourceCitationWidget extends StatelessWidget {
   Column _getCrowdSourceMessage(final BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: <Widget>[
       Row(children: [
-        Text(fuelTypeName, style: const TextStyle(fontSize: 22, color: Colors.indigo, fontWeight: FontWeight.bold)),
+        Text(fuelTypeName, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
         const SizedBox(width: 10),
         Text(fuelQuote.quoteValue.toString(),
-            style: const TextStyle(fontSize: 22, color: Colors.indigo, fontWeight: FontWeight.bold))
+            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold))
       ]),
       const SizedBox(height: 12),
-      const Divider(color: Colors.indigo, height: 1),
+      const Divider(height: 1),
       const SizedBox(height: 8),
       const Text('Fuel Price Crowd Sourced',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500, color: Colors.indigo)),
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
       const SizedBox(height: 8),
       Text('Price updated ${_getPublishDateFormatted(fuelQuote.publishDate!)}',
-          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.indigo)),
+          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400)),
       const SizedBox(height: 12),
-      const Divider(color: Colors.indigo, height: 1),
+      const Divider(height: 1),
       const SizedBox(height: 12),
       _getAdminContactMessage(),
       const SizedBox(height: 12),
@@ -112,17 +112,13 @@ class FuelPriceSourceCitationWidget extends StatelessWidget {
 
   Row _getOkActionButton(final BuildContext context) {
     return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-      WidgetUtils.getRoundedElevatedButton(
-          child: Row(children: const [
-            Icon(Icons.cancel_outlined, size: 24, color: Colors.white),
-            SizedBox(width: 10),
-            Text('Cancel', style: TextStyle(color: Colors.white))
-          ]),
-          onPressed: () {
+      WidgetUtils.getRoundedButton(
+          context: context,
+          buttonText: 'Cancel',
+          iconData: Icons.cancel_outlined,
+          onTapFunction: () {
             Navigator.pop(context);
-          },
-          borderRadius: 10.0,
-          backgroundColor: Colors.indigo),
+          }),
       const SizedBox(width: 10),
       _getNotificationWidget()
     ]);
@@ -131,7 +127,6 @@ class FuelPriceSourceCitationWidget extends StatelessWidget {
   Widget _getNotificationWidget() {
     var notificationType = notificationTypeMap[fuelQuote.fuelQuoteSourceName];
     if (notificationType == emailNotificationType || fuelQuote.crowdSourced()) {
-      // fuelQuote.fuelQuoteSourceName can never be null.
       return EmailNotificationWidget(
           emailBody: _getEmailBody(),
           emailSubject: _getEmailSubject(),
@@ -144,7 +139,7 @@ class FuelPriceSourceCitationWidget extends StatelessWidget {
 
   Text _getAdminContactMessage() {
     return const Text('If fuel price is incorrect please let us know',
-        textAlign: TextAlign.start, style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w400, color: Colors.red));
+        textAlign: TextAlign.start, style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w400, color: Colors.red));
   }
 
   String? _getFuelAuthorityQuotePublisher() {

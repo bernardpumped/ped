@@ -34,15 +34,6 @@ dependencies:
   localstore: ^1.2.0
   sprintf: ^6.0.0
   uuid: ^3.0.4
-  provider: ^6.0.3
-
-# plugins firebase (android and ios)
-  cloud_firestore: ^3.4.0
-  firebase_auth: ^3.5.0
-  firebase_core: ^1.20.0
-  flutter_facebook_auth: ^4.4.0
-  google_sign_in: ^5.4.0
-  twitter_login: ^4.2.3
 
 # plugins general
   device_info_plus: ^4.0.0
@@ -50,9 +41,9 @@ dependencies:
   geocoding: ^2.0.4
   geolocator: ^9.0.0
   geolocator_linux: ^0.1.0
-  path: ^1.8.0
-  url_launcher: ^6.0.11
-  webview_flutter: ^3.0.4
+  path: ^1.8.0 # Supported on Linux
+  url_launcher: ^6.0.11 # Supported on Linux. However, for certain functions invoked using this library do not work on Linux, like google maps, phone calling etc.
+  webview_flutter: ^3.0.4 # NOT supported on linux.
 
 dev_dependencies:
   build_runner: ^2.1.5
@@ -95,7 +86,7 @@ flutter:
     - assets/images/2.0x/ic_pumped_black_text.png
     - assets/images/3.0x/ic_pumped_black_text.png
     - assets/images/ic_user.png
-    - assets/images/Wave-2.png #https://bgjar.com/wave
+    - assets/images/Wave-2-landscape.png #https://bgjar.com/wave
     - assets/images/1.0x/ic_user.png
     - assets/images/2.0x/ic_user.png
     - assets/images/3.0x/ic_user.png

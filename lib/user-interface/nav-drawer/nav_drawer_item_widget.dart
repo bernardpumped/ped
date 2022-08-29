@@ -17,8 +17,6 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:pumped_end_device/main.dart';
-import 'package:pumped_end_device/user-interface/nav-drawer/nav_drawer_color_scheme.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
 class NavDrawerItemWidget extends StatelessWidget {
@@ -27,41 +25,30 @@ class NavDrawerItemWidget extends StatelessWidget {
   final int itemIndex;
   final String label;
   final IconData icon;
+  final IconData selectedIcon;
   final VoidCallback callback;
   final bool selected;
-  final NavDrawerColorScheme colorScheme = getIt.get<NavDrawerColorScheme>(instanceName: navDrawerColorSchemeName);
 
-  NavDrawerItemWidget(
+  const NavDrawerItemWidget(
       {Key? key,
       required this.itemIndex,
       required this.label,
       required this.icon,
+      required this.selectedIcon,
       required this.callback,
       required this.selected})
       : super(key: key);
 
   @override
   Widget build(final BuildContext context) {
-    final backgroundColor = selected ? colorScheme.selectedBackgroundColor : colorScheme.backgroundColor;
-    final textColor = selected ? colorScheme.selectedTextColor : colorScheme.textColor;
-    final iconColor = selected ? colorScheme.selectedIconColor : colorScheme.iconColor;
+    final displayIcon = selected ? selectedIcon : icon;
     return GestureDetector(
         onTap: () {
           LogUtil.debug(_tag, '$label is currently selected');
           callback();
         },
         child: Container(
-            margin: const EdgeInsets.only(right: 25),
-            padding: const EdgeInsets.all(15),
-            decoration: BoxDecoration(
-                color: backgroundColor,
-                shape: BoxShape.rectangle,
-                borderRadius: const BorderRadius.horizontal(right: Radius.circular(50.0))),
-            child: Row(children: [
-              Padding(padding: const EdgeInsets.only(left: 20), child: Icon(icon, color: iconColor)),
-              Padding(
-                  padding: const EdgeInsets.only(left: 20),
-                  child: Text(label, style: TextStyle(color: textColor, fontSize: 16)))
-            ])));
+            padding: const EdgeInsets.only(top: 16, bottom: 16, left: 8, right: 8),
+            child: Icon(displayIcon, size: 35)));
   }
 }

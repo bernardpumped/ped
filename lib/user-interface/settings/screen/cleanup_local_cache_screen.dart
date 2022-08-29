@@ -23,7 +23,6 @@ import 'package:pumped_end_device/data/local/dao/update_history_dao.dart';
 import 'package:pumped_end_device/data/local/dao/user_configuration_dao.dart';
 import 'package:pumped_end_device/data/local/model/user_configuration.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
-import 'package:pumped_end_device/user-interface/widgets/pumped_app_bar.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
 class CleanupLocalCacheScreen extends StatefulWidget {
@@ -42,111 +41,112 @@ class _CleanupLocalCacheScreenState extends State<CleanupLocalCacheScreen> {
 
   @override
   Widget build(final BuildContext context) {
-    return Scaffold(
-        appBar: const PumpedAppBar(),
-        body: Container(
-            height: MediaQuery.of(context).size.height,
-            color: const Color(0xFFF0EDFF),
-            width: double.infinity,
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-              const Padding(
-                  padding: EdgeInsets.only(top: 10, bottom: 10, left: 10),
-                  child: Text('Clear Local Cache',
-                      style: TextStyle(fontSize: 24, color: Colors.indigo, fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.center)),
-              Expanded(
-                  child: ListView(padding: const EdgeInsets.only(left: 10, right: 10, top: 10), children: <Widget>[
-                _buildListTile(Icons.search, "Search Settings",
-                    "Clear search settings. It will set all the values to defaults.", _clearSearchSettings, (value) {
-                  setState(() {
-                    LogUtil.debug(_tag, 'build::Clear Search settings Click function');
-                    _clearSearchSettings = value!;
-                  });
-                }),
-                _buildListTile(
-                    Icons.history,
-                    "Update History",
-                    "All your local data related to updates made to fuel prices and operating times will be erased",
-                    _clearUpdateHistory, (value) {
-                  setState(() {
-                    LogUtil.debug(_tag, 'build::Clear Update History Click function');
-                    _clearUpdateHistory = value!;
-                  });
-                }),
-                _buildListTile(Icons.favorite_border_outlined, "Favourite Stations",
-                    "Clear your selected favourite stations.", _clearFavouriteStations, (value) {
-                  setState(() {
-                    LogUtil.debug(_tag, 'build::Clear Favorite Stations Click function');
-                    _clearFavouriteStations = value!;
-                  });
-                }),
-                _buildListTile(Icons.hide_source_outlined, "Hidden Fuel Stations", "Clear your hidden stations.",
-                    _clearHiddenFuelStations, (value) {
-                  setState(() {
-                    LogUtil.debug(_tag, 'build::Clear Hidden Stations Click function');
-                    _clearHiddenFuelStations = value!;
-                  });
-                }),
-                _buildListTile(
-                    Icons.description_outlined,
-                    "Application Data",
-                    "Clear all app cached data. It will clear search settings, update history, "
-                        "favourite stations and hidden stations",
-                    _clearApplicationData, (value) {
-                  setState(() {
-                    LogUtil.debug(_tag, 'build::Clear Application Data Click function');
-                    _clearApplicationData = value!;
-                  });
-                }),
-                ListTile(
-                    contentPadding: const EdgeInsets.only(left: 10, right: 15),
-                    trailing: ElevatedButton(
-                        onPressed: () async {
-                          List<String> dataToClean = _dataToClean();
-                          if (dataToClean.isNotEmpty) {
-                            String msg = 'Cleaning up ${dataToClean.join(", ")}';
-                            BuildContext? dialogContext;
-                            showDialog(
-                                barrierDismissible: false,
-                                context: context,
-                                builder: (BuildContext context) {
-                                  dialogContext = context;
-                                  return AlertDialog(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(10), side: const BorderSide(width: 0.2)),
-                                      title: const Text("Cleaning data", style: TextStyle(color: Colors.indigo)),
-                                      content: Row(children: [
-                                        Expanded(
-                                            child: Text(msg,
-                                                style:
-                                                    const TextStyle(fontSize: 15, height: 1.4, color: Colors.indigo))),
-                                        const RefreshProgressIndicator(
-                                            backgroundColor: Colors.indigo, color: Colors.white)
-                                      ]));
-                                });
-                            String failedString  = await _cleanUp(context);
-                            if (dialogContext != null) {
-                              Navigator.pop(dialogContext!);
-                            }
-                            if (mounted) {
-                              if (failedString.isNotEmpty) {
-                                WidgetUtils.showToastMessage(context, failedString, Colors.indigo);
-                              } else {
-                                Navigator.pop(context);
-                              }
-                            }
-                          } else {
-                            WidgetUtils.showToastMessage(context, 'Nothing selected to clean', Colors.indigo);
+    return Container(
+        padding: const EdgeInsets.only(right: 10, bottom: 15, left: 10),
+        height: MediaQuery.of(context).size.height,
+        width: double.infinity,
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
+          const Padding(
+              padding: EdgeInsets.only(top: 10, bottom: 10, left: 10),
+              child: Text('Clear Local Cache',
+                  style: TextStyle(fontSize: 26, fontWeight: FontWeight.w500), textAlign: TextAlign.center)),
+          Expanded(
+              child: ListView(children: <Widget>[
+            _buildListTile(Icons.search, "Search Settings",
+                "Clear search settings. It will set all the values to defaults.", _clearSearchSettings, (value) {
+              setState(() {
+                LogUtil.debug(_tag, 'build::Clear Search settings Click function');
+                _clearSearchSettings = value!;
+              });
+            }),
+            _buildListTile(
+                Icons.history,
+                "Update History",
+                "All your local data related to updates made to fuel prices and operating times will be erased",
+                _clearUpdateHistory, (value) {
+              setState(() {
+                LogUtil.debug(_tag, 'build::Clear Update History Click function');
+                _clearUpdateHistory = value!;
+              });
+            }),
+            _buildListTile(Icons.favorite_border_outlined, "Favourite Stations",
+                "Clear your selected favourite stations.", _clearFavouriteStations, (value) {
+              setState(() {
+                LogUtil.debug(_tag, 'build::Clear Favorite Stations Click function');
+                _clearFavouriteStations = value!;
+              });
+            }),
+            _buildListTile(Icons.hide_source_outlined, "Hidden Fuel Stations", "Clear your hidden stations.",
+                _clearHiddenFuelStations, (value) {
+              setState(() {
+                LogUtil.debug(_tag, 'build::Clear Hidden Stations Click function');
+                _clearHiddenFuelStations = value!;
+              });
+            }),
+            _buildListTile(
+                Icons.description_outlined,
+                "Application Data",
+                "Clear all app cached data. It will clear search settings, update history, "
+                    "favourite stations and hidden stations",
+                _clearApplicationData, (value) {
+              setState(() {
+                LogUtil.debug(_tag, 'build::Clear Application Data Click function');
+                _clearApplicationData = value!;
+              });
+            }),
+            Padding(
+                padding: const EdgeInsets.only(top: 20, right: 20),
+                child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                  GestureDetector(
+                      onTap: () async {
+                        final List<String> dataToClean = _dataToClean();
+                        if (dataToClean.isNotEmpty) {
+                          final String msg = 'Cleaning up ${dataToClean.join(", ")}';
+                          BuildContext? dialogContext;
+                          showDialog(
+                              barrierDismissible: false,
+                              context: context,
+                              builder: (BuildContext context) {
+                                dialogContext = context;
+                                return AlertDialog(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10), side: const BorderSide(width: 0.2)),
+                                    title: const Text("Cleaning data"),
+                                    content: Row(children: [
+                                      Expanded(child: Text(msg, style: const TextStyle(fontSize: 15, height: 1.4))),
+                                      const RefreshProgressIndicator()
+                                    ]));
+                              });
+                          final String failedString = await _cleanUp(context);
+                          if (dialogContext != null) {
+                            setState(() {
+                              _clearSearchSettings = false;
+                              _clearUpdateHistory = false;
+                              _clearFavouriteStations = false;
+                              _clearApplicationData = false;
+                              _clearHiddenFuelStations = false;
+                            });
                           }
-                        },
-                        style: ButtonStyle(
-                            foregroundColor: MaterialStateProperty.all(Colors.white),
-                            backgroundColor: MaterialStateProperty.all(Colors.indigo),
-                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)))),
-                        child: const Text('Clear data')))
-              ]))
-            ])));
+                          if (mounted) {
+                            if (failedString.isNotEmpty) {
+                              WidgetUtils.showToastMessage(context, failedString);
+                            } else {
+                              Navigator.pop(context);
+                            }
+                          }
+                        } else {
+                          WidgetUtils.showToastMessage(context, 'Nothing selected to clean');
+                        }
+                      },
+                      child: WidgetUtils.wrapWithRoundedContainer(
+                          context: context,
+                          radius: 24,
+                          child: const Padding(
+                              padding: EdgeInsets.only(top: 8, bottom: 8, left: 12, right: 12),
+                              child: Text('Clear Data', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500)))))
+                ]))
+          ]))
+        ]));
   }
 
   Future<String> _cleanUp(final BuildContext context) async {
@@ -166,7 +166,8 @@ class _CleanupLocalCacheScreenState extends State<CleanupLocalCacheScreen> {
     if (_clearHiddenFuelStations || _clearApplicationData) {
       hiddenFuelStationsDeleted = await _cleanUpHiddenStations();
     }
-    return _getFailedString(searchSettingsDeleted, updateHistoryDeleted, favouriteStationsDeleted, hiddenFuelStationsDeleted);
+    return _getFailedString(
+        searchSettingsDeleted, updateHistoryDeleted, favouriteStationsDeleted, hiddenFuelStationsDeleted);
     // Navigator.pop(context);
   }
 
@@ -227,20 +228,16 @@ class _CleanupLocalCacheScreenState extends State<CleanupLocalCacheScreen> {
   Widget _buildListTile(final IconData icon, final String title, final String subTitle, final bool checkBoxValue,
       final Function(bool?)? onChangeFunction) {
     return Card(
-        color: Colors.white,
-        surfaceTintColor: Colors.white,
         child: ListTile(
             contentPadding: const EdgeInsets.all(10),
-            leading: Icon(icon, size: 30, color: Colors.indigo),
-            title: Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.indigo)),
+            leading: Icon(icon, size: 35),
+            title: Text(title, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.normal)),
             subtitle: Padding(
                 padding: const EdgeInsets.only(top: 5.0),
-                child: Text(subTitle, style: const TextStyle(fontSize: 14, color: Colors.indigo))),
+                child: Text(subTitle, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.normal))),
             trailing: Checkbox(
                 value: checkBoxValue,
-                onChanged: onChangeFunction,
-                activeColor: Colors.indigo,
-                focusColor: Colors.indigo)));
+                onChanged: onChangeFunction)));
   }
 
   List<String> _dataToClean() {

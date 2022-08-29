@@ -32,9 +32,10 @@ class FuelStationListWidget extends StatefulWidget {
   final FuelType _selectedFuelType;
   final int sortOrder;
   final FuelStationType fuelStationType;
+  final Function setSelectedFuelStation;
 
-  const FuelStationListWidget(
-      this._scrollController, this._fuelStations, this._selectedFuelType, this.sortOrder, this.fuelStationType,
+  const FuelStationListWidget(this._scrollController, this._fuelStations, this._selectedFuelType, this.sortOrder,
+      this.fuelStationType, this.setSelectedFuelStation,
       {Key? key})
       : super(key: key);
 
@@ -81,7 +82,8 @@ class _FuelStationListWidgetState extends State<FuelStationListWidget> with Tick
               child: FuelStationListItemWidget(
                   fuelStation: fuelStation,
                   selectedFuelType: widget._selectedFuelType,
-                  parentRefresh: fuelStationListRefresh));
+                  parentRefresh: fuelStationListRefresh,
+                  setSelectedFuelStation: (fuelStation) => widget.setSelectedFuelStation(fuelStation)));
         });
   }
 }

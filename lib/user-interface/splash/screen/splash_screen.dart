@@ -26,11 +26,11 @@ import 'package:pumped_end_device/data/local/location/get_location_result.dart';
 import 'package:pumped_end_device/data/local/location/location_access_result_code.dart';
 import 'package:pumped_end_device/data/local/location/location_data_source.dart';
 import 'package:pumped_end_device/main.dart';
-import 'package:pumped_end_device/user-interface/fuel-stations/screens/nearby/nearby_stations_screen.dart';
-import 'package:pumped_end_device/user-interface/splash/screen/splash_screen_color_scheme.dart';
+import 'package:pumped_end_device/user-interface/ped_base_page_view.dart';
 import 'package:pumped_end_device/user-interface/utils/under_maintenance_service.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/util/log_util.dart';
+import 'package:pumped_end_device/util/system_utils.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -41,8 +41,6 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   static const _tag = 'SplashScreen';
-  final SplashScreenColorScheme colorScheme =
-      getIt.get<SplashScreenColorScheme>(instanceName: splashScreenColorSchemeName);
   final UnderMaintenanceService underMaintenanceService = getIt.get(instanceName: underMaintenanceServiceName);
 
   bool _locationDetectionTriggered = false;
@@ -63,10 +61,10 @@ class _SplashScreenState extends State<SplashScreen> {
     final double widthOfScaffold = MediaQuery.of(context).size.width;
     return Scaffold(
         key: _scaffoldKey,
-        backgroundColor: colorScheme.backgroundColor,
+        backgroundColor: Colors.indigo,
         body: Container(
             decoration: const BoxDecoration(
-                image: DecorationImage(image: AssetImage("assets/images/Wave-2.png"), fit: BoxFit.cover)),
+                image: DecorationImage(image: AssetImage("assets/images/Wave-2-landscape.png"), fit: BoxFit.cover)),
             alignment: Alignment.center,
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -75,15 +73,11 @@ class _SplashScreenState extends State<SplashScreen> {
                   const Image(
                       image: AssetImage('assets/images/ic_splash.png'), width: 153, height: 133, fit: BoxFit.fill),
                   const SizedBox(height: 30),
-                  Center(
+                  const Center(
                       child: Text('Your friendly \n neighbourhood fuel finder',
                           textAlign: TextAlign.center,
-                          style:
-                              TextStyle(fontSize: 22, color: colorScheme.appDescColor, fontWeight: FontWeight.w500))),
-                  Container(
-                      width: 120,
-                      margin: const EdgeInsets.only(top: 40),
-                      child: const LinearProgressIndicator(color: Colors.white)),
+                          style: TextStyle(fontSize: 26, color: Colors.white, fontWeight: FontWeight.w500))),
+                  Container(width: 120, margin: const EdgeInsets.only(top: 40), child: const LinearProgressIndicator()),
                   const SizedBox(height: 100),
                   Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
                     AnimatedOpacity(
@@ -91,18 +85,17 @@ class _SplashScreenState extends State<SplashScreen> {
                         duration: const Duration(milliseconds: 500),
                         child: Padding(
                             padding: EdgeInsets.only(left: widthOfScaffold / 2 - 135, right: 5),
-                            child: Icon(Icons.my_location, color: colorScheme.notificationsColor))),
+                            child: const Icon(Icons.my_location, color: Colors.white))),
                     AnimatedOpacity(
                         opacity: _locationDetectionTriggered ? 1.0 : 0.0,
                         duration: const Duration(milliseconds: 500),
-                        child: SizedBox(
-                            width: 200,
-                            child: Text('Detecting Location',
-                                style: TextStyle(fontSize: 16, color: colorScheme.notificationsColor)))),
+                        child: const SizedBox(
+                            width: 300,
+                            child: Text('Detecting Location', style: TextStyle(fontSize: 22, color: Colors.white)))),
                     AnimatedOpacity(
                         opacity: _detectingLocationIconVisible ? 1.0 : 0.0,
                         duration: const Duration(milliseconds: 500),
-                        child: Icon(Icons.done, color: colorScheme.notificationsColor))
+                        child: const Icon(Icons.done, color: Colors.white))
                   ]),
                   const SizedBox(height: 20),
                   Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
@@ -111,18 +104,18 @@ class _SplashScreenState extends State<SplashScreen> {
                         duration: const Duration(milliseconds: 500),
                         child: Padding(
                             padding: EdgeInsets.only(left: widthOfScaffold / 2 - 135, right: 7),
-                            child: Icon(Icons.local_gas_station, color: colorScheme.notificationsColor))),
+                            child: const Icon(Icons.local_gas_station, color: Colors.white))),
                     AnimatedOpacity(
                         opacity: _checkingPumpedAvailabilityIconVisible ? 1.0 : 0.0,
                         duration: const Duration(milliseconds: 500),
-                        child: SizedBox(
-                            width: 200,
-                            child: Text('Fetching Fuel Stations',
-                                style: TextStyle(fontSize: 16, color: colorScheme.notificationsColor)))),
+                        child: const SizedBox(
+                            width: 300,
+                            child:
+                                Text('Fetching Fuel Stations', style: TextStyle(fontSize: 22, color: Colors.white)))),
                     AnimatedOpacity(
                         opacity: _checkingPumpedAvailabilityTextVisible ? 1.0 : 0.0,
                         duration: const Duration(milliseconds: 500),
-                        child: Icon(Icons.done, color: colorScheme.notificationsColor))
+                        child: const Icon(Icons.done, color: Colors.white))
                   ])
                 ])));
   }
@@ -141,17 +134,8 @@ class _SplashScreenState extends State<SplashScreen> {
       bool isUnderMaintenance = underMaintenanceR.isUnderMaintenance;
       if (isUnderMaintenance) {
         final String underMaintenanceMsg = underMaintenanceR.underMaintenanceMessage;
-        ScaffoldMessenger.of(context).showSnackBar(WidgetUtils.buildSnackBar2(
-            underMaintenanceMsg, Theme.of(context).dialogBackgroundColor, 12 * 60 * 60 * 30, 'Exit', () {
-          if (Platform.isIOS) {
-            // Apple does not like  this, as it is against their Human Interface Guidelines.
-            exit(0);
-          } else if (Platform.isAndroid) {
-            SystemNavigator.pop();
-          } else {
-            // Not sure if SystemNavigator.pop(); would work for other platforms
-          }
-        }));
+        ScaffoldMessenger.of(context).showSnackBar(
+            WidgetUtils.buildSnackBar2(context, underMaintenanceMsg, 12 * 60 * 60 * 30, 'Exit', SystemUtils.exitApp));
       } else {
         LogUtil.debug(_tag, 'Backend is not under maintenance.');
         _getLocation();
@@ -162,6 +146,19 @@ class _SplashScreenState extends State<SplashScreen> {
     });
   }
 
+  void exitApp() {
+    if (!kIsWeb) {
+      if (Platform.isIOS) {
+        // Apple does not like  this, as it is against their Human Interface Guidelines.
+        exit(0);
+      } else if (Platform.isAndroid) {
+        SystemNavigator.pop();
+      } else {
+        // Not sure if SystemNavigator.pop(); would work for other platforms
+      }
+    } else {}
+  }
+
   void _getLocationFromOnDeviceLocationService() {
     final Future<GetLocationResult> getLocationDataFuture =
         getIt.get<LocationDataSource>(instanceName: locationDataSourceInstanceName).getLocationData();
@@ -169,18 +166,18 @@ class _SplashScreenState extends State<SplashScreen> {
       final LocationInitResultCode code = locationResult.locationInitResultCode;
       switch (code) {
         case LocationInitResultCode.locationServiceDisabled:
-          ScaffoldMessenger.of(context).showSnackBar(WidgetUtils.buildSnackBar2(
-              'Location Service is disabled', Theme.of(context).dialogBackgroundColor, 2, '', () {}));
+          ScaffoldMessenger.of(context).showSnackBar(
+              WidgetUtils.buildSnackBar2(context, 'Location Service is disabled', 2, 'Exit', SystemUtils.exitApp));
           break;
         case LocationInitResultCode.permissionDenied:
-          ScaffoldMessenger.of(context).showSnackBar(WidgetUtils.buildSnackBar2(
-              'Location Service is disabled', Theme.of(context).dialogBackgroundColor, 2, '', () {}));
+          ScaffoldMessenger.of(context).showSnackBar(
+              WidgetUtils.buildSnackBar2(context, 'Location Service is disabled', 2, 'Exit', SystemUtils.exitApp));
           break;
         case LocationInitResultCode.notFound:
-          WidgetUtils.buildSnackBar2('Location Not Found', Theme.of(context).dialogBackgroundColor, 2, '', () {});
+          WidgetUtils.buildSnackBar2(context, 'Location Not Found', 2, 'Exit', SystemUtils.exitApp);
           break;
         case LocationInitResultCode.failure:
-          WidgetUtils.buildSnackBar2('Location Failure', Theme.of(context).dialogBackgroundColor, 2, '', () {});
+          WidgetUtils.buildSnackBar2(context, 'Location Failure', 2, 'Exit', SystemUtils.exitApp);
           break;
         case LocationInitResultCode.success:
           _takeActionOnLocation(locationResult);
@@ -212,7 +209,7 @@ class _SplashScreenState extends State<SplashScreen> {
           setState(() {
             _checkingPumpedAvailabilityTextVisible = true;
           });
-          Navigator.pushReplacementNamed(context, NearbyStationsScreen.routeName);
+          Navigator.pushReplacementNamed(context, PedBasePageView.routeName);
         });
       }, onError: (error) {
         LogUtil.error(_tag, 'Error happened on detecting location : $error');

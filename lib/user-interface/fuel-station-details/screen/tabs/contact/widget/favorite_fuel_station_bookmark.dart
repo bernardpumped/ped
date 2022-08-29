@@ -71,15 +71,16 @@ class _FavoriteFuelStationBookmarkState extends State<FavoriteFuelStationBookmar
   Widget _getWidget(final IconData icon, final String text, final GestureTapCallback callback) {
     return GestureDetector(
         onTap: callback,
-        child: Column(children: [
-          Card(
-              elevation: 2,
-              color: Colors.indigo,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15), side: const BorderSide(color: Colors.indigo, width: 1)),
-              child: Padding(padding: const EdgeInsets.all(14.0), child: Icon(icon, color: Colors.white))),
-          Text(text, style: const TextStyle(color: Colors.indigo, fontSize: 14, fontWeight: FontWeight.w500))
-        ]));
+        child: WidgetUtils.wrapWithRoundedContainer(
+            context: context,
+            radius: 24,
+            child: Padding(
+                padding: const EdgeInsets.all(14.0),
+                child: Row(children: [
+                  Text(text, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
+                  const SizedBox(width: 8),
+                  Icon(icon, size: 24)
+                ]))));
   }
 
   void _favoriteRemoveAction(final FavoriteFuelStation station) {
@@ -87,19 +88,19 @@ class _FavoriteFuelStationBookmarkState extends State<FavoriteFuelStationBookmar
         dao.containsFavoriteFuelStation(station.favoriteFuelStationId, station.fuelStationSource);
     isFavoriteFuelStationFuture.then((value) {
       if (!value) {
-        WidgetUtils.showToastMessage(context, 'Fuel Station is not yet Favorite', Colors.indigo);
+        WidgetUtils.showToastMessage(context, 'Fuel Station is not yet Favorite');
       } else {
         final Future<dynamic> deleteFavFuelStationFuture = dao.deleteFavoriteFuelStation(station);
         deleteFavFuelStationFuture.then((value) {
-          WidgetUtils.showToastMessage(context, 'Removed from Favorite', Colors.indigo);
+          WidgetUtils.showToastMessage(context, 'Removed from Favorite');
           setState(() {});
         }, onError: (error, s) {
-          WidgetUtils.showToastMessage(context, 'Error removing from Favorite', Colors.indigo);
+          WidgetUtils.showToastMessage(context, 'Error removing from Favorite');
           LogUtil.error(_tag, 'Error removing from Favorite $error');
         });
       }
     }, onError: (error, s) {
-      WidgetUtils.showToastMessage(context, 'Error removing from Favorite', Colors.indigo);
+      WidgetUtils.showToastMessage(context, 'Error removing from Favorite');
       LogUtil.error(_tag, 'Error removing from Favorite $error');
     });
   }
@@ -111,17 +112,17 @@ class _FavoriteFuelStationBookmarkState extends State<FavoriteFuelStationBookmar
       if (!value) {
         final Future<dynamic> insertFuture = dao.insertFavoriteFuelStation(station);
         insertFuture.then((value) {
-          WidgetUtils.showToastMessage(context, 'Bookmarked as Favorite', Colors.indigo);
+          WidgetUtils.showToastMessage(context, 'Bookmarked as Favorite');
           setState(() {});
         }, onError: (error, s) {
-          WidgetUtils.showToastMessage(context, 'Error marking as Favorite', Colors.indigo);
+          WidgetUtils.showToastMessage(context, 'Error marking as Favorite');
           LogUtil.error(_tag, 'Error marking as Favorite $error');
         });
       } else {
-        WidgetUtils.showToastMessage(context, 'Already Bookmarked as Favorite', Colors.indigo);
+        WidgetUtils.showToastMessage(context, 'Already Bookmarked as Favorite');
       }
     }, onError: (error, s) {
-      WidgetUtils.showToastMessage(context, 'Error marking as Favorite', Colors.indigo);
+      WidgetUtils.showToastMessage(context, 'Error marking as Favorite');
       LogUtil.error(_tag, 'Error marking as Favorite $error');
     });
   }

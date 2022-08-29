@@ -37,12 +37,10 @@ class _ThemeMenuItemWidgetState extends State<ThemeMenuItemWidget> {
   @override
   Widget build(final BuildContext context) {
     return Card(
-        color: Colors.white,
-        surfaceTintColor: Colors.white,
         child: ExpansionTile(
             title: Text("Theme - ${_themes[selectedTheme]}",
-                style: const TextStyle(fontSize: 18, color: Colors.indigo, fontWeight: FontWeight.w500)),
-            leading: const Icon(Icons.compare_outlined, color: Colors.indigo, size: 30),
+                style: const TextStyle(fontSize: 22, fontWeight: FontWeight.normal)),
+            leading: const Icon(Icons.compare_outlined, size: 35),
             children: [_getMenuItem(_lightTheme), _getMenuItem(_darkTheme), _getMenuItem(_systemTheme)]));
   }
 
@@ -55,6 +53,6 @@ class _ThemeMenuItemWidgetState extends State<ThemeMenuItemWidget> {
             selectedTheme = newVal!;
           });
         },
-        title: Text(_themes[themeValue]!, style: const TextStyle(fontWeight: FontWeight.w500, color: Colors.indigo)));
+        title: Text(_themes[themeValue]!, style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 20)));
   }
 }

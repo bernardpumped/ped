@@ -18,7 +18,7 @@
 
 import 'package:pumped_end_device/models/pumped/operating_hours.dart';
 import 'package:pumped_end_device/models/status.dart';
-import 'package:pumped_end_device/user-interface/edit-fuel-station-details/model/operating_time_range.dart';
+import 'package:pumped_end_device/user-interface/fuel-station-details/model/operating_time_range.dart';
 
 class OperatingHoursResponseParseUtils {
   static OperatingHours? getOperatingHours(final Map<String, dynamic>? operatingHoursJsonVal, final bool? holidayToday) {

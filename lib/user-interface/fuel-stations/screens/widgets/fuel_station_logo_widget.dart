@@ -35,9 +35,7 @@ class FuelStationLogoWidget extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    return Material(
-        elevation: 1,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(borderRadius)),
+    return Card(
         child: Container(
             width: width,
             height: height,
@@ -47,6 +45,7 @@ class FuelStationLogoWidget extends StatelessWidget {
                 decoration: BoxDecoration(
                     shape: BoxShape.rectangle,
                     borderRadius: BorderRadius.circular(5),
+                    color: Theme.of(context).backgroundColor,
                     image: DecorationImage(fit: BoxFit.scaleDown, image: image)))));
   }
 }

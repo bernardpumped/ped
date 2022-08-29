@@ -30,19 +30,28 @@ class NotificationWidget extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    return WidgetUtils.getRoundedElevatedButton(
-        child: Row(children: const [
-          Icon(Icons.email_outlined, size: 24, color: Colors.white),
-          SizedBox(width: 10),
-          Text('Notify', style: TextStyle(color: Colors.white))
-        ]),
-        onPressed: () {
+    return WidgetUtils.getRoundedButton(
+        context: context,
+        buttonText: 'Notify',
+        iconData: Icons.email_outlined,
+        onTapFunction: () {
           _sendNotification(() {
-            WidgetUtils.showToastMessage(context, 'Cannot send notification', Colors.indigo);
+            WidgetUtils.showToastMessage(context, 'Cannot send notification');
           });
-        },
-        borderRadius: 10.0,
-        backgroundColor: Colors.indigo);
+        });
+    // return WidgetUtils.getRoundedElevatedButton(
+    //     child: Row(children: const [
+    //       Icon(Icons.email_outlined, size: 24, color: Colors.white),
+    //       SizedBox(width: 10),
+    //       Text('Notify', style: TextStyle(color: Colors.white))
+    //     ]),
+    //     onPressed: () {
+    //       _sendNotification(() {
+    //         WidgetUtils.showToastMessage(context, 'Cannot send notification');
+    //       });
+    //     },
+    //     borderRadius: 10.0,
+    //     backgroundColor: Colors.indigo);
   }
 
   void _sendNotification(final Function function) async {

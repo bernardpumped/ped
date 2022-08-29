@@ -20,33 +20,13 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pumped_end_device/data/local/location/location_data_source.dart';
-import 'package:pumped_end_device/user-interface/about/screen/about_screen_color_scheme.dart';
-import 'package:pumped_end_device/user-interface/about/screen/about_screen.dart';
-import 'package:pumped_end_device/user-interface/edit-fuel-station-details/screen/edit_fuel_station_details_screen.dart';
-import 'package:pumped_end_device/user-interface/fuel-station-details/fuel_station_details_screen_color_scheme.dart';
-import 'package:pumped_end_device/user-interface/fuel-station-details/screen/fuel_station_details_screen.dart';
-import 'package:pumped_end_device/user-interface/fuel-station-details/utils/firebase_service.dart';
-import 'package:pumped_end_device/user-interface/fuel-stations/fuel_station_screen_color_scheme.dart';
-import 'package:pumped_end_device/user-interface/fuel-stations/screens/favourite/favourite_stations_screen.dart';
-import 'package:pumped_end_device/user-interface/help/screen/help_screen.dart';
-import 'package:pumped_end_device/user-interface/nav-drawer/nav_drawer_color_scheme.dart';
-import 'package:pumped_end_device/user-interface/fuel-stations/screens/nearby/nearby_stations_screen.dart';
-import 'package:pumped_end_device/user-interface/send-feedback/screens/send_feedback_screen.dart';
-import 'package:pumped_end_device/user-interface/settings/screen/cleanup_local_cache_screen.dart';
-import 'package:pumped_end_device/user-interface/settings/screen/customize_search_settings_screen.dart';
-import 'package:pumped_end_device/user-interface/settings/screen/settings_screen.dart';
-import 'package:pumped_end_device/user-interface/splash/screen/splash_screen_color_scheme.dart';
+import 'package:pumped_end_device/user-interface/ped_base_page_view.dart';
 import 'package:pumped_end_device/user-interface/splash/screen/splash_screen.dart';
-import 'package:pumped_end_device/user-interface/update-history/screen/update_history_details_screen.dart';
-import 'package:pumped_end_device/user-interface/update-history/screen/update_history_screen.dart';
 import 'package:pumped_end_device/user-interface/utils/under_maintenance_service.dart';
-import 'package:pumped_end_device/user-interface/widgets/pumped_app_bar_color_scheme.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 import 'package:pumped_end_device/util/platform_wrapper.dart';
-import 'package:firebase_core/firebase_core.dart';
 
 import 'data/local/location/geo_location_wrapper.dart';
-import 'firebase_options.dart';
 
 GetIt getIt = GetIt.instance;
 // Set this variable to false when in release mode.
@@ -58,21 +38,9 @@ const locationDataSourceInstanceName = 'locationDataSource';
 const underMaintenanceServiceName = 'underMaintenanceService';
 
 const firebaseServiceInstanceName = 'firebaseService';
-const appBarColorSchemeName = 'appBarColorScheme';
-const splashScreenColorSchemeName = 'splashScreenColorScheme';
-const navDrawerColorSchemeName = 'navDrawerColorScheme';
-const fsScreenColorSchemeName = 'fsScreenColorScheme';
-const fsCardColorSchemeName = 'fsCardColorScheme';
-const aboutScreenColorSchemeName = 'aboutScreenColorScheme';
-const fsDetailsScreenColorSchemeName = 'fsDetailsScreenColorScheme';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  if (Firebase.apps.isEmpty) {
-    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  } else {
-    Firebase.app();
-  }
   runApp(const PumpedApp());
 }
 
@@ -85,29 +53,54 @@ class PumpedApp extends StatelessWidget {
     _deviceInfo();
     _registerBeansWithGetIt();
     final ThemeData themeData = ThemeData(
+        checkboxTheme: CheckboxThemeData(
+            side: MaterialStateBorderSide.resolveWith((_) => const BorderSide(width: 2, color: Colors.indigo)),
+            fillColor: MaterialStateProperty.all(Colors.white),
+            checkColor: MaterialStateProperty.all(Colors.indigo)),
+        listTileTheme: const ListTileThemeData(iconColor: Colors.indigo, textColor: Colors.indigo),
+        expansionTileTheme: const ExpansionTileThemeData(
+            iconColor: Colors.indigo,
+            textColor: Colors.indigo,
+            collapsedIconColor: Colors.indigo,
+            backgroundColor: Colors.white,
+            collapsedTextColor: Colors.indigo,
+            collapsedBackgroundColor: Colors.white),
+        progressIndicatorTheme: const ProgressIndicatorThemeData(
+            color: Colors.white,
+            circularTrackColor: Colors.white,
+            linearTrackColor: Colors.indigo,
+            refreshBackgroundColor: Colors.indigo),
+        tabBarTheme: TabBarTheme(
+            overlayColor: MaterialStateColor.resolveWith((states) => Colors.white),
+            labelColor: Colors.indigo,
+            unselectedLabelColor: Colors.indigo,
+            indicator: const UnderlineTabIndicator(borderSide: BorderSide(color: Colors.indigo))),
         useMaterial3: true,
         primarySwatch: Colors.indigo,
-        colorScheme: ColorScheme.fromSwatch(accentColor: Colors.indigoAccent),
-        textTheme: Theme.of(context).textTheme.apply(fontFamily: 'SF-Pro-Display'));
-    _registerThemes(themeData);
-    return MaterialApp(
+        colorScheme: ColorScheme.fromSwatch(accentColor: Colors.indigo),
+        iconTheme: const IconThemeData(color: Colors.indigo),
+        dividerColor: Colors.indigo.withOpacity(0.3),
+        backgroundColor: Colors.white,
+        scaffoldBackgroundColor: Colors.white,
+        shadowColor: Colors.indigo,
+        cardTheme: const CardTheme(
+            surfaceTintColor: Colors.white, color: Colors.white, elevation: 1.5, shadowColor: Colors.indigo),
+        unselectedWidgetColor: Colors.indigo,
+        // textTheme: const TextTheme(
+        //   headline1: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold, fontFamily: 'SF-Pro-Display', color: Colors.indigo),
+        //   headline6: TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic, fontFamily: 'SF-Pro-Display', color: Colors.indigo),
+        //   bodyText2: TextStyle(fontSize: 14.0, fontFamily: 'SF-Pro-Display', color: Colors.indigo),
+        // ),
+        textTheme: Theme.of(context)
+            .textTheme
+            .apply(fontFamily: 'SF-Pro-Display', displayColor: Colors.indigo, bodyColor: Colors.indigo));
+    return _applyExpansionTileTheme(MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: themeData,
+        darkTheme: ThemeData.dark(),
+        themeMode: ThemeMode.system,
         home: const SplashScreen(),
-        routes: {
-          NearbyStationsScreen.routeName: (context) => const NearbyStationsScreen(),
-          FavouriteStationsScreen.routeName: (context) => const FavouriteStationsScreen(),
-          AboutScreen.routeName: (context) => AboutScreen(),
-          SettingsScreen.routeName: (context) => const SettingsScreen(),
-          FuelStationDetailsScreen.routeName: (context) => const FuelStationDetailsScreen(),
-          CustomizeSearchSettingsScreen.routeName: (context) => const CustomizeSearchSettingsScreen(),
-          CleanupLocalCacheScreen.routeName: (context) => const CleanupLocalCacheScreen(),
-          EditFuelStationDetailsScreen.routeName: (context) => const EditFuelStationDetailsScreen(),
-          UpdateHistoryScreen.routeName: (context) => const UpdateHistoryScreen(),
-          UpdateHistoryDetailsScreen.routeName: (context) => const UpdateHistoryDetailsScreen(),
-          SendFeedbackScreen.routeName: (context) => const SendFeedbackScreen(),
-          HelpScreen.routeName: (context) => const HelpScreen()
-        });
+        routes: {PedBasePageView.routeName: (context) => const PedBasePageView()}));
   }
 
   void _deviceInfo() async {
@@ -148,13 +141,6 @@ class PumpedApp extends StatelessWidget {
       LogUtil.debug(_tag, 'Instance of $platformWrapperInstanceName is already registered');
     }
 
-    if (!getIt.isRegistered<FirebaseService>(instanceName: firebaseServiceInstanceName)) {
-      LogUtil.debug(_tag, 'Registering instance of $firebaseServiceInstanceName');
-      getIt.registerSingleton<FirebaseService>(FirebaseService(), instanceName: firebaseServiceInstanceName);
-    } else {
-      LogUtil.debug(_tag, 'Instance of $firebaseServiceInstanceName is already registered');
-    }
-
     if (!getIt.isRegistered<UnderMaintenanceService>(instanceName: underMaintenanceServiceName)) {
       LogUtil.debug(_tag, 'Registering instance of $underMaintenanceServiceName');
       getIt.registerSingleton<UnderMaintenanceService>(UnderMaintenanceService.instance,
@@ -164,60 +150,16 @@ class PumpedApp extends StatelessWidget {
     }
   }
 
-  void _registerThemes(final ThemeData themeData) {
-    if (!getIt.isRegistered<AboutScreenColorScheme>(instanceName: aboutScreenColorSchemeName)) {
-      LogUtil.debug(_tag, 'Registering instance of $aboutScreenColorSchemeName');
-      getIt.registerSingleton<AboutScreenColorScheme>(AboutScreenColorScheme(themeData),
-          instanceName: aboutScreenColorSchemeName);
-    } else {
-      LogUtil.debug(_tag, 'Instance of $appBarColorSchemeName is already registered');
-    }
-    if (!getIt.isRegistered<PumpedAppBarColorScheme>(instanceName: appBarColorSchemeName)) {
-      LogUtil.debug(_tag, 'Registering instance of $appBarColorSchemeName');
-      getIt.registerSingleton<PumpedAppBarColorScheme>(PumpedAppBarColorScheme(themeData),
-          instanceName: appBarColorSchemeName);
-    } else {
-      LogUtil.debug(_tag, 'Instance of $appBarColorSchemeName is already registered');
-    }
-
-    if (!getIt.isRegistered<SplashScreenColorScheme>(instanceName: splashScreenColorSchemeName)) {
-      LogUtil.debug(_tag, 'Registering instance of $splashScreenColorSchemeName');
-      getIt.registerSingleton<SplashScreenColorScheme>(SplashScreenColorScheme(themeData),
-          instanceName: splashScreenColorSchemeName);
-    } else {
-      LogUtil.debug(_tag, 'Instance of $splashScreenColorSchemeName is already registered');
-    }
-
-    if (!getIt.isRegistered<NavDrawerColorScheme>(instanceName: navDrawerColorSchemeName)) {
-      LogUtil.debug(_tag, 'Registering instance of $navDrawerColorSchemeName');
-      getIt.registerSingleton<NavDrawerColorScheme>(NavDrawerColorScheme(themeData),
-          instanceName: navDrawerColorSchemeName);
-    } else {
-      LogUtil.debug(_tag, 'Instance of $navDrawerColorSchemeName is already registered');
-    }
-
-    if (!getIt.isRegistered<FuelStationsScreenColorScheme>(instanceName: fsScreenColorSchemeName)) {
-      LogUtil.debug(_tag, 'Registering instance of $fsScreenColorSchemeName');
-      getIt.registerSingleton<FuelStationsScreenColorScheme>(FuelStationsScreenColorScheme(themeData),
-          instanceName: fsScreenColorSchemeName);
-    } else {
-      LogUtil.debug(_tag, 'Instance of $fsScreenColorSchemeName is already registered');
-    }
-
-    if (!getIt.isRegistered<FuelStationCardColorScheme>(instanceName: fsCardColorSchemeName)) {
-      LogUtil.debug(_tag, 'Registering instance of $fsCardColorSchemeName');
-      getIt.registerSingleton<FuelStationCardColorScheme>(FuelStationCardColorScheme(themeData),
-          instanceName: fsCardColorSchemeName);
-    } else {
-      LogUtil.debug(_tag, 'Instance of $fsCardColorSchemeName is already registered');
-    }
-
-    if (!getIt.isRegistered<FuelStationDetailsScreenColorScheme>(instanceName: fsDetailsScreenColorSchemeName)) {
-      LogUtil.debug(_tag, 'Registering instance of $fsDetailsScreenColorSchemeName');
-      getIt.registerSingleton<FuelStationDetailsScreenColorScheme>(FuelStationDetailsScreenColorScheme(themeData),
-          instanceName: fsDetailsScreenColorSchemeName);
-    } else {
-      LogUtil.debug(_tag, 'Instance of $fsDetailsScreenColorSchemeName is already registered');
-    }
+  static Widget _applyExpansionTileTheme(final Widget child) {
+    return ExpansionTileTheme(
+        data: const ExpansionTileThemeData(
+          iconColor: Colors.indigo,
+          textColor: Colors.indigo,
+          collapsedIconColor: Colors.indigo,
+          // backgroundColor: Colors.white,
+          collapsedTextColor: Colors.indigo,
+          // collapsedBackgroundColor: Colors.white
+        ),
+        child: child);
   }
 }

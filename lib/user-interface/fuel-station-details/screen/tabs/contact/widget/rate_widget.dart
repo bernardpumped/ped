@@ -22,6 +22,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station_address.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/screen/tabs/contact/widget/feature_support.dart';
+import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -37,14 +38,16 @@ class RateWidget extends StatelessWidget {
   Widget build(final BuildContext context) {
     return GestureDetector(
         child: Column(children: [
-          Card(
-              elevation: 2,
-              color: Colors.indigo,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15), side: const BorderSide(color: Colors.indigo, width: 1)),
-              child: const Padding(
-                  padding: EdgeInsets.all(14.0), child: Icon(Icons.star_rate_outlined, color: Colors.white))),
-          const Text('Rate', style: TextStyle(color: Colors.indigo, fontSize: 14, fontWeight: FontWeight.w500))
+          WidgetUtils.wrapWithRoundedContainer(
+              context: context,
+              radius: 24,
+              child: Padding(
+                  padding: const EdgeInsets.all(14.0),
+                  child: Row(children: const [
+                    Text('Rate', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
+                    SizedBox(width: 8),
+                    Icon(Icons.star_rate_outlined, size: 24)
+                  ])))
         ]),
         onTap: () async {
           if (kIsWeb) {
@@ -77,21 +80,21 @@ class RateWidget extends StatelessWidget {
     }
     final String googleRatingUrl = Uri.encodeFull('https://www.google.com/maps/search/?api=1&query=$fsAddress');
     if (Platform.isIOS) {
-      if (await canLaunchUrlString(googleRatingUrl)) {
+      if (await canLaunch(googleRatingUrl)) {
         LogUtil.debug(_tag, 'Attempting native launch of Google Maps/rate url');
         bool nativeAppLaunchSucceeded = false;
-        nativeAppLaunchSucceeded = await launchUrlString(
+        nativeAppLaunchSucceeded = await launch(
           googleRatingUrl,
-          // forceSafariVC: false,
-          // universalLinksOnly: true,
+          forceSafariVC: false,
+          universalLinksOnly: true,
         );
         LogUtil.debug(_tag, 'Native launch of Google Maps/rate successful $nativeAppLaunchSucceeded');
         bool nonNativeAppLaunchSucceeded = false;
         if (!nativeAppLaunchSucceeded) {
           LogUtil.debug(_tag, 'Attempting non-native launch of Google Maps/rate successful');
-          nonNativeAppLaunchSucceeded = await launchUrlString(
+          nonNativeAppLaunchSucceeded = await launch(
             googleRatingUrl,
-            // forceSafariVC: true,
+            forceSafariVC: true,
           );
           LogUtil.debug(_tag, 'Non-Native launch of Google Maps/rate successful $nativeAppLaunchSucceeded');
         }
@@ -102,7 +105,7 @@ class RateWidget extends StatelessWidget {
       }
     } else {
       if (await canLaunchUrlString(googleRatingUrl)) {
-        return await launchUrlString(googleRatingUrl);
+        return await canLaunchUrlString(googleRatingUrl);
       } else {
         return false;
       }

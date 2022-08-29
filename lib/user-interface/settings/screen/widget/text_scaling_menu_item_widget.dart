@@ -45,12 +45,10 @@ class _TextScalingMenuItemWidgetState extends State<TextScalingMenuItemWidget> {
   @override
   Widget build(final BuildContext context) {
     return Card(
-        color: Colors.white,
-        surfaceTintColor: Colors.white,
         child: ExpansionTile(
             title: Text("Text Scale - ${_textScales[selectedTextScale]}",
-                style: const TextStyle(fontSize: 18, color: Colors.indigo, fontWeight: FontWeight.w500)),
-            leading: const Icon(Icons.linear_scale_rounded, color: Colors.indigo, size: 30),
+                style: const TextStyle(fontSize: 22, fontWeight: FontWeight.normal)),
+            leading: const Icon(Icons.linear_scale_rounded, size: 35),
             children: [
               _getMenuItem(_systemTextScale),
               _getMenuItem(_smallTextScale),
@@ -69,6 +67,6 @@ class _TextScalingMenuItemWidgetState extends State<TextScalingMenuItemWidget> {
             selectedTextScale = newVal!;
           });
         },
-        title: Text(_textScales[value]!, style: const TextStyle(fontWeight: FontWeight.w500, color: Colors.indigo)));
+        title: Text(_textScales[value]!, style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 20)));
   }
 }

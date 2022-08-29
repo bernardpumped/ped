@@ -33,20 +33,19 @@ class PhoneWidget extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     return GestureDetector(
-        child: Column(children: [
-          Card(
-              elevation: 2,
-              color: Colors.indigo,
-              // color: Color(0xFFF0EDFF),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15), side: const BorderSide(color: Colors.indigo, width: 1)),
-              child: const Padding(
-                  padding: EdgeInsets.all(14.0),
-                  child: Icon(Icons.phone_outlined, color: Colors.white))),
-          const Text('Call', style: TextStyle(color: Colors.indigo, fontSize: 14, fontWeight: FontWeight.w500))
-        ]),
+        child: WidgetUtils.wrapWithRoundedContainer(
+            context: context,
+            radius: 24,
+            child: Padding(
+                padding: const EdgeInsets.all(14.0),
+                child: Row(children: const [
+                  Text('Call', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
+                  SizedBox(width: 8),
+                  Icon(Icons.phone_outlined, size: 24)
+                ]))),
         onTap: () async {
           _launchCaller(_phone, () {
-            WidgetUtils.showToastMessage(context, 'Cannot call phone', Colors.indigo);
+            WidgetUtils.showToastMessage(context, 'Cannot call phone');
           });
         });
   }

@@ -63,15 +63,15 @@ class _ServerVersionWidgetState extends State<ServerVersionWidget> {
           }
           return ListTile(
               title: Text(displayText,
-                  style: const TextStyle(fontSize: 16, color: Colors.indigo, fontWeight: FontWeight.w500),
-                  textAlign: TextAlign.center));
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500), textAlign: TextAlign.center));
         });
   }
 
   Future<GetBackendMetadataResponse> _getBackendMetadata() async {
     GetBackendMetadataResponse response;
     try {
-      response = await GetBackendMetadata(GetBackendMetadataResponseParser()).execute(GetBackendMetadataRequest(const Uuid().v1()));
+      response = await GetBackendMetadata(GetBackendMetadataResponseParser())
+          .execute(GetBackendMetadataRequest(const Uuid().v1()));
     } on Exception catch (e, s) {
       LogUtil.debug(_tag, 'Exception happened while making call GetBackendMetadata $s');
       response = GetBackendMetadataResponse("CALL-EXCEPTION", s.toString(), {}, DateTime.now().millisecondsSinceEpoch);

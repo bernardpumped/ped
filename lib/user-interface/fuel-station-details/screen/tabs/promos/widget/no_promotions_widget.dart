@@ -31,15 +31,13 @@ class NoPromotionsWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: const <Widget>[
               Text('No Current Offers',
-                  style: TextStyle(fontSize: 34, fontWeight: FontWeight.w500, color: Colors.indigo),
-                  textAlign: TextAlign.center),
+                  style: TextStyle(fontSize: 34, fontWeight: FontWeight.w500), textAlign: TextAlign.center),
               Text(
                   "\n Click here if you'd appreciate this station providing more and better offers and we'll let them know",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.indigo),
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.w400),
                   textAlign: TextAlign.center),
               Text('\n Come back again soon.',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.indigo),
-                  textAlign: TextAlign.center)
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.w400), textAlign: TextAlign.center)
             ]));
   }
 }

@@ -174,10 +174,10 @@ class _FloatButton extends StatelessWidget {
       {required this.size, required this.color, required this.icon, required this.iconSize, this.expansionDirection, required this.label});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     if (expansionDirection == ExpansionDirection.horizontal) {
       return Container(
-          color: Colors.white.withOpacity(0.0),
+          color: Theme.of(context).backgroundColor.withOpacity(0.0),
           width: size * 1.4,
           height: size,
           child: Row(
@@ -189,7 +189,7 @@ class _FloatButton extends StatelessWidget {
           ));
     }
     return Container(
-        color: Colors.white.withOpacity(0.0),
+        color: Theme.of(context).backgroundColor.withOpacity(0.0),
         width: size,
         height: size,
         child: Icon(icon, color: color, size: iconSize));

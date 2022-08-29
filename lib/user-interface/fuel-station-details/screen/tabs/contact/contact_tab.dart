@@ -17,12 +17,9 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:pumped_end_device/main.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/data/remote/model/request/get_fuel_station_operating_hrs_request.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/data/remote/model/response/get_fuel_station_operating_hrs_response.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/data/remote/response-parser/get_fuel_station_operating_hrs_response_parser.dart';
-import 'package:pumped_end_device/user-interface/fuel-station-details/fuel_station_details_screen_color_scheme.dart';
-import 'package:pumped_end_device/user-interface/fuel-station-details/screen/tabs/contact/widget/action_bar.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/screen/tabs/contact/widget/operating_hours_widget.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/data/remote/get_fuel_station_operating_hrs.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/screen/tabs/contact/widget/horizontal_scroll_list_widget.dart';
@@ -34,9 +31,8 @@ import 'package:uuid/uuid.dart';
 
 class ContactTabWidget extends StatefulWidget {
   final FuelStation _fuelStation;
-  final Function onFavouriteStatusChange;
 
-  const ContactTabWidget(this._fuelStation, this.onFavouriteStatusChange, {Key? key}) : super(key: key);
+  const ContactTabWidget(this._fuelStation, {Key? key}) : super(key: key);
 
   @override
   State<ContactTabWidget> createState() => _ContactTabWidgetState();
@@ -45,9 +41,6 @@ class ContactTabWidget extends StatefulWidget {
 class _ContactTabWidgetState extends State<ContactTabWidget> {
   static const _tag = 'OverviewTabWidget';
   Future<GetFuelStationOperatingHrsResponse>? _operatingHrsResponseFuture;
-
-  final FuelStationDetailsScreenColorScheme colorScheme =
-      getIt.get<FuelStationDetailsScreenColorScheme>(instanceName: fsDetailsScreenColorSchemeName);
 
   @override
   void initState() {
@@ -81,17 +74,16 @@ class _ContactTabWidgetState extends State<ContactTabWidget> {
               margin: const EdgeInsets.only(top: 7, bottom: 7), child: HorizontalScrollListWidget(fuelStation.imgUrls!))
           : const SizedBox(width: 0),
       imgUrlsPresent
-          ? const Divider(color: Colors.black45, indent: 15, endIndent: 15, height: 0)
+          ? const Divider(indent: 15, endIndent: 15, height: 0)
           : const SizedBox(width: 0),
       const SizedBox(height: 5),
-      ActionBar(fuelStation: fuelStation, onFavouriteStatusChange: widget.onFavouriteStatusChange),
       _getFuelStationAddressWidget(fuelStationAddress),
       Card(
           margin: const EdgeInsets.only(left: 5, right: 5, top: 5),
-          color: Colors.white,
-          surfaceTintColor: Colors.white,
-          child:
-              OperatingHoursWidget(fuelStation: fuelStation, operatingHrsResponseFuture: _operatingHrsResponseFuture)),
+          child: Padding(
+              padding: const EdgeInsets.only(top: 10, bottom: 10),
+              child: OperatingHoursWidget(
+                  fuelStation: fuelStation, operatingHrsResponseFuture: _operatingHrsResponseFuture))),
       phonePresent ? _getPhoneNumberWidget(fuelStationAddress) : const SizedBox(width: 0)
     ]);
   }
@@ -99,34 +91,33 @@ class _ContactTabWidgetState extends State<ContactTabWidget> {
   Widget _getFuelStationAddressWidget(final FuelStationAddress fuelStationAddress) {
     return Card(
         margin: const EdgeInsets.only(left: 5, right: 5, top: 5),
-        color: Colors.white,
-        surfaceTintColor: Colors.white,
-        child: ListTile(
-            contentPadding: const EdgeInsets.only(left: 20, right: 5, top: 3, bottom: 7),
-            leading: Icon(Icons.location_on_outlined, color: colorScheme.fuelStationDetailsTextColor, size: 30),
-            title: _getFuelStationAddress(fuelStationAddress)));
+        child: Padding(
+          padding: const EdgeInsets.only(top: 10, bottom: 10),
+          child: ListTile(
+              contentPadding: const EdgeInsets.only(left: 20, right: 5, top: 3, bottom: 7),
+              leading: const Icon(Icons.location_on_outlined, size: 40),
+              title: _getFuelStationAddress(fuelStationAddress)),
+        ));
   }
 
   Widget _getPhoneNumberWidget(final FuelStationAddress fuelStationAddress) {
     return Card(
         margin: const EdgeInsets.only(left: 5, right: 5, top: 5),
-        color: Colors.white,
-        surfaceTintColor: Colors.white,
-        child: ListTile(
-            contentPadding: const EdgeInsets.only(left: 20, right: 5),
-            leading: Icon(Icons.phone_outlined, size: 30, color: colorScheme.fuelStationDetailsTextColor),
-            title: _getPhone(fuelStationAddress)));
+        child: Padding(
+            padding: const EdgeInsets.only(top: 10, bottom: 10),
+            child: ListTile(
+                contentPadding: const EdgeInsets.only(left: 20, right: 5),
+                leading: const Icon(Icons.phone_outlined, size: 40),
+                title: _getPhone(fuelStationAddress))));
   }
 
   Widget _getFuelStationAddress(final FuelStationAddress fuelStationAddress) {
-    String address =
-        '${fuelStationAddress.addressLine1.toTitleCase()},\n${fuelStationAddress.locality?.toTitleCase()}, '
+    String address = '${fuelStationAddress.addressLine1.toTitleCase()}, ${fuelStationAddress.locality?.toTitleCase()}, '
         '${fuelStationAddress.state} ${fuelStationAddress.zip}';
     return Text(address,
         maxLines: 2,
         overflow: TextOverflow.ellipsis,
-        style: TextStyle(
-            fontSize: 17, fontWeight: FontWeight.w500, color: colorScheme.fuelStationDetailsTextColor, height: 1.7));
+        style: const TextStyle(fontSize: 22, fontWeight: FontWeight.normal, height: 1.7));
   }
 
   Widget _getPhone(final FuelStationAddress fuelStationAddress) {
@@ -142,8 +133,7 @@ class _ContactTabWidgetState extends State<ContactTabWidget> {
       phoneN = fuelStationAddress.phone2;
     }
     if (DataUtils.isNotBlank(phoneN)) {
-      return Text(phoneN!,
-          style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500, color: colorScheme.fuelStationDetailsTextColor));
+      return Text(phoneN!, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.normal));
     } else {
       return const SizedBox(width: 0);
     }

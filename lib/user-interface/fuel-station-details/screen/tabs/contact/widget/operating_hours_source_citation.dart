@@ -62,23 +62,22 @@ class OperatingHoursSourceCitation extends StatelessWidget {
     }
     return Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
       Row(children: [
-        Text(weekDay, style: const TextStyle(fontSize: 22, color: Colors.indigo, fontWeight: FontWeight.bold)),
+        Text(weekDay, style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w500)),
         const SizedBox(width: 10),
-        Text(operatingTimeRange,
-            style: const TextStyle(fontSize: 22, color: Colors.indigo, fontWeight: FontWeight.bold))
+        Text(operatingTimeRange, style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w500))
       ]),
+      const SizedBox(height: 14),
+      const Divider(height: 1),
+      const SizedBox(height: 10),
+      Text(sourceMessage, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w500)),
       const SizedBox(height: 12),
-      const Divider(color: Colors.indigo, height: 1),
-      const SizedBox(height: 8),
-      Text(sourceMessage, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500, color: Colors.indigo)),
-      const SizedBox(height: 8),
       Text('Last Update Time ${_getPublishDateFormatted(_operatingHours.publishDate!)}',
-          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.indigo)),
-      const SizedBox(height: 12),
-      const Divider(color: Colors.indigo, height: 1),
-      const SizedBox(height: 12),
+          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.normal)),
+      const SizedBox(height: 14),
+      const Divider(height: 1),
+      const SizedBox(height: 14),
       _getAdminContactMessage(),
-      const SizedBox(height: 12),
+      const SizedBox(height: 15),
       _getOkActionButton(context)
     ]);
   }
@@ -90,25 +89,20 @@ class OperatingHoursSourceCitation extends StatelessWidget {
 
   Text _getAdminContactMessage() {
     return const Text(_pumpedMessage,
-        textAlign: TextAlign.start, style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w400, color: Colors.red));
+        textAlign: TextAlign.start, style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w400, color: Colors.red));
   }
 
-  Row _getOkActionButton(final BuildContext context) {
+  Widget _getOkActionButton(final BuildContext context) {
     return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-      WidgetUtils.getRoundedElevatedButton(
-          child: Row(children: const [
-            Icon(Icons.cancel_outlined, size: 24, color: Colors.white),
-            SizedBox(width: 10),
-            Text('Cancel', style: TextStyle(color: Colors.white))
-          ]),
-          foreGroundColor: Colors.white,
-          backgroundColor: Colors.indigo,
-          borderRadius: 10.0,
-          onPressed: () {
+      WidgetUtils.getRoundedButton(
+          context: context,
+          buttonText: 'Cancel',
+          iconData: Icons.cancel_outlined,
+          onTapFunction: () {
             Navigator.pop(context);
           }),
       const SizedBox(width: 10),
-      _getNotificationWidget(),
+      _getNotificationWidget()
     ]);
   }
 

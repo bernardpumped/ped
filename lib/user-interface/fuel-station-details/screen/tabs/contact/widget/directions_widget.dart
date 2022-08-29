@@ -39,19 +39,11 @@ class DirectionsWidget extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    final Color snackBarColor = Theme.of(context).dialogBackgroundColor;
-    return GestureDetector(
-        child: Column(children: [
-          Card(
-              elevation: 2,
-              color: Colors.indigo,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15), side: const BorderSide(color: Colors.indigo, width: 1)),
-              child: const Padding(
-                  padding: EdgeInsets.all(14.0), child: Icon(Icons.directions_outlined, color: Colors.white))),
-          const Text('Directions', style: TextStyle(color: Colors.indigo, fontSize: 14, fontWeight: FontWeight.w500))
-        ]),
-        onTap: () async {
+    return WidgetUtils.getRoundedButton(
+        context: context,
+        buttonText: 'Directions',
+        iconData: Icons.directions_outlined,
+        onTapFunction: () async {
           if (kIsWeb) {
             if (!FeatureSupport.webPlatform.contains(FeatureSupport.directionsFeature)) {
               LogUtil.debug(_tag, 'Web does not yet support ${FeatureSupport.directionsFeature}');
@@ -67,16 +59,16 @@ class DirectionsWidget extends StatelessWidget {
 
           switch (resultCode) {
             case LocationInitResultCode.locationServiceDisabled:
-              WidgetUtils.buildSnackBar2('Location Service is disabled', snackBarColor, 2, '', () {});
+              WidgetUtils.buildSnackBar2(context, 'Location Service is disabled', 2, '', () {});
               break;
             case LocationInitResultCode.permissionDenied:
-              WidgetUtils.buildSnackBar2('Location Permission denied', snackBarColor, 2, '', () {});
+              WidgetUtils.buildSnackBar2(context, 'Location Permission denied', 2, '', () {});
               break;
             case LocationInitResultCode.notFound:
-              WidgetUtils.buildSnackBar2('Location Not Found', snackBarColor, 2, '', () {});
+              WidgetUtils.buildSnackBar2(context, 'Location Not Found', 2, '', () {});
               break;
             case LocationInitResultCode.failure:
-              WidgetUtils.buildSnackBar2('Location Failure', snackBarColor, 2, '', () {});
+              WidgetUtils.buildSnackBar2(context, 'Location Failure', 2, '', () {});
               break;
             case LocationInitResultCode.success:
               {
@@ -85,10 +77,10 @@ class DirectionsWidget extends StatelessWidget {
                   final sLat = geoLocationData.latitude;
                   final sLng = geoLocationData.longitude;
                   _launchMaps(sLat, sLng, _dLat, _dLng, () {
-                    WidgetUtils.showToastMessage(context, 'Cannot call phone', Colors.indigo);
+                    WidgetUtils.showToastMessage(context, 'Cannot call phone');
                   });
                 } else {
-                  WidgetUtils.buildSnackBar2('Location Failure', snackBarColor, 2, '', () {});
+                  WidgetUtils.buildSnackBar2(context, 'Location Failure', 2, '', () {});
                 }
               }
               break;
@@ -134,19 +126,19 @@ class DirectionsWidget extends StatelessWidget {
   }
 
   Future<bool> _launchGoogleMaps(final double slat, final double slng, final double dlat, final double dlng) async {
-    final urlString = "https://www.google.com/maps/dir/?api=1&origin=$slat,$slng&destination=$dlat,$dlng";
-    final Uri googleMapsUrl = Uri.parse(urlString);
+    final Uri googleMapsUrl =
+        Uri.parse("https://www.google.com/maps/dir/?api=1&origin=$slat,$slng&destination=$dlat,$dlng");
     if (Platform.isIOS) {
       if (await canLaunchUrl(googleMapsUrl)) {
         final bool nativeAppLaunchSucceeded = await launchUrl(
-          googleMapsUrl, mode: LaunchMode.externalApplication
+          googleMapsUrl,
           // forceSafariVC: false,
           // universalLinksOnly: true,
         );
         bool nonNativeAppLaunchSucceeded = false;
         if (!nativeAppLaunchSucceeded) {
           nonNativeAppLaunchSucceeded = await launchUrl(
-              googleMapsUrl
+            googleMapsUrl,
             // forceSafariVC: true,
           );
         }
@@ -155,8 +147,7 @@ class DirectionsWidget extends StatelessWidget {
       return false;
     } else {
       if (await canLaunchUrl(googleMapsUrl)) {
-        // launchUrl(url)
-        bool launchSuccessful = await launchUrl(googleMapsUrl, mode: LaunchMode.externalApplication);
+        bool launchSuccessful = await launchUrl(googleMapsUrl);
         return launchSuccessful;
       } else {
         return false;
@@ -166,44 +157,47 @@ class DirectionsWidget extends StatelessWidget {
 
   Future<bool> _launchAppleMaps(final double slat, final double slng, final double dlat, final double dlng) async {
     if (!Platform.isIOS) return false;
-    String urlString = 'http://maps.apple.com/maps?saddr=$slat,$slng&daddr=$dlat,$dlng';
-    final Uri appleMapsUrl = Uri.parse(urlString);
-    if (await canLaunchUrl(appleMapsUrl)) {
+    String urlAppleMaps = 'http://maps.apple.com/maps?saddr=$slat,$slng&daddr=$dlat,$dlng';
+    if (await canLaunch(urlAppleMaps)) {
       LogUtil.debug(_tag, 'Attempting native launch of apple maps');
-      final bool nativeAppLaunchSucceeded = await launchUrl(appleMapsUrl, mode: LaunchMode.externalApplication /*forceSafariVC: false, universalLinksOnly: true*/);
+      final bool nativeAppLaunchSucceeded = await launch(urlAppleMaps, forceSafariVC: false, universalLinksOnly: true);
       LogUtil.debug(_tag, 'Native launch for apple map successful $nativeAppLaunchSucceeded');
 
       bool nonNativeAppLaunchSucceeded = false;
       if (!nativeAppLaunchSucceeded) {
         LogUtil.debug(_tag, 'Attempting non-native launch of apple maps');
-        nonNativeAppLaunchSucceeded = await launchUrl(appleMapsUrl);
+        nonNativeAppLaunchSucceeded = await launch(urlAppleMaps, forceSafariVC: true);
         LogUtil.debug(_tag, 'Non-Native launch for apple map successful $nonNativeAppLaunchSucceeded');
       }
       return nativeAppLaunchSucceeded || nonNativeAppLaunchSucceeded;
     } else {
-      LogUtil.debug(_tag, 'Could not launch $urlString');
+      LogUtil.debug(_tag, 'Could not launch $urlAppleMaps');
       return false;
     }
   }
 
   Future<bool> _launchWazeMaps(final double slat, final double slng, final double dlat, final double dlng) async {
-    final String urlString = "https://waze.com/ul?ll=$dlat,$dlng&navigate=yes";
-    Uri wazeMapUrl = Uri.parse(urlString);
-    if (Platform.isIOS || Platform.isAndroid) {
-      if (await canLaunchUrl(wazeMapUrl)) {
-        final bool nativeAppLaunchSucceeded = await launchUrl(
-          wazeMapUrl, mode: LaunchMode.externalApplication
+    final String wazeMapsUrl = "https://waze.com/ul?ll=$dlat,$dlng&navigate=yes";
+    if (Platform.isIOS) {
+      if (await canLaunch(wazeMapsUrl)) {
+        final bool nativeAppLaunchSucceeded = await launch(
+          wazeMapsUrl,
+          forceSafariVC: false,
+          universalLinksOnly: true,
         );
         bool nonNativeAppLaunchSucceeded = false;
         if (!nativeAppLaunchSucceeded) {
-          nonNativeAppLaunchSucceeded = await launchUrl(wazeMapUrl);
+          nonNativeAppLaunchSucceeded = await launch(
+            wazeMapsUrl,
+            forceSafariVC: true,
+          );
         }
         return nativeAppLaunchSucceeded || nonNativeAppLaunchSucceeded;
       }
       return false;
     } else {
-      if (await canLaunchUrl(wazeMapUrl)) {
-        bool launchSuccessful = await launchUrl(wazeMapUrl);
+      if (await canLaunch(wazeMapsUrl)) {
+        bool launchSuccessful = await launch(wazeMapsUrl);
         return launchSuccessful;
       } else {
         return false;

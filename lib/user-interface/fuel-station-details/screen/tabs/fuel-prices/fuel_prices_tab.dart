@@ -56,9 +56,7 @@ class _FuelPricesTabWidgetState extends State<FuelPricesTabWidget> {
           } else if (snapshot.hasData) {
             final List<FuelType> allowedFuelTypes = snapshot.data as List<FuelType>;
             if (widget._fuelStation.hasFuelPrices()) {
-              return Container(
-                  decoration: const BoxDecoration(color: Color(0xFFF0EDFF)),
-                  child: Column(children: _getListItem(context, allowedFuelTypes)));
+              return Column(children: _getListItem(context, allowedFuelTypes));
             } else {
               return const NoFuelPricesWidget();
             }
@@ -93,21 +91,18 @@ class _FuelPricesTabWidgetState extends State<FuelPricesTabWidget> {
 
   Widget _getDeclarationRowItem() {
     return const Card(
-        surfaceTintColor: Color(0xFFF0EDFF),
         // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         margin: EdgeInsets.only(left: 5, right: 5, top: 15),
         child: Padding(
             padding: EdgeInsets.only(top: 10, bottom: 10, left: 20, right: 20),
             child: Text('Fuel Station does not advertise prices for other fuel types',
-                style: TextStyle(fontSize: 16, color: Colors.indigo, fontWeight: FontWeight.w500))));
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500))));
   }
 
   Widget _getFuelQuoteRowItem(final FuelQuote fuelQuote, final Map<String, FuelType> allowedFuelTypesMap) {
     final String? fuelTypeName = allowedFuelTypesMap[fuelQuote.fuelType]?.fuelName;
     return Card(
-        color: Colors.white,
-        surfaceTintColor: Colors.white,
-        margin: const EdgeInsets.only(left: 5, right: 5, top: 5),
+        margin: const EdgeInsets.only(left: 5, right: 5, top: 5, bottom: 5),
         child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
           Expanded(
               flex: 11,
@@ -116,10 +111,9 @@ class _FuelPricesTabWidgetState extends State<FuelPricesTabWidget> {
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
                     Container(
                         margin: const EdgeInsets.only(left: 25),
-                        child: Text(fuelTypeName!,
-                            style: const TextStyle(fontSize: 17, color: Colors.indigo, fontWeight: FontWeight.w500))),
+                        child: Text(fuelTypeName!, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w500))),
                     Container(
-                        padding: const EdgeInsets.only(right: 10, top: 8, bottom: 10),
+                        padding: const EdgeInsets.only(right: 10, top: 10, bottom: 10),
                         child: Row(children: <Widget>[
                           Container(margin: const EdgeInsets.only(left: 25), child: _getLastUpdateDateWidget(fuelQuote))
                         ]))
@@ -136,8 +130,8 @@ class _FuelPricesTabWidgetState extends State<FuelPricesTabWidget> {
 
   Widget _getFuelQuoteValueWidget(final FuelQuote fuelQuote) {
     return fuelQuote.quoteValue != null
-        ? Text('${fuelQuote.quoteValue}', style: const TextStyle(fontSize: 19, color: Colors.indigo))
-        : const Text('---', style: TextStyle(fontSize: 18, color: Colors.indigo, fontWeight: FontWeight.w500));
+        ? Text('${fuelQuote.quoteValue}', style: const TextStyle(fontSize: 24))
+        : const Text('---', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500));
   }
 
   Widget _getFuelQuoteSourceIcon(final FuelQuote fuelQuote, final String fuelTypeName) {
@@ -152,7 +146,7 @@ class _FuelPricesTabWidgetState extends State<FuelPricesTabWidget> {
   Widget _getLastUpdateDateWidget(final FuelQuote fuelQuote) {
     return fuelQuote.publishDate != null
         ? Text('Last Update ${_getPublishDateFormatted(fuelQuote.publishDate!)}',
-            style: const TextStyle(fontSize: 14, color: Colors.indigo, overflow: TextOverflow.ellipsis))
+            style: const TextStyle(fontSize: 18, overflow: TextOverflow.ellipsis))
         : const SizedBox(width: 0);
   }
 
@@ -164,14 +158,21 @@ class _FuelPricesTabWidgetState extends State<FuelPricesTabWidget> {
 
   GestureDetector _getFuelPriceSourceCitation(final FuelQuote fuelQuote, final String fuelTypeName) {
     final icon = fuelQuote.fuelQuoteSource == 'F'
-        ? const Icon(Icons.info_outline, color: Colors.indigo, size: 30)
-        : const Icon(Icons.people_outline, color: Colors.indigo, size: 30);
+        ? const Icon(Icons.info_outline, size: 36)
+        : const Icon(Icons.people_outline, size: 36);
     return GestureDetector(
         onTap: () {
-          showModalBottomSheet(
-              context: context,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
-              builder: (context) => FuelPriceSourceCitationWidget(fuelQuote, widget._fuelStation, fuelTypeName));
+          showDialog(barrierDismissible: false, context: context, builder: (BuildContext context) {
+            return AlertDialog(
+                backgroundColor: Colors.transparent,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10), side: const BorderSide(width: 0.2)),
+                content: FuelPriceSourceCitationWidget(fuelQuote, widget._fuelStation, fuelTypeName));
+          });
+          // showModalBottomSheet(
+          //     context: context,
+          //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
+          //     builder: (context) => FuelPriceSourceCitationWidget(fuelQuote, widget._fuelStation, fuelTypeName));
         },
         child: icon);
   }
