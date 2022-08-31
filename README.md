@@ -13,4 +13,6 @@ Install, Setup and configure https://docs.flutter.dev/get-started/install/linux 
   
   $ flutter create .
   
-  $ flutter run -d linux
+  $ flutter run [ linux web ]]
+
+  $ flutter build [ bundle linux web ]
