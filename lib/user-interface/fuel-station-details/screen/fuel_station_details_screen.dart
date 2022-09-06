@@ -67,10 +67,6 @@ class _FuelStationDetailsScreenState extends State<FuelStationDetailsScreen> {
     super.dispose();
   }
 
-  void onFavouriteStatusChange() {
-    homeScreenRefreshNeeded = true;
-  }
-
   @override
   Widget build(final BuildContext context) {
     final FuelStation fuelStation = widget.selectedFuelStation;
@@ -85,7 +81,7 @@ class _FuelStationDetailsScreenState extends State<FuelStationDetailsScreen> {
         child: _fuelStationDetailsView(fuelStation));
   }
 
-  DefaultTabController _fuelStationDetailsView(FuelStation fuelStation) {
+  DefaultTabController _fuelStationDetailsView(final FuelStation fuelStation) {
     return DefaultTabController(
         length: _tabs.length,
         child: NestedScrollView(
@@ -93,15 +89,11 @@ class _FuelStationDetailsScreenState extends State<FuelStationDetailsScreen> {
               return <Widget>[
                 SliverAppBar(
                     pinned: true,
-                    expandedHeight: 240,
+                    expandedHeight: 250,
                     automaticallyImplyLeading: false,
                     centerTitle: false,
-                    collapsedHeight: 240,
-                    flexibleSpace: FlexibleSpaceBar(
-                        background: Card(
-                            margin: const EdgeInsets.all(6),
-                            child: ExpandedHeaderWidget(
-                                fuelStation: fuelStation, onFavouriteStatusChange: onFavouriteStatusChange)))),
+                    collapsedHeight: 250,
+                    flexibleSpace: FlexibleSpaceBar(background: ExpandedHeaderWidget(fuelStation: fuelStation))),
                 SliverPersistentHeader(
                     pinned: true,
                     delegate: _SliverTabBarDelegate(TabBar(
@@ -115,8 +107,7 @@ class _FuelStationDetailsScreenState extends State<FuelStationDetailsScreen> {
                         tabs: _tabs.map((tabName) {
                           return Tab(
                               child: Text(tabName,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 22)));
+                                  overflow: TextOverflow.ellipsis, style: Theme.of(context).textTheme.headline4));
                         }).toList())))
               ];
             },
@@ -154,7 +145,7 @@ class _SliverTabBarDelegate extends SliverPersistentHeaderDelegate {
 
   @override
   Widget build(final BuildContext context, final double shrinkOffset, final bool overlapsContent) {
-    return Container(child: _tabBar);
+    return Container(color: Theme.of(context).backgroundColor, child: _tabBar);
   }
 
   @override

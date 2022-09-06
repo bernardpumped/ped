@@ -24,6 +24,7 @@ import 'package:pumped_end_device/user-interface/fuel-station-details/screen/tab
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class PhoneWidget extends StatelessWidget {
   static const _tag = 'PhoneWidget';
@@ -32,18 +33,11 @@ class PhoneWidget extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    return GestureDetector(
-        child: WidgetUtils.wrapWithRoundedContainer(
-            context: context,
-            radius: 24,
-            child: Padding(
-                padding: const EdgeInsets.all(14.0),
-                child: Row(children: const [
-                  Text('Call', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
-                  SizedBox(width: 8),
-                  Icon(Icons.phone_outlined, size: 24)
-                ]))),
-        onTap: () async {
+    return WidgetUtils.getRoundedButton(
+        context: context,
+        buttonText: 'Call',
+        iconData: Icons.phone_outlined,
+        onTapFunction: () async {
           _launchCaller(_phone, () {
             WidgetUtils.showToastMessage(context, 'Cannot call phone');
           });
@@ -63,8 +57,8 @@ class PhoneWidget extends StatelessWidget {
     }
     final String phoneUrl = Uri.encodeFull("tel:$phone");
     try {
-      if (await canLaunch(phoneUrl)) {
-        await launch(phoneUrl);
+      if (await canLaunchUrlString(phoneUrl)) {
+        await launchUrlString(phoneUrl);
       } else {
         LogUtil.debug(_tag, 'Could not launch $phoneUrl');
         function.call();

@@ -36,20 +36,11 @@ class RateWidget extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    return GestureDetector(
-        child: Column(children: [
-          WidgetUtils.wrapWithRoundedContainer(
-              context: context,
-              radius: 24,
-              child: Padding(
-                  padding: const EdgeInsets.all(14.0),
-                  child: Row(children: const [
-                    Text('Rate', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
-                    SizedBox(width: 8),
-                    Icon(Icons.star_rate_outlined, size: 24)
-                  ])))
-        ]),
-        onTap: () async {
+    return WidgetUtils.getRoundedButton(
+        context: context,
+        buttonText: 'Rate',
+        iconData: Icons.star_outline,
+        onTapFunction: () async {
           if (kIsWeb) {
             if (!FeatureSupport.webPlatform.contains(FeatureSupport.ratingFeature)) {
               LogUtil.debug(_tag, 'Web does not yet support ${FeatureSupport.ratingFeature}');
@@ -79,36 +70,11 @@ class RateWidget extends StatelessWidget {
       fsAddress = '$fsAddress ${address.state}';
     }
     final String googleRatingUrl = Uri.encodeFull('https://www.google.com/maps/search/?api=1&query=$fsAddress');
-    if (Platform.isIOS) {
-      if (await canLaunch(googleRatingUrl)) {
-        LogUtil.debug(_tag, 'Attempting native launch of Google Maps/rate url');
-        bool nativeAppLaunchSucceeded = false;
-        nativeAppLaunchSucceeded = await launch(
-          googleRatingUrl,
-          forceSafariVC: false,
-          universalLinksOnly: true,
-        );
-        LogUtil.debug(_tag, 'Native launch of Google Maps/rate successful $nativeAppLaunchSucceeded');
-        bool nonNativeAppLaunchSucceeded = false;
-        if (!nativeAppLaunchSucceeded) {
-          LogUtil.debug(_tag, 'Attempting non-native launch of Google Maps/rate successful');
-          nonNativeAppLaunchSucceeded = await launch(
-            googleRatingUrl,
-            forceSafariVC: true,
-          );
-          LogUtil.debug(_tag, 'Non-Native launch of Google Maps/rate successful $nativeAppLaunchSucceeded');
-        }
-        return nativeAppLaunchSucceeded || nonNativeAppLaunchSucceeded;
-      } else {
-        LogUtil.debug(_tag, 'Could not launch $googleRatingUrl');
-        return false;
-      }
+
+    if (await canLaunchUrlString(googleRatingUrl)) {
+      return await launchUrlString(googleRatingUrl);
     } else {
-      if (await canLaunchUrlString(googleRatingUrl)) {
-        return await canLaunchUrlString(googleRatingUrl);
-      } else {
-        return false;
-      }
+      return false;
     }
   }
 }

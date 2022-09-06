@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pumped_end_device/user-interface/about/screen/about_screen.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/screens/favourite/favourite_stations_screen.dart';
-import 'package:pumped_end_device/user-interface/help/screen/help_screen.dart';
-import 'package:pumped_end_device/user-interface/send-feedback/screens/send_feedback_screen.dart';
 import 'package:pumped_end_device/user-interface/settings/screen/settings_screen.dart';
 
 import 'fuel-stations/screens/nearby/nearby_stations_screen.dart';
@@ -45,14 +43,7 @@ class _PedBasePageViewState extends State<PedBasePageView> {
               physics: const NeverScrollableScrollPhysics(),
               controller: _pageController,
               onPageChanged: onPageChanged,
-              children: const [
-                NearbyStationsScreen(),
-                FavouriteStationsScreen(),
-                SettingsScreen(),
-                AboutScreen(),
-                SendFeedbackScreen(),
-                HelpScreen()
-              ]))
+              children: const [NearbyStationsScreen(), FavouriteStationsScreen(), SettingsScreen(), AboutScreen()]))
     ]);
   }
 }

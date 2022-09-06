@@ -19,10 +19,10 @@
 import 'package:flutter/material.dart';
 import 'package:pumped_end_device/main.dart';
 import 'package:pumped_end_device/user-interface/ped_base_page_view.dart';
-import 'package:pumped_end_device/user-interface/settings/screen/widget/text_direction_menu_item_widget.dart';
-import 'package:pumped_end_device/user-interface/settings/screen/widget/text_locale_menu_item_widget.dart';
-import 'package:pumped_end_device/user-interface/settings/screen/widget/text_scaling_menu_item_widget.dart';
-import 'package:pumped_end_device/user-interface/settings/screen/widget/theme_menu_item_widget.dart';
+import 'package:pumped_end_device/user-interface/settings/screen/locale_screen.dart';
+import 'package:pumped_end_device/user-interface/settings/screen/text_direction_screen.dart';
+import 'package:pumped_end_device/user-interface/settings/screen/text_scaling_screen.dart';
+import 'package:pumped_end_device/user-interface/settings/screen/theming_screen.dart';
 import 'package:pumped_end_device/user-interface/settings/screen/widget/server_version_widget.dart';
 import 'package:pumped_end_device/user-interface/utils/under_maintenance_service.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
@@ -43,6 +43,8 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   static const _tag = 'SettingsScreen';
+  SettingsMenu? _selectedSettings;
+
   final UnderMaintenanceService _underMaintenanceService =
       getIt.get<UnderMaintenanceService>(instanceName: underMaintenanceServiceName);
 
@@ -76,9 +78,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ]));
   }
 
-  bool _displayCustomizeSearchMenu = false;
-  bool _displayClearCachedMenuItem = false;
-
   _settingsScreen() {
     return SingleChildScrollView(
         child: Container(
@@ -90,19 +89,34 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 children: <Widget>[
                   _customizeSearchMenuItem(),
                   _clearCacheMenuItem(),
-                  const TextScalingMenuItemWidget(),
-                  const ThemeMenuItemWidget(),
-                  const TextDirectionMenuItemWidget(),
-                  const TextLocaleMenuItemWidget(),
+                  _textScalingMenuItem(),
+                  _themingMenuItem(),
+                  _textDirectionMenuItem(),
+                  _localeMenuItem(),
                   _appVersionWidget(),
                   const ServerVersionWidget()
                 ])));
   }
 
   _getSelectedSettingsDetails() {
-    return _displayCustomizeSearchMenu
-        ? const CustomizeSearchSettingsScreen()
-        : (_displayClearCachedMenuItem ? const CleanupLocalCacheScreen() : _selectASettingsMsg());
+    if (_selectedSettings == null) {
+      return _selectASettingsMsg();
+    } else {
+      switch (_selectedSettings!) {
+        case SettingsMenu.customizeSearch:
+          return const CustomizeSearchSettingsScreen();
+        case SettingsMenu.clearLocalCache:
+          return const CleanupLocalCacheScreen();
+        case SettingsMenu.textScaling:
+          return const TextScalingScreen();
+        case SettingsMenu.theming:
+          return const ThemingScreen();
+        case SettingsMenu.textDirection:
+          return const TextDirectionScreen();
+        case SettingsMenu.locale:
+          return const LocaleScreen();
+      }
+    }
   }
 
   Widget _selectASettingsMsg() {
@@ -110,8 +124,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       margin: const EdgeInsets.all(8),
       child: Container(
           decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
-          child: const Center(
-              child: Text('Select a Settings', style: TextStyle(fontSize: 24, fontWeight: FontWeight.normal)))),
+          child: Center(child: Text('Select a Settings', style: Theme.of(context).textTheme.headline2))),
     );
   }
 
@@ -119,39 +132,99 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return GestureDetector(
         onTap: () {
           setState(() {
-            _displayCustomizeSearchMenu = true;
-            _displayClearCachedMenuItem = false;
+            _selectedSettings = SettingsMenu.customizeSearch;
           });
         },
-        child: const Card(
+        child: Card(
             child: ListTile(
-                contentPadding: EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
-                leading: Icon(Icons.settings_outlined, size: 35),
-                title: Text("Customize Search", style: TextStyle(fontSize: 22, fontWeight: FontWeight.normal)),
-                trailing: Icon(Icons.chevron_right, size: 24))));
+                contentPadding: const EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
+                leading: const Icon(Icons.settings_outlined, size: 35),
+                title: Text("Customize Search", style: Theme.of(context).textTheme.headline4),
+                trailing: const Icon(Icons.chevron_right, size: 24))));
+  }
+
+  Widget _textScalingMenuItem() {
+    return GestureDetector(
+        onTap: () {
+          setState(() {
+            _selectedSettings = SettingsMenu.textScaling;
+          });
+        },
+        child: Card(
+            child: ListTile(
+                contentPadding: const EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
+                leading: const Icon(Icons.linear_scale_rounded, size: 35),
+                title: Text("Text Scaling", style: Theme.of(context).textTheme.headline4),
+                trailing: const Icon(Icons.chevron_right, size: 24))));
+  }
+
+  Widget _themingMenuItem() {
+    return GestureDetector(
+        onTap: () {
+          setState(() {
+            _selectedSettings = SettingsMenu.theming;
+          });
+        },
+        child: Card(
+            child: ListTile(
+                contentPadding: const EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
+                leading: const Icon(Icons.compare_outlined, size: 35),
+                title: Text("Theming", style: Theme.of(context).textTheme.headline4),
+                trailing: const Icon(Icons.chevron_right, size: 24))));
   }
 
   Widget _clearCacheMenuItem() {
     return GestureDetector(
         onTap: () {
           setState(() {
-            _displayCustomizeSearchMenu = false;
-            _displayClearCachedMenuItem = true;
+            _selectedSettings = SettingsMenu.clearLocalCache;
           });
         },
-        child: const Card(
+        child: Card(
             child: ListTile(
-                contentPadding: EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
-                leading: Icon(Icons.delete_outline, size: 35),
-                title: Text("Clear local cache", style: TextStyle(fontSize: 22, fontWeight: FontWeight.normal)),
-                trailing: Icon(Icons.chevron_right, size: 24))));
+                contentPadding: const EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
+                leading: const Icon(Icons.delete_outline, size: 35),
+                title: Text("Clear local cache", style: Theme.of(context).textTheme.headline4),
+                trailing: const Icon(Icons.chevron_right, size: 24))));
+  }
+
+  Widget _textDirectionMenuItem() {
+    return GestureDetector(
+        onTap: () {
+          setState(() {
+            _selectedSettings = SettingsMenu.textDirection;
+          });
+        },
+        child: Card(
+            child: ListTile(
+                contentPadding: const EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
+                leading: const Icon(Icons.align_horizontal_left, size: 35),
+                title: Text("Text Direction", style: Theme.of(context).textTheme.headline4),
+                trailing: const Icon(Icons.chevron_right, size: 24))));
+  }
+
+  Widget _localeMenuItem() {
+    return GestureDetector(
+        onTap: () {
+          setState(() {
+            _selectedSettings = SettingsMenu.locale;
+          });
+        },
+        child: Card(
+            child: ListTile(
+                contentPadding: const EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
+                leading: const Icon(Icons.language, size: 35),
+                title: Text("Locale", style: Theme.of(context).textTheme.headline4),
+                trailing: const Icon(Icons.chevron_right, size: 24))));
   }
 
   Widget _appVersionWidget() {
-    return const Padding(
-        padding: EdgeInsets.only(top: 25),
+    return Padding(
+        padding: const EdgeInsets.only(top: 25),
         child: ListTile(
             title: Text("Pumped App Release - $appVersion",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500), textAlign: TextAlign.center)));
+                style: Theme.of(context).textTheme.bodyText1, textAlign: TextAlign.center)));
   }
 }
+
+enum SettingsMenu { customizeSearch, clearLocalCache, textScaling, theming, textDirection, locale }

@@ -40,12 +40,10 @@ class ContactTabWidget extends StatefulWidget {
 
 class _ContactTabWidgetState extends State<ContactTabWidget> {
   static const _tag = 'OverviewTabWidget';
-  Future<GetFuelStationOperatingHrsResponse>? _operatingHrsResponseFuture;
 
   @override
   void initState() {
     super.initState();
-    _operatingHrsResponseFuture = _getFuelStationOperatingHrsFuture();
   }
 
   Future<GetFuelStationOperatingHrsResponse> _getFuelStationOperatingHrsFuture() async {
@@ -83,7 +81,7 @@ class _ContactTabWidgetState extends State<ContactTabWidget> {
           child: Padding(
               padding: const EdgeInsets.only(top: 10, bottom: 10),
               child: OperatingHoursWidget(
-                  fuelStation: fuelStation, operatingHrsResponseFuture: _operatingHrsResponseFuture))),
+                  fuelStation: fuelStation, operatingHrsResponseFuture: _getFuelStationOperatingHrsFuture()))),
       phonePresent ? _getPhoneNumberWidget(fuelStationAddress) : const SizedBox(width: 0)
     ]);
   }
@@ -95,7 +93,7 @@ class _ContactTabWidgetState extends State<ContactTabWidget> {
           padding: const EdgeInsets.only(top: 10, bottom: 10),
           child: ListTile(
               contentPadding: const EdgeInsets.only(left: 20, right: 5, top: 3, bottom: 7),
-              leading: const Icon(Icons.location_on_outlined, size: 40),
+              leading: const Icon(Icons.location_on_outlined, size: 36),
               title: _getFuelStationAddress(fuelStationAddress)),
         ));
   }
@@ -117,7 +115,7 @@ class _ContactTabWidgetState extends State<ContactTabWidget> {
     return Text(address,
         maxLines: 2,
         overflow: TextOverflow.ellipsis,
-        style: const TextStyle(fontSize: 22, fontWeight: FontWeight.normal, height: 1.7));
+        style: Theme.of(context).textTheme.headline5);
   }
 
   Widget _getPhone(final FuelStationAddress fuelStationAddress) {
@@ -133,7 +131,7 @@ class _ContactTabWidgetState extends State<ContactTabWidget> {
       phoneN = fuelStationAddress.phone2;
     }
     if (DataUtils.isNotBlank(phoneN)) {
-      return Text(phoneN!, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.normal));
+      return Text(phoneN!, style: Theme.of(context).textTheme.headline5);
     } else {
       return const SizedBox(width: 0);
     }

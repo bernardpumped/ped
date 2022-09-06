@@ -30,16 +30,19 @@ class FuelTypeSwitcherButton extends StatelessWidget {
           _trailingButtonAction();
         },
         child: Container(
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(24), color: Colors.indigo),
+          // Intentionally using Theme.of(context).textTheme.headline1!.color! for fill color, because using primaryColor
+          // for border does not work well when theme is dark.
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(24), color: Theme.of(context).textTheme.headline2!.color),
             child: Padding(
                 padding: const EdgeInsets.only(left: 14.0, right: 14, top: 12, bottom: 12),
                 child: Row(children: [
-                  const Icon(Icons.workspaces_outline, color: Colors.white, size: 25),
+                  Icon(Icons.workspaces_outline, color: Theme.of(context).backgroundColor, size: 25),
                   const SizedBox(width: 8),
                   Text(_txtToDisplay,
-                      style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.normal)),
+                      style: Theme.of(context).textTheme.headline6!.copyWith(color: Theme.of(context).backgroundColor)),
                   const SizedBox(width: 8),
-                  const Icon(Icons.chevron_right, color: Colors.white, size: 25)
+                  Icon(Icons.chevron_right, color: Theme.of(context).backgroundColor, size: 25)
                 ]))));
   }
 }

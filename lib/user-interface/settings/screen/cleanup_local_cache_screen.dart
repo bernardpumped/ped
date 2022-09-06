@@ -46,10 +46,15 @@ class _CleanupLocalCacheScreenState extends State<CleanupLocalCacheScreen> {
         height: MediaQuery.of(context).size.height,
         width: double.infinity,
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-          const Padding(
-              padding: EdgeInsets.only(top: 10, bottom: 10, left: 10),
-              child: Text('Clear Local Cache',
-                  style: TextStyle(fontSize: 26, fontWeight: FontWeight.w500), textAlign: TextAlign.center)),
+          Padding(
+              padding: const EdgeInsets.only(top: 10, bottom: 10, left: 10),
+              child: Row(
+                children: [
+                  const Icon(Icons.delete_outline, size: 35),
+                  const SizedBox(width: 10),
+                  Text('Clear Local Cache', style: Theme.of(context).textTheme.headline3, textAlign: TextAlign.center),
+                ],
+              )),
           Expanded(
               child: ListView(children: <Widget>[
             _buildListTile(Icons.search, "Search Settings",
@@ -97,56 +102,57 @@ class _CleanupLocalCacheScreenState extends State<CleanupLocalCacheScreen> {
             Padding(
                 padding: const EdgeInsets.only(top: 20, right: 20),
                 child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                  GestureDetector(
-                      onTap: () async {
-                        final List<String> dataToClean = _dataToClean();
-                        if (dataToClean.isNotEmpty) {
-                          final String msg = 'Cleaning up ${dataToClean.join(", ")}';
-                          BuildContext? dialogContext;
-                          showDialog(
-                              barrierDismissible: false,
-                              context: context,
-                              builder: (BuildContext context) {
-                                dialogContext = context;
-                                return AlertDialog(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10), side: const BorderSide(width: 0.2)),
-                                    title: const Text("Cleaning data"),
-                                    content: Row(children: [
-                                      Expanded(child: Text(msg, style: const TextStyle(fontSize: 15, height: 1.4))),
-                                      const RefreshProgressIndicator()
-                                    ]));
-                              });
-                          final String failedString = await _cleanUp(context);
-                          if (dialogContext != null) {
-                            setState(() {
-                              _clearSearchSettings = false;
-                              _clearUpdateHistory = false;
-                              _clearFavouriteStations = false;
-                              _clearApplicationData = false;
-                              _clearHiddenFuelStations = false;
-                            });
-                          }
-                          if (mounted) {
-                            if (failedString.isNotEmpty) {
-                              WidgetUtils.showToastMessage(context, failedString);
-                            } else {
-                              Navigator.pop(context);
-                            }
-                          }
-                        } else {
-                          WidgetUtils.showToastMessage(context, 'Nothing selected to clean');
-                        }
+                  WidgetUtils.getRoundedButton(
+                      context: context,
+                      buttonText: 'Clear Data',
+                      onTapFunction: () {
+                        _cleanUpDialog();
                       },
-                      child: WidgetUtils.wrapWithRoundedContainer(
-                          context: context,
-                          radius: 24,
-                          child: const Padding(
-                              padding: EdgeInsets.only(top: 8, bottom: 8, left: 12, right: 12),
-                              child: Text('Clear Data', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500)))))
+                      iconData: Icons.delete_outline)
                 ]))
           ]))
         ]));
+  }
+
+  void _cleanUpDialog() async {
+    final List<String> dataToClean = _dataToClean();
+    if (dataToClean.isNotEmpty) {
+      final String msg = 'Cleaning up ${dataToClean.join(", ")}';
+      BuildContext? dialogContext;
+      showDialog(
+          barrierDismissible: false,
+          context: context,
+          builder: (BuildContext context) {
+            dialogContext = context;
+            return AlertDialog(
+                shape:
+                    RoundedRectangleBorder(borderRadius: BorderRadius.circular(10), side: const BorderSide(width: 0.2)),
+                title: const Text("Cleaning data"),
+                content: Row(children: [
+                  Expanded(child: Text(msg, style: Theme.of(context).textTheme.headline6)),
+                  const RefreshProgressIndicator()
+                ]));
+          });
+      final String failedString = await _cleanUp(context);
+      if (dialogContext != null) {
+        setState(() {
+          _clearSearchSettings = false;
+          _clearUpdateHistory = false;
+          _clearFavouriteStations = false;
+          _clearApplicationData = false;
+          _clearHiddenFuelStations = false;
+        });
+      }
+      if (mounted) {
+        if (failedString.isNotEmpty) {
+          WidgetUtils.showToastMessage(context, failedString);
+        } else {
+          Navigator.pop(context);
+        }
+      }
+    } else {
+      WidgetUtils.showToastMessage(context, 'Nothing selected to clean');
+    }
   }
 
   Future<String> _cleanUp(final BuildContext context) async {
@@ -230,14 +236,12 @@ class _CleanupLocalCacheScreenState extends State<CleanupLocalCacheScreen> {
     return Card(
         child: ListTile(
             contentPadding: const EdgeInsets.all(10),
-            leading: Icon(icon, size: 35),
-            title: Text(title, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.normal)),
+            leading: Icon(icon, size: 34),
+            title: Text(title, style: Theme.of(context).textTheme.headline5),
             subtitle: Padding(
                 padding: const EdgeInsets.only(top: 5.0),
-                child: Text(subTitle, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.normal))),
-            trailing: Checkbox(
-                value: checkBoxValue,
-                onChanged: onChangeFunction)));
+                child: Text(subTitle, style: Theme.of(context).textTheme.caption)),
+            trailing: Checkbox(value: checkBoxValue, onChanged: onChangeFunction)));
   }
 
   List<String> _dataToClean() {

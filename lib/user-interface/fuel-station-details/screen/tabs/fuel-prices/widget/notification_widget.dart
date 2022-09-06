@@ -39,26 +39,13 @@ class NotificationWidget extends StatelessWidget {
             WidgetUtils.showToastMessage(context, 'Cannot send notification');
           });
         });
-    // return WidgetUtils.getRoundedElevatedButton(
-    //     child: Row(children: const [
-    //       Icon(Icons.email_outlined, size: 24, color: Colors.white),
-    //       SizedBox(width: 10),
-    //       Text('Notify', style: TextStyle(color: Colors.white))
-    //     ]),
-    //     onPressed: () {
-    //       _sendNotification(() {
-    //         WidgetUtils.showToastMessage(context, 'Cannot send notification');
-    //       });
-    //     },
-    //     borderRadius: 10.0,
-    //     backgroundColor: Colors.indigo);
   }
 
   void _sendNotification(final Function function) async {
     final String notificationUrl = _getNotificationUrl();
     try {
       if (await canLaunchUrlString(notificationUrl)) {
-        await canLaunchUrlString(notificationUrl);
+        await launchUrlString(notificationUrl);
       } else {
         LogUtil.debug(_tag, 'Cannot send email $notificationUrl');
         function.call();
@@ -71,6 +58,7 @@ class NotificationWidget extends StatelessWidget {
 
   String _getNotificationUrl() {
     return Uri.encodeFull("https://notify-fuel-prices.epw.qld.gov.au/?SiteName=${fuelStation.fuelStationName}"
-        "&SiteAddress=${fuelStation.fuelStationAddress}&SiteID=${fuelStation.fuelAuthorityStationCode}&DataPublisher=Pumped");
+        "&SiteAddress=${fuelStation.fuelStationAddress.getStationAddress()}"
+        "&SiteID=${fuelStation.fuelAuthorityStationCode}&DataPublisher=Pumped");
   }
 }

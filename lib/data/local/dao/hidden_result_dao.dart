@@ -51,12 +51,11 @@ class HiddenResultDao {
         hiddenResults.add(HiddenResult.fromJson(hrItemF.value));
       }
     }
-    LogUtil.debug(
-        _tag, 'getAllHiddenResults::Num Hidden Results : ${hiddenResults.length}');
+    LogUtil.debug(_tag, 'getAllHiddenResults::Num Hidden Results : ${hiddenResults.length}');
     return hiddenResults;
   }
 
-  Future<dynamic> _deleteHiddenResults(final HiddenResult hiddenResult) async {
+  Future<dynamic> deleteHiddenResults(final HiddenResult hiddenResult) async {
     final db = Localstore.instance;
     return db.collection(_getCollection(hiddenResult)).doc(hiddenResult.hiddenStationId.toString()).delete();
   }
@@ -65,10 +64,20 @@ class HiddenResultDao {
     final List<HiddenResult> allHiddenResults = await getAllHiddenResults();
     int deleteCount = 0;
     for (var hiddenResult in allHiddenResults) {
-      _deleteHiddenResults(hiddenResult);
+      deleteHiddenResults(hiddenResult);
       deleteCount += 1;
     }
     return deleteCount;
+  }
+
+  Future<bool> containsHiddenFuelStation(final int hiddenStationId, final String hiddenStationSource) async {
+    final db = Localstore.instance;
+    if (hiddenStationSource == 'G') {
+      return await db.collection(_hiddenResultsCollectionG).doc(hiddenStationId.toString()).get() != null;
+    } else if (hiddenStationSource == 'F') {
+      return await db.collection(_hiddenResultsCollectionF).doc(hiddenStationId.toString()).get() != null;
+    }
+    return false;
   }
 
   _getCollection(final HiddenResult hiddenResult) {

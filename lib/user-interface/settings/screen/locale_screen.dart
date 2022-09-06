@@ -17,15 +17,16 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 
-class TextLocaleMenuItemWidget extends StatefulWidget {
-  const TextLocaleMenuItemWidget({Key? key}) : super(key: key);
+class LocaleScreen extends StatefulWidget {
+  const LocaleScreen({Key? key}) : super(key: key);
 
   @override
-  State<TextLocaleMenuItemWidget> createState() => _TextLocaleMenuItemWidgetState();
+  State<LocaleScreen> createState() => _LocaleScreenState();
 }
 
-class _TextLocaleMenuItemWidgetState extends State<TextLocaleMenuItemWidget> {
+class _LocaleScreenState extends State<LocaleScreen> {
   static const _systemLocale = 'SYS_LOCALE';
   static const _deutschLocale = 'DEUTSCH_LOCALE';
   static const _englishLocale = 'ENG_LOCALE';
@@ -50,12 +51,19 @@ class _TextLocaleMenuItemWidgetState extends State<TextLocaleMenuItemWidget> {
 
   @override
   Widget build(final BuildContext context) {
-    return Card(
-        child: ExpansionTile(
-          title: Text("Locale - ${_locales[selectedLocale]}",
-              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.normal)),
-          leading: const Icon(Icons.language, size: 35),
-          children: [
+    return Container(
+        padding: const EdgeInsets.only(right: 10, bottom: 15, left: 10),
+        height: MediaQuery.of(context).size.height,
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
+          Padding(
+              padding: const EdgeInsets.only(top: 10, bottom: 10, left: 10),
+              child: Row(children: [
+                const Icon(Icons.language, size: 35),
+                const SizedBox(width: 10),
+                Text('Locale ', style: Theme.of(context).textTheme.headline2, textAlign: TextAlign.center)
+              ])),
+          Card(
+              child: Column(children: [
             _getMenuItem(_systemLocale),
             _getMenuItem(_deutschLocale),
             _getMenuItem(_englishLocale),
@@ -64,8 +72,13 @@ class _TextLocaleMenuItemWidgetState extends State<TextLocaleMenuItemWidget> {
             _getMenuItem(_spanishLocale),
             _getMenuItem(_frenchLocale),
             _getMenuItem(_hindiLocale)
-          ],
-        ));
+          ])),
+          Padding(
+              padding: const EdgeInsets.only(top: 20, right: 20),
+              child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                WidgetUtils.getRoundedButton(context: context, buttonText: 'Set App Locale', iconData: Icons.language, onTapFunction: () {})
+              ]))
+        ]));
   }
 
   RadioListTile<String> _getMenuItem(final String value) {
@@ -77,6 +90,6 @@ class _TextLocaleMenuItemWidgetState extends State<TextLocaleMenuItemWidget> {
             selectedLocale = newVal!;
           });
         },
-        title: Text(_locales[value]!, style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 20)));
+        title: Text(_locales[value]!, style: Theme.of(context).textTheme.headline6));
   }
 }

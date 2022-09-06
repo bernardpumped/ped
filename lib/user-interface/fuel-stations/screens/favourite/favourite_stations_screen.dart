@@ -70,6 +70,9 @@ class _FavouriteStationsScreenState extends State<FavouriteStationsScreen> {
   bool _displayFuelTypeSwitcher = false;
   FuelStation? _fuelStationToDisplay;
 
+  static const _leftPartitionFlex = 2;
+  static const _rightPartitionFex = 3;
+
   @override
   void initState() {
     super.initState();
@@ -96,27 +99,78 @@ class _FavouriteStationsScreenState extends State<FavouriteStationsScreen> {
     return Scaffold(body: SafeArea(child: _favouriteStationsScreenBody()));
   }
 
-  void scrollFuelStations(final int sortOrder) {
-    setState(() {
-      this.sortOrder = sortOrder;
-      if (_favouriteStations.isNotEmpty) {
-        _scrollController.animateTo(0.0, curve: Curves.easeOut, duration: const Duration(milliseconds: 500));
-      }
-    });
+  _favouriteStationsScreenBody() {
+    final width = MediaQuery.of(context).size.width - drawerWidth;
+    final rightPartitionWidth = width * _rightPartitionFex / (_leftPartitionFlex + _rightPartitionFex);
+    return SizedBox(
+        width: width,
+        child: Stack(children: [
+          _getFavouriteFuelStationsFutureBuilder(),
+          Positioned(right: rightPartitionWidth + 20, bottom: 20, child: _getFuelTypeSwitcherStreamBuilder())
+        ]));
   }
 
-  _favouriteStationsScreenBody() {
-    return SizedBox(
-        width: MediaQuery.of(context).size.width - drawerWidth,
-        child: Row(children: [
-          Expanded(
-              flex: 2,
-              child: Stack(children: [
-                _getFavouriteFuelStationsFutureBuilder(),
-                Positioned(right: 20, bottom: 20, child: _getFuelTypeSwitcherStreamBuilder())
-              ])),
-          Expanded(flex: 3, child: _getDetailsSectionWidget())
-        ]));
+  _getFavouriteFuelStationsFutureBuilder() {
+    return FutureBuilder<FavoriteFuelStations>(
+        future: _favoriteFuelStationsFuture,
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.none:
+            case ConnectionState.waiting:
+            case ConnectionState.active:
+              return const Center(child: CircularProgressIndicator());
+            case ConnectionState.done:
+            default:
+              if (snapshot.hasError) {
+                LogUtil.debug(_tag, 'Error loading nearby fuel stations ${snapshot.error}');
+                return const NoFavouriteStationsWidget();
+              } else if (snapshot.hasData) {
+                final FavoriteFuelStations data = snapshot.data!;
+                return RefreshIndicator(
+                    onRefresh: () async {
+                      setState(() {
+                        _fuelStationToDisplay = null;
+                        _favoriteFuelStationsFuture = _favoriteFuelStationsDataSource.getFuelStations();
+                      });
+                    },
+                    child: _getUI(data));
+              } else {
+                return const Center(child: CircularProgressIndicator());
+              }
+          }
+        });
+  }
+
+  Row _getUI(final FavoriteFuelStations data) {
+    List<Widget> children;
+    if (data.fuelStations != null && data.fuelStations!.isNotEmpty) {
+      children = [
+        _favoriteFuelStationWidget(data),
+        Positioned(bottom: 80, right: 20, child: FuelStationSorterWidget(parentUpdateFunction: _scrollFuelStations))
+      ];
+    } else {
+      children = [_favoriteFuelStationWidget(data)];
+    }
+    return Row(children: [
+      Expanded(flex: _leftPartitionFlex, child: Stack(children: children)),
+      Expanded(flex: 3, child: _getDetailsSectionWidget())
+    ]);
+  }
+
+  Widget _favoriteFuelStationWidget(final FavoriteFuelStations data) {
+    if (!data.locationSearchSuccessful) {
+      final String locationErrorReason = data.locationErrorReason ?? 'Unknown Location Error Reason';
+      return Center(child: Text(locationErrorReason));
+    } else {
+      _favouriteStations = data.fuelStations ?? [];
+      if (_favouriteStations.isNotEmpty) {
+        LogUtil.debug(_tag, '_favoriteFuelStationWidget::fuel type ${_selectedFuelType?.fuelType}');
+        return FuelStationListWidget(_scrollController, _favouriteStations, _selectedFuelType!, sortOrder,
+            FuelStationType.favourite, _setSelectedFuelStation);
+      } else {
+        return const NoFavouriteStationsWidget();
+      }
+    }
   }
 
   _getDetailsSectionWidget() {
@@ -139,12 +193,15 @@ class _FavouriteStationsScreenState extends State<FavouriteStationsScreen> {
   }
 
   Card _selectStationMessage() {
-    return Card(
-        margin: const EdgeInsets.all(8),
-        child: Container(
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: Colors.white),
-            child: const Center(
-                child: Text('Select a Fuel Station', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500)))));
+    Widget child = Container(
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: Theme.of(context).backgroundColor));
+    LogUtil.debug(_tag, 'Number of favourite fuel-stations : ${_favouriteStations.length}');
+    if (_favouriteStations.isNotEmpty) {
+      child = Container(
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: Theme.of(context).backgroundColor),
+          child: Center(child: Text('Select a Fuel Station', style: Theme.of(context).textTheme.headline2)));
+    }
+    return Card(margin: const EdgeInsets.all(8), child: child);
   }
 
   StreamBuilder<FuelTypeSwitcherData> _getFuelTypeSwitcherStreamBuilder() {
@@ -194,56 +251,13 @@ class _FavouriteStationsScreenState extends State<FavouriteStationsScreen> {
     }
   }
 
-  _getFavouriteFuelStationsFutureBuilder() {
-    return FutureBuilder<FavoriteFuelStations>(
-        future: _favoriteFuelStationsFuture,
-        builder: (context, snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.none:
-            case ConnectionState.waiting:
-            case ConnectionState.active:
-              return const Center(child: CircularProgressIndicator());
-            case ConnectionState.done:
-            default:
-              if (snapshot.hasError) {
-                LogUtil.debug(_tag, 'Error loading nearby fuel stations ${snapshot.error}');
-                return const NoFavouriteStationsWidget();
-              } else if (snapshot.hasData) {
-                final FavoriteFuelStations data = snapshot.data!;
-                return RefreshIndicator(
-                    onRefresh: () async {
-                      setState(() {
-                        _favoriteFuelStationsFuture = _favoriteFuelStationsDataSource.getFuelStations();
-                      });
-                    },
-                    child: Stack(children: [
-                      _favoriteFuelStationWidget(data),
-                      Positioned(
-                          bottom: 80,
-                          right: 20,
-                          child: FuelStationSorterWidget(parentUpdateFunction: scrollFuelStations))
-                    ]));
-              } else {
-                return const Center(child: CircularProgressIndicator());
-              }
-          }
-        });
-  }
-
-  Widget _favoriteFuelStationWidget(final FavoriteFuelStations data) {
-    if (!data.locationSearchSuccessful) {
-      final String locationErrorReason = data.locationErrorReason ?? 'Unknown Location Error Reason';
-      return Center(child: Text(locationErrorReason));
-    } else {
-      _favouriteStations = data.fuelStations ?? [];
+  void _scrollFuelStations(final int sortOrder) {
+    setState(() {
+      this.sortOrder = sortOrder;
       if (_favouriteStations.isNotEmpty) {
-        LogUtil.debug(_tag, '_favoriteFuelStationWidget::fuel type ${_selectedFuelType?.fuelType}');
-        return FuelStationListWidget(_scrollController, _favouriteStations, _selectedFuelType!, sortOrder,
-            FuelStationType.favourite, _setSelectedFuelStation);
-      } else {
-        return const NoFavouriteStationsWidget();
+        _scrollController.animateTo(0.0, curve: Curves.easeOut, duration: const Duration(milliseconds: 500));
       }
-    }
+    });
   }
 
   void _setSelectedFuelStation(final FuelStation fuelStation) {

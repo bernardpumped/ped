@@ -87,7 +87,10 @@ class _NearbyStationsScreenState extends State<NearbyStationsScreen> {
 
   bool _displayFuelTypeSwitcher = false;
   FuelStation? _fuelStationToDisplay;
-  NearByFuelStations? data;
+  NearByFuelStations? _nearByFuelStationsData;
+
+  static const _leftPartitionFlex = 2;
+  static const _rightPartitionFex = 3;
 
   @override
   void initState() {
@@ -97,7 +100,7 @@ class _NearbyStationsScreenState extends State<NearbyStationsScreen> {
     _fuelTypeSwitcherDataStreamController = StreamController<FuelTypeSwitcherData>.broadcast();
     timeOfLastNearbySearch = DateTime.now().millisecondsSinceEpoch;
     _nearbyFuelStationsFuture?.whenComplete(() {
-      whenNearbyFuelStationFutureComplete();
+      _whenNearbyFuelStationFutureComplete();
     });
     _nearbyFuelStationsFuture?.then((value) => _showDisclaimer(value));
     _underMaintenanceService.registerSubscription(_tag, context, (event, context) {
@@ -124,47 +127,123 @@ class _NearbyStationsScreenState extends State<NearbyStationsScreen> {
     return Scaffold(body: SafeArea(child: _nearByStationsScreenBody()));
   }
 
-  void scrollFuelStations(final int sortOrder) {
+  _nearByStationsScreenBody() {
+    final width = MediaQuery.of(context).size.width - drawerWidth;
+    final rightPartitionWidth = width * _rightPartitionFex / (_leftPartitionFlex + _rightPartitionFex);
+    return SizedBox(
+        width: width,
+        child: Stack(children: [
+          _getNearbyFuelStationsFutureBuilder(),
+          Positioned(right: rightPartitionWidth + 20, bottom: 20, child: _getFuelTypeSwitcherStreamBuilder())
+        ]));
+  }
+
+  Widget _getNearbyFuelStationsFutureBuilder() {
+    return FutureBuilder<NearByFuelStations>(
+        future: _nearbyFuelStationsFuture,
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.none:
+            case ConnectionState.waiting:
+            case ConnectionState.active:
+              return _getIntermediateUI(_nearByFuelStationsData);
+            case ConnectionState.done:
+            default:
+              if (snapshot.hasError) {
+                LogUtil.debug(_tag, 'Error loading nearby fuel stations ${snapshot.error}');
+                return const NoNearByStationsWidget();
+              } else if (snapshot.hasData) {
+                _nearByFuelStationsData = snapshot.data!;
+                lastQueryLatitude = _nearByFuelStationsData!.latitude;
+                lastQueryLongitude = _nearByFuelStationsData!.longitude;
+                return RefreshIndicator(
+                    onRefresh: () async {
+                      if ((DateTime.now().millisecondsSinceEpoch - timeOfLastNearbySearch) > minTimeBetweenSearches) {
+                        setState(() {
+                          _fuelStationToDisplay = null;
+                          timeOfLastNearbySearch = DateTime.now().millisecondsSinceEpoch;
+                          _nearbyFuelStationsFuture = _nearByFuelStationsService.getFuelStations();
+                          _nearbyFuelStationsFuture?.then((value) => _showDisclaimer(value));
+                          _nearbyFuelStationsFuture?.whenComplete(() {
+                            _whenNearbyFuelStationFutureComplete();
+                          });
+                        });
+                      } else {
+                        LogUtil.debug(_tag, 'Not triggering the search as time has not yet passed');
+                      }
+                    },
+                    child: _getUI(_nearByFuelStationsData!));
+              } else {
+                return _getIntermediateUI(_nearByFuelStationsData);
+              }
+          }
+        });
+  }
+
+  StreamBuilder<FuelTypeSwitcherData> _getFuelTypeSwitcherStreamBuilder() {
+    return StreamBuilder(
+        stream: _fuelTypeSwitcherDataStreamController.stream,
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            LogUtil.debug(_tag, 'Error is ${snapshot.error}');
+            return FuelTypeSwitcherButton('Error Loading', () => {});
+          } else if (snapshot.hasData) {
+            return _getFuelTypeSwitcherButton(snapshot.data!);
+          } else {
+            return FuelTypeSwitcherButton('Loading', () => {});
+          }
+        });
+  }
+
+  RenderObjectWidget _getIntermediateUI(final NearByFuelStations? data) {
+    if (data != null) {
+      LogUtil.debug(_tag, 'Data was NOT found to be null');
+      return _getUI(data);
+    } else {
+      LogUtil.debug(_tag, 'Data was found to be null');
+      return const Center(child: RefreshProgressIndicator());
+    }
+  }
+
+  Row _getUI(final NearByFuelStations data, {final bool intermediateUI = false}) {
+    List<Widget> children;
+    if (intermediateUI) {
+      // If intermediate UI, new data is still loading. Old data exists. Show refresh indicator.
+      // If old data has fuel-stations, then only show the sort widget.
+      if (data.fuelStations != null && data.fuelStations!.isNotEmpty) {
+        children = [
+          _nearbyFuelStationsWidget(data),
+          Positioned(bottom: 80, right: 20, child: FuelStationSorterWidget(parentUpdateFunction: _scrollFuelStations)),
+          const Center(child: RefreshProgressIndicator())
+        ];
+      } else {
+        children = [_nearbyFuelStationsWidget(data), const Center(child: RefreshProgressIndicator())];
+      }
+    } else {
+      // If intermediate UI, new data is still loading. Old data exists. Show refresh indicator.
+      // If old data has fuel-stations, then only show the sort widget.
+      if (data.fuelStations != null && data.fuelStations!.isNotEmpty) {
+        children = [
+          _nearbyFuelStationsWidget(data),
+          Positioned(bottom: 80, right: 20, child: FuelStationSorterWidget(parentUpdateFunction: _scrollFuelStations))
+        ];
+      } else {
+        children = [_nearbyFuelStationsWidget(data)];
+      }
+    }
+    return Row(children: [
+      Expanded(flex: _leftPartitionFlex, child: Stack(children: children)),
+      Expanded(flex: _rightPartitionFex, child: _getDetailsSectionWidget())
+    ]);
+  }
+
+  void _scrollFuelStations(final int sortOrder) {
     setState(() {
       this.sortOrder = sortOrder;
       if (_nearByFuelStations.isNotEmpty) {
         _scrollController.animateTo(0.0, curve: Curves.easeOut, duration: const Duration(milliseconds: 500));
       }
     });
-  }
-
-  void whenNearbyFuelStationFutureComplete() async {
-    if (_locationServiceSubscription == null || !_locationServiceSubscriptionActive) {
-      _locationServiceSubscription = await _locationUtils.configureLocationService(_locationChangeListener);
-      _locationServiceSubscriptionActive = true;
-    }
-    final MarketRegionZoneConfiguration? config =
-        await MarketRegionZoneConfigDao.instance.getMarketRegionZoneConfiguration();
-    if (config != null) {
-      minTimeBetweenSearches = config.zoneConfig.minTimeLocationUpdates;
-      minDistanceBetweenSearches = config.zoneConfig.minDistanceLocationUpdates;
-    }
-    if (minTimeBetweenSearches == 0) {
-      minTimeBetweenSearches = tenSec;
-    }
-    LogUtil.debug(
-        _tag,
-        'whenNearbyFuelStationFutureComplete :: timeOfLastNearbySearch : $timeOfLastNearbySearch '
-        'and minTimeBetweenSearches $minTimeBetweenSearches');
-  }
-
-  _nearByStationsScreenBody() {
-    return SizedBox(
-        width: MediaQuery.of(context).size.width - drawerWidth,
-        child: Row(children: [
-          Expanded(
-              flex: 2,
-              child: Stack(children: [
-                _getNearbyFuelStationsFutureBuilder(),
-                Positioned(right: 20, bottom: 20, child: _getFuelTypeSwitcherStreamBuilder())
-              ])),
-          Expanded(flex: 3, child: _getDetailsSectionWidget())
-        ]));
   }
 
   _getDetailsSectionWidget() {
@@ -187,105 +266,16 @@ class _NearbyStationsScreenState extends State<NearbyStationsScreen> {
   }
 
   Card _selectStationMessage() {
-    return Card(
-        margin: const EdgeInsets.all(8),
-        child: Container(
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: Colors.white),
-            child: const Center(
-                child: Text('Select a Fuel Station', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500)))));
-  }
-
-  Widget _getNearbyFuelStationsFutureBuilder() {
-    return FutureBuilder<NearByFuelStations>(
-        future: _nearbyFuelStationsFuture,
-        builder: (context, snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.none:
-            case ConnectionState.waiting:
-            case ConnectionState.active:
-              return _getIntermediateUI(data);
-            case ConnectionState.done:
-            default:
-              if (snapshot.hasError) {
-                LogUtil.debug(_tag, 'Error loading nearby fuel stations ${snapshot.error}');
-                return const NoNearByStationsWidget();
-              } else if (snapshot.hasData) {
-                data = snapshot.data!;
-                lastQueryLatitude = data!.latitude;
-                lastQueryLongitude = data!.longitude;
-                return RefreshIndicator(
-                    onRefresh: () async {
-                      if ((DateTime.now().millisecondsSinceEpoch - timeOfLastNearbySearch) > minTimeBetweenSearches) {
-                        setState(() {
-                          timeOfLastNearbySearch = DateTime.now().millisecondsSinceEpoch;
-                          _nearbyFuelStationsFuture = _nearByFuelStationsService.getFuelStations();
-                          _nearbyFuelStationsFuture?.then((value) => _showDisclaimer(value));
-                          _nearbyFuelStationsFuture?.whenComplete(() {
-                            whenNearbyFuelStationFutureComplete();
-                          });
-                        });
-                      } else {
-                        LogUtil.debug(_tag, 'Not triggering the search as time has not yet passed');
-                      }
-                    },
-                    child: Stack(children: [
-                      _nearbyFuelStationsWidget(data!),
-                      Positioned(
-                          bottom: 80,
-                          right: 20,
-                          child: FuelStationSorterWidget(parentUpdateFunction: scrollFuelStations))
-                    ]));
-              } else {
-                return _getIntermediateUI(data);
-              }
-          }
-        });
-  }
-
-  RenderObjectWidget _getIntermediateUI(final NearByFuelStations? data) {
-    if (data != null) {
-      LogUtil.debug(_tag, 'Data was NOT found to be null');
-      return Stack(children: [
-        _nearbyFuelStationsWidget(data),
-        const Center(child: RefreshProgressIndicator())
-      ]);
-    } else {
-      LogUtil.debug(_tag, 'Data was found to be null');
-      return const Center(child: RefreshProgressIndicator());
+    Widget child = Container(
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: Theme.of(context).backgroundColor));
+    if (_nearByFuelStationsData != null &&
+        _nearByFuelStationsData!.fuelStations != null &&
+        _nearByFuelStationsData!.fuelStations!.isNotEmpty) {
+      child = Container(
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: Theme.of(context).backgroundColor),
+          child: Center(child: Text('Select a Fuel Station', style: Theme.of(context).textTheme.headline2)));
     }
-  }
-
-  void _locationChangeListener(final double latitude, final double longitude) async {
-    if (lastQueryLatitude == null || lastQueryLongitude == null) {
-      LogUtil.debug(
-          _tag,
-          'lastQueryLatitude : $lastQueryLatitude lastQueryLongitude : $lastQueryLongitude '
-          'not in state to query. Returning');
-      return;
-    }
-    // Null check exists on lastQueryLatitude and lastQueryLongitude above, so here
-    final double distanceBetween =
-        GeoLocationWrapper().distanceBetween(lastQueryLatitude!, lastQueryLongitude!, latitude, longitude);
-    final bool distanceThresholdBreached = distanceBetween >= minDistanceBetweenSearches;
-    final int timeElapsed = DateTime.now().millisecondsSinceEpoch - timeOfLastNearbySearch;
-    final bool timeThresholdBreached = timeElapsed > minTimeBetweenSearches;
-    /*
-      This logic is to prevent un-necessary builds, at the time of registration with the location engine.
-      At the time of registration, there are duplicate events. This logic depends on minTime and minDistance.
-     */
-    if (distanceThresholdBreached || timeThresholdBreached) {
-      LogUtil.debug(_tag, 'distanceThresholdBreached $distanceBetween timeThresholdBreached $timeElapsed');
-      setState(() {
-        timeOfLastNearbySearch = DateTime.now().millisecondsSinceEpoch;
-        _nearbyFuelStationsFuture = _nearByFuelStationsService.getFuelStations();
-        _nearbyFuelStationsFuture?.then((value) => _showDisclaimer(value));
-        _nearbyFuelStationsFuture?.whenComplete(() {
-          whenNearbyFuelStationFutureComplete();
-        });
-      });
-    } else {
-      LogUtil.debug(_tag, 'locationChangeListener::distance not sufficient to trigger next query');
-    }
+    return Card(margin: const EdgeInsets.all(8), child: child);
   }
 
   Widget _nearbyFuelStationsWidget(final NearByFuelStations data) {
@@ -325,27 +315,20 @@ class _NearbyStationsScreenState extends State<NearbyStationsScreen> {
     }
   }
 
-  StreamBuilder<FuelTypeSwitcherData> _getFuelTypeSwitcherStreamBuilder() {
-    return StreamBuilder(
-        stream: _fuelTypeSwitcherDataStreamController.stream,
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            LogUtil.debug(_tag, 'Error is ${snapshot.error}');
-            return FuelTypeSwitcherButton('Error Loading', () => {});
-          } else if (snapshot.hasData) {
-            return _getFuelTypeSwitcherButton(snapshot.data!);
-          } else {
-            return FuelTypeSwitcherButton('Loading', () => {});
-          }
-        });
-  }
-
   Widget _getFuelTypeSwitcherButton(final FuelTypeSwitcherData data) {
     if (data.userSettingsVersion > _userSettingsVersion) {
+      LogUtil.debug(
+          _tag,
+          'data.userSettingsVersion : ${data.userSettingsVersion} '
+          'is greater than $_userSettingsVersion, setting variables');
       _userSettingsVersion = data.userSettingsVersion;
       _selectedFuelType = data.defaultFuelType;
       _selectedFuelCategory = data.defaultFuelCategory;
     } else {
+      LogUtil.debug(
+          _tag,
+          'data.userSettingsVersion : ${data.userSettingsVersion} '
+          'is less than / equal to $_userSettingsVersion, setting variables');
       _selectedFuelType = _selectedFuelType ?? data.defaultFuelType;
       _selectedFuelCategory = _selectedFuelCategory ?? data.defaultFuelCategory;
     }
@@ -353,6 +336,7 @@ class _NearbyStationsScreenState extends State<NearbyStationsScreen> {
     if (txtToDisplay.length > 15) {
       txtToDisplay = _selectedFuelType!.fuelName.substring(0, 15);
     }
+    LogUtil.debug(_tag, 'creating widgets');
     return FuelTypeSwitcherButton(txtToDisplay, () {
       setState(() {
         _fuelStationToDisplay = null;
@@ -370,6 +354,59 @@ class _NearbyStationsScreenState extends State<NearbyStationsScreen> {
       });
     } else {
       LogUtil.debug(_tag, 'handleFuelTypeSwitch::No response returned from FuelTypeSwitcher');
+    }
+  }
+
+  void _whenNearbyFuelStationFutureComplete() async {
+    if (_locationServiceSubscription == null || !_locationServiceSubscriptionActive) {
+      _locationServiceSubscription = await _locationUtils.configureLocationService(_locationChangeListener);
+      _locationServiceSubscriptionActive = true;
+    }
+    final MarketRegionZoneConfiguration? config =
+        await MarketRegionZoneConfigDao.instance.getMarketRegionZoneConfiguration();
+    if (config != null) {
+      minTimeBetweenSearches = config.zoneConfig.minTimeLocationUpdates;
+      minDistanceBetweenSearches = config.zoneConfig.minDistanceLocationUpdates;
+    }
+    if (minTimeBetweenSearches == 0) {
+      minTimeBetweenSearches = tenSec;
+    }
+    LogUtil.debug(
+        _tag,
+        'whenNearbyFuelStationFutureComplete :: timeOfLastNearbySearch : $timeOfLastNearbySearch '
+        'and minTimeBetweenSearches $minTimeBetweenSearches');
+  }
+
+  void _locationChangeListener(final double latitude, final double longitude) async {
+    if (lastQueryLatitude == null || lastQueryLongitude == null) {
+      LogUtil.debug(
+          _tag,
+          'lastQueryLatitude : $lastQueryLatitude lastQueryLongitude : $lastQueryLongitude '
+          'not in state to query. Returning');
+      return;
+    }
+    // Null check exists on lastQueryLatitude and lastQueryLongitude above, so here
+    final double distanceBetween =
+        GeoLocationWrapper().distanceBetween(lastQueryLatitude!, lastQueryLongitude!, latitude, longitude);
+    final bool distanceThresholdBreached = distanceBetween >= minDistanceBetweenSearches;
+    final int timeElapsed = DateTime.now().millisecondsSinceEpoch - timeOfLastNearbySearch;
+    final bool timeThresholdBreached = timeElapsed > minTimeBetweenSearches;
+    /*
+      This logic is to prevent un-necessary builds, at the time of registration with the location engine.
+      At the time of registration, there are duplicate events. This logic depends on minTime and minDistance.
+     */
+    if (distanceThresholdBreached || timeThresholdBreached) {
+      LogUtil.debug(_tag, 'distanceThresholdBreached $distanceBetween timeThresholdBreached $timeElapsed');
+      setState(() {
+        timeOfLastNearbySearch = DateTime.now().millisecondsSinceEpoch;
+        _nearbyFuelStationsFuture = _nearByFuelStationsService.getFuelStations();
+        _nearbyFuelStationsFuture?.then((value) => _showDisclaimer(value));
+        _nearbyFuelStationsFuture?.whenComplete(() {
+          _whenNearbyFuelStationFutureComplete();
+        });
+      });
+    } else {
+      LogUtil.debug(_tag, 'locationChangeListener::distance not sufficient to trigger next query');
     }
   }
 }

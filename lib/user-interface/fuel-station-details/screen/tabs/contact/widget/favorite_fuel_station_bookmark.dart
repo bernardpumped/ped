@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:pumped_end_device/data/local/dao/favorite_fuel_stations_dao.dart';
+import 'package:pumped_end_device/data/local/dao/hidden_result_dao.dart';
 import 'package:pumped_end_device/data/local/model/favorite_fuel_station.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station.dart';
@@ -39,48 +40,20 @@ class _FavoriteFuelStationBookmarkState extends State<FavoriteFuelStationBookmar
 
   @override
   Widget build(final BuildContext context) {
-    final FavoriteFuelStation station = FavoriteFuelStation(
-        favoriteFuelStationId: widget._fuelStation.stationId,
-        fuelStationSource: (widget._fuelStation.getFuelStationSource()));
-    final Future<bool> isFavoriteFuelStationFuture =
-        dao.containsFavoriteFuelStation(station.favoriteFuelStationId, station.fuelStationSource);
-    return Wrap(children: [
-      FutureBuilder<bool>(
-          future: isFavoriteFuelStationFuture,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              final bool isFavoriteFuelStation = snapshot.data!;
-              return isFavoriteFuelStation
-                  ? _getWidget(Icons.heart_broken_outlined, 'Unfavourite', () {
-                      _favoriteRemoveAction(station);
-                      widget._onFavouriteStatusChange(); // This is to enable refresh of the home screen.
-                    })
-                  : _getWidget(Icons.favorite_border_outlined, 'Favourite', () {
-                      _favoriteAddAction(station);
-                      widget._onFavouriteStatusChange(); // This is to enable refresh of the home screen.
-                    });
-            } else if (snapshot.hasError) {
-              return const Text('Error Loading');
-            } else {
-              return const Text('Loading');
-            }
-          })
-    ]);
-  }
-
-  Widget _getWidget(final IconData icon, final String text, final GestureTapCallback callback) {
-    return GestureDetector(
-        onTap: callback,
-        child: WidgetUtils.wrapWithRoundedContainer(
-            context: context,
-            radius: 24,
-            child: Padding(
-                padding: const EdgeInsets.all(14.0),
-                child: Row(children: [
-                  Text(text, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
-                  const SizedBox(width: 8),
-                  Icon(icon, size: 24)
-                ]))));
+    final Future<bool> isHidden = HiddenResultDao.instance
+        .containsHiddenFuelStation(widget._fuelStation.stationId, widget._fuelStation.getFuelStationSource());
+    return FutureBuilder<bool>(
+        future: isHidden,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            bool hidden = snapshot.data!;
+            return hidden ? _inEligibleStation() : _eligibleStation();
+          } else if (snapshot.hasError) {
+            return const Text('Error Loading');
+          } else {
+            return const Text('Loading');
+          }
+        });
   }
 
   void _favoriteRemoveAction(final FavoriteFuelStation station) {
@@ -125,5 +98,48 @@ class _FavoriteFuelStationBookmarkState extends State<FavoriteFuelStationBookmar
       WidgetUtils.showToastMessage(context, 'Error marking as Favorite');
       LogUtil.error(_tag, 'Error marking as Favorite $error');
     });
+  }
+
+  _eligibleStation() {
+    final FavoriteFuelStation station = FavoriteFuelStation(
+        favoriteFuelStationId: widget._fuelStation.stationId,
+        fuelStationSource: (widget._fuelStation.getFuelStationSource()));
+    final Future<bool> isFavoriteFuelStationFuture =
+        dao.containsFavoriteFuelStation(station.favoriteFuelStationId, station.fuelStationSource);
+    return Wrap(children: [
+      FutureBuilder<bool>(
+          future: isFavoriteFuelStationFuture,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              final bool isFavoriteFuelStation = snapshot.data!;
+              return isFavoriteFuelStation
+                  ? WidgetUtils.getRoundedButton(
+                      context: context,
+                      buttonText: 'Unfavourite',
+                      iconData: Icons.heart_broken_outlined,
+                      onTapFunction: () {
+                        _favoriteRemoveAction(station);
+                        widget._onFavouriteStatusChange(); // This is to enable refresh of the home screen.
+                      })
+                  : WidgetUtils.getRoundedButton(
+                      context: context,
+                      buttonText: 'Favourite',
+                      iconData: Icons.favorite_border_outlined,
+                      onTapFunction: () {
+                        _favoriteAddAction(station);
+                        widget._onFavouriteStatusChange(); // This is to enable refresh of the home screen.
+                      });
+            } else if (snapshot.hasError) {
+              return const Text('Error Loading');
+            } else {
+              return const Text('Loading');
+            }
+          })
+    ]);
+  }
+
+  _inEligibleStation() {
+    LogUtil.debug(_tag, 'Fuel Station is hidden. Not displaying Favourite button');
+    return const SizedBox(width: 0);
   }
 }

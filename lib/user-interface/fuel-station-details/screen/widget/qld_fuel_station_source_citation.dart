@@ -51,37 +51,38 @@ class QldFuelStationSourceCitation extends StatelessWidget {
     return Container(
         padding: const EdgeInsets.all(25),
         decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).backgroundColor,
             shape: BoxShape.rectangle,
-            borderRadius: BorderRadius.circular(15),
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: Theme.of(context).primaryColor),
             boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 10.0, offset: Offset(0.0, 10.0))]),
         child: _getQldFuelAuthorityMessage(context));
   }
 
   Widget _getQldFuelAuthorityMessage(final BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: <Widget>[
-      const Padding(
-          padding: EdgeInsets.only(top: 10, bottom: 15),
+      Padding(
+          padding: const EdgeInsets.only(bottom: 15),
           child: Text(_subTitle,
-              textAlign: TextAlign.center, style: TextStyle(fontSize: 26.0, fontWeight: FontWeight.w500))),
-      const Padding(
-          padding: EdgeInsets.only(bottom: 10),
+              textAlign: TextAlign.center, style: Theme.of(context).textTheme.headline4)),
+      Padding(
+          padding: const EdgeInsets.only(bottom: 10),
           child: Text(_qldLicensePara1,
-              textAlign: TextAlign.start, style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.normal))),
-      const Padding(
-          padding: EdgeInsets.only(bottom: 10),
+              textAlign: TextAlign.start, style: Theme.of(context).textTheme.subtitle2)),
+      Padding(
+          padding: const EdgeInsets.only(bottom: 10),
           child: Text(_qldLicensePara2,
-              textAlign: TextAlign.start, style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.normal))),
-      Padding(padding: const EdgeInsets.only(bottom: 10), child: _getAdminContactMessage()),
+              textAlign: TextAlign.start, style: Theme.of(context).textTheme.subtitle2)),
+      Padding(padding: const EdgeInsets.only(bottom: 10), child: _getAdminContactMessage(context)),
       const Divider(height: 1),
-      const SizedBox(height: 15),
+      const SizedBox(height: 10),
       _getOkActionButton(context)
     ]);
   }
 
-  Text _getAdminContactMessage() {
-    return const Text(_pumpedMessage,
-        textAlign: TextAlign.start, style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.normal, color: Colors.red));
+  Text _getAdminContactMessage(final BuildContext context) {
+    return Text(_pumpedMessage,
+        textAlign: TextAlign.start, style: Theme.of(context).textTheme.subtitle2!.copyWith(color: Colors.red));
   }
 
   Row _getOkActionButton(final BuildContext context) {

@@ -73,10 +73,10 @@ class _SplashScreenState extends State<SplashScreen> {
                   const Image(
                       image: AssetImage('assets/images/ic_splash.png'), width: 153, height: 133, fit: BoxFit.fill),
                   const SizedBox(height: 30),
-                  const Center(
+                  Center(
                       child: Text('Your friendly \n neighbourhood fuel finder',
                           textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 26, color: Colors.white, fontWeight: FontWeight.w500))),
+                          style: Theme.of(context).textTheme.headline2!.copyWith(color: Colors.white))),
                   Container(width: 120, margin: const EdgeInsets.only(top: 40), child: const LinearProgressIndicator()),
                   const SizedBox(height: 100),
                   Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
@@ -89,9 +89,10 @@ class _SplashScreenState extends State<SplashScreen> {
                     AnimatedOpacity(
                         opacity: _locationDetectionTriggered ? 1.0 : 0.0,
                         duration: const Duration(milliseconds: 500),
-                        child: const SizedBox(
+                        child: SizedBox(
                             width: 300,
-                            child: Text('Detecting Location', style: TextStyle(fontSize: 22, color: Colors.white)))),
+                            child: Text('Detecting Location',
+                                style: Theme.of(context).textTheme.headline5!.copyWith(color: Colors.white)))),
                     AnimatedOpacity(
                         opacity: _detectingLocationIconVisible ? 1.0 : 0.0,
                         duration: const Duration(milliseconds: 500),
@@ -108,10 +109,10 @@ class _SplashScreenState extends State<SplashScreen> {
                     AnimatedOpacity(
                         opacity: _checkingPumpedAvailabilityIconVisible ? 1.0 : 0.0,
                         duration: const Duration(milliseconds: 500),
-                        child: const SizedBox(
+                        child: SizedBox(
                             width: 300,
-                            child:
-                                Text('Fetching Fuel Stations', style: TextStyle(fontSize: 22, color: Colors.white)))),
+                            child: Text('Fetching Fuel Stations',
+                                style: Theme.of(context).textTheme.headline5!.copyWith(color: Colors.white)))),
                     AnimatedOpacity(
                         opacity: _checkingPumpedAvailabilityTextVisible ? 1.0 : 0.0,
                         duration: const Duration(milliseconds: 500),
@@ -144,19 +145,6 @@ class _SplashScreenState extends State<SplashScreen> {
       LogUtil.debug(_tag, 'Error happened in querying Firestore $error, still making attempt');
       _getLocation();
     });
-  }
-
-  void exitApp() {
-    if (!kIsWeb) {
-      if (Platform.isIOS) {
-        // Apple does not like  this, as it is against their Human Interface Guidelines.
-        exit(0);
-      } else if (Platform.isAndroid) {
-        SystemNavigator.pop();
-      } else {
-        // Not sure if SystemNavigator.pop(); would work for other platforms
-      }
-    } else {}
   }
 
   void _getLocationFromOnDeviceLocationService() {

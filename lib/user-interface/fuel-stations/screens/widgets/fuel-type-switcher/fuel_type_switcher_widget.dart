@@ -46,42 +46,27 @@ class _FuelTypeSwitcherWidgetState extends State<FuelTypeSwitcherWidget> {
   @override
   Widget build(final BuildContext context) {
     return ListView(padding: const EdgeInsets.all(15), children: [
-      const ListTile(
-          leading: Icon(Icons.workspaces_outline, size: 40),
-          title: Text('Change Fuel Type', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500))),
-      Card(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          child: Theme(
-              data: ThemeData().copyWith(dividerColor: Colors.transparent), child: _getFuelCategoriesExpansionTile())),
-      Card(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          child:
-              Theme(data: ThemeData().copyWith(dividerColor: Colors.transparent), child: _getFuelTypesExpansionTile())),
+      ListTile(
+          leading: const Icon(Icons.workspaces_outline, size: 34),
+          title: Text('Change Fuel Type', style: Theme.of(context).textTheme.headline2)),
+      Card(child: _getFuelCategoriesExpansionTile()),
+      Card(child: _getFuelTypesExpansionTile()),
       const SizedBox(height: 20),
       Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-        GestureDetector(
-          onTap: () {
-            widget.onCancelCallback();
-          },
-          child: WidgetUtils.wrapWithRoundedContainer(
-              context: context,
-              radius: 24,
-              child: const Padding(
-                  padding: EdgeInsets.only(left: 15.0, right: 15.0, top: 8, bottom: 8),
-                  child: Text('Cancel', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500)))),
-        ),
+        WidgetUtils.getRoundedButton(
+            context: context,
+            buttonText: 'Cancel',
+            onTapFunction: () => widget.onCancelCallback(),
+            iconData: Icons.cancel_outlined),
         const SizedBox(width: 40),
-        GestureDetector(
-            onTap: () {
+        WidgetUtils.getRoundedButton(
+            context: context,
+            buttonText: 'Apply',
+            iconData: Icons.save_alt,
+            onTapFunction: () {
               widget.onChangeCallback(FuelTypeSwitcherResponseParams(
                   fuelType: _fuelTypeSelectedValue!, fuelCategory: _fuelCategorySelectedValue!));
-            },
-            child: WidgetUtils.wrapWithRoundedContainer(
-                context: context,
-                radius: 24,
-                child: const Padding(
-                    padding: EdgeInsets.only(left: 15.0, right: 15.0, top: 8, bottom: 8),
-                    child: Text('Apply', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500)))))
+            })
       ])
     ]);
   }
@@ -92,25 +77,22 @@ class _FuelTypeSwitcherWidgetState extends State<FuelTypeSwitcherWidget> {
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             LogUtil.debug(_tag, 'Error loading ${snapshot.error}');
-            return const Text('Error loading Fuel Categories',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal));
+            return Text('Error loading Fuel Categories',
+                style: Theme.of(context).textTheme.headline5!.copyWith(color: Colors.red));
           } else if (snapshot.hasData) {
             final DropDownValues<FuelCategory> dropDownValues = snapshot.data!;
             _fuelCategorySelectedValue ??= dropDownValues.values[dropDownValues.selectedIndex];
             return ExpansionTile(
-                title: const Text('Fuel Category', style: TextStyle(fontSize: 22, fontWeight: FontWeight.normal)),
+                title: Text('Fuel Category', style: Theme.of(context).textTheme.headline5),
                 subtitle: _fuelCategorySelectedValue != null
-                    ? Text(_fuelCategorySelectedValue!.categoryName,
-                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.normal))
+                    ? Text(_fuelCategorySelectedValue!.categoryName, style: Theme.of(context).textTheme.caption)
                     : const SizedBox(width: 0),
                 leading: const Icon(Icons.category_outlined, size: 35),
                 children: dropDownValues.values.map<RadioListTile<FuelCategory>>((FuelCategory category) {
                   return RadioListTile<FuelCategory>(
                       selected: category.categoryId == _fuelCategorySelectedValue?.categoryId,
                       value: category,
-                      activeColor: Colors.indigo,
-                      title: Text(category.categoryName,
-                          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.normal)),
+                      title: Text(category.categoryName, style: Theme.of(context).textTheme.headline6),
                       groupValue: _fuelCategorySelectedValue,
                       onChanged: (changedCat) {
                         setState(() {
@@ -122,7 +104,7 @@ class _FuelTypeSwitcherWidgetState extends State<FuelTypeSwitcherWidget> {
                       });
                 }).toList());
           } else {
-            return const Text('Loading...', style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal));
+            return Text('Loading...', style: Theme.of(context).textTheme.headline5);
           }
         });
   }
@@ -133,27 +115,24 @@ class _FuelTypeSwitcherWidgetState extends State<FuelTypeSwitcherWidget> {
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             LogUtil.debug(_tag, 'Error loading ${snapshot.error}');
-            return const Text('Error loading', style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal));
+            return Text('Error loading', style: Theme.of(context).textTheme.headline5!.copyWith(color: Colors.red));
           } else if (snapshot.hasData) {
             final DropDownValues<FuelType> dropDownValues = snapshot.data!;
             if (dropDownValues.noDataFound) {
-              return const Text('No data found', style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal));
+              return Text('No data found', style: Theme.of(context).textTheme.headline5!.copyWith(color: Colors.red));
             } else {
               _fuelTypeSelectedValue ??= __fuelTypeSelectedValue(dropDownValues);
               return ExpansionTile(
-                  title: const Text('Fuel Type', style: TextStyle(fontSize: 22, fontWeight: FontWeight.normal)),
+                  title: Text('Fuel Type', style: Theme.of(context).textTheme.headline5),
                   subtitle: _fuelTypeSelectedValue != null
-                      ? Text(_fuelTypeSelectedValue!.fuelName,
-                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.normal))
+                      ? Text(_fuelTypeSelectedValue!.fuelName, style: Theme.of(context).textTheme.caption)
                       : const SizedBox(width: 0),
                   leading: const Icon(Icons.class_outlined, size: 35),
                   children: dropDownValues.values.map<RadioListTile<FuelType>>((FuelType fuelType) {
                     return RadioListTile<FuelType>(
                         selected: fuelType.fuelType == _fuelTypeSelectedValue?.fuelType,
                         value: fuelType,
-                        activeColor: Colors.indigo,
-                        title: Text(fuelType.fuelName,
-                            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.normal)),
+                        title: Text(fuelType.fuelName, style: Theme.of(context).textTheme.headline6),
                         groupValue: _fuelTypeSelectedValue,
                         onChanged: (changedFuelType) {
                           setState(() {
@@ -163,7 +142,7 @@ class _FuelTypeSwitcherWidgetState extends State<FuelTypeSwitcherWidget> {
                   }).toList());
             }
           } else {
-            return const Text('Loading...', style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal));
+            return Text('Loading...', style: Theme.of(context).textTheme.headline5);
           }
         });
   }

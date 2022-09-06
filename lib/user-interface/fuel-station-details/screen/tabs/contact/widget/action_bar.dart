@@ -27,41 +27,51 @@ import 'package:pumped_end_device/user-interface/fuel-station-details/screen/tab
 import 'package:pumped_end_device/user-interface/fuel-station-details/screen/tabs/contact/widget/rate_widget.dart';
 import 'package:pumped_end_device/util/data_utils.dart';
 
-class ActionBar extends StatelessWidget {
+class ActionBar extends StatefulWidget {
   final FuelStation fuelStation;
-  final Function onFavouriteStatusChange;
-  const ActionBar({Key? key, required this.fuelStation, required this.onFavouriteStatusChange}) : super(key: key);
+  const ActionBar({Key? key, required this.fuelStation}) : super(key: key);
 
   @override
+  State<ActionBar> createState() => _ActionBarState();
+}
+
+class _ActionBarState extends State<ActionBar> {
+  @override
   Widget build(final BuildContext context) {
-    final String? phone = DataUtils.isNotBlank(fuelStation.fuelStationAddress.phone1)
-        ? fuelStation.fuelStationAddress.phone1
-        : fuelStation.fuelStationAddress.phone2;
+    final String? phone = DataUtils.isNotBlank(widget.fuelStation.fuelStationAddress.phone1)
+        ? widget.fuelStation.fuelStationAddress.phone1
+        : widget.fuelStation.fuelStationAddress.phone2;
     return Container(
         padding: const EdgeInsets.only(top: 10, bottom: 10),
         margin: const EdgeInsets.only(left: 5, right: 5),
-        child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Padding(
-                  padding: const EdgeInsets.only(left: 15, right: 12),
-                  child: DirectionsWidget(
-                      fuelStation.fuelStationAddress.latitude,
-                      fuelStation.fuelStationAddress.longitude,
-                      getIt.get<LocationDataSource>(instanceName: locationDataSourceInstanceName))),
-              (phone != null)
-                  ? Padding(padding: const EdgeInsets.only(left: 12, right: 12), child: PhoneWidget(phone))
-                  : const SizedBox(width: 0),
-              Padding(
-                  padding: const EdgeInsets.only(left: 12, right: 12),
-                  child: RateWidget(fuelStation.fuelStationAddress)),
-              Padding(
-                  padding: const EdgeInsets.only(left: 12, right: 15),
-                  child: FavoriteFuelStationBookmark(fuelStation, onFavouriteStatusChange)),
-              Padding(
-                  padding: const EdgeInsets.only(left: 12, right: 15),
-                  child: HideFuelStationWidget(fuelStation, onFavouriteStatusChange))
-            ]));
+        child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Padding(
+                      padding: const EdgeInsets.only(left: 15, right: 12),
+                      child: DirectionsWidget(
+                          widget.fuelStation.fuelStationAddress.latitude,
+                          widget.fuelStation.fuelStationAddress.longitude,
+                          getIt.get<LocationDataSource>(instanceName: locationDataSourceInstanceName))),
+                  (phone != null)
+                      ? Padding(padding: const EdgeInsets.only(left: 12, right: 12), child: PhoneWidget(phone))
+                      : const SizedBox(width: 0),
+                  Padding(
+                      padding: const EdgeInsets.only(left: 12, right: 12),
+                      child: RateWidget(widget.fuelStation.fuelStationAddress)),
+                  Padding(
+                      padding: const EdgeInsets.only(left: 12, right: 15),
+                      child: FavoriteFuelStationBookmark(widget.fuelStation, () {
+                        setState(() {});
+                      })),
+                  Padding(
+                      padding: const EdgeInsets.only(left: 12, right: 15),
+                      child: HideFuelStationWidget(widget.fuelStation, () {
+                        setState(() {});
+                      }))
+                ])));
   }
 }

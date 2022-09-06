@@ -29,7 +29,7 @@ class AboutScreen extends StatelessWidget {
   Padding _buildPara(final BuildContext context, final String text) {
     return Padding(
         padding: const EdgeInsets.only(top: 10),
-        child: Text(text, style: const TextStyle(fontSize: 20), textAlign: TextAlign.left));
+        child: Text(text, style: Theme.of(context).textTheme.headline5, textAlign: TextAlign.left));
   }
 
   Widget _aboutContent(final BuildContext context) {
@@ -42,10 +42,9 @@ class AboutScreen extends StatelessWidget {
                   padding: EdgeInsets.only(top: 50),
                   child: Image(
                       image: AssetImage('assets/images/ic_pumped_black_text.png'), height: 120, fit: BoxFit.fill)),
-              const Padding(
-                  padding: EdgeInsets.only(bottom: 5),
-                  child: Text('About',
-                      style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold), textAlign: TextAlign.center)),
+              Padding(
+                  padding: const EdgeInsets.only(bottom: 5),
+                  child: Text('About', style: Theme.of(context).textTheme.headline1, textAlign: TextAlign.center)),
               Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,

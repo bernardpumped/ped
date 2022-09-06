@@ -24,7 +24,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:pumped_end_device/data/local/location/geo_location_wrapper.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/data/local/places.dart';
 import 'package:pumped_end_device/util/log_util.dart';
-import 'package:pumped_end_device/util/platform_wrapper.dart';
 
 import 'geo_location_data.dart';
 import 'get_location_result.dart';
@@ -34,9 +33,8 @@ import 'location_service_subscription.dart';
 class LocationDataSource {
   static const _tag = "LocationDataSource";
   final GeoLocationWrapper _geoLocationWrapper;
-  final PlatformWrapper _platformWrapper;
 
-  LocationDataSource(this._geoLocationWrapper, this._platformWrapper);
+  LocationDataSource(this._geoLocationWrapper);
 
   Future<GetLocationResult> getLocationData({String thread = 'default'}) async {
     // if (!_platformWrapper.deviceIsBrowser() && _platformWrapper.platformIsLinux()) {
@@ -79,8 +77,8 @@ class LocationDataSource {
         return Future.value(GetLocationResult(
             LocationInitResultCode.success,
             Future.value(GeoLocationData(
-                latitude: Places.fishBurnerSydney.latitude,
-                longitude: Places.fishBurnerSydney.longitude,
+                latitude: Places.fishBurnerBrisbane.latitude,
+                longitude: Places.fishBurnerBrisbane.longitude,
                 altitude: 0))));
       } else {
         LogUtil.debug(_tag, 'Returning from !kIsWeb');

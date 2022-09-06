@@ -23,10 +23,12 @@ class _FuelStationSorterWidgetState extends State<FuelStationSorterWidget> {
   @override
   Widget build(final BuildContext context) {
     return FloatBoxPanelWidget(
-        iconSize: 24,
-        size: 50,
+        iconSize: 30,
+        size: 55,
         panelIcon: Icons.sort_outlined,
-        backgroundColor: Theme.of(context).primaryColor,
+        // Intentionally using Theme.of(context).textTheme.headline1!.color! for border, because using primaryColor
+        // for text here does not work well when theme is dark.
+        backgroundColor: Theme.of(context).textTheme.headline1!.color!,
         contentColor: const Color(0xFFffd629),
         nonSelColor: Theme.of(context).backgroundColor,
         buttons: sortIcons.values.toList(),

@@ -41,9 +41,9 @@ class OperatingHoursSourceCitation extends StatelessWidget {
     LogUtil.debug(
         'OperatingHoursSourceCitation', 'operatingTimeSourceName : ${_operatingHours.operatingTimeSourceName}');
     return Container(
-        padding: const EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 40),
+        padding: const EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 20),
         decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).backgroundColor,
             shape: BoxShape.rectangle,
             borderRadius: BorderRadius.circular(15.0),
             boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 10.0, offset: Offset(0.0, 10.0))]),
@@ -62,22 +62,22 @@ class OperatingHoursSourceCitation extends StatelessWidget {
     }
     return Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
       Row(children: [
-        Text(weekDay, style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w500)),
+        Text(weekDay, style: Theme.of(context).textTheme.headline4),
         const SizedBox(width: 10),
-        Text(operatingTimeRange, style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w500))
+        Text(operatingTimeRange, style: Theme.of(context).textTheme.headline4)
       ]),
-      const SizedBox(height: 14),
+      const SizedBox(height: 6),
       const Divider(height: 1),
-      const SizedBox(height: 10),
-      Text(sourceMessage, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w500)),
-      const SizedBox(height: 12),
+      const SizedBox(height: 6),
+      Text(sourceMessage, style: Theme.of(context).textTheme.headline4),
+      const SizedBox(height: 8),
       Text('Last Update Time ${_getPublishDateFormatted(_operatingHours.publishDate!)}',
-          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.normal)),
-      const SizedBox(height: 14),
+          style: Theme.of(context).textTheme.subtitle2),
+      const SizedBox(height: 8),
       const Divider(height: 1),
-      const SizedBox(height: 14),
-      _getAdminContactMessage(),
-      const SizedBox(height: 15),
+      const SizedBox(height: 8),
+      _getAdminContactMessage(context),
+      const SizedBox(height: 8),
       _getOkActionButton(context)
     ]);
   }
@@ -87,9 +87,9 @@ class OperatingHoursSourceCitation extends StatelessWidget {
     return formatter.format(publishDate);
   }
 
-  Text _getAdminContactMessage() {
-    return const Text(_pumpedMessage,
-        textAlign: TextAlign.start, style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w400, color: Colors.red));
+  Text _getAdminContactMessage(final BuildContext context) {
+    return Text(_pumpedMessage,
+        textAlign: TextAlign.start, style: Theme.of(context).textTheme.subtitle2!.copyWith(color: Colors.red));
   }
 
   Widget _getOkActionButton(final BuildContext context) {

@@ -29,15 +29,14 @@ class NoPromotionsWidget extends StatelessWidget {
         child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: const <Widget>[
-              Text('No Current Offers',
-                  style: TextStyle(fontSize: 34, fontWeight: FontWeight.w500), textAlign: TextAlign.center),
+            children: <Widget>[
+              Text('No Current Offers', style: Theme.of(context).textTheme.headline2, textAlign: TextAlign.center),
               Text(
                   "\n Click here if you'd appreciate this station providing more and better offers and we'll let them know",
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.w400),
+                  style: Theme.of(context).textTheme.headline5,
                   textAlign: TextAlign.center),
               Text('\n Come back again soon.',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.w400), textAlign: TextAlign.center)
+                  style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.center)
             ]));
   }
 }

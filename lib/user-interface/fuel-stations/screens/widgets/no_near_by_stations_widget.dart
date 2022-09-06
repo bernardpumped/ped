@@ -23,27 +23,27 @@ class NoNearByStationsWidget extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          const Text('No Nearby Stations',
-              style: TextStyle(fontSize: 26, fontWeight: FontWeight.w500), textAlign: TextAlign.center),
+    return Card(
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+          Text('No Nearby Stations', style: Theme.of(context).textTheme.headline2, textAlign: TextAlign.center),
           const SizedBox(height: 20),
           RichText(
               textAlign: TextAlign.center,
-              text: const TextSpan(children: [
+              text: TextSpan(children: [
                 TextSpan(
                     text: "Sorry your neighbourhood not yet covered by Pumped. We have informed Pumped admin.\n",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal)),
+                    style: Theme.of(context).textTheme.headline5),
                 TextSpan(
                     text: "\nYou can refine your Search Options. Tap on ",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal)),
-                WidgetSpan(child: Icon(Icons.settings, size: 24)),
+                    style: Theme.of(context).textTheme.headline5),
+                const WidgetSpan(child: Icon(Icons.settings_outlined, size: 24)),
                 TextSpan(
-                    text: " icon on bottom bar, to customize search.",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal))
+                    text: " icon on side navigation bar, to customize search.",
+                    style: Theme.of(context).textTheme.headline5)
               ]))
-        ]);
+        ]));
   }
 }

@@ -90,13 +90,12 @@ class _FuelPricesTabWidgetState extends State<FuelPricesTabWidget> {
   final formatter = DateFormat('dd-MMM-yy HH:mm');
 
   Widget _getDeclarationRowItem() {
-    return const Card(
-        // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        margin: EdgeInsets.only(left: 5, right: 5, top: 15),
+    return Card(
+        margin: const EdgeInsets.only(left: 5, right: 5, top: 15),
         child: Padding(
-            padding: EdgeInsets.only(top: 10, bottom: 10, left: 20, right: 20),
+            padding: const EdgeInsets.only(top: 10, bottom: 10, left: 20, right: 20),
             child: Text('Fuel Station does not advertise prices for other fuel types',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500))));
+                style: Theme.of(context).textTheme.headline6)));
   }
 
   Widget _getFuelQuoteRowItem(final FuelQuote fuelQuote, final Map<String, FuelType> allowedFuelTypesMap) {
@@ -111,7 +110,7 @@ class _FuelPricesTabWidgetState extends State<FuelPricesTabWidget> {
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
                     Container(
                         margin: const EdgeInsets.only(left: 25),
-                        child: Text(fuelTypeName!, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w500))),
+                        child: Text(fuelTypeName!, style: Theme.of(context).textTheme.headline3)),
                     Container(
                         padding: const EdgeInsets.only(right: 10, top: 10, bottom: 10),
                         child: Row(children: <Widget>[
@@ -130,8 +129,8 @@ class _FuelPricesTabWidgetState extends State<FuelPricesTabWidget> {
 
   Widget _getFuelQuoteValueWidget(final FuelQuote fuelQuote) {
     return fuelQuote.quoteValue != null
-        ? Text('${fuelQuote.quoteValue}', style: const TextStyle(fontSize: 24))
-        : const Text('---', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500));
+        ? Text('${fuelQuote.quoteValue}', style: Theme.of(context).textTheme.headline3)
+        : Text('---', style: Theme.of(context).textTheme.headline2);
   }
 
   Widget _getFuelQuoteSourceIcon(final FuelQuote fuelQuote, final String fuelTypeName) {
@@ -146,7 +145,7 @@ class _FuelPricesTabWidgetState extends State<FuelPricesTabWidget> {
   Widget _getLastUpdateDateWidget(final FuelQuote fuelQuote) {
     return fuelQuote.publishDate != null
         ? Text('Last Update ${_getPublishDateFormatted(fuelQuote.publishDate!)}',
-            style: const TextStyle(fontSize: 18, overflow: TextOverflow.ellipsis))
+            style: Theme.of(context).textTheme.caption)
         : const SizedBox(width: 0);
   }
 
@@ -158,21 +157,20 @@ class _FuelPricesTabWidgetState extends State<FuelPricesTabWidget> {
 
   GestureDetector _getFuelPriceSourceCitation(final FuelQuote fuelQuote, final String fuelTypeName) {
     final icon = fuelQuote.fuelQuoteSource == 'F'
-        ? const Icon(Icons.info_outline, size: 36)
-        : const Icon(Icons.people_outline, size: 36);
+        ? const Icon(Icons.info_outline, size: 32)
+        : const Icon(Icons.people_outline, size: 32);
     return GestureDetector(
         onTap: () {
-          showDialog(barrierDismissible: false, context: context, builder: (BuildContext context) {
-            return AlertDialog(
-                backgroundColor: Colors.transparent,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10), side: const BorderSide(width: 0.2)),
-                content: FuelPriceSourceCitationWidget(fuelQuote, widget._fuelStation, fuelTypeName));
-          });
-          // showModalBottomSheet(
-          //     context: context,
-          //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
-          //     builder: (context) => FuelPriceSourceCitationWidget(fuelQuote, widget._fuelStation, fuelTypeName));
+          showDialog(
+              barrierDismissible: false,
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                    contentPadding: const EdgeInsets.all(0),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10), side: const BorderSide(width: 0.2)),
+                    content: FuelPriceSourceCitationWidget(fuelQuote, widget._fuelStation, fuelTypeName));
+              });
         },
         child: icon);
   }

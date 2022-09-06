@@ -62,8 +62,7 @@ class _ServerVersionWidgetState extends State<ServerVersionWidget> {
             displayText = 'Loading...';
           }
           return ListTile(
-              title: Text(displayText,
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500), textAlign: TextAlign.center));
+              title: Text(displayText, style: Theme.of(context).textTheme.bodyText1, textAlign: TextAlign.center));
         });
   }
 

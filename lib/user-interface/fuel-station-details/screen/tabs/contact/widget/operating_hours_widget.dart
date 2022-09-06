@@ -40,13 +40,15 @@ class OperatingHoursWidget extends StatefulWidget {
 
 class _OperatingHoursWidgetState extends State<OperatingHoursWidget> {
   static const _tag = 'OperatingHoursWidget';
-  static const TextStyle _closedStyle = TextStyle(fontSize: 22, fontWeight: FontWeight.normal, color: Colors.red);
-  static const TextStyle _openStatusStyle = TextStyle(fontSize: 22, fontWeight: FontWeight.normal);
+  late TextStyle _closedStyle;
+  late TextStyle _openStatusStyle;
 
   bool _operatingHoursExpanded = false;
 
   @override
   Widget build(final BuildContext context) {
+    _closedStyle = Theme.of(context).textTheme.headline5!.copyWith(color: Colors.red);
+    _openStatusStyle = Theme.of(context).textTheme.headline5!.copyWith(color: Colors.green);
     return FutureBuilder<GetFuelStationOperatingHrsResponse>(
         future: widget.operatingHrsResponseFuture,
         builder: (context, snapshot) {
@@ -56,7 +58,9 @@ class _OperatingHoursWidgetState extends State<OperatingHoursWidget> {
           } else if (snapshot.hasData) {
             final GetFuelStationOperatingHrsResponse data = snapshot.data!;
             if (data.responseCode != 'SUCCESS') {
-              return const ListTile(title: Text('Error Loading', style: TextStyle(color: Colors.red, fontSize: 17)));
+              return ListTile(
+                  title:
+                      Text('Error Loading', style: Theme.of(context).textTheme.headline5!.copyWith(color: Colors.red)));
             } else {
               final FuelStationOperatingHrs? fuelStationOperatingHrs = data.fuelStationOperatingHrs;
               widget.fuelStation.fuelStationOperatingHrs = fuelStationOperatingHrs;
@@ -64,7 +68,7 @@ class _OperatingHoursWidgetState extends State<OperatingHoursWidget> {
               if (weeklyOperatingHrs != null && weeklyOperatingHrs.isNotEmpty) {
                 return ExpansionTile(
                     initiallyExpanded: false,
-                    leading: const Icon(Icons.access_time_outlined, size: 40),
+                    leading: const Icon(Icons.access_time_outlined, size: 36),
                     title: _getOpenClosed(weeklyOperatingHrs),
                     key: const PageStorageKey<String>("open-close"),
                     trailing: ExpandIcon(
@@ -83,9 +87,9 @@ class _OperatingHoursWidgetState extends State<OperatingHoursWidget> {
               }
             }
           } else {
-            return const ListTile(
-                leading: Icon(Icons.access_time, size: 30),
-                title: Text('Loading Operating Hours...', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500)));
+            return ListTile(
+                leading: const Icon(Icons.access_time, size: 30),
+                title: Text('Loading Operating Hours...', style: Theme.of(context).textTheme.headline5));
           }
         });
   }
@@ -213,15 +217,14 @@ class _OperatingHoursWidgetState extends State<OperatingHoursWidget> {
           child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
             Expanded(
                 flex: 6,
-                child: Text(weekDay,
-                    textAlign: TextAlign.start, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.normal))),
+                child: Text(weekDay, textAlign: TextAlign.start, style: Theme.of(context).textTheme.headline5)),
             Expanded(
                 flex: 6,
-                child: Text(operatingTimeRange,
-                    textAlign: TextAlign.start, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.normal))),
+                child:
+                    Text(operatingTimeRange, textAlign: TextAlign.start, style: Theme.of(context).textTheme.headline5)),
             Expanded(flex: 1, child: _getOperatingHoursSourceCitation(dailyOperatingHrs, weekDay, operatingTimeRange))
           ])));
-      columnContent.add(const Divider(color: Color(0xFFF0EDFF), thickness: 1, height: 1));
+      columnContent.add(const Divider(thickness: .5, height: 1));
     }
     return columnContent;
   }
@@ -233,13 +236,15 @@ class _OperatingHoursWidgetState extends State<OperatingHoursWidget> {
         : const Icon(Icons.people_alt_outlined, size: 30);
     return GestureDetector(
         onTap: () {
-          showDialog(barrierDismissible: false, context: context, builder: (BuildContext context) {
-            return AlertDialog(
-              backgroundColor: Colors.transparent,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10), side: const BorderSide(width: 0.2)),
-                content: OperatingHoursSourceCitation(operatingHours, widget.fuelStation, weekDay, operatingTimeRange));
-          });
+          showDialog(
+              barrierDismissible: false,
+              context: context,
+              builder: (final BuildContext context) {
+                return AlertDialog(
+                    contentPadding: const EdgeInsets.all(0),
+                    content:
+                        OperatingHoursSourceCitation(operatingHours, widget.fuelStation, weekDay, operatingTimeRange));
+              });
         },
         child: sourceIcon);
   }

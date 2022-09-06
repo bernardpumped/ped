@@ -17,21 +17,9 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class WidgetUtils {
-  static Widget getRating(final double? rating, final double size) {
-    return rating != null
-        ? RatingBarIndicator(
-            rating: rating,
-            itemBuilder: (context, index) => const Icon(Icons.star, color: Colors.amber),
-            itemCount: 5,
-            itemSize: size,
-            direction: Axis.horizontal)
-        : const SizedBox(width: 0);
-  }
-
   static void showToastMessage(final BuildContext context, final String message) {
     final FToast fToast = FToast();
     fToast.init(context);
@@ -57,15 +45,6 @@ class WidgetUtils {
 
   static void showPumpedUnavailabilityMessage(final String underMaintenanceDocSnap, final BuildContext context) {}
 
-  static Widget wrapWithRoundedContainer(
-      {required BuildContext context, required double radius, required Widget child}) {
-    return Container(
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(radius),
-            border: Border.all(color: Theme.of(context).primaryColor, width: 1)),
-        child: child);
-  }
-
   static Widget getRoundedButton(
       {required BuildContext context,
       required String buttonText,
@@ -73,31 +52,18 @@ class WidgetUtils {
       final IconData? iconData}) {
     return GestureDetector(
         onTap: onTapFunction,
-        child: WidgetUtils.wrapWithRoundedContainer(
-            context: context,
-            radius: 24,
+        child: Container(
+          // Intentionally using Theme.of(context).textTheme.headline1!.color! for border, because using primaryColor
+          // for border does not work well when theme is dark.
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(24),
+                border: Border.all(color: Theme.of(context).textTheme.headline1!.color!, width: 1)),
             child: Padding(
-                padding: const EdgeInsets.all(14.0),
+                padding: const EdgeInsets.all(10.0),
                 child: Row(children: [
-                  Text(buttonText, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
+                  Text(buttonText, style: Theme.of(context).textTheme.button),
                   const SizedBox(width: 8),
-                  iconData != null ? Icon(iconData, size: 20) : const SizedBox(width: 0)
+                  iconData != null ? Icon(iconData, size: 24) : const SizedBox(width: 0)
                 ]))));
-  }
-
-  static ElevatedButton getRoundedElevatedButton(
-      {final Function()? onPressed,
-      final Widget? child,
-      required final Color backgroundColor,
-      final Color foreGroundColor = Colors.white,
-      required final double borderRadius}) {
-    return ElevatedButton(
-        onPressed: onPressed,
-        style: ButtonStyle(
-            foregroundColor: MaterialStateProperty.all(foreGroundColor),
-            backgroundColor: MaterialStateProperty.all(backgroundColor),
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(borderRadius)))),
-        child: Padding(padding: const EdgeInsets.only(left: 15, right: 15), child: child));
   }
 }

@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:pumped_end_device/util/log_util.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import 'nav_drawer_item_widget.dart';
 
@@ -84,7 +85,7 @@ class _NavDrawerWidgetState extends State<NavDrawerWidget> {
                   label: 'Send Feedback',
                   selectedIcon: Icons.feedback,
                   icon: Icons.feedback_outlined,
-                  callback: () => _selectItem(context, 4),
+                  callback: () => _helpScreen(),
                   selected: selectedIndex == 4),
               const SizedBox(height: 10),
               NavDrawerItemWidget(
@@ -92,7 +93,7 @@ class _NavDrawerWidgetState extends State<NavDrawerWidget> {
                   label: 'Help',
                   selectedIcon: Icons.help,
                   icon: Icons.help_outline,
-                  callback: () => _selectItem(context, 6),
+                  callback: () => _helpScreen(),
                   selected: selectedIndex == 6),
               const Divider()
             ])));
@@ -106,5 +107,18 @@ class _NavDrawerWidgetState extends State<NavDrawerWidget> {
       selectedIndex = index;
     });
     widget.pageController.jumpToPage(index);
+  }
+
+  _helpScreen() async {
+    String notificationUrl = 'https://pumpedfuel.com';
+    try {
+      if (await canLaunchUrlString(notificationUrl)) {
+        await launchUrlString(notificationUrl, mode: LaunchMode.externalApplication);
+      } else {
+        LogUtil.debug(_tag, 'Cannot send email $notificationUrl');
+      }
+    } on Exception catch (e) {
+      LogUtil.debug(_tag, 'Exception invoking notificationUrl $notificationUrl $e');
+    }
   }
 }

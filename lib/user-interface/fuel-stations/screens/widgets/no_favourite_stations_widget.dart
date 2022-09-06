@@ -25,18 +25,17 @@ class NoFavouriteStationsWidget extends StatelessWidget {
   Widget build(final BuildContext context) {
     return Padding(
         padding: const EdgeInsets.all(16.0),
-        child: ListView(children: const <Widget>[
-          SizedBox(height: 120),
-          Text('No Favourites',
-              style: TextStyle(fontSize: 26, fontWeight: FontWeight.w500), textAlign: TextAlign.center),
-          SizedBox(height: 20),
+        child: ListView(children: <Widget>[
+          const SizedBox(height: 120),
+          Text('No Favourites', style: Theme.of(context).textTheme.headline2, textAlign: TextAlign.center),
+          const SizedBox(height: 20),
           Text.rich(
               TextSpan(children: [
-                TextSpan(text: "Tap on the favourite ", style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal)),
-                WidgetSpan(child: Icon(Icons.favorite_outline, size: 24)),
+                TextSpan(text: "Tap on the favourite ", style: Theme.of(context).textTheme.headline5),
+                const WidgetSpan(child: Icon(Icons.favorite_outline, size: 24)),
                 TextSpan(
                     text: " icon in Fuel Station details to add fuel station to favourites.",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal))
+                    style: Theme.of(context).textTheme.headline5)
               ]),
               textAlign: TextAlign.center)
         ]));
