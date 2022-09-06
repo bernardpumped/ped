@@ -42,7 +42,6 @@ import 'package:pumped_end_device/user-interface/update-history/screen/update_hi
 import 'package:pumped_end_device/user-interface/utils/under_maintenance_service.dart';
 import 'package:pumped_end_device/user-interface/widgets/pumped_app_bar_color_scheme.dart';
 import 'package:pumped_end_device/util/log_util.dart';
-import 'package:pumped_end_device/util/platform_wrapper.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'data/local/location/geo_location_wrapper.dart';
@@ -51,7 +50,7 @@ import 'firebase_options.dart';
 GetIt getIt = GetIt.instance;
 // Set this variable to false when in release mode.
 bool enrichOffers = true;
-const appVersion = "29";
+const appVersion = "30";
 const getLocationWrapperInstanceName = 'geoLocationWrapper';
 const platformWrapperInstanceName = 'platformWrapper';
 const locationDataSourceInstanceName = 'locationDataSource';
@@ -131,18 +130,10 @@ class PumpedApp extends StatelessWidget {
       LogUtil.debug(_tag, 'Instance of $getLocationWrapperInstanceName is already registered');
     }
 
-    if (!getIt.isRegistered<PlatformWrapper>(instanceName: platformWrapperInstanceName)) {
-      LogUtil.debug(_tag, 'Registering instance of $platformWrapperInstanceName');
-      getIt.registerSingleton<PlatformWrapper>(PlatformWrapper(), instanceName: platformWrapperInstanceName);
-    } else {
-      LogUtil.debug(_tag, 'Instance of $platformWrapperInstanceName is already registered');
-    }
-
     if (!getIt.isRegistered<LocationDataSource>(instanceName: locationDataSourceInstanceName)) {
       LogUtil.debug(_tag, 'Registering instance of $locationDataSourceInstanceName');
       getIt.registerSingleton(
-          LocationDataSource(getIt.get<GeoLocationWrapper>(instanceName: getLocationWrapperInstanceName),
-              getIt.get<PlatformWrapper>(instanceName: platformWrapperInstanceName)),
+          LocationDataSource(getIt.get<GeoLocationWrapper>(instanceName: getLocationWrapperInstanceName)),
           instanceName: locationDataSourceInstanceName);
     } else {
       LogUtil.debug(_tag, 'Instance of $platformWrapperInstanceName is already registered');

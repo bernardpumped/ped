@@ -17,14 +17,10 @@
  */
 
 import 'dart:async';
-import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:pumped_end_device/data/local/location/geo_location_wrapper.dart';
-import 'package:pumped_end_device/user-interface/fuel-stations/data/local/places.dart';
 import 'package:pumped_end_device/util/log_util.dart';
-import 'package:pumped_end_device/util/platform_wrapper.dart';
 
 import 'geo_location_data.dart';
 import 'get_location_result.dart';
@@ -34,17 +30,10 @@ import 'location_service_subscription.dart';
 class LocationDataSource {
   static const _tag = "LocationDataSource";
   final GeoLocationWrapper _geoLocationWrapper;
-  final PlatformWrapper _platformWrapper;
 
-  LocationDataSource(this._geoLocationWrapper, this._platformWrapper);
+  LocationDataSource(this._geoLocationWrapper);
 
   Future<GetLocationResult> getLocationData({String thread = 'default'}) async {
-    // if (!_platformWrapper.deviceIsBrowser() && _platformWrapper.platformIsLinux()) {
-    //   return Future.value(GetLocationResult(
-    //       LocationInitResultCode.success,
-    //       Future.value(GeoLocationData(
-    //           latitude: Places.fishBurnerSydney.latitude, longitude: Places.fishBurnerSydney.longitude, altitude: 0))));
-    // }
     LogUtil.debug(_tag, "Checking Location Service Enabled");
     bool serviceEnabled = await _geoLocationWrapper.isLocationServiceEnabled();
     LogUtil.debug(_tag, "Location Service is Enabled ? $serviceEnabled");
@@ -67,34 +56,17 @@ class LocationDataSource {
     try {
       final Position position = await _geoLocationWrapper.getCurrentPosition();
       LogUtil.debug(_tag, "Location found as : $position");
-      // final List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
-      // String? isoCountryCode;
-      // if (placemarks.isNotEmpty) {
-      //   isoCountryCode = placemarks[0].isoCountryCode;
-      //   LogUtil.debug(_tag, 'CountryCode found is $isoCountryCode');
-      // }
-      if (kIsWeb || Platform.isLinux || Platform.isAndroid) {
-        // LogUtil.debug(_tag, 'Overriding the location, as the current country is not AU/Australia');
-        LogUtil.debug(_tag, 'Overriding the actual location with static one, as the Browser / Linux does not allow mocking the location');
-        return Future.value(GetLocationResult(
-            LocationInitResultCode.success,
-            Future.value(GeoLocationData(
-                latitude: Places.fishBurnerSydney.latitude,
-                longitude: Places.fishBurnerSydney.longitude,
-                altitude: 0))));
-      } else {
-        LogUtil.debug(_tag, 'Returning from !kIsWeb');
-        return Future.value(GetLocationResult(
-            LocationInitResultCode.success,
-            Future.value(GeoLocationData(
-                latitude: position.latitude, longitude: position.longitude, altitude: position.altitude))));
-        // return Future.value(GetLocationResult(LocationInitResultCode.success,
-        //     Future.value(GeoLocationData(
-        //       latitude: Places.cairnsQld.latitude,
-        //       longitude: Places.cairnsQld.longitude,
-        //       altitude: 1,
-        //     ))));
-      }
+      return Future.value(GetLocationResult(
+          LocationInitResultCode.success,
+          Future.value(GeoLocationData(
+              latitude: position.latitude, longitude: position.longitude, altitude: position.altitude))));
+      // For mock location use below code.
+      // return Future.value(GetLocationResult(LocationInitResultCode.success,
+      //     Future.value(GeoLocationData(
+      //       latitude: Places.cairnsQld.latitude,
+      //       longitude: Places.cairnsQld.longitude,
+      //       altitude: 1,
+      //     ))));
     } catch (e) {
       return Future.value(GetLocationResult(LocationInitResultCode.failure, null));
     }
@@ -104,11 +76,7 @@ class LocationDataSource {
       final int interval, final double distance, final Function listenerFunction) async {
     final StreamSubscription<Position> positionSubscription =
         _geoLocationWrapper.getPositionStream(interval, distance).listen((Position position) {
-      if (kIsWeb) {
-        listenerFunction(Places.fishBurnerSydney.latitude, Places.fishBurnerSydney.longitude);
-      } else {
-        listenerFunction(position.latitude, position.longitude);
-      }
+      listenerFunction(position.latitude, position.longitude);
     });
     return LocationServiceSubscription(positionSubscription);
   }

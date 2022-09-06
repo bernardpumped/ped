@@ -16,6 +16,8 @@
  *     along with Pumped End Device.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import 'package:basic_utils/basic_utils.dart';
+
 class FuelStationAddress {
   String contactName;
   String addressLine1;
@@ -48,4 +50,11 @@ class FuelStationAddress {
     this.zip,
     this.countryName,
   });
+
+  String getStationAddress() {
+    if (StringUtils.isNotNullOrEmpty(locality)) {
+      return "$addressLine1, ${locality!}";
+    }
+    return addressLine1;
+  }
 }

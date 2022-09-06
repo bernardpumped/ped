@@ -22,7 +22,6 @@
 
 import 'package:mockito/mockito.dart' as i1;
 import 'package:pumped_end_device/data/local/location/geo_location_wrapper.dart' as i3;
-import 'package:pumped_end_device/util/platform_wrapper.dart' as i2;
 
 // ignore_for_file: avoid_redundant_argument_values
 // ignore_for_file: avoid_setters_without_getters
@@ -32,15 +31,6 @@ import 'package:pumped_end_device/util/platform_wrapper.dart' as i2;
 // ignore_for_file: prefer_const_constructors
 // ignore_for_file: unnecessary_parenthesis
 // ignore_for_file: camel_case_types
-
-/// A class which mocks [PlatformWrapper].
-///
-/// See the documentation for Mockito's code generation for more information.
-class MockPlatformWrapper extends i1.Mock implements i2.PlatformWrapper {
-  MockPlatformWrapper() {
-    i1.throwOnMissingStub(this);
-  }
-}
 
 /// A class which mocks [GeoLocationWrapper].
 ///

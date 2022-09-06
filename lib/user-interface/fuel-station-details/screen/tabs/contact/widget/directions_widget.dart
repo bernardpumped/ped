@@ -52,12 +52,6 @@ class DirectionsWidget extends StatelessWidget {
           const Text('Directions', style: TextStyle(color: Colors.indigo, fontSize: 14, fontWeight: FontWeight.w500))
         ]),
         onTap: () async {
-          if (kIsWeb) {
-            if (!FeatureSupport.webPlatform.contains(FeatureSupport.directionsFeature)) {
-              LogUtil.debug(_tag, 'Web does not yet support ${FeatureSupport.directionsFeature}');
-              return;
-            }
-          }
           if (!FeatureSupport.directions.contains(Platform.operatingSystem)) {
             LogUtil.debug(_tag, '${Platform.operatingSystem} does not yet support ${FeatureSupport.directionsFeature}');
             return;
