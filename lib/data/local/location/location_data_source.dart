@@ -77,8 +77,8 @@ class LocationDataSource {
         return Future.value(GetLocationResult(
             LocationInitResultCode.success,
             Future.value(GeoLocationData(
-                latitude: Places.fishBurnerBrisbane.latitude,
-                longitude: Places.fishBurnerBrisbane.longitude,
+                latitude: Places.fishBurnerSydney.latitude,
+                longitude: Places.fishBurnerSydney.longitude,
                 altitude: 0))));
       } else {
         LogUtil.debug(_tag, 'Returning from !kIsWeb');
