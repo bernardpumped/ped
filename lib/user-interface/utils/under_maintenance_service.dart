@@ -17,70 +17,54 @@
  */
 
 import 'dart:async';
-import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
 class UnderMaintenanceService {
   static const _tag = 'UnderMaintenanceService';
   late DocumentReference underMaintenanceDocRef;
-  late bool initialized;
 
   final Map<String, StreamSubscription> subscriptionMap = {};
 
   static final UnderMaintenanceService instance = UnderMaintenanceService._();
 
-  UnderMaintenanceService._(){
-    if (kIsWeb || Platform.isAndroid || Platform.isIOS) {
-      underMaintenanceDocRef = FirebaseFirestore.instance.collection("pumped-documents").doc("under-maintenance");
-      initialized = true;
-    }
+  UnderMaintenanceService._() {
+    underMaintenanceDocRef = FirebaseFirestore.instance.collection("pumped-documents").doc("under-maintenance");
   }
 
   Future<UnderMaintenance> isUnderMaintenance() async {
-    if (kIsWeb || Platform.isAndroid || Platform.isIOS) {
-      final DocumentSnapshot snapshot = await underMaintenanceDocRef.get();
-      final bool underMaintenance = snapshot['underMaintenance'] ?? false;
-      if (underMaintenance) {
-        final String underMaintenanceMsg = snapshot['maintenanceMessage'];
-        return UnderMaintenance(underMaintenance, underMaintenanceMsg);
-      }
+    final DocumentSnapshot snapshot = await underMaintenanceDocRef.get();
+    final bool underMaintenance = snapshot['underMaintenance'] ?? false;
+    if (underMaintenance) {
+      final String underMaintenanceMsg = snapshot['maintenanceMessage'];
+      return UnderMaintenance(underMaintenance, underMaintenanceMsg);
     }
     return UnderMaintenance(false, 'Not Under Maintenance');
   }
 
   void registerSubscription(final String key, final BuildContext context, final Function function) {
-    if (kIsWeb || Platform.isAndroid || Platform.isIOS) {
-      if (subscriptionMap.containsKey(key)) {
-        LogUtil.debug(_tag, 'Subscription already registered for key $key');
-      } else {
-        LogUtil.debug(_tag, 'Registering Subscription for key $key');
-      }
-      subscriptionMap.putIfAbsent(
-          key,
-          () => underMaintenanceDocRef.snapshots().listen((event) {
-                function(event, context);
-              }));
+    if (subscriptionMap.containsKey(key)) {
+      LogUtil.debug(_tag, 'Subscription already registered for key $key');
     } else {
-      LogUtil.debug(_tag, 'Platform does not support firebase yet');
+      LogUtil.debug(_tag, 'Registering Subscription for key $key');
     }
+    subscriptionMap.putIfAbsent(
+        key,
+        () => underMaintenanceDocRef.snapshots().listen((event) {
+              function(event, context);
+            }));
   }
 
   void cancelSubscription(final String key) {
-    if (kIsWeb || Platform.isAndroid || Platform.isIOS) {
-      if (subscriptionMap.containsKey(key)) {
-        subscriptionMap[key]?.cancel();
-        LogUtil.debug(_tag, 'Cancelled subscription with key $key');
-        subscriptionMap.remove(key);
-        return;
-      } else {
-        LogUtil.debug(_tag, 'No subscription found with key $key for cancellation');
-      }
+    if (subscriptionMap.containsKey(key)) {
+      subscriptionMap[key]?.cancel();
+      LogUtil.debug(_tag, 'Cancelled subscription with key $key');
+      subscriptionMap.remove(key);
+      return;
     } else {
-      LogUtil.debug(_tag, 'Platform does not support firebase yet');
+      LogUtil.debug(_tag, 'No subscription found with key $key for cancellation');
     }
   }
 }

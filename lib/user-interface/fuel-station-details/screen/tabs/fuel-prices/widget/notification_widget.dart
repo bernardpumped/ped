@@ -49,7 +49,7 @@ class NotificationWidget extends StatelessWidget {
     final String notificationUrl = _getNotificationUrl();
     try {
       if (await canLaunchUrlString(notificationUrl)) {
-        await canLaunchUrlString(notificationUrl);
+        await launchUrlString(notificationUrl);
       } else {
         LogUtil.debug(_tag, 'Cannot send email $notificationUrl');
         function.call();
@@ -62,6 +62,7 @@ class NotificationWidget extends StatelessWidget {
 
   String _getNotificationUrl() {
     return Uri.encodeFull("https://notify-fuel-prices.epw.qld.gov.au/?SiteName=${fuelStation.fuelStationName}"
-        "&SiteAddress=${fuelStation.fuelStationAddress}&SiteID=${fuelStation.fuelAuthorityStationCode}&DataPublisher=Pumped");
+        "&SiteAddress=${fuelStation.fuelStationAddress.getStationAddress()}"
+        "&SiteID=${fuelStation.fuelAuthorityStationCode}&DataPublisher=Pumped");
   }
 }

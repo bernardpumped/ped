@@ -52,12 +52,6 @@ class PhoneWidget extends StatelessWidget {
   }
 
   static void _launchCaller(final String phone, final Function function) async {
-    if (kIsWeb) {
-      if (!FeatureSupport.webPlatform.contains(FeatureSupport.callFeature)) {
-        LogUtil.debug(_tag, 'Web does not yet support ${FeatureSupport.callFeature}');
-        return;
-      }
-    }
     if (!FeatureSupport.call.contains(Platform.operatingSystem)) {
       LogUtil.debug(_tag, '${Platform.operatingSystem} does not yet support ${FeatureSupport.callFeature}');
       return;

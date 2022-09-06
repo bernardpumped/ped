@@ -47,12 +47,6 @@ class RateWidget extends StatelessWidget {
           const Text('Rate', style: TextStyle(color: Colors.indigo, fontSize: 14, fontWeight: FontWeight.w500))
         ]),
         onTap: () async {
-          if (kIsWeb) {
-            if (!FeatureSupport.webPlatform.contains(FeatureSupport.ratingFeature)) {
-              LogUtil.debug(_tag, 'Web does not yet support ${FeatureSupport.ratingFeature}');
-              return;
-            }
-          }
           if (!FeatureSupport.rating.contains(Platform.operatingSystem)) {
             LogUtil.debug(_tag, '${Platform.operatingSystem} does not yet support ${FeatureSupport.ratingFeature}');
             return;

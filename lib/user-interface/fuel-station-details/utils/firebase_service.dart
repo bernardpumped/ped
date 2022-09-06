@@ -19,7 +19,6 @@
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:pumped_end_device/util/log_util.dart';
@@ -86,14 +85,8 @@ class FirebaseService {
 
   static final Map<String, List<String>> _osSupport = {
     'android': [googleIdProvider, facebookIdProvider, twitterIdProvider],
-    'ios': [googleIdProvider, facebookIdProvider, twitterIdProvider],
-    'fuchsia': [],
-    'linux': [],
-    'macos': [],
-    'windows': []
+    'ios': [googleIdProvider, facebookIdProvider, twitterIdProvider]
   };
-
-  static final List<String> _webSupport = [twitterIdProvider];
 
   late FirebaseAuth _auth;
   late GoogleSignIn _googleSignIn;
@@ -101,7 +94,7 @@ class FirebaseService {
   late TwitterLogin _twitterLogin;
 
   FirebaseService() {
-    List<String>? platformSupport = _getPlatformSupport();
+    List<String>? platformSupport = _osSupport[Platform.operatingSystem];
     LogUtil.debug(_tag, 'platformSupport is $platformSupport');
     if (platformSupport != null && platformSupport.isNotEmpty) {
       _auth = FirebaseAuth.instance;
@@ -120,23 +113,13 @@ class FirebaseService {
     }
   }
 
-  List<String>? _getPlatformSupport() {
-    List<String>? platformSupport;
-    if (kIsWeb) {
-      platformSupport = _webSupport;
-    } else {
-      platformSupport = _osSupport[Platform.operatingSystem];
-    }
-    return platformSupport;
-  }
-
   String? idProviderUsed;
 
   SignedInUser? getSignedInUser() {
     if (idProviderUsed == null) {
       return null;
     }
-    final List<String>? platformSupport = _getPlatformSupport();
+    final List<String>? platformSupport = _osSupport[Platform.operatingSystem];
     if (platformSupport != null && platformSupport.contains(idProviderUsed)) {
       return SignedInUser(false, user: FirebaseAuth.instance.currentUser);
     }
@@ -148,7 +131,7 @@ class FirebaseService {
       throw FirebaseAuthException(message: 'Unknown idProviderType $idProviderType', code: 'unknown-idProvider');
     }
     idProviderUsed = idProviderType;
-    final List<String>? platformSupport = _getPlatformSupport();
+    final List<String>? platformSupport = _osSupport[Platform.operatingSystem];
     if (platformSupport != null) {
       if (platformSupport.contains(idProviderType)) {
         switch (idProviderType) {

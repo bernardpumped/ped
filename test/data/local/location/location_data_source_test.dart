@@ -24,23 +24,18 @@ import 'package:pumped_end_device/data/local/location/geo_location_wrapper.dart'
 import 'package:pumped_end_device/data/local/location/get_location_result.dart';
 import 'package:pumped_end_device/data/local/location/location_access_result_code.dart';
 import 'package:pumped_end_device/data/local/location/location_data_source.dart';
-import 'package:pumped_end_device/util/platform_wrapper.dart';
 
 import 'location_data_source_test.mocks.dart';
 
 
-@GenerateMocks([PlatformWrapper, GeoLocationWrapper])
+@GenerateMocks([GeoLocationWrapper])
 void main() {
   late LocationDataSource locationDataSource;
-  late PlatformWrapper platformWrapper;
   late GeoLocationWrapper geoLocationWrapper;
   
   setUp(() {
-    platformWrapper = MockPlatformWrapper();
     geoLocationWrapper = MockGeoLocationWrapper();
-    when(platformWrapper.platformIsLinux()).thenReturn(false);
-    when(platformWrapper.deviceIsBrowser()).thenReturn(false);
-    locationDataSource = LocationDataSource(geoLocationWrapper, platformWrapper);
+    locationDataSource = LocationDataSource(geoLocationWrapper);
   });
 
   test('When Location Service is Disabled', () async {
@@ -48,10 +43,7 @@ void main() {
     GetLocationResult result = await locationDataSource.getLocationData();
     expect(result.locationInitResultCode, equals(LocationInitResultCode.locationServiceDisabled));
     expect(result.geoLocationData, null);
-    verify(platformWrapper.deviceIsBrowser()).called(1);
-    verify(platformWrapper.platformIsLinux()).called(1);
     verify(geoLocationWrapper.isLocationServiceEnabled()).called(1);
-    verifyNoMoreInteractions(platformWrapper);
     verifyNoMoreInteractions(geoLocationWrapper);
   });
 
@@ -62,12 +54,9 @@ void main() {
     GetLocationResult result = await locationDataSource.getLocationData();
     expect(result.locationInitResultCode, equals(LocationInitResultCode.permissionDenied));
     expect(result.geoLocationData, null);
-    verify(platformWrapper.deviceIsBrowser()).called(1);
-    verify(platformWrapper.platformIsLinux()).called(1);
     verify(geoLocationWrapper.isLocationServiceEnabled()).called(1);
     verify(geoLocationWrapper.checkPermission()).called(1);
     verify(geoLocationWrapper.requestPermission()).called(1);
-    verifyNoMoreInteractions(platformWrapper);
     verifyNoMoreInteractions(geoLocationWrapper);
   });
 
@@ -77,11 +66,8 @@ void main() {
     GetLocationResult result = await locationDataSource.getLocationData();
     expect(result.locationInitResultCode, equals(LocationInitResultCode.permissionDenied));
     expect(result.geoLocationData, null);
-    verify(platformWrapper.deviceIsBrowser()).called(1);
-    verify(platformWrapper.platformIsLinux()).called(1);
     verify(geoLocationWrapper.isLocationServiceEnabled()).called(1);
     verify(geoLocationWrapper.checkPermission()).called(1);
-    verifyNoMoreInteractions(platformWrapper);
     verifyNoMoreInteractions(geoLocationWrapper);
   });
 }

@@ -39,7 +39,6 @@ android/app/src/main/*
 android/app/src/profile/*
 !android/app/src/profile/AndroidManifest.xml
 !android/AndroidManifest.xml
-
 build
 !ios/
 ios/*
