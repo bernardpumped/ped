@@ -37,12 +37,10 @@ class _TextDirectionMenuItemWidgetState extends State<TextDirectionMenuItemWidge
   @override
   Widget build(final BuildContext context) {
     return Card(
-        color: Colors.white,
-        surfaceTintColor: Colors.white,
         child: ExpansionTile(
             title: Text("Text Direction - ${_textDirection[selectedTextDirection]}",
-                style: const TextStyle(fontSize: 18, color: Colors.indigo, fontWeight: FontWeight.w500)),
-            leading: const Icon(Icons.align_horizontal_left, color: Colors.indigo, size: 30),
+                style: Theme.of(context).textTheme.subtitle1),
+            leading: const Icon(Icons.align_horizontal_left, size: 30),
             children: [_getMenuItem(_basedOnLocale), _getMenuItem(_ltrDirection), _getMenuItem(_rtlDirection)]));
   }
 
@@ -55,6 +53,6 @@ class _TextDirectionMenuItemWidgetState extends State<TextDirectionMenuItemWidge
             selectedTextDirection = newVal!;
           });
         },
-        title: Text(_textDirection[value]!, style: const TextStyle(fontWeight: FontWeight.w500, color: Colors.indigo)));
+        title: Text(_textDirection[value]!, style: Theme.of(context).textTheme.subtitle2));
   }
 }

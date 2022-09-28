@@ -44,8 +44,8 @@ class EditFuelStationAddressLineItem extends StatefulWidget {
 }
 
 class _EditFuelStationAddressLineItemState extends State<EditFuelStationAddressLineItem> {
-  static const _heightWithoutErrorMsg = 63.0;
-  static const _heightWithErrorMsg = 88.0;
+  static const _heightWithoutErrorMsg = 75.0;
+  static const _heightWithErrorMsg = 100.0;
   static const _heightOfErrorMsg = 25.0;
   static const _heightOfNoErrorMsg = 0.0;
 
@@ -72,32 +72,29 @@ class _EditFuelStationAddressLineItemState extends State<EditFuelStationAddressL
     final TextField addressComponentTextField = _buildTextField();
     return AnimatedContainer(
         height: _containerHeight,
-        decoration:
-            BoxDecoration(color: Colors.white, shape: BoxShape.rectangle, borderRadius: BorderRadius.circular(10)),
         curve: Curves.fastOutSlowIn,
         duration: Duration(milliseconds: _containerHeightChangeTime),
-        padding: const EdgeInsets.only(left: 30, right: 30, bottom: 15),
-        child: Row(children: <Widget>[
-          Expanded(
-              flex: 1,
-              child: Text(widget._addressComponentName,
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.indigo))),
-          Expanded(
-              flex: 3,
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [_getAddressComponentField(addressComponentTextField), _getErrorMsgField()]))
-        ]));
+        child: Card(
+            child: Padding(
+                padding: const EdgeInsets.only(left: 30, right: 30, bottom: 15),
+                child: Row(children: <Widget>[
+                  Expanded(
+                      flex: 1, child: Text(widget._addressComponentName, style: Theme.of(context).textTheme.subtitle2)),
+                  Expanded(
+                      flex: 3,
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [_getAddressComponentField(addressComponentTextField), _getErrorMsgField()]))
+                ]))));
   }
 
   TextField _buildTextField() {
     return TextField(
         controller: widget._addressComponentEditingController, // Add this
-        style: const TextStyle(fontSize: 18),
+        style: Theme.of(context).textTheme.subtitle2,
         maxLengthEnforcement: MaxLengthEnforcement.enforced,
         enabled: _addressComponentEnabled && !widget._backendUpdateInProgress,
         decoration: InputDecoration(
-            hintStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400, color: Colors.indigo),
             hintText:
                 !_addressComponentEnabled ? widget._addressComponentValue : 'Enter ${widget._addressComponentName}'),
         key: PageStorageKey('edit-${widget._addressComponentValue}'),
@@ -129,7 +126,8 @@ class _EditFuelStationAddressLineItemState extends State<EditFuelStationAddressL
         height: _errorContainerHeight,
         curve: Curves.fastOutSlowIn,
         duration: Duration(milliseconds: _errorMsgHeightChangeTime),
-        child: Text(_errorMessage, style: const TextStyle(color: Colors.red)));
+        child: Text(_errorMessage,
+            style: Theme.of(context).textTheme.caption!.copyWith(color: Theme.of(context).errorColor)));
   }
 
   Widget _getAddressComponentField(final TextField addressComponentTextField) {
@@ -139,7 +137,7 @@ class _EditFuelStationAddressLineItemState extends State<EditFuelStationAddressL
             behavior: HitTestBehavior.translucent,
             child: IgnorePointer(child: addressComponentTextField),
             onTap: () {
-              WidgetUtils.showToastMessage(context, '${widget._addressComponentName} cannot be changed', Colors.indigo);
+              WidgetUtils.showToastMessage(context, '${widget._addressComponentName} cannot be changed');
             });
   }
 

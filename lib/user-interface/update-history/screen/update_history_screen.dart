@@ -34,6 +34,10 @@ import 'package:pumped_end_device/util/log_util.dart';
 
 class UpdateHistoryScreen extends StatefulWidget {
   static const routeName = '/ped/edit-history/summary';
+  static const viewLabel = 'Updates History';
+  static const viewIcon = Icons.update_outlined;
+  static const viewSelectedIcon = Icons.update;
+
   const UpdateHistoryScreen({Key? key}) : super(key: key);
 
   @override
@@ -68,27 +72,16 @@ class _UpdateHistoryScreenState extends State<UpdateHistoryScreen> {
   @override
   Widget build(final BuildContext context) {
     return Scaffold(
-        appBar: const PumpedAppBar(),
+        appBar: const PumpedAppBar(title: UpdateHistoryScreen.viewLabel, icon: UpdateHistoryScreen.viewSelectedIcon),
         drawer: const NavDrawerWidget(),
-        body: Container(
-            color: const Color(0xFFF0EDFF),
-            child: SingleChildScrollView(
-                child: Container(
-                    constraints:
-                        BoxConstraints(minHeight: MediaQuery.of(context).size.height, minWidth: double.infinity),
-                    color: const Color(0xFFF0EDFF),
-                    padding: const EdgeInsets.only(left: 10, right: 10),
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Padding(
-                              padding: EdgeInsets.only(top: 10, bottom: 10, left: 10),
-                              child: Text('Update History',
-                                  style: TextStyle(fontSize: 24, color: Colors.indigo, fontWeight: FontWeight.bold),
-                                  textAlign: TextAlign.center)),
-                          _futureBuilder()
-                        ])))));
+        body: SingleChildScrollView(
+            child: Container(
+                constraints: BoxConstraints(minHeight: MediaQuery.of(context).size.height, minWidth: double.infinity),
+                padding: const EdgeInsets.only(left: 10, right: 10),
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [_futureBuilder()]))));
   }
 
   _futureBuilder() {
@@ -108,8 +101,9 @@ class _UpdateHistoryScreenState extends State<UpdateHistoryScreen> {
             }
             return Column(children: widgets);
           } else if (snapshot.hasError) {
-            return const Center(
-                child: Text('Error Loading', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500)));
+            return Center(
+                child: Text('Error Loading',
+                    style: Theme.of(context).textTheme.subtitle2!.copyWith(color: Theme.of(context).errorColor)));
           } else {
             return const Center(child: CircularProgressIndicator());
           }

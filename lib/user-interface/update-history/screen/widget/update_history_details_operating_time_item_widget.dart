@@ -54,62 +54,40 @@ class UpdateHistoryDetailsOperatingTimeItemWidget extends StatelessWidget {
     final String updateResult = _getUpdateResult();
     return Card(
         margin: const EdgeInsets.all(2),
-        color: Colors.white,
-        surfaceTintColor: Colors.white,
-        elevation: 2,
         child: Column(children: <Widget>[
           Padding(
               padding: const EdgeInsets.only(top: 12, left: 20, right: 20),
               child: Row(children: <Widget>[
-                const Expanded(
-                    flex: 1,
-                    child: Text('Day of Week',
-                        style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500, color: Colors.indigo))),
-                Expanded(flex: 1, child: Text(dayOfWeek, style: const TextStyle(fontSize: 17, color: Colors.indigo)))
+                Expanded(flex: 1, child: Text('Day of Week', style: Theme.of(context).textTheme.bodyText1)),
+                Expanded(flex: 1, child: Text(dayOfWeek, style: Theme.of(context).textTheme.bodyText1))
               ])),
           Padding(
               padding: const EdgeInsets.only(top: 12, left: 20, right: 20),
               child: Row(children: <Widget>[
-                const Expanded(
-                    flex: 1,
-                    child: Text('Old Range',
-                        style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500, color: Colors.indigo))),
-                Expanded(
-                    flex: 1, child: Text(originalTimeRange, style: const TextStyle(fontSize: 17, color: Colors.indigo)))
+                Expanded(flex: 1, child: Text('Old Range', style: Theme.of(context).textTheme.bodyText1)),
+                Expanded(flex: 1, child: Text(originalTimeRange, style: Theme.of(context).textTheme.bodyText1))
               ])),
           Padding(
               padding: const EdgeInsets.only(top: 12, left: 20, right: 20),
               child: Row(children: <Widget>[
-                const Expanded(
-                    flex: 1,
-                    child: Text('New Value',
-                        style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500, color: Colors.indigo))),
-                Expanded(
-                    flex: 1, child: Text(updatedTimeRange, style: const TextStyle(fontSize: 17, color: Colors.indigo)))
+                Expanded(flex: 1, child: Text('New Range', style: Theme.of(context).textTheme.bodyText1)),
+                Expanded(flex: 1, child: Text(updatedTimeRange, style: Theme.of(context).textTheme.bodyText1))
               ])),
           Padding(
               padding: const EdgeInsets.only(top: 12, left: 20, right: 20),
               child: Row(children: <Widget>[
-                const Expanded(
-                    flex: 1,
-                    child: Text('Status',
-                        style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500, color: Colors.indigo))),
-                Expanded(
-                    flex: 1,
-                    child: Text(updateResult, maxLines: 3, style: const TextStyle(fontSize: 17, color: Colors.indigo)))
+                Expanded(flex: 1, child: Text('Status', style: Theme.of(context).textTheme.bodyText1)),
+                Expanded(flex: 1, child: Text(updateResult, maxLines: 3, style: Theme.of(context).textTheme.bodyText1))
               ])),
           _getUpdateResult() == 'Failed'
               ? Padding(
                   padding: const EdgeInsets.only(top: 12, left: 20, right: 20, bottom: 12),
                   child: Row(children: <Widget>[
-                    const Expanded(
-                        flex: 1,
-                        child: Text('Status',
-                            style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500, color: Colors.indigo))),
+                    Expanded(flex: 1, child: Text('Status', style: Theme.of(context).textTheme.bodyText1)),
                     Expanded(
                         flex: 1,
                         child: Text(_getTranslatedUpdateResult(),
-                            maxLines: 3, style: const TextStyle(fontSize: 17, color: Colors.indigo)))
+                            maxLines: 3, style: Theme.of(context).textTheme.bodyText1))
                   ]))
               : const SizedBox(height: 12)
         ]));

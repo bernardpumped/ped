@@ -86,7 +86,8 @@ class _EditFeaturesWidgetState extends State<EditFeaturesWidget> {
             right: 25,
             child: Visibility(
                 visible: _fabVisible,
-                child: EditActionButton(undoButtonAction: _onFeaturesEditUndo, saveButtonAction: _onFeaturesEditSave, tag: _tag)))
+                child: EditActionButton(
+                    undoButtonAction: _onFeaturesEditUndo, saveButtonAction: _onFeaturesEditSave, tag: _tag)))
       ])
     ]);
   }
@@ -94,19 +95,16 @@ class _EditFeaturesWidgetState extends State<EditFeaturesWidget> {
   _getTitleWidget() {
     return Padding(
         padding: const EdgeInsets.only(left: 20, top: 10, bottom: 5),
-        child: Row(mainAxisAlignment: MainAxisAlignment.start, children: const [
-          Icon(Icons.flag_outlined, size: 30, color: Colors.indigo),
-          SizedBox(width: 10),
-          Text('Update Features', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Colors.indigo))
+        child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+          const Icon(Icons.flag_outlined, size: 30),
+          const SizedBox(width: 10),
+          Text('Update Features', style: Theme.of(context).textTheme.headline4)
         ]));
   }
 
   List<Widget> _getFeatureCards() {
     final List<FuelStationFeature> fuelStationFeatures = DataFuelStationFeatures.fuelStationFeatures;
-    return fuelStationFeatures
-        .map((feature) =>
-            Padding(padding: const EdgeInsets.only(left: 8.0, right: 8.0), child: _getFeatureCard(feature)))
-        .toList();
+    return fuelStationFeatures.map((feature) => _getFeatureCard(feature)).toList();
   }
 
   Widget _getFeatureCard(final FuelStationFeature feature) {
@@ -114,22 +112,17 @@ class _EditFeaturesWidgetState extends State<EditFeaturesWidget> {
         featureSelectStatusMap[feature.featureType] != null ? featureSelectStatusMap[feature.featureType]! : false;
     final Checkbox featureCheckBox = Checkbox(
         value: val,
-        checkColor: Colors.indigo,
         onChanged: (val) {
           if (val != null) {
             _valueChangeListenerFunction(feature.featureType, val);
           } else {
             LogUtil.debug(_tag, '_getFeatureCard::ChangeListener had null value');
           }
-        },
-        activeColor: Colors.white);
+        });
     return Card(
-        color: Colors.white,
-        surfaceTintColor: Colors.white,
         child: ListTile(
-            leading: Icon(feature.icon, size: 30, color: Colors.indigo),
-            title: Text(feature.featureName,
-                style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w500, color: Colors.indigo)),
+            leading: Icon(feature.icon, size: 30),
+            title: Text(feature.featureName, style: Theme.of(context).textTheme.subtitle2),
             trailing: featureCheckBox));
   }
 
@@ -210,8 +203,8 @@ class _EditFeaturesWidgetState extends State<EditFeaturesWidget> {
           'endDeviceUpdateFuelStation::updateFuelStationFeature::persistenceResult : $persistUpdateHistoryResult');
       if (!mounted) return;
       final Map<String, dynamic> responseParseMap = _isUpdateSuccessful(response);
-      WidgetUtils.showToastMessage(
-          context, responseParseMap[_responseMsg], responseParseMap[_isSuccess]! ? Colors.indigo : Colors.red);
+      WidgetUtils.showToastMessage(context, responseParseMap[_responseMsg],
+          isErrorToast: !responseParseMap[_isSuccess]!);
       Navigator.pop(context, _getUpdateResponse(request, response));
     }
   }

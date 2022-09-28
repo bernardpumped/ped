@@ -19,7 +19,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/screen/widget/email_widget.dart';
-import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station.dart';
 import 'package:pumped_end_device/models/pumped/operating_hours.dart';
 import 'package:pumped_end_device/util/log_util.dart';
@@ -42,11 +41,6 @@ class OperatingHoursSourceCitation extends StatelessWidget {
         'OperatingHoursSourceCitation', 'operatingTimeSourceName : ${_operatingHours.operatingTimeSourceName}');
     return Container(
         padding: const EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 40),
-        decoration: BoxDecoration(
-            color: Colors.white,
-            shape: BoxShape.rectangle,
-            borderRadius: BorderRadius.circular(15.0),
-            boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 10.0, offset: Offset(0.0, 10.0))]),
         child: _getOperatingHrsSourceMessage(context, operatingTimeSource, _operatingHours.operatingTimeSourceName));
   }
 
@@ -62,23 +56,22 @@ class OperatingHoursSourceCitation extends StatelessWidget {
     }
     return Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
       Row(children: [
-        Text(weekDay, style: const TextStyle(fontSize: 22, color: Colors.indigo, fontWeight: FontWeight.bold)),
+        Text(weekDay, style: Theme.of(context).textTheme.headline4),
         const SizedBox(width: 10),
-        Text(operatingTimeRange,
-            style: const TextStyle(fontSize: 22, color: Colors.indigo, fontWeight: FontWeight.bold))
+        Text(operatingTimeRange, style: Theme.of(context).textTheme.headline4)
       ]),
       const SizedBox(height: 12),
-      const Divider(color: Colors.indigo, height: 1),
-      const SizedBox(height: 8),
-      Text(sourceMessage, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500, color: Colors.indigo)),
-      const SizedBox(height: 8),
+      const Divider(height: 1),
+      const SizedBox(height: 6),
+      Text(sourceMessage, style: Theme.of(context).textTheme.headline6),
+      const SizedBox(height: 6),
       Text('Last Update Time ${_getPublishDateFormatted(_operatingHours.publishDate!)}',
-          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.indigo)),
-      const SizedBox(height: 12),
-      const Divider(color: Colors.indigo, height: 1),
-      const SizedBox(height: 12),
-      _getAdminContactMessage(),
-      const SizedBox(height: 12),
+          style: Theme.of(context).textTheme.bodyText2),
+      const SizedBox(height: 6),
+      const Divider(height: 1),
+      const SizedBox(height: 6),
+      _getAdminContactMessage(context),
+      const SizedBox(height: 8),
       _getOkActionButton(context)
     ]);
   }
@@ -88,25 +81,22 @@ class OperatingHoursSourceCitation extends StatelessWidget {
     return formatter.format(publishDate);
   }
 
-  Text _getAdminContactMessage() {
-    return const Text(_pumpedMessage,
-        textAlign: TextAlign.start, style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w400, color: Colors.red));
+  Text _getAdminContactMessage(final BuildContext context) {
+    return Text(_pumpedMessage,
+        textAlign: TextAlign.start,
+        style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Theme.of(context).errorColor));
   }
 
   Row _getOkActionButton(final BuildContext context) {
     return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-      WidgetUtils.getRoundedElevatedButton(
-          child: Row(children: const [
-            Icon(Icons.cancel_outlined, size: 24, color: Colors.white),
-            SizedBox(width: 10),
-            Text('Cancel', style: TextStyle(color: Colors.white))
-          ]),
-          foreGroundColor: Colors.white,
-          backgroundColor: Colors.indigo,
-          borderRadius: 10.0,
+      ElevatedButton(
           onPressed: () {
             Navigator.pop(context);
-          }),
+          },
+          child: Padding(
+              padding: const EdgeInsets.only(left: 15, right: 15),
+              child:
+                  Row(children: const [Icon(Icons.cancel_outlined, size: 24), SizedBox(width: 10), Text('Cancel')]))),
       const SizedBox(width: 10),
       _getNotificationWidget(),
     ]);

@@ -39,8 +39,8 @@ class EditPhoneNumberLineItem extends StatefulWidget {
 }
 
 class _EditPhoneNumberLineItemState extends State<EditPhoneNumberLineItem> {
-  static const _heightWithoutErrorMsg = 63.0;
-  static const _heightWithErrorMsg = 88.0;
+  static const _heightWithoutErrorMsg = 75.0;
+  static const _heightWithErrorMsg = 100.0;
   static const _heightOfErrorMsg = 25.0;
   static const _heightOfNoErrorMsg = 0.0;
 
@@ -93,23 +93,20 @@ class _EditPhoneNumberLineItemState extends State<EditPhoneNumberLineItem> {
   Widget build(final BuildContext context) {
     final TextField phoneTextField = _buildTextField();
     return AnimatedContainer(
-        decoration:
-            BoxDecoration(color: Colors.white, shape: BoxShape.rectangle, borderRadius: BorderRadius.circular(10)),
         height: _containerHeight,
         curve: Curves.fastOutSlowIn,
         duration: Duration(milliseconds: _containerHeightChangeTime),
-        padding: const EdgeInsets.only(left: 30, right: 30, bottom: 15),
-        child: Row(children: <Widget>[
-          Expanded(
-              flex: 1,
-              child: Text(widget._phoneNumberName,
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.indigo))),
-          Expanded(
-              flex: 3,
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [_getPhoneField(phoneTextField), _getErrorMsgField()]))
-        ]));
+        child: Card(
+            child: Padding(
+                padding: const EdgeInsets.only(left: 30, right: 30, bottom: 15),
+                child: Row(children: <Widget>[
+                  Expanded(flex: 1, child: Text(widget._phoneNumberName, style: Theme.of(context).textTheme.subtitle2)),
+                  Expanded(
+                      flex: 3,
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [_getPhoneField(phoneTextField), _getErrorMsgField()]))
+                ]))));
   }
 
   Widget _getErrorMsgField() {
@@ -118,7 +115,8 @@ class _EditPhoneNumberLineItemState extends State<EditPhoneNumberLineItem> {
         height: _errorContainerHeight,
         curve: Curves.fastOutSlowIn,
         duration: Duration(milliseconds: _errorMsgHeightChangeTime),
-        child: Text(_errorMessage, style: const TextStyle(color: Colors.red)));
+        child: Text(_errorMessage,
+            style: Theme.of(context).textTheme.caption!.copyWith(color: Theme.of(context).errorColor)));
   }
 
   Widget _getPhoneField(final TextField phoneTextField) {
@@ -128,20 +126,19 @@ class _EditPhoneNumberLineItemState extends State<EditPhoneNumberLineItem> {
             behavior: HitTestBehavior.translucent,
             child: IgnorePointer(child: phoneTextField),
             onTap: () {
-              WidgetUtils.showToastMessage(context, 'Phone number cannot be changed', Colors.indigo);
+              WidgetUtils.showToastMessage(context, 'Phone number cannot be changed');
             });
   }
 
   TextField _buildTextField() {
     return TextField(
         controller: widget._phoneEditingController, // Add this
-        style: const TextStyle(fontSize: 15),
+        style: Theme.of(context).textTheme.subtitle2,
         keyboardType: TextInputType.phone,
         maxLengthEnforcement: MaxLengthEnforcement.enforced,
         enabled: _phoneEnabled && !widget._backendUpdateInProgress,
-        decoration: InputDecoration(
-            hintStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400, color: Colors.indigo),
-            hintText: !_phoneEnabled ? widget._phoneNumberValue : 'Enter ${widget._phoneNumberName}'),
+        decoration:
+            InputDecoration(hintText: !_phoneEnabled ? widget._phoneNumberValue : 'Enter ${widget._phoneNumberName}'),
         key: PageStorageKey('edit-${widget._phoneNumberValue}'),
         onChanged: (v) {
           _onValueChange();

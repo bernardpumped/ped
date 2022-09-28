@@ -49,13 +49,6 @@ class _UpdateHistoryDetailsItemWidgetState extends State<UpdateHistoryDetailsIte
             ? _inProgressUpdateStatusIcon
             : _failedUpdateStatusIcon;
     return Card(
-        // color: Colors.white,
-        // surfaceTintColor: Colors.white,
-        color: const Color(0xFFF9F8FF),
-        surfaceTintColor: const Color(0xFFF9F8FF),
-        // color: Color(0xFFD8ECEB),
-        // surfaceTintColor: Color(0xFFD8ECEB),
-        elevation: 1.5,
         child: Container(
             padding: const EdgeInsets.only(left: 5, right: 5, top: 10, bottom: 5),
             child: Column(children: [
@@ -68,13 +61,11 @@ class _UpdateHistoryDetailsItemWidgetState extends State<UpdateHistoryDetailsIte
                         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
                           Padding(
                               padding: const EdgeInsets.only(left: 20, bottom: 8),
-                              child: Text(fuelStation,
-                                  style:
-                                      const TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Colors.indigo))),
+                              child: Text(fuelStation, style: Theme.of(context).textTheme.subtitle2)),
                           Padding(
                               padding: const EdgeInsets.only(left: 20, bottom: 5),
                               child: Text(updateDateFormatter.format(dateTime),
-                                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.indigo)))
+                                  style: Theme.of(context).textTheme.bodyText1))
                         ])),
                     Expanded(flex: 2, child: updateStatusIconCode)
                   ]),
@@ -82,9 +73,9 @@ class _UpdateHistoryDetailsItemWidgetState extends State<UpdateHistoryDetailsIte
             ])));
   }
 
-  static const _successUpdateStatusIcon = Icon(Icons.check, color: Colors.indigo, size: 30);
-  static const _inProgressUpdateStatusIcon = Icon(Icons.sync, color: Colors.indigo, size: 30);
-  static const _failedUpdateStatusIcon = Icon(Icons.error_outline, color: Colors.indigo, size: 30);
+  static const _successUpdateStatusIcon = Icon(Icons.check, size: 30);
+  static const _inProgressUpdateStatusIcon = Icon(Icons.sync, size: 30);
+  static const _failedUpdateStatusIcon = Icon(Icons.error_outline, size: 30);
 
   Widget _getUpdateDetails(final UpdateHistory updateHistory) {
     List<Widget> children = [];

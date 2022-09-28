@@ -43,17 +43,18 @@ class _CleanupLocalCacheScreenState extends State<CleanupLocalCacheScreen> {
   @override
   Widget build(final BuildContext context) {
     return Scaffold(
-        appBar: const PumpedAppBar(),
-        body: Container(
+        appBar: const PumpedAppBar(title: 'Pumped Settings'),
+        body: SizedBox(
             height: MediaQuery.of(context).size.height,
-            color: const Color(0xFFF0EDFF),
             width: double.infinity,
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-              const Padding(
-                  padding: EdgeInsets.only(top: 10, bottom: 10, left: 10),
-                  child: Text('Clear Local Cache',
-                      style: TextStyle(fontSize: 24, color: Colors.indigo, fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.center)),
+              Padding(
+                  padding: const EdgeInsets.only(top: 10, bottom: 10, left: 20),
+                  child: Row(children: [
+                    const Icon(Icons.delete_outline, size: 30),
+                    const SizedBox(width: 10),
+                    Text('Clear Local Cache', style: Theme.of(context).textTheme.headline3, textAlign: TextAlign.center)
+                  ])),
               Expanded(
                   child: ListView(padding: const EdgeInsets.only(left: 10, right: 10, top: 10), children: <Widget>[
                 _buildListTile(Icons.search, "Search Settings",
@@ -98,53 +99,50 @@ class _CleanupLocalCacheScreenState extends State<CleanupLocalCacheScreen> {
                     _clearApplicationData = value!;
                   });
                 }),
-                ListTile(
-                    contentPadding: const EdgeInsets.only(left: 10, right: 15),
-                    trailing: ElevatedButton(
-                        onPressed: () async {
-                          List<String> dataToClean = _dataToClean();
-                          if (dataToClean.isNotEmpty) {
-                            String msg = 'Cleaning up ${dataToClean.join(", ")}';
-                            BuildContext? dialogContext;
-                            showDialog(
-                                barrierDismissible: false,
-                                context: context,
-                                builder: (BuildContext context) {
-                                  dialogContext = context;
-                                  return AlertDialog(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(10), side: const BorderSide(width: 0.2)),
-                                      title: const Text("Cleaning data", style: TextStyle(color: Colors.indigo)),
-                                      content: Row(children: [
-                                        Expanded(
-                                            child: Text(msg,
-                                                style:
-                                                    const TextStyle(fontSize: 15, height: 1.4, color: Colors.indigo))),
-                                        const RefreshProgressIndicator(
-                                            backgroundColor: Colors.indigo, color: Colors.white)
-                                      ]));
-                                });
-                            String failedString  = await _cleanUp(context);
-                            if (dialogContext != null) {
-                              Navigator.pop(dialogContext!);
-                            }
-                            if (mounted) {
-                              if (failedString.isNotEmpty) {
-                                WidgetUtils.showToastMessage(context, failedString, Colors.indigo);
-                              } else {
-                                Navigator.pop(context);
-                              }
-                            }
-                          } else {
-                            WidgetUtils.showToastMessage(context, 'Nothing selected to clean', Colors.indigo);
+                Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                  ElevatedButton(
+                      onPressed: () async {
+                        List<String> dataToClean = _dataToClean();
+                        if (dataToClean.isNotEmpty) {
+                          String msg = 'Cleaning up ${dataToClean.join(", ")}';
+                          BuildContext? dialogContext;
+                          showDialog(
+                              barrierDismissible: false,
+                              context: context,
+                              builder: (BuildContext context) {
+                                dialogContext = context;
+                                return AlertDialog(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10), side: const BorderSide(width: 0.2)),
+                                    title: const Text("Cleaning data"),
+                                    content: Row(children: [
+                                      Expanded(child: Text(msg, style: Theme.of(context).textTheme.bodyText1)),
+                                      const RefreshProgressIndicator()
+                                    ]));
+                              });
+                          String failedString = await _cleanUp(context);
+                          if (dialogContext != null) {
+                            Navigator.pop(dialogContext!);
                           }
-                        },
-                        style: ButtonStyle(
-                            foregroundColor: MaterialStateProperty.all(Colors.white),
-                            backgroundColor: MaterialStateProperty.all(Colors.indigo),
-                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)))),
-                        child: const Text('Clear data')))
+                          if (mounted) {
+                            if (failedString.isNotEmpty) {
+                              WidgetUtils.showToastMessage(context, failedString, isErrorToast: true);
+                            } else {
+                              Navigator.pop(context);
+                            }
+                          }
+                        } else {
+                          WidgetUtils.showToastMessage(context, 'Nothing selected to clean');
+                        }
+                      },
+                      child: Padding(
+                          padding: const EdgeInsets.only(left: 10, right: 10),
+                          child: Row(children: const [
+                            Icon(Icons.delete_outline, size: 24),
+                            SizedBox(width: 10),
+                            Text('Clear Data')
+                          ])))
+                ])
               ]))
             ])));
   }
@@ -166,7 +164,8 @@ class _CleanupLocalCacheScreenState extends State<CleanupLocalCacheScreen> {
     if (_clearHiddenFuelStations || _clearApplicationData) {
       hiddenFuelStationsDeleted = await _cleanUpHiddenStations();
     }
-    return _getFailedString(searchSettingsDeleted, updateHistoryDeleted, favouriteStationsDeleted, hiddenFuelStationsDeleted);
+    return _getFailedString(
+        searchSettingsDeleted, updateHistoryDeleted, favouriteStationsDeleted, hiddenFuelStationsDeleted);
     // Navigator.pop(context);
   }
 
@@ -227,20 +226,14 @@ class _CleanupLocalCacheScreenState extends State<CleanupLocalCacheScreen> {
   Widget _buildListTile(final IconData icon, final String title, final String subTitle, final bool checkBoxValue,
       final Function(bool?)? onChangeFunction) {
     return Card(
-        color: Colors.white,
-        surfaceTintColor: Colors.white,
         child: ListTile(
             contentPadding: const EdgeInsets.all(10),
-            leading: Icon(icon, size: 30, color: Colors.indigo),
-            title: Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.indigo)),
+            leading: Icon(icon, size: 30),
+            title: Text(title, style: Theme.of(context).textTheme.subtitle1),
             subtitle: Padding(
                 padding: const EdgeInsets.only(top: 5.0),
-                child: Text(subTitle, style: const TextStyle(fontSize: 14, color: Colors.indigo))),
-            trailing: Checkbox(
-                value: checkBoxValue,
-                onChanged: onChangeFunction,
-                activeColor: Colors.indigo,
-                focusColor: Colors.indigo)));
+                child: Text(subTitle, style: Theme.of(context).textTheme.bodyText2)),
+            trailing: Checkbox(value: checkBoxValue, onChanged: onChangeFunction)));
   }
 
   List<String> _dataToClean() {

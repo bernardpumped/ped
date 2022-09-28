@@ -29,18 +29,12 @@ class NoFuelPricesWidget extends StatelessWidget {
         child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: const <Widget>[
-              Text('No Fuel Prices',
-                  style: TextStyle(fontSize: 34, fontWeight: FontWeight.w500, color: Colors.indigo),
-                  textAlign: TextAlign.center),
-              Text(
-                  "\n Click here if you'd appreciate this station providing accurate prices we'll let them know",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.indigo),
-                  textAlign: TextAlign.center),
+            children: <Widget>[
+              Text('No Fuel Prices', style: Theme.of(context).textTheme.headline2, textAlign: TextAlign.center),
+              Text("\n Click here if you'd appreciate this station providing accurate prices we'll let them know",
+                  style: Theme.of(context).textTheme.subtitle1, textAlign: TextAlign.center),
               Text('\n Come back again soon.',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.indigo),
-                  textAlign: TextAlign.center)
+                  style: Theme.of(context).textTheme.subtitle2, textAlign: TextAlign.center)
             ]));
   }
-
 }

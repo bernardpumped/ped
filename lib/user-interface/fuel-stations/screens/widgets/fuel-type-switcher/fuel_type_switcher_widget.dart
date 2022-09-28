@@ -17,14 +17,13 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:pumped_end_device/main.dart';
 import 'package:pumped_end_device/models/pumped/fuel_category.dart';
 import 'package:pumped_end_device/models/pumped/fuel_type.dart';
-import 'package:pumped_end_device/user-interface/fuel-stations/fuel_station_screen_color_scheme.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/params/fuel_type_switcher_response_params.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/screens/widgets/fuel-type-switcher/fuel_type_switcher_btn.dart';
 import 'package:pumped_end_device/user-interface/settings/model/dropdown_values.dart';
 import 'package:pumped_end_device/user-interface/settings/service/settings_service.dart';
+import 'package:pumped_end_device/util/app_theme.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
 class FuelTypeSwitcherWidget extends StatefulWidget {
@@ -43,8 +42,6 @@ class FuelTypeSwitcherWidget extends StatefulWidget {
 class _FuelTypeSwitcherWidgetState extends State<FuelTypeSwitcherWidget> {
   static const _tag = 'FuelStationFuelTypeWidget';
   final SettingsService _settingsDataSource = SettingsService();
-  final FuelStationsScreenColorScheme colorScheme =
-      getIt.get<FuelStationsScreenColorScheme>(instanceName: fsScreenColorSchemeName);
 
   FuelType? _fuelTypeSelectedValue;
   FuelCategory? _fuelCategorySelectedValue;
@@ -67,16 +64,16 @@ class _FuelTypeSwitcherWidgetState extends State<FuelTypeSwitcherWidget> {
     return GestureDetector(
         onTap: () {
           showModalBottomSheet(
+              backgroundColor: AppTheme.modalBottomSheetBg(context),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
               context: context,
-              builder: _modalBottomSheetBuilder,
-              backgroundColor: colorScheme.fuelTypeSwitcherWidgetBackgroundColor);
+              builder: _modalBottomSheetBuilder);
         },
         child: FuelTypeSwitcherButton(txtToDisplay, () {
           showModalBottomSheet(
               context: context,
               builder: _modalBottomSheetBuilder,
-              backgroundColor: colorScheme.fuelTypeSwitcherWidgetBackgroundColor);
+              backgroundColor: AppTheme.modalBottomSheetBg(context));
         }));
   }
 
@@ -98,45 +95,27 @@ class _FuelTypeSwitcherWidgetState extends State<FuelTypeSwitcherWidget> {
     LogUtil.debug(_tag, '_modalBottomSheetBuilder invoked');
     _fuelTypeSelectedValue = widget.selectedFuelType;
     _fuelCategorySelectedValue = widget.selectedFuelCategory;
-    return StatefulBuilder(builder: (BuildContext context, StateSetter mystate) {
+    return StatefulBuilder(builder: (final BuildContext context, final StateSetter mystate) {
       return ListView(padding: const EdgeInsets.all(15), children: [
         ListTile(
-            leading: Icon(Icons.workspaces, size: 35, color: colorScheme.fuelTypeSwitcherWidgetTextColor),
-            title: Text('Change Fuel Type',
-                style: TextStyle(
-                    fontSize: 20, fontWeight: FontWeight.bold, color: colorScheme.fuelTypeSwitcherWidgetTextColor))),
-        Card(
-            surfaceTintColor: colorScheme.fuelTypeSwitcherWidgetBackgroundColor,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            child: Theme(
-                data: ThemeData().copyWith(dividerColor: Colors.transparent),
-                child: _getFuelCategoriesExpansionTile(mystate))),
-        Card(
-            surfaceTintColor: colorScheme.fuelTypeSwitcherWidgetBackgroundColor,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            child: Theme(
-                data: ThemeData().copyWith(dividerColor: Colors.transparent),
-                child: _getFuelTypesExpansionTile(mystate))),
+            leading: const Icon(Icons.workspaces, size: 35),
+            title: Text('Change Fuel Type', style: Theme.of(context).textTheme.headline6)),
+        Card(child: _getFuelCategoriesExpansionTile(mystate)),
+        Card(child: _getFuelTypesExpansionTile(mystate)),
         const SizedBox(height: 20),
         Row(mainAxisAlignment: MainAxisAlignment.end, children: [
           ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                  primary: colorScheme.fuelStationSwitcherWidgetTextColor,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15))),
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text('Cancel', style: TextStyle(color: colorScheme.fuelStationSwitcherWidgetButtonTextColor))),
+              child: const Text('Cancel')),
           const SizedBox(width: 40),
           ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                  primary: colorScheme.fuelTypeSwitcherWidgetTextColor,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15))),
               onPressed: () {
                 updateSelectedFuelType();
                 Navigator.pop(context);
               },
-              child: Text('Apply', style: TextStyle(color: colorScheme.fuelTypeSwitcherWidgetButtonTextColor)))
+              child: const Text('Apply'))
         ])
       ]);
     });
@@ -156,27 +135,16 @@ class _FuelTypeSwitcherWidgetState extends State<FuelTypeSwitcherWidget> {
             } else {
               _fuelTypeSelectedValue ??= __fuelTypeSelectedValue(dropDownValues);
               return ExpansionTile(
-                  title: Text('Fuel Type',
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500,
-                          color: colorScheme.fuelTypeSwitcherWidgetTextColor)),
+                  title: Text('Fuel Type', style: Theme.of(context).textTheme.subtitle2),
                   subtitle: _fuelTypeSelectedValue != null
-                      ? Text(_fuelTypeSelectedValue!.fuelName,
-                          style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                              color: colorScheme.fuelTypeSwitcherWidgetTextColor))
+                      ? Text(_fuelTypeSelectedValue!.fuelName, style: Theme.of(context).textTheme.bodyText1)
                       : const SizedBox(width: 0),
-                  leading: Icon(Icons.class_, size: 24, color: colorScheme.fuelTypeSwitcherWidgetTextColor),
+                  leading: const Icon(Icons.class_, size: 24),
                   children: dropDownValues.values.map<RadioListTile<FuelType>>((FuelType fuelType) {
                     return RadioListTile<FuelType>(
                         selected: fuelType.fuelType == _fuelTypeSelectedValue?.fuelType,
                         value: fuelType,
-                        activeColor: colorScheme.fuelTypeSwitcherWidgetTextColor,
-                        title: Text(fuelType.fuelName,
-                            style: TextStyle(
-                                fontWeight: FontWeight.w500, color: colorScheme.fuelTypeSwitcherWidgetTextColor)),
+                        title: Text(fuelType.fuelName, style: Theme.of(context).textTheme.caption),
                         groupValue: _fuelTypeSelectedValue,
                         onChanged: (changedFuelType) {
                           mystate(() {
@@ -210,25 +178,16 @@ class _FuelTypeSwitcherWidgetState extends State<FuelTypeSwitcherWidget> {
             final DropDownValues<FuelCategory> dropDownValues = snapshot.data!;
             _fuelCategorySelectedValue ??= dropDownValues.values[dropDownValues.selectedIndex];
             return ExpansionTile(
-                title: Text('Fuel Category',
-                    style: TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.w500, color: colorScheme.fuelTypeSwitcherWidgetTextColor)),
+                title: Text('Fuel Category', style: Theme.of(context).textTheme.subtitle2),
                 subtitle: _fuelCategorySelectedValue != null
-                    ? Text(_fuelCategorySelectedValue!.categoryName,
-                        style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                            color: colorScheme.fuelTypeSwitcherWidgetTextColor))
+                    ? Text(_fuelCategorySelectedValue!.categoryName, style: Theme.of(context).textTheme.bodyText1)
                     : const SizedBox(width: 0),
-                leading: Icon(Icons.category, size: 24, color: colorScheme.fuelTypeSwitcherWidgetTextColor),
+                leading: const Icon(Icons.category, size: 24),
                 children: dropDownValues.values.map<RadioListTile<FuelCategory>>((FuelCategory category) {
                   return RadioListTile<FuelCategory>(
                       selected: category.categoryId == _fuelCategorySelectedValue?.categoryId,
                       value: category,
-                      activeColor: colorScheme.fuelTypeSwitcherWidgetTextColor,
-                      title: Text(category.categoryName,
-                          style: TextStyle(
-                              fontWeight: FontWeight.w500, color: colorScheme.fuelTypeSwitcherWidgetTextColor)),
+                      title: Text(category.categoryName, style: Theme.of(context).textTheme.caption),
                       groupValue: _fuelCategorySelectedValue,
                       onChanged: (changedCat) {
                         mystate(() {

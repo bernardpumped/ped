@@ -28,6 +28,7 @@ import 'package:pumped_end_device/user-interface/fuel-station-details/screen/wid
 import 'package:pumped_end_device/user-interface/fuel-station-details/utils/firebase_service.dart';
 import 'package:pumped_end_device/user-interface/splash/screen/splash_screen.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
+import 'package:pumped_end_device/util/app_theme.dart';
 import 'package:pumped_end_device/util/data_utils.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
@@ -47,8 +48,11 @@ class _ContextAwareFabState extends State<ContextAwareFab> with SingleTickerProv
   static const _tag = 'ContextAwareFab';
   late Animation<double> _animation;
   late AnimationController _animationController;
-
   late FirebaseService service;
+  late final Color iconColor = Theme.of(context).backgroundColor;
+  late final Color textColor = Theme.of(context).backgroundColor;
+  // Not using Theme.of(context).primaryColor; because in darkMode it does not produce right color
+  late final Color backgroundColor = Theme.of(context).textTheme.headline3!.color!;
 
   @override
   void initState() {
@@ -70,9 +74,9 @@ class _ContextAwareFabState extends State<ContextAwareFab> with SingleTickerProv
         animation: _animation,
         onPress: () =>
             _animationController.isCompleted ? _animationController.reverse() : _animationController.forward(),
-        iconColor: Colors.white,
+        iconColor: iconColor,
         iconData: Icons.edit,
-        backGroundColor: Colors.indigo);
+        backGroundColor: backgroundColor);
   }
 
   _getContextAwareBubbles() {
@@ -80,10 +84,10 @@ class _ContextAwareFabState extends State<ContextAwareFab> with SingleTickerProv
       return [
         Bubble(
             title: "Fuel Prices",
-            iconColor: Colors.white,
-            bubbleColor: Colors.indigo,
+            iconColor: iconColor,
+            bubbleColor: backgroundColor,
             icon: Icons.monetization_on_outlined,
-            titleStyle: const TextStyle(fontSize: 16, color: Colors.white),
+            titleStyle: Theme.of(context).textTheme.caption!.copyWith(color: textColor),
             onPress: () {
               _animationController.reverse();
               if (_shouldEdit(widget._fuelStation, editFuelPrices: true)) {
@@ -95,10 +99,10 @@ class _ContextAwareFabState extends State<ContextAwareFab> with SingleTickerProv
       return [
         Bubble(
             title: "Operating Time",
-            iconColor: Colors.white,
-            bubbleColor: Colors.indigo,
+            iconColor: iconColor,
+            bubbleColor: backgroundColor,
             icon: Icons.access_alarm,
-            titleStyle: const TextStyle(fontSize: 16, color: Colors.white),
+            titleStyle: Theme.of(context).textTheme.caption!.copyWith(color: textColor),
             onPress: () {
               _animationController.reverse();
               if (_shouldEdit(widget._fuelStation, editOperatingTime: true)) {
@@ -107,10 +111,10 @@ class _ContextAwareFabState extends State<ContextAwareFab> with SingleTickerProv
             }),
         Bubble(
             title: "Contact Details",
-            iconColor: Colors.white,
-            bubbleColor: Colors.indigo,
+            iconColor: iconColor,
+            bubbleColor: backgroundColor,
             icon: Icons.location_on_outlined,
-            titleStyle: const TextStyle(fontSize: 16, color: Colors.white),
+            titleStyle: Theme.of(context).textTheme.caption!.copyWith(color: textColor),
             onPress: () {
               _animationController.reverse();
               if (_shouldEdit(widget._fuelStation, editDetails: true)) {
@@ -119,10 +123,10 @@ class _ContextAwareFabState extends State<ContextAwareFab> with SingleTickerProv
             }),
         Bubble(
             title: "Features",
-            iconColor: Colors.white,
-            bubbleColor: Colors.indigo,
+            iconColor: iconColor,
+            bubbleColor: backgroundColor,
             icon: Icons.flag_outlined,
-            titleStyle: const TextStyle(fontSize: 16, color: Colors.white),
+            titleStyle: Theme.of(context).textTheme.caption!.copyWith(color: textColor),
             onPress: () {
               _animationController.reverse();
               if (_shouldEdit(widget._fuelStation, editFeatures: true)) {
@@ -131,10 +135,10 @@ class _ContextAwareFabState extends State<ContextAwareFab> with SingleTickerProv
             }),
         Bubble(
             title: "Suggest Edit",
-            iconColor: Colors.white,
-            bubbleColor: Colors.indigo,
+            iconColor: iconColor,
+            bubbleColor: backgroundColor,
             icon: Icons.comment_outlined,
-            titleStyle: const TextStyle(fontSize: 16, color: Colors.white),
+            titleStyle: Theme.of(context).textTheme.caption!.copyWith(color: textColor),
             onPress: () {
               _animationController.reverse();
               if (_shouldEdit(widget._fuelStation, suggestEdit: true)) {
@@ -146,10 +150,10 @@ class _ContextAwareFabState extends State<ContextAwareFab> with SingleTickerProv
       return [
         Bubble(
             title: "Bad data",
-            iconColor: Colors.white,
-            bubbleColor: Colors.indigo,
+            iconColor: iconColor,
+            bubbleColor: backgroundColor,
             icon: Icons.fmd_bad,
-            titleStyle: const TextStyle(fontSize: 16, color: Colors.white),
+            titleStyle: Theme.of(context).textTheme.caption!.copyWith(color: textColor),
             onPress: () {
               _animationController.reverse();
               Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const SplashScreen()));
@@ -212,7 +216,7 @@ class _ContextAwareFabState extends State<ContextAwareFab> with SingleTickerProv
     if (signedInUser == null || !signedInUser.isSignedIn()) {
       final Future<bool?> signInDialogOutput = showModalBottomSheet(
           context: context,
-          backgroundColor: Colors.white,
+          backgroundColor: AppTheme.modalBottomSheetBg(context),
           isDismissible: false,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
           builder: (context) => PumpedSignInWidget(cancelButtonAction: () => Navigator.of(context).pop()));
@@ -243,8 +247,8 @@ class _ContextAwareFabState extends State<ContextAwareFab> with SingleTickerProv
     if (signInResult != null && signInResult) {
       final SignedInUser? signedInUser = service.getSignedInUser();
       if (signedInUser == null) {
-        ScaffoldMessenger.of(context).showSnackBar(WidgetUtils.buildSnackBar2(
-            'Cannot edit without signing in', Theme.of(context).dialogBackgroundColor, 10, 'DISMISS', () => {}));
+        ScaffoldMessenger.of(context).showSnackBar(
+            WidgetUtils.buildSnackBar(context, 'Cannot edit without signing in', 10, 'DISMISS', () => {}));
         return;
       }
       signedInUser.getToken().then((token) async {
@@ -266,8 +270,8 @@ class _ContextAwareFabState extends State<ContextAwareFab> with SingleTickerProv
         }
       });
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(WidgetUtils.buildSnackBar2(
-          'Cannot edit without signing in', Theme.of(context).dialogBackgroundColor, 10, 'DISMISS', () => {}));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(WidgetUtils.buildSnackBar(context, 'Cannot edit without signing in', 10, 'DISMISS', () => {}));
     }
   }
 
@@ -287,25 +291,25 @@ class _ContextAwareFabState extends State<ContextAwareFab> with SingleTickerProv
       final bool suggestEdit = false}) {
     if (editDetails) {
       if (!_isAddressEditable(fuelStation)) {
-        WidgetUtils.showToastMessage(context, 'Address is not editable', Colors.indigo);
+        WidgetUtils.showToastMessage(context, 'Address is not editable');
         return false;
       }
     }
     if (editOperatingTime) {
       if (!_isOperatingTimeEditable(fuelStation)) {
-        WidgetUtils.showToastMessage(context, 'Operating hours not editable', Colors.indigo);
+        WidgetUtils.showToastMessage(context, 'Operating hours not editable');
         return false;
       }
     }
     if (editFuelPrices) {
       if (!_isFuelPriceEditable(fuelStation)) {
-        WidgetUtils.showToastMessage(context, 'Fuel prices not editable', Colors.indigo);
+        WidgetUtils.showToastMessage(context, 'Fuel prices not editable');
         return false;
       }
     }
     if (editFeatures) {
       if (!_isFeaturesEditable(fuelStation)) {
-        WidgetUtils.showToastMessage(context, 'Features not editable', Colors.indigo);
+        WidgetUtils.showToastMessage(context, 'Features not editable');
         return false;
       }
     }

@@ -50,8 +50,8 @@ class _EditOperatingTimeLineItemWidgetStateNew extends State<EditOperatingTimeLi
   int _selectedValue = _other;
 
   static const _nonEditableHeight = 75.0;
-  static const _editableHeight = 105.0;
-  static const _errorHeight = 150.0;
+  static const _editableHeight = 115.0;
+  static const _errorHeight = 160.0;
   static const _noErrorMsgHeight = 0.0;
   static const _errorMsgHeight = 45.0;
 
@@ -118,59 +118,48 @@ class _EditOperatingTimeLineItemWidgetStateNew extends State<EditOperatingTimeLi
   Widget _getAnimatedContainer() {
     final double animatedContainerTopPadding = _errorContainerHeight != _noErrorMsgHeight ? 10 : 0;
     return Card(
-      color: Colors.white,
-      surfaceTintColor: Colors.white,
-      child: AnimatedContainer(
-          // decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
-          padding: const EdgeInsets.only(left: 12, right: 12, bottom: 10, top: 10),
-          height: _height,
-          duration: Duration(milliseconds: _containerHeightChangeTime),
-          curve: Curves.fastOutSlowIn,
-          child: Column(children: [
-            Row(children: <Widget>[
-              Expanded(
-                  flex: 3,
-                  child: Text(DateTimeUtils.weekDayShortToLongName[widget.operatingHour.dayOfWeek]!,
-                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.indigo))),
-              Expanded(
-                  flex: 9,
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
+        child: AnimatedContainer(
+            padding: const EdgeInsets.only(left: 20, right: 12, bottom: 10, top: 10),
+            height: _height,
+            duration: Duration(milliseconds: _containerHeightChangeTime),
+            curve: Curves.fastOutSlowIn,
+            child: Column(children: [
+              Row(children: <Widget>[
+                Expanded(
+                    flex: 3, child: Text(widget.operatingHour.dayOfWeek, style: Theme.of(context).textTheme.subtitle2)),
+                Expanded(
+                    flex: 12,
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Card(child: _getAlwaysOpenCloseWidget()),
+                          const SizedBox(height: 7),
+                          Card(child: _getOpenCloseOperatingTimeWidget())
+                        ]))
+              ]),
+              AnimatedContainer(
+                  padding: EdgeInsets.only(left: 30, top: animatedContainerTopPadding),
+                  height: _errorContainerHeight,
+                  duration: Duration(milliseconds: _errorMsgHeightChangeTime),
+                  child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Card(
-                            surfaceTintColor: const Color(0xFFF0EDFF),
-                            color: const Color(0xFFF0EDFF),
-                            child: _getAlwaysOpenCloseWidget()),
-                        const SizedBox(height: 7),
-                        Card(
-                            surfaceTintColor: const Color(0xFFF0EDFF),
-                            color: const Color(0xFFF0EDFF),
-                            child: _getOpenCloseOperatingTimeWidget())
+                        Text(_errorMessage,
+                            textAlign: TextAlign.center,
+                            style:
+                                Theme.of(context).textTheme.subtitle2!.copyWith(color: Theme.of(context).errorColor)),
+                        const SizedBox(width: 30),
+                        _getUndoButton()
                       ]))
-            ]),
-            AnimatedContainer(
-                padding: EdgeInsets.only(left: 30, top: animatedContainerTopPadding),
-                height: _errorContainerHeight,
-                duration: Duration(milliseconds: _errorMsgHeightChangeTime),
-                child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text(_errorMessage,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w400, color: Colors.red)),
-                      const SizedBox(width: 30),
-                      _getUndoButton()
-                    ]))
-          ])),
-    );
+            ])));
   }
 
   Widget _getUndoButton() {
     return widget.updatedOperatingHrs != null
-        ? GestureDetector(
-            onTap: () {
+        ? OutlinedButton(
+            onPressed: () {
               LogUtil.debug(_tag, 'undo Button clicked');
               if (widget.backendUpdateInProgress) {
                 LogUtil.debug(_tag, 'Background task is in progress');
@@ -179,21 +168,16 @@ class _EditOperatingTimeLineItemWidgetStateNew extends State<EditOperatingTimeLi
                 widget.undoOperatingTimeChange(widget.operatingHour.dayOfWeek);
               }
             },
-            child: Container(
-                padding: const EdgeInsets.only(left: 12, right: 12, top: 8, bottom: 8),
-                decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: Colors.indigo),
-                child: Row(children: const [
-                  Icon(Icons.history, color: Colors.white, size: 20),
-                  SizedBox(width: 4),
-                  Text('Undo', style: TextStyle(fontSize: 15, color: Colors.white, fontWeight: FontWeight.w500))
-                ])))
+            child: Padding(
+                padding: const EdgeInsets.only(left: 15, right: 15),
+                child: Row(children: const [Icon(Icons.history, size: 24), SizedBox(width: 10), Text('Undo')])))
         : const SizedBox(width: 0);
   }
 
   Row _getOpenCloseOperatingTimeWidget() {
     return Row(mainAxisAlignment: MainAxisAlignment.start, mainAxisSize: MainAxisSize.max, children: [
-      const SizedBox(width: 15),
-      const Text('Opens : ', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.indigo)),
+      const SizedBox(width: 12),
+      Text('Opens : ', style: Theme.of(context).textTheme.subtitle2),
       OperatingTimeWidget(
           _editable,
           widget.operatingHour.openingHrs,
@@ -206,8 +190,8 @@ class _EditOperatingTimeLineItemWidgetStateNew extends State<EditOperatingTimeLi
           widget.backendUpdateInProgress,
           updatedHrs: widget.updatedOperatingHrs?.openingHrs,
           updatedMins: widget.updatedOperatingHrs?.openingMins),
-      const SizedBox(width: 20),
-      const Text('Closes : ', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.indigo)),
+      const SizedBox(width: 15),
+      Text('Closes : ', style: Theme.of(context).textTheme.subtitle2),
       OperatingTimeWidget(
           _editable,
           widget.operatingHour.closingHrs,
@@ -225,17 +209,14 @@ class _EditOperatingTimeLineItemWidgetStateNew extends State<EditOperatingTimeLi
 
   Widget _getContainer() {
     return Card(
-      color: Colors.white,
-      surfaceTintColor: Colors.white,
       child: Container(
-          // decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
           padding: const EdgeInsets.only(left: 20, right: 20, bottom: 10, top: 10),
           height: _height,
           child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
             Expanded(
                 flex: 2,
                 child: Text(DateTimeUtils.weekDayShortToLongName[widget.operatingHour.dayOfWeek]!,
-                    style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w500, color: Colors.indigo))),
+                    style: Theme.of(context).textTheme.bodyText1)),
             Expanded(
                 flex: 2,
                 child: OperatingTimeWidget(
@@ -306,26 +287,20 @@ class _EditOperatingTimeLineItemWidgetStateNew extends State<EditOperatingTimeLi
   Widget _getAlwaysOpenCloseWidget() {
     return Row(mainAxisAlignment: MainAxisAlignment.start, mainAxisSize: MainAxisSize.max, children: <Widget>[
       SizedBox(
-          height: 30,
+          height: 35,
           child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
             Radio(
-                value: _open24Hours,
-                groupValue: _selectedValue,
-                onChanged: _handleRadioValueChange,
-                activeColor: Colors.indigo,
-                focusColor: Colors.indigo),
-            const Text('Open 24 hrs', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: Colors.indigo))
+              value: _open24Hours,
+              groupValue: _selectedValue,
+              onChanged: _handleRadioValueChange,
+            ),
+            Text('Open 24 hrs', style: Theme.of(context).textTheme.subtitle2)
           ])),
       SizedBox(
-          height: 30,
+          height: 35,
           child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-            Radio(
-                value: _closed,
-                groupValue: _selectedValue,
-                onChanged: _handleRadioValueChange,
-                activeColor: Colors.indigo,
-                focusColor: Colors.indigo),
-            const Text('Closed', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: Colors.indigo))
+            Radio(value: _closed, groupValue: _selectedValue, onChanged: _handleRadioValueChange),
+            Text('Closed', style: Theme.of(context).textTheme.subtitle2)
           ]))
     ]);
   }

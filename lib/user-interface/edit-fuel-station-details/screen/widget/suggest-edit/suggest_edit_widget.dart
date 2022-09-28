@@ -73,7 +73,8 @@ class _SuggestEditWidgetState extends State<SuggestEditWidget> {
             right: 25,
             child: Visibility(
                 visible: _fabVisible,
-                child: EditActionButton(undoButtonAction: _onFeaturesEditUndo, saveButtonAction: _onFeaturesEditSave, tag: _tag)))
+                child: EditActionButton(
+                    undoButtonAction: _onFeaturesEditUndo, saveButtonAction: _onFeaturesEditSave, tag: _tag)))
       ])
     ]);
   }
@@ -81,10 +82,10 @@ class _SuggestEditWidgetState extends State<SuggestEditWidget> {
   _getTitleWidget() {
     return Padding(
         padding: const EdgeInsets.only(left: 20, top: 10, bottom: 5),
-        child: Row(mainAxisAlignment: MainAxisAlignment.start, children: const [
-          Icon(Icons.comment, size: 30, color: Colors.indigo),
-          SizedBox(width: 10),
-          Text('Suggest Edit', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Colors.indigo))
+        child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+          const Icon(Icons.comment, size: 30),
+          const SizedBox(width: 10),
+          Text('Suggest Edit', style: Theme.of(context).textTheme.headline4)
         ]));
   }
 
@@ -92,7 +93,7 @@ class _SuggestEditWidgetState extends State<SuggestEditWidget> {
     _inputSuggestionValid = isValid(_suggestion);
     if (!_inputSuggestionValid) {
       setState(() {});
-      WidgetUtils.showToastMessage(context, 'No Valid suggestion provided', Colors.red);
+      WidgetUtils.showToastMessage(context, 'No Valid suggestion provided', isErrorToast: true);
       return;
     }
     var uuid = const Uuid();
@@ -129,7 +130,7 @@ class _SuggestEditWidgetState extends State<SuggestEditWidget> {
     LogUtil.debug(_tag, 'SuggestEdit : persistUpdateHistory : result $persistUpdateHistoryResult');
     if (!mounted) return;
     if (response.responseCode == 'SUCCESS') {
-      WidgetUtils.showToastMessage(context, 'Successfully notified pumped team for suggestion', Colors.indigo);
+      WidgetUtils.showToastMessage(context, 'Successfully notified pumped team for suggestion');
       if (_onValueChanged) {
         setState(() {
           _onValueChanged = false;
@@ -137,7 +138,7 @@ class _SuggestEditWidgetState extends State<SuggestEditWidget> {
       }
     } else {
       LogUtil.debug(_tag, 'Error persisting suggestion ${response.responseCode}');
-      WidgetUtils.showToastMessage(context, 'Error notifying pumped team', Colors.indigo);
+      WidgetUtils.showToastMessage(context, 'Error notifying pumped team', isErrorToast: true);
     }
     Navigator.pop(context, _getUpdateResponse(request, response));
   }
@@ -185,14 +186,9 @@ class _SuggestEditWidgetState extends State<SuggestEditWidget> {
             enabled: !_backendUpdateInProgress,
             maxLines: 8,
             onChanged: _onChangeListener,
-            cursorColor: Colors.indigo,
-            decoration: const InputDecoration(
-                filled: true,
-                fillColor: Colors.white,
-                focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.indigo, width: 1.5)),
-                border: OutlineInputBorder(borderSide: BorderSide(color: Colors.indigo)),
-                hintText: 'Enter your suggestion',
-                hintStyle: TextStyle(color: Colors.indigo))));
+            decoration: InputDecoration(
+                border: OutlineInputBorder(borderSide: BorderSide(color: Theme.of(context).primaryColor)),
+                hintText: 'Enter your suggestion')));
   }
 
   void _onChangeListener(final String text) {

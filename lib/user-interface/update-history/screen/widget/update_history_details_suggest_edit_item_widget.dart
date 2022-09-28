@@ -39,29 +39,22 @@ class UpdateHistoryDetailsSuggestEditItemWidget extends StatelessWidget {
     final updateStatus = _getUpdateResult();
     return Card(
         margin: const EdgeInsets.all(2),
-        color: Colors.white,
-        surfaceTintColor: Colors.white,
-        elevation: 2,
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-          const Padding(
-              padding: EdgeInsets.only(top: 12, left: 20, right: 20),
-              child: Text('Suggestion',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.indigo))),
+          Padding(
+              padding: const EdgeInsets.only(top: 12, left: 20, right: 20),
+              child: Text('Suggestion', style: Theme.of(context).textTheme.bodyText1)),
           Padding(
               padding: const EdgeInsets.only(top: 12, left: 20, right: 20),
               child: Text(updateValue,
-                  style: const TextStyle(fontSize: 16, color: Colors.indigo),
+                  style: Theme.of(context).textTheme.bodyText1,
                   softWrap: true,
                   maxLines: 4,
                   overflow: TextOverflow.ellipsis)),
           Padding(
               padding: const EdgeInsets.only(top: 12, left: 20, right: 20, bottom: 12),
               child: Row(children: <Widget>[
-                const Expanded(
-                    flex: 1,
-                    child: Text('Status',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.indigo))),
-                Expanded(flex: 1, child: Text(updateStatus, style: const TextStyle(fontSize: 16, color: Colors.indigo)))
+                Expanded(flex: 1, child: Text('Status', style: Theme.of(context).textTheme.bodyText1)),
+                Expanded(flex: 1, child: Text(updateStatus, style: Theme.of(context).textTheme.bodyText1))
               ]))
         ]));
   }

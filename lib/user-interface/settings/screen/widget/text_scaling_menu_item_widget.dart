@@ -45,19 +45,16 @@ class _TextScalingMenuItemWidgetState extends State<TextScalingMenuItemWidget> {
   @override
   Widget build(final BuildContext context) {
     return Card(
-        color: Colors.white,
-        surfaceTintColor: Colors.white,
         child: ExpansionTile(
-            title: Text("Text Scale - ${_textScales[selectedTextScale]}",
-                style: const TextStyle(fontSize: 18, color: Colors.indigo, fontWeight: FontWeight.w500)),
-            leading: const Icon(Icons.linear_scale_rounded, color: Colors.indigo, size: 30),
+            title: Text("Text Scale - ${_textScales[selectedTextScale]}", style: Theme.of(context).textTheme.subtitle1),
+            leading: const Icon(Icons.linear_scale_rounded, size: 30),
             children: [
-              _getMenuItem(_systemTextScale),
-              _getMenuItem(_smallTextScale),
-              _getMenuItem(_mediumTextScale),
-              _getMenuItem(_largeTextScale),
-              _getMenuItem(_hugeTextScale)
-            ]));
+          _getMenuItem(_systemTextScale),
+          _getMenuItem(_smallTextScale),
+          _getMenuItem(_mediumTextScale),
+          _getMenuItem(_largeTextScale),
+          _getMenuItem(_hugeTextScale)
+        ]));
   }
 
   RadioListTile<String> _getMenuItem(final String value) {
@@ -69,6 +66,6 @@ class _TextScalingMenuItemWidgetState extends State<TextScalingMenuItemWidget> {
             selectedTextScale = newVal!;
           });
         },
-        title: Text(_textScales[value]!, style: const TextStyle(fontWeight: FontWeight.w500, color: Colors.indigo)));
+        title: Text(_textScales[value]!, style: Theme.of(context).textTheme.subtitle2));
   }
 }

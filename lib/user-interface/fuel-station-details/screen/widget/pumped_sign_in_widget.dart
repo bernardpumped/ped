@@ -23,6 +23,7 @@ import 'package:flutter_signin_button/button_view.dart';
 import 'package:pumped_end_device/main.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/utils/firebase_service.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
+import 'package:pumped_end_device/util/app_theme.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
 class PumpedSignInWidget extends StatefulWidget {
@@ -46,10 +47,10 @@ class _PumpedSignInWidgetState extends State<PumpedSignInWidget> {
     return Container(
         padding: const EdgeInsets.only(top: 20, bottom: 50),
         child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-          const Image(
-              image: AssetImage('assets/images/ic_pumped_black_text.png'), width: 100, height: 86, fit: BoxFit.fill),
-          const SizedBox(height: 8.0),
-          signInProgress ? const LinearProgressIndicator(color: Colors.indigo) : const SizedBox(height: 0),
+          Image(
+              image: AssetImage(AppTheme.getPumpedLogo(context)), width: 100, height: 86, fit: BoxFit.fill),
+          const SizedBox(height: 5.0),
+          signInProgress ? const LinearProgressIndicator() : const SizedBox(height: 0),
           signInProgress ? const SizedBox(height: 8) : const SizedBox(height: 0),
           SignInButton(Buttons.GoogleDark, onPressed: () {
             setState(() {
@@ -58,7 +59,7 @@ class _PumpedSignInWidgetState extends State<PumpedSignInWidget> {
             LogUtil.debug(PumpedSignInWidget._tag, 'Google SignInIn clicked');
             _signInUsingIdProvider(context, FirebaseService.googleIdProvider);
           }),
-          const SizedBox(height: 10),
+          const SizedBox(height: 6),
           SignInButton(Buttons.Facebook, onPressed: () {
             setState(() {
               signInProgress = true;
@@ -66,7 +67,7 @@ class _PumpedSignInWidgetState extends State<PumpedSignInWidget> {
             LogUtil.debug(PumpedSignInWidget._tag, 'Facebook SignInIn clicked');
             _signInUsingIdProvider(context, FirebaseService.facebookIdProvider);
           }),
-          const SizedBox(height: 10),
+          const SizedBox(height: 6),
           SignInButton(Buttons.Twitter, onPressed: () {
             setState(() {
               signInProgress = true;
@@ -74,9 +75,9 @@ class _PumpedSignInWidgetState extends State<PumpedSignInWidget> {
             LogUtil.debug(PumpedSignInWidget._tag, 'Twitter SignInIn clicked');
             _signInUsingIdProvider(context, FirebaseService.twitterIdProvider);
           }),
-          const SizedBox(height: 10),
+          const SizedBox(height: 6),
           ElevatedButton(
-              child: const Text('Cancel', style: TextStyle(fontSize: 14, color: Colors.indigo)),
+              child: const Text('Cancel'),
               onPressed: () {
                 if (!signInProgress) {
                   widget.cancelButtonAction();
@@ -95,14 +96,14 @@ class _PumpedSignInWidgetState extends State<PumpedSignInWidget> {
       setState(() {
         signInProgress = false;
       });
-      Navigator.of(context).pop(signedIn);
+      if (mounted) Navigator.of(context).pop(signedIn);
     } catch (e) {
       setState(() {
         signInProgress = false;
       });
       if (e is FirebaseAuthException) {
-        ScaffoldMessenger.of(context).showSnackBar(WidgetUtils.buildSnackBar2(
-            'Error happened while logging in', Theme.of(context).dialogBackgroundColor, 10, 'DISMISS', () => {}));
+        ScaffoldMessenger.of(context).showSnackBar(
+            WidgetUtils.buildSnackBar(context, 'Error happened while logging in', 10, 'DISMISS', () => {}));
       }
     }
   }

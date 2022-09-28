@@ -86,7 +86,8 @@ class _EditFuelPriceWidgetState extends State<EditFuelPriceWidget> {
             right: 25,
             child: Visibility(
                 visible: _fabVisible,
-                child: EditActionButton(undoButtonAction: _onFuelPriceChangeUndo, saveButtonAction: _onFuelPriceSave, tag: _tag)))
+                child: EditActionButton(
+                    undoButtonAction: _onFuelPriceChangeUndo, saveButtonAction: _onFuelPriceSave, tag: _tag)))
       ])
     ]);
   }
@@ -100,10 +101,10 @@ class _EditFuelPriceWidgetState extends State<EditFuelPriceWidget> {
   _getTitleWidget() {
     return Padding(
         padding: const EdgeInsets.only(left: 20, top: 10, bottom: 5),
-        child: Row(mainAxisAlignment: MainAxisAlignment.start, children: const [
-          Icon(Icons.monetization_on, size: 30, color: Colors.indigo),
-          SizedBox(width: 10),
-          Text('Update Fuel Prices', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Colors.indigo))
+        child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+          const Icon(Icons.monetization_on_outlined, size: 30),
+          const SizedBox(width: 10),
+          Text('Update Fuel Prices', style: Theme.of(context).textTheme.headline4)
         ]));
   }
 
@@ -113,13 +114,11 @@ class _EditFuelPriceWidgetState extends State<EditFuelPriceWidget> {
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             LogUtil.debug(_tag, 'Error loading EditFuelPriceWidgetData ${snapshot.error}');
-            return const Center(child: Text('Error Loading fuel-types'));
+            return Center(child: Text('Error Loading fuel-types', style: Theme.of(context).textTheme.subtitle2));
           } else if (snapshot.hasData) {
             return Column(children: _editFuelTypePriceWidget(snapshot.data!));
           } else {
-            return const Center(
-                child:
-                    Text('Loading', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.indigo)));
+            return Center(child: Text('Loading', style: Theme.of(context).textTheme.subtitle2));
           }
         });
   }
@@ -165,7 +164,7 @@ class _EditFuelPriceWidgetState extends State<EditFuelPriceWidget> {
           fuelAuthorityPriceMetadata: fuelTypePriceMetadata[fuelType],
           fuelPriceEditingController: fuelPriceEditingController);
       fuelPriceLineItemWidgets.putIfAbsent(fuelType, () => fuelPriceLineItemWidget);
-      children.add(Padding(padding: const EdgeInsets.only(left: 6.0, right: 6.0), child: fuelPriceLineItemWidget));
+      children.add(fuelPriceLineItemWidget);
     }
     children.add(const SizedBox(height: 70));
     return children;
@@ -203,7 +202,7 @@ class _EditFuelPriceWidgetState extends State<EditFuelPriceWidget> {
     if (badPriceFuelTypes.isNotEmpty) {
       String badPriceFuelTypesStr = badPriceFuelTypes.join(",");
       WidgetUtils.showToastMessage(
-          context, 'First fix out of range price of $badPriceFuelTypesStr, and then try saving', Colors.indigo);
+          context, 'First fix out of range price of $badPriceFuelTypesStr, and then try saving');
       return;
     }
     if (updatedFuelQuotes.isNotEmpty) {
@@ -245,8 +244,8 @@ class _EditFuelPriceWidgetState extends State<EditFuelPriceWidget> {
       LogUtil.debug(_tag, 'UpdateHistory inserted for :: UpdateFuelPrices :: result $insertRecordResult');
       if (!mounted) return;
       final Map<String, dynamic> responseParseMap = _isUpdateSuccessful(response);
-      WidgetUtils.showToastMessage(
-          context, responseParseMap[_responseMsg], responseParseMap[_isSuccess]! ? Colors.indigo : Colors.red);
+      WidgetUtils.showToastMessage(context, responseParseMap[_responseMsg],
+          isErrorToast: !responseParseMap[_isSuccess]!);
       Navigator.pop(context, _getUpdateResponse(response, originalPrices, updatedPrices));
     }
   }

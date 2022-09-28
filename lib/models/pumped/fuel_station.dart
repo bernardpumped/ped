@@ -29,8 +29,8 @@ class FuelStation {
 
   final bool? managed;
   final double? rating;
-  // final bool hasPromos;
-  int promos = 0;
+ // final bool hasoffers;
+  int offers = 0;
   // final bool hasServices;
   int services = 0;
   final String? stationType;
@@ -103,11 +103,18 @@ class FuelStation {
     return pricePresent;
   }
 
-  set setPromos(int promos){
-    this.promos = promos;
+  set setOffers(final int offers) {
+    this.offers = offers;
   }
 
-  set setServices(int services){
+  set setServices(final int services) {
     this.services = services;
+  }
+
+  List<String?> getPublishers() {
+    return fuelQuotes()
+        .where((fq) => fq.fuelQuoteSource != null && fq.fuelQuoteSource != 'C')
+        .map((fq) => fq.fuelQuoteSourceName)
+        .toList();
   }
 }

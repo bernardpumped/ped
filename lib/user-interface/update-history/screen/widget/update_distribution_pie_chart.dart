@@ -34,25 +34,19 @@ class _UpdateDistributionPieChartState extends State<UpdateDistributionPieChart>
   @override
   Widget build(final BuildContext context) {
     if (widget._data.isEmpty || noValues(widget._data)) {
-      return const Center(
+      return Center(
           child: Card(
-              color: Colors.white,
-              surfaceTintColor: Colors.white,
               child: Padding(
-                  padding: EdgeInsets.all(20.0),
-                  child: Text('No Update History',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.indigo)))));
+                  padding: const EdgeInsets.all(20.0),
+                  child: Text('No Update History', style: Theme.of(context).textTheme.subtitle1))));
     }
     return AspectRatio(
         aspectRatio: 1,
         child: Card(
-          surfaceTintColor: Colors.white,
-            color: Colors.white,
             child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
-                  const Text('Successful Updates',
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500, color: Colors.indigo)),
+                  Text('Successful Updates', style: Theme.of(context).textTheme.headline6),
                   const SizedBox(height: 18),
                   Expanded(
                       child: AspectRatio(
@@ -94,17 +88,15 @@ class _UpdateDistributionPieChartState extends State<UpdateDistributionPieChart>
     var i = 0;
     for (var entry in data.entries) {
       final isTouched = i == _touchedIndex;
-      final fontSize = isTouched ? 25.0 : 16.0;
+      final TextStyle style = isTouched
+          ? Theme.of(context).textTheme.headline3!.copyWith(color: Theme.of(context).backgroundColor)
+          : Theme.of(context).textTheme.headline6!.copyWith(color: Theme.of(context).backgroundColor);
       final radius = isTouched ? 60.0 : 50.0;
       final double data = entry.value;
       final UpdateType updateType = entry.key;
       final double val = num.parse(data.toStringAsFixed(2)).toDouble();
       pieChartSectionData.add(PieChartSectionData(
-          color: _pieChartColors[updateType],
-          value: val,
-          title: val.toString(),
-          radius: radius,
-          titleStyle: TextStyle(fontSize: fontSize, fontWeight: FontWeight.w500, color: const Color(0xffffffff))));
+          color: _pieChartColors[updateType], value: val, title: val.toString(), radius: radius, titleStyle: style));
       i++;
     }
     return pieChartSectionData;

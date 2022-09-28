@@ -33,14 +33,14 @@ class FuelStationsSorter {
         case 2:
           return _comparisonResultForDistanceSortOrder(fs1, fs2, fuelType);
         case 3:
-          return _comparisonResultForPromoSortOrder(fs1, fs2, fuelType);
+          return _comparisonResultForOfferSortOrder(fs1, fs2, fuelType);
         default:
           return _comparisonResultForPriceSortOrder(fs1, fs2, fuelType);
       }
     });
   }
 
-  int _comparisonResultForPromoSortOrder(final FuelStation fs1, final FuelStation fs2, final String? fuelType) {
+  int _comparisonResultForOfferSortOrder(final FuelStation fs1, final FuelStation fs2, final String? fuelType) {
     int comparisonResult = _compareOffers(fs1, fs2);
     if (comparisonResult == 0) {
       comparisonResult = _compareFuelQuotes(fs1, fs2, fuelType);
@@ -97,7 +97,7 @@ class FuelStationsSorter {
   }
 
   int _compareOffers(final FuelStation fs1, final FuelStation fs2) =>
-      (fs2.promos + fs2.services - fs1.promos - fs1.services).toInt();
+      (fs2.offers + fs2.services - fs1.offers - fs1.services).toInt();
 
   int _compareDistance(final FuelStation fs1, final FuelStation fs2) => fs1.distance.compareTo(fs2.distance);
 

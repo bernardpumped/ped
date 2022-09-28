@@ -17,6 +17,12 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:pumped_end_device/data/local/dao/ui_settings_dao.dart';
+import 'package:pumped_end_device/data/local/model/ui_settings.dart';
+import 'package:pumped_end_device/util/log_util.dart';
+import 'package:pumped_end_device/util/theme_notifier.dart';
+import 'package:pumped_end_device/util/ui_themes.dart';
 
 class ThemeMenuItemWidget extends StatefulWidget {
   const ThemeMenuItemWidget({Key? key}) : super(key: key);
@@ -26,35 +32,74 @@ class ThemeMenuItemWidget extends StatefulWidget {
 }
 
 class _ThemeMenuItemWidgetState extends State<ThemeMenuItemWidget> {
-  static const _lightTheme = 'LIGHT_THEME';
-  static const _darkTheme = 'DARK_THEME';
-  static const _systemTheme = 'SYSTEM_THEME';
-
-  static const _themes = {_lightTheme: 'Light Theme', _darkTheme: 'Dark Theme', _systemTheme: 'System Theme'};
-
-  String selectedTheme = _lightTheme;
+  static const _tag = 'ThemeMenuItemWidget';
 
   @override
   Widget build(final BuildContext context) {
     return Card(
-        color: Colors.white,
-        surfaceTintColor: Colors.white,
-        child: ExpansionTile(
-            title: Text("Theme - ${_themes[selectedTheme]}",
-                style: const TextStyle(fontSize: 18, color: Colors.indigo, fontWeight: FontWeight.w500)),
-            leading: const Icon(Icons.compare_outlined, color: Colors.indigo, size: 30),
-            children: [_getMenuItem(_lightTheme), _getMenuItem(_darkTheme), _getMenuItem(_systemTheme)]));
+        child: FutureBuilder(
+            future: getUiSettings(),
+            builder: (context, snapShot) {
+              String? selectedTheme;
+              if (snapShot.hasData) {
+                UiSettings? uiSettings = snapShot.data as UiSettings?;
+                if (uiSettings != null) {
+                  LogUtil.debug(_tag, 'Read UiSettings : ${uiSettings.uiTheme}');
+                  if (uiSettings.uiTheme != null) {
+                    selectedTheme = uiSettings.uiTheme;
+                  } else {
+                    // No theme was yet set in UiSettings
+                    // setting the default values
+                    selectedTheme = UiThemes.lightTheme;
+                  }
+                } else {
+                  // Ui Settings is not set yet
+                  // Creating instance now with default value
+                  selectedTheme = UiThemes.lightTheme;
+                }
+                return _getExpansionTile(selectedTheme!);
+              } else if (snapShot.hasError) {
+                LogUtil.debug(_tag, 'Error found while loading UiSettings ${snapShot.error}');
+                return Text('Error Loading',
+                    style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Theme.of(context).errorColor));
+              } else {
+                return Text('Loading', style: Theme.of(context).textTheme.subtitle1);
+              }
+            }));
   }
 
-  RadioListTile<String> _getMenuItem(final String themeValue) {
+  _getExpansionTile(final String selectedTheme) {
+    return ExpansionTile(
+        title: Text("Theme - ${UiThemes.themes[selectedTheme]}", style: Theme.of(context).textTheme.subtitle1),
+        leading: const Icon(Icons.compare_outlined, size: 30),
+        children: [
+          _getMenuItem(UiThemes.lightTheme, selectedTheme),
+          _getMenuItem(UiThemes.darkTheme, selectedTheme),
+          _getMenuItem(UiThemes.systemTheme, selectedTheme)
+        ]);
+  }
+
+  RadioListTile<String> _getMenuItem(final String themeValue, final String selectedTheme) {
     return RadioListTile<String>(
         value: themeValue,
+        selected: themeValue == selectedTheme,
         groupValue: selectedTheme,
         onChanged: (newVal) {
-          setState(() {
-            selectedTheme = newVal!;
+          LogUtil.debug(_tag, 'Selected Theme $newVal');
+          UiSettingsDao.instance.insertUiSettings(UiSettings(uiTheme: newVal!)).whenComplete(() {
+            final themeNotifier = Provider.of<ThemeNotifier>(context, listen: false);
+            themeNotifier.setThemeMode(UiThemes.getThemeMode(newVal));
+            LogUtil.debug(_tag, 'Inserted instance $newVal');
+            if (mounted) {
+              LogUtil.debug(_tag, 'Still mounted, calling setState');
+              setState(() {});
+            }
           });
         },
-        title: Text(_themes[themeValue]!, style: const TextStyle(fontWeight: FontWeight.w500, color: Colors.indigo)));
+        title: Text(UiThemes.themes[themeValue]!, style: Theme.of(context).textTheme.subtitle2));
+  }
+
+  Future<UiSettings?>? getUiSettings() {
+    return UiSettingsDao.instance.getUiSettings();
   }
 }

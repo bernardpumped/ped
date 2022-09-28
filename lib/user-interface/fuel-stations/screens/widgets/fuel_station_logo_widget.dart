@@ -35,9 +35,8 @@ class FuelStationLogoWidget extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    return Material(
+    return Card(
         elevation: 1,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(borderRadius)),
         child: Container(
             width: width,
             height: height,

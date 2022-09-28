@@ -17,30 +17,21 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:pumped_end_device/main.dart';
-import 'package:pumped_end_device/user-interface/fuel-stations/fuel_station_screen_color_scheme.dart';
 
 class FuelTypeSwitcherButton extends StatelessWidget {
   final String _txtToDisplay;
   final Function() _trailingButtonAction;
-  FuelTypeSwitcherButton(this._txtToDisplay, this._trailingButtonAction, {Key? key}) : super(key: key);
-
-  final FuelStationsScreenColorScheme colorScheme =
-      getIt.get<FuelStationsScreenColorScheme>(instanceName: fsScreenColorSchemeName);
+  const FuelTypeSwitcherButton(this._txtToDisplay, this._trailingButtonAction, {Key? key}) : super(key: key);
 
   @override
   Widget build(final BuildContext context) {
     return Chip(
         elevation: 5,
-        backgroundColor: colorScheme.fuelTypeSwitcherBtnBackgroundColor,
-        avatar: CircleAvatar(
-            backgroundColor: colorScheme.fuelTypeSwitcherBtnBackgroundColor,
-            child: Icon(Icons.workspaces, color: colorScheme.fuelTypeSwitcherBtnForegroundColor)),
+        avatar: const Icon(Icons.workspaces),
         label: Text(_txtToDisplay, overflow: TextOverflow.ellipsis),
-        labelStyle: TextStyle(
-            fontSize: 16, fontWeight: FontWeight.normal, color: colorScheme.fuelTypeSwitcherBtnForegroundColor),
+        labelStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: Theme.of(context).backgroundColor),
         labelPadding: const EdgeInsets.all(3),
         onDeleted: _trailingButtonAction,
-        deleteIcon: Icon(Icons.chevron_right, color: colorScheme.fuelTypeSwitcherWidgetBackgroundColor));
+        deleteIcon: const Icon(Icons.chevron_right));
   }
 }

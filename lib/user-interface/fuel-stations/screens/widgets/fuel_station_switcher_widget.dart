@@ -17,8 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:pumped_end_device/main.dart';
-import 'package:pumped_end_device/user-interface/fuel-stations/fuel_station_screen_color_scheme.dart';
+import 'package:pumped_end_device/util/app_theme.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
 import 'fuel_station_type.dart';
@@ -38,9 +37,6 @@ class _FuelStationSwitcherWidgetState extends State<FuelStationSwitcherWidget> {
   static const _tag = 'FuelStationSwitcherWidget';
   FuelStationType? fuelStationType;
 
-  final FuelStationsScreenColorScheme colorScheme =
-      getIt.get<FuelStationsScreenColorScheme>(instanceName: fsScreenColorSchemeName);
-
   @override
   Widget build(final BuildContext context) {
     String labelText;
@@ -55,55 +51,44 @@ class _FuelStationSwitcherWidgetState extends State<FuelStationSwitcherWidget> {
     return GestureDetector(
       onTap: () {
         showModalBottomSheet(
+            backgroundColor: AppTheme.modalBottomSheetBg(context),
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
             context: context,
-            builder: _modalBottomSheetBuilder,
-            backgroundColor: colorScheme.fuelStationSwitcherWidgetBackgroundColor);
+            builder: _modalBottomSheetBuilder);
       },
       child: Chip(
           elevation: 5,
-          backgroundColor: colorScheme.fuelStationSwitcherBtnBackgroundColor,
-          avatar: CircleAvatar(
-              backgroundColor: colorScheme.fuelStationSwitcherBtnBackgroundColor,
-              child: Icon(iconData, color: colorScheme.fuelStationSwitcherBtnForegroundColor)),
+          avatar: Icon(iconData),
           label: Text(labelText),
           labelPadding: const EdgeInsets.all(3),
-          labelStyle: TextStyle(
-              fontSize: 16, fontWeight: FontWeight.normal, color: colorScheme.fuelStationSwitcherBtnForegroundColor),
+          labelStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: Theme.of(context).backgroundColor),
           onDeleted: () {
             showModalBottomSheet(
+                backgroundColor: AppTheme.modalBottomSheetBg(context),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
                 context: context,
-                builder: _modalBottomSheetBuilder,
-                backgroundColor: colorScheme.fuelStationSwitcherWidgetBackgroundColor);
+                builder: _modalBottomSheetBuilder);
           },
-          deleteIcon: Icon(Icons.chevron_right, color: colorScheme.fuelStationSwitcherBtnForegroundColor)),
+          deleteIcon: Icon(Icons.chevron_right, color: Theme.of(context).backgroundColor)),
     );
   }
 
   Widget _modalBottomSheetBuilder(context) {
     fuelStationType = widget.fuelStationType;
     LogUtil.debug(_tag, '_modalBottomSheetBuilder invoked');
-    return StatefulBuilder(builder: (BuildContext context, StateSetter mystate) {
+    return StatefulBuilder(builder: (final BuildContext context, final StateSetter mystate) {
       return ListView(padding: const EdgeInsets.all(15), children: [
         ListTile(
-            leading:
-                Icon(Icons.local_gas_station_rounded, size: 35, color: colorScheme.fuelStationSwitcherWidgetTextColor),
-            title: Text('Change Fuel Station',
-                style: TextStyle(
-                    fontSize: 20, fontWeight: FontWeight.bold, color: colorScheme.fuelStationSwitcherWidgetTextColor))),
+            leading: const Icon(Icons.local_gas_station_rounded, size: 30),
+            title: Text('Change Fuel Station', style: Theme.of(context).textTheme.headline6)),
         Card(
-            surfaceTintColor: colorScheme.fuelStationSwitcherWidgetBackgroundColor,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             child: RadioListTile<FuelStationType>(
                 selected: FuelStationType.nearby == fuelStationType,
                 value: FuelStationType.nearby,
-                activeColor: colorScheme.fuelStationSwitcherWidgetTextColor,
                 title: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                  Text('Nearby Fuel Stations',
-                      style: TextStyle(
-                          fontWeight: FontWeight.w500, color: colorScheme.fuelStationSwitcherWidgetTextColor)),
-                  Icon(Icons.near_me, color: colorScheme.fuelStationSwitcherWidgetTextColor, size: 25)
+                  Text('Nearby Fuel Stations', style: Theme.of(context).textTheme.subtitle2),
+                  const Icon(Icons.near_me, size: 25)
                 ]),
                 groupValue: fuelStationType,
                 onChanged: (changedCat) {
@@ -112,17 +97,13 @@ class _FuelStationSwitcherWidgetState extends State<FuelStationSwitcherWidget> {
                   });
                 })),
         Card(
-            surfaceTintColor: colorScheme.fuelStationSwitcherWidgetBackgroundColor,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             child: RadioListTile<FuelStationType>(
                 selected: FuelStationType.favourite == fuelStationType,
                 value: FuelStationType.favourite,
-                activeColor: colorScheme.fuelStationSwitcherWidgetTextColor,
                 title: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                  Text('Favourite Fuel Stations',
-                      style: TextStyle(
-                          fontWeight: FontWeight.w500, color: colorScheme.fuelStationSwitcherWidgetTextColor)),
-                  Icon(Icons.favorite, color: colorScheme.fuelStationSwitcherWidgetTextColor, size: 25)
+                  Text('Favourite Fuel Stations', style: Theme.of(context).textTheme.subtitle2),
+                  const Icon(Icons.favorite, size: 25)
                 ]),
                 groupValue: fuelStationType,
                 onChanged: (changedCat) {
@@ -133,23 +114,19 @@ class _FuelStationSwitcherWidgetState extends State<FuelStationSwitcherWidget> {
         const SizedBox(height: 20),
         Row(mainAxisAlignment: MainAxisAlignment.end, children: [
           ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                  primary: colorScheme.fuelStationSwitcherWidgetTextColor,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15))),
+              style: ElevatedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15))),
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text('Cancel', style: TextStyle(color: colorScheme.fuelStationSwitcherWidgetButtonTextColor))),
+              child: const Text('Cancel')),
           const SizedBox(width: 40),
           ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                  primary: colorScheme.fuelStationSwitcherWidgetTextColor,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15))),
+              style: ElevatedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15))),
               onPressed: () {
                 Navigator.pop(context);
                 updateSelectedFuelStation();
               },
-              child: Text('Apply', style: TextStyle(color: colorScheme.fuelStationSwitcherWidgetButtonTextColor)))
+              child: const Text('Apply'))
         ])
       ]);
     });

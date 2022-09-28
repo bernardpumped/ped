@@ -17,10 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:pumped_end_device/main.dart';
-import 'package:pumped_end_device/user-interface/fuel-station-details/fuel_station_details_screen_color_scheme.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/screen/tabs/fuel-prices/widget/notification_widget.dart';
-import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station.dart';
 
 class QldFuelStationSourceCitation extends StatelessWidget {
@@ -46,68 +43,47 @@ class QldFuelStationSourceCitation extends StatelessWidget {
 
   final FuelStation fuelStation;
 
-  QldFuelStationSourceCitation({Key? key, required this.fuelStation}) : super(key: key);
-
-  final FuelStationDetailsScreenColorScheme colorScheme =
-      getIt.get<FuelStationDetailsScreenColorScheme>(instanceName: fsDetailsScreenColorSchemeName);
+  const QldFuelStationSourceCitation({Key? key, required this.fuelStation}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        padding: const EdgeInsets.all(15),
-        decoration: BoxDecoration(
-            color: Colors.white,
-            shape: BoxShape.rectangle,
-            borderRadius: BorderRadius.circular(15),
-            boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 10.0, offset: Offset(0.0, 10.0))]),
-        child: _getQldFuelAuthorityMessage(context));
+    return Container(padding: const EdgeInsets.all(15), child: _getQldFuelAuthorityMessage(context));
   }
 
   Widget _getQldFuelAuthorityMessage(final BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: <Widget>[
       Padding(
           padding: const EdgeInsets.only(top: 10, bottom: 10),
-          child: Text(_subTitle,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontSize: 18.0, fontWeight: FontWeight.w600, color: colorScheme.fuelStationTitleTextColor))),
+          child: Text(_subTitle, textAlign: TextAlign.center, style: Theme.of(context).textTheme.headline6)),
       Padding(
           padding: const EdgeInsets.only(bottom: 10),
-          child: Text(_qldLicensePara1,
-              textAlign: TextAlign.start,
-              style: TextStyle(
-                  fontSize: 14.0, fontWeight: FontWeight.w400, color: colorScheme.fuelStationTitleTextColor))),
+          child: Text(_qldLicensePara1, textAlign: TextAlign.start, style: Theme.of(context).textTheme.bodyText2)),
       Padding(
           padding: const EdgeInsets.only(bottom: 10),
-          child: Text(_qldLicensePara2,
-              textAlign: TextAlign.start,
-              style: TextStyle(
-                  fontSize: 14.0, fontWeight: FontWeight.w400, color: colorScheme.fuelStationTitleTextColor))),
-      Padding(padding: const EdgeInsets.only(bottom: 10), child: _getAdminContactMessage()),
-      Divider(color: colorScheme.fuelStationTitleTextColor, height: 1),
+          child: Text(_qldLicensePara2, textAlign: TextAlign.start, style: Theme.of(context).textTheme.bodyText2)),
+      Padding(padding: const EdgeInsets.only(bottom: 6), child: _getAdminContactMessage(context)),
+      const Divider(height: 1),
+      const SizedBox(height: 6),
       _getOkActionButton(context)
     ]);
   }
 
-  Text _getAdminContactMessage() {
-    return const Text(_pumpedMessage,
-        textAlign: TextAlign.start, style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w400, color: Colors.red));
+  Text _getAdminContactMessage(final BuildContext context) {
+    return Text(_pumpedMessage,
+        textAlign: TextAlign.start,
+        style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Theme.of(context).errorColor));
   }
 
   Row _getOkActionButton(final BuildContext context) {
     return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-      WidgetUtils.getRoundedElevatedButton(
-          child: Row(children: const [
-            Icon(Icons.cancel_outlined, size: 24, color: Colors.white),
-            SizedBox(width: 10),
-            Text('Cancel', style: TextStyle(color: Colors.white))
-          ]),
-          foreGroundColor: colorScheme.actionBtnTextColor,
-          backgroundColor: colorScheme.actionBtnBackgroundColor,
-          borderRadius: 10.0,
+      ElevatedButton(
           onPressed: () {
             Navigator.pop(context);
-          }),
+          },
+          child: Padding(
+              padding: const EdgeInsets.only(left: 15, right: 15),
+              child:
+                  Row(children: const [Icon(Icons.cancel_outlined, size: 24), SizedBox(width: 10), Text('Cancel')]))),
       const SizedBox(width: 10),
       _getNotificationWidget(),
     ]);
@@ -115,11 +91,6 @@ class QldFuelStationSourceCitation extends StatelessWidget {
 
   Widget _getNotificationWidget() {
     final Set<String?> fuelQuoteSources = fuelStation.fuelQuoteSources();
-    if (fuelQuoteSources.isNotEmpty) {
-      return NotificationWidget(fuelStation: fuelStation);
-    }
-    return const SizedBox(
-      width: 0,
-    );
+    return fuelQuoteSources.isNotEmpty ? NotificationWidget(fuelStation: fuelStation) : const SizedBox(width: 0);
   }
 }

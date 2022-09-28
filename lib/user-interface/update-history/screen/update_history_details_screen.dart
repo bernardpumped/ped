@@ -30,25 +30,20 @@ class UpdateHistoryDetailsScreen extends StatelessWidget {
   Widget build(final BuildContext context) {
     final UpdateTileData params = ModalRoute.of(context)?.settings.arguments as UpdateTileData;
     return Scaffold(
-        appBar: const PumpedAppBar(),
-        body: Container(
-            color: const Color(0xFFF0EDFF),
-            child: SingleChildScrollView(
-                child: Container(
-                    constraints:
-                        BoxConstraints(minHeight: MediaQuery.of(context).size.height, minWidth: double.infinity),
-                    color: const Color(0xFFF0EDFF),
-                    padding: const EdgeInsets.only(left: 10, right: 10),
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: _getBody(params))))));
+        appBar: const PumpedAppBar(title: 'Pumped Update History'),
+        body: SingleChildScrollView(
+            child: Container(
+                constraints: BoxConstraints(minHeight: MediaQuery.of(context).size.height, minWidth: double.infinity),
+                padding: const EdgeInsets.only(left: 10, right: 10),
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: _getBody(context, params)))));
   }
 
-  List<Widget> _getBody(final UpdateTileData params) {
+  List<Widget> _getBody(final BuildContext context, final UpdateTileData params) {
     final List<Widget> body = [];
-    body.add(Padding(child: _getTitle(), padding: const EdgeInsets.only(left: 20, top: 10)));
-    body.add(Padding(child: _getSubtitle(params), padding: const EdgeInsets.only(left: 20, top: 10)));
+    body.add(Padding(child: _getSubtitle(context, params), padding: const EdgeInsets.only(left: 20, top: 10)));
     body.add(const SizedBox(height: 8));
     for (var element in params.updateRecords) {
       body.add(UpdateHistoryDetailsItemWidget(element));
@@ -56,18 +51,12 @@ class UpdateHistoryDetailsScreen extends StatelessWidget {
     return body;
   }
 
-  _getTitle() {
-    return const Text('Update History',
-        style: TextStyle(fontSize: 24, color: Colors.indigo, fontWeight: FontWeight.bold), textAlign: TextAlign.center);
-  }
-
-  _getSubtitle(final UpdateTileData params) {
+  _getSubtitle(final BuildContext context, final UpdateTileData params) {
     return Row(children: [
       _getIcon(params),
       const SizedBox(width: 10),
       Text('${params.updateType.updateTypeReadableName} Updates',
-          style: const TextStyle(fontSize: 20, color: Colors.indigo, fontWeight: FontWeight.w500),
-          textAlign: TextAlign.center)
+          style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.center)
     ]);
   }
 
@@ -84,6 +73,6 @@ class UpdateHistoryDetailsScreen extends StatelessWidget {
     } else {
       iconData = Icons.comment_outlined;
     }
-    return Icon(iconData, color: Colors.indigo, size: 30);
+    return Icon(iconData, size: 30);
   }
 }

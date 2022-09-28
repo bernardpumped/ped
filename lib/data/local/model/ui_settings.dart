@@ -16,22 +16,18 @@
  *     along with Pumped End Device.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'package:flutter/material.dart';
+class UiSettings {
+  String? uiTheme;
 
-class FuelStationDetailsScreenColorScheme {
-  late Color backgroundColor;
-  late Color fuelStationTitleTextColor;
-  late Color fuelStationDetailsTextColor;
+  UiSettings({this.uiTheme});
 
-  late Color actionBtnBackgroundColor;
-  late Color actionBtnTextColor;
+  Map<String, dynamic> toMap() => {'uiTheme': uiTheme};
 
+  Map<String, dynamic> toJson() => {'uiTheme': uiTheme};
 
-  FuelStationDetailsScreenColorScheme(final ThemeData themeData) {
-    backgroundColor = const Color(0xFFF0EDFF);
-    fuelStationTitleTextColor = themeData.primaryColor;
-    fuelStationDetailsTextColor = themeData.primaryColor;
-    actionBtnBackgroundColor = themeData.primaryColor;
-    actionBtnTextColor = Colors.white;
+  factory UiSettings.fromJson(final Map<String, dynamic> data) {
+    return UiSettings(uiTheme: data['uiTheme']);
   }
+
+  factory UiSettings.fromMap(final Map<String, dynamic> data) => UiSettings.fromJson(data);
 }

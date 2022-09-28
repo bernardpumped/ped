@@ -42,52 +42,30 @@ class UpdateHistoryDetailsAddressItemWidget extends StatelessWidget {
     final String addressUpdateResult = _getUpdateResult();
     return Card(
         margin: const EdgeInsets.all(2),
-        color: Colors.white,
-        surfaceTintColor: Colors.white,
-        elevation: 2,
         child: Column(children: <Widget>[
           Padding(
               padding: const EdgeInsets.only(top: 12, left: 20, right: 20),
               child: Row(children: <Widget>[
-                const Expanded(
-                    flex: 1,
-                    child: Text('Address Component',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.indigo))),
-                Expanded(
-                    flex: 1, child: Text(addressComponent, style: const TextStyle(fontSize: 16, color: Colors.indigo)))
+                Expanded(flex: 1, child: Text('Address Component', style: Theme.of(context).textTheme.bodyText1)),
+                Expanded(flex: 1, child: Text(addressComponent, style: Theme.of(context).textTheme.bodyText1))
               ])),
           Padding(
               padding: const EdgeInsets.only(top: 12, left: 20, right: 20),
               child: Row(children: <Widget>[
-                const Expanded(
-                    flex: 1,
-                    child: Text('Old Value',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.indigo))),
-                Expanded(
-                    flex: 1,
-                    child: Text(addressOriginalValue, style: const TextStyle(fontSize: 16, color: Colors.indigo)))
+                Expanded(flex: 1, child: Text('Old Address', style: Theme.of(context).textTheme.bodyText1)),
+                Expanded(flex: 1, child: Text(addressOriginalValue, style: Theme.of(context).textTheme.bodyText1))
               ])),
           Padding(
               padding: const EdgeInsets.only(top: 12, left: 20, right: 20),
               child: Row(children: <Widget>[
-                const Expanded(
-                    flex: 1,
-                    child: Text('New Value',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.indigo))),
-                Expanded(
-                    flex: 1,
-                    child: Text(addressUpdatedValue, style: const TextStyle(fontSize: 16, color: Colors.indigo)))
+                Expanded(flex: 1, child: Text('New Address', style: Theme.of(context).textTheme.bodyText1)),
+                Expanded(flex: 1, child: Text(addressUpdatedValue, style: Theme.of(context).textTheme.bodyText1))
               ])),
           Padding(
               padding: const EdgeInsets.only(top: 12, left: 20, right: 20, bottom: 12),
               child: Row(children: <Widget>[
-                const Expanded(
-                    flex: 1,
-                    child: Text('Status',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.indigo))),
-                Expanded(
-                    flex: 1,
-                    child: Text(addressUpdateResult, style: const TextStyle(fontSize: 16, color: Colors.indigo)))
+                Expanded(flex: 1, child: Text('Status', style: Theme.of(context).textTheme.bodyText1)),
+                Expanded(flex: 1, child: Text(addressUpdateResult, style: Theme.of(context).textTheme.bodyText1))
               ]))
         ]));
   }

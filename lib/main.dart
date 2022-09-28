@@ -19,30 +19,30 @@
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:provider/provider.dart';
+import 'package:pumped_end_device/data/local/dao/ui_settings_dao.dart';
 import 'package:pumped_end_device/data/local/location/location_data_source.dart';
-import 'package:pumped_end_device/user-interface/about/screen/about_screen_color_scheme.dart';
+import 'package:pumped_end_device/data/local/model/ui_settings.dart';
 import 'package:pumped_end_device/user-interface/about/screen/about_screen.dart';
 import 'package:pumped_end_device/user-interface/edit-fuel-station-details/screen/edit_fuel_station_details_screen.dart';
-import 'package:pumped_end_device/user-interface/fuel-station-details/fuel_station_details_screen_color_scheme.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/screen/fuel_station_details_screen.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/utils/firebase_service.dart';
-import 'package:pumped_end_device/user-interface/fuel-stations/fuel_station_screen_color_scheme.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/screens/favourite/favourite_stations_screen.dart';
 import 'package:pumped_end_device/user-interface/help/screen/help_screen.dart';
-import 'package:pumped_end_device/user-interface/nav-drawer/nav_drawer_color_scheme.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/screens/nearby/nearby_stations_screen.dart';
 import 'package:pumped_end_device/user-interface/send-feedback/screens/send_feedback_screen.dart';
 import 'package:pumped_end_device/user-interface/settings/screen/cleanup_local_cache_screen.dart';
 import 'package:pumped_end_device/user-interface/settings/screen/customize_search_settings_screen.dart';
 import 'package:pumped_end_device/user-interface/settings/screen/settings_screen.dart';
-import 'package:pumped_end_device/user-interface/splash/screen/splash_screen_color_scheme.dart';
 import 'package:pumped_end_device/user-interface/splash/screen/splash_screen.dart';
 import 'package:pumped_end_device/user-interface/update-history/screen/update_history_details_screen.dart';
 import 'package:pumped_end_device/user-interface/update-history/screen/update_history_screen.dart';
 import 'package:pumped_end_device/user-interface/utils/under_maintenance_service.dart';
-import 'package:pumped_end_device/user-interface/widgets/pumped_app_bar_color_scheme.dart';
+import 'package:pumped_end_device/util/app_theme.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:pumped_end_device/util/theme_notifier.dart';
+import 'package:pumped_end_device/util/ui_themes.dart';
 
 import 'data/local/location/geo_location_wrapper.dart';
 import 'firebase_options.dart';
@@ -50,29 +50,32 @@ import 'firebase_options.dart';
 GetIt getIt = GetIt.instance;
 // Set this variable to false when in release mode.
 bool enrichOffers = true;
-const appVersion = "30";
+const appVersion = "31";
 const getLocationWrapperInstanceName = 'geoLocationWrapper';
 const platformWrapperInstanceName = 'platformWrapper';
 const locationDataSourceInstanceName = 'locationDataSource';
 const underMaintenanceServiceName = 'underMaintenanceService';
-
 const firebaseServiceInstanceName = 'firebaseService';
-const appBarColorSchemeName = 'appBarColorScheme';
-const splashScreenColorSchemeName = 'splashScreenColorScheme';
-const navDrawerColorSchemeName = 'navDrawerColorScheme';
-const fsScreenColorSchemeName = 'fsScreenColorScheme';
-const fsCardColorSchemeName = 'fsCardColorScheme';
-const aboutScreenColorSchemeName = 'aboutScreenColorScheme';
-const fsDetailsScreenColorSchemeName = 'fsDetailsScreenColorScheme';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  if (Firebase.apps.isEmpty) {
-    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  // if (Firebase.apps.isEmpty) {
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform, name: 'PED Mobile');
+  // } else {
+  //   Firebase.app();
+  // }
+  UiSettings? uiSettings = await UiSettingsDao.instance.getUiSettings();
+  ThemeMode themeMode;
+  if (uiSettings != null && uiSettings.uiTheme != null) {
+    themeMode = UiThemes.getThemeMode(uiSettings.uiTheme!);
   } else {
-    Firebase.app();
+    themeMode = ThemeMode.light;
   }
-  runApp(const PumpedApp());
+  runApp(ChangeNotifierProvider<ThemeNotifier>(
+      create: (BuildContext context) {
+        return ThemeNotifier(themeMode);
+      },
+      child: const PumpedApp()));
 }
 
 class PumpedApp extends StatelessWidget {
@@ -81,22 +84,19 @@ class PumpedApp extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
+    final themeNotifier = Provider.of<ThemeNotifier>(context);
     _deviceInfo();
     _registerBeansWithGetIt();
-    final ThemeData themeData = ThemeData(
-        useMaterial3: true,
-        primarySwatch: Colors.indigo,
-        colorScheme: ColorScheme.fromSwatch(accentColor: Colors.indigoAccent),
-        textTheme: Theme.of(context).textTheme.apply(fontFamily: 'SF-Pro-Display'));
-    _registerThemes(themeData);
     return MaterialApp(
         debugShowCheckedModeBanner: false,
-        theme: themeData,
+        theme: AppTheme().lightTheme,
+        darkTheme: AppTheme().darkTheme,
+        themeMode: themeNotifier.getThemeMode(),
         home: const SplashScreen(),
         routes: {
           NearbyStationsScreen.routeName: (context) => const NearbyStationsScreen(),
           FavouriteStationsScreen.routeName: (context) => const FavouriteStationsScreen(),
-          AboutScreen.routeName: (context) => AboutScreen(),
+          AboutScreen.routeName: (context) => const AboutScreen(),
           SettingsScreen.routeName: (context) => const SettingsScreen(),
           FuelStationDetailsScreen.routeName: (context) => const FuelStationDetailsScreen(),
           CustomizeSearchSettingsScreen.routeName: (context) => const CustomizeSearchSettingsScreen(),
@@ -136,7 +136,7 @@ class PumpedApp extends StatelessWidget {
           LocationDataSource(getIt.get<GeoLocationWrapper>(instanceName: getLocationWrapperInstanceName)),
           instanceName: locationDataSourceInstanceName);
     } else {
-      LogUtil.debug(_tag, 'Instance of $platformWrapperInstanceName is already registered');
+      LogUtil.debug(_tag, 'Instance of $locationDataSourceInstanceName is already registered');
     }
 
     if (!getIt.isRegistered<FirebaseService>(instanceName: firebaseServiceInstanceName)) {
@@ -152,63 +152,6 @@ class PumpedApp extends StatelessWidget {
           instanceName: underMaintenanceServiceName);
     } else {
       LogUtil.debug(_tag, 'Instance of $underMaintenanceServiceName is already registered');
-    }
-  }
-
-  void _registerThemes(final ThemeData themeData) {
-    if (!getIt.isRegistered<AboutScreenColorScheme>(instanceName: aboutScreenColorSchemeName)) {
-      LogUtil.debug(_tag, 'Registering instance of $aboutScreenColorSchemeName');
-      getIt.registerSingleton<AboutScreenColorScheme>(AboutScreenColorScheme(themeData),
-          instanceName: aboutScreenColorSchemeName);
-    } else {
-      LogUtil.debug(_tag, 'Instance of $appBarColorSchemeName is already registered');
-    }
-    if (!getIt.isRegistered<PumpedAppBarColorScheme>(instanceName: appBarColorSchemeName)) {
-      LogUtil.debug(_tag, 'Registering instance of $appBarColorSchemeName');
-      getIt.registerSingleton<PumpedAppBarColorScheme>(PumpedAppBarColorScheme(themeData),
-          instanceName: appBarColorSchemeName);
-    } else {
-      LogUtil.debug(_tag, 'Instance of $appBarColorSchemeName is already registered');
-    }
-
-    if (!getIt.isRegistered<SplashScreenColorScheme>(instanceName: splashScreenColorSchemeName)) {
-      LogUtil.debug(_tag, 'Registering instance of $splashScreenColorSchemeName');
-      getIt.registerSingleton<SplashScreenColorScheme>(SplashScreenColorScheme(themeData),
-          instanceName: splashScreenColorSchemeName);
-    } else {
-      LogUtil.debug(_tag, 'Instance of $splashScreenColorSchemeName is already registered');
-    }
-
-    if (!getIt.isRegistered<NavDrawerColorScheme>(instanceName: navDrawerColorSchemeName)) {
-      LogUtil.debug(_tag, 'Registering instance of $navDrawerColorSchemeName');
-      getIt.registerSingleton<NavDrawerColorScheme>(NavDrawerColorScheme(themeData),
-          instanceName: navDrawerColorSchemeName);
-    } else {
-      LogUtil.debug(_tag, 'Instance of $navDrawerColorSchemeName is already registered');
-    }
-
-    if (!getIt.isRegistered<FuelStationsScreenColorScheme>(instanceName: fsScreenColorSchemeName)) {
-      LogUtil.debug(_tag, 'Registering instance of $fsScreenColorSchemeName');
-      getIt.registerSingleton<FuelStationsScreenColorScheme>(FuelStationsScreenColorScheme(themeData),
-          instanceName: fsScreenColorSchemeName);
-    } else {
-      LogUtil.debug(_tag, 'Instance of $fsScreenColorSchemeName is already registered');
-    }
-
-    if (!getIt.isRegistered<FuelStationCardColorScheme>(instanceName: fsCardColorSchemeName)) {
-      LogUtil.debug(_tag, 'Registering instance of $fsCardColorSchemeName');
-      getIt.registerSingleton<FuelStationCardColorScheme>(FuelStationCardColorScheme(themeData),
-          instanceName: fsCardColorSchemeName);
-    } else {
-      LogUtil.debug(_tag, 'Instance of $fsCardColorSchemeName is already registered');
-    }
-
-    if (!getIt.isRegistered<FuelStationDetailsScreenColorScheme>(instanceName: fsDetailsScreenColorSchemeName)) {
-      LogUtil.debug(_tag, 'Registering instance of $fsDetailsScreenColorSchemeName');
-      getIt.registerSingleton<FuelStationDetailsScreenColorScheme>(FuelStationDetailsScreenColorScheme(themeData),
-          instanceName: fsDetailsScreenColorSchemeName);
-    } else {
-      LogUtil.debug(_tag, 'Instance of $fsDetailsScreenColorSchemeName is already registered');
     }
   }
 }

@@ -34,6 +34,10 @@ import 'customize_search_settings_screen.dart';
 
 class SettingsScreen extends StatefulWidget {
   static const routeName = '/ped/settings';
+  static const viewLabel = 'Settings';
+  static const viewIcon = Icons.settings_outlined;
+  static const viewSelectedIcon = Icons.settings;
+
   const SettingsScreen({Key? key}) : super(key: key);
 
   @override
@@ -66,69 +70,54 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(final BuildContext context) {
     return Scaffold(
-        appBar: const PumpedAppBar(),
+        appBar: const PumpedAppBar(title: SettingsScreen.viewLabel, icon: SettingsScreen.viewSelectedIcon),
         drawer: const NavDrawerWidget(),
-        body: Container(
-            color: const Color(0xFFF0EDFF),
-            child: SingleChildScrollView(
-                child: Container(
-                    constraints: BoxConstraints(minHeight: MediaQuery.of(context).size.height),
-                    color: const Color(0xFFF0EDFF),
-                    padding: const EdgeInsets.only(left: 10, right: 10),
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          const Padding(
-                              padding: EdgeInsets.only(top: 10, bottom: 10, left: 10),
-                              child: Text('Settings',
-                                  style: TextStyle(fontSize: 24, color: Colors.indigo, fontWeight: FontWeight.bold),
-                                  textAlign: TextAlign.center)),
-                          _customizeSearchMenuItem(),
-                          _clearCacheMenuItem(),
-                          const TextScalingMenuItemWidget(),
-                          const ThemeMenuItemWidget(),
-                          const TextDirectionMenuItemWidget(),
-                          const TextLocaleMenuItemWidget(),
-                          _appVersionWidget(),
-                          const ServerVersionWidget()
-                        ])))));
+        body: SingleChildScrollView(
+            child: Container(
+                constraints: BoxConstraints(minHeight: MediaQuery.of(context).size.height),
+                padding: const EdgeInsets.only(left: 10, right: 10),
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      _customizeSearchMenuItem(),
+                      _clearCacheMenuItem(),
+                      const TextScalingMenuItemWidget(),
+                      const ThemeMenuItemWidget(),
+                      const TextDirectionMenuItemWidget(),
+                      const TextLocaleMenuItemWidget(),
+                      _appVersionWidget(),
+                      const ServerVersionWidget()
+                    ]))));
   }
 
   Widget _customizeSearchMenuItem() {
     return GestureDetector(
         onTap: () => Navigator.pushNamed(context, CustomizeSearchSettingsScreen.routeName),
-        child: const Card(
-            color: Colors.white,
-            surfaceTintColor: Colors.white,
+        child: Card(
             child: ListTile(
-                contentPadding: EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
-                leading: Icon(Icons.settings_outlined, color: Colors.indigo, size: 30),
-                title: Text("Customize Search",
-                    style: TextStyle(fontSize: 18, color: Colors.indigo, fontWeight: FontWeight.w500)),
-                trailing: Icon(Icons.chevron_right, color: Colors.indigo, size: 24))));
+                contentPadding: const EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
+                leading: const Icon(Icons.settings_outlined, size: 30),
+                title: Text("Customize Search", style: Theme.of(context).textTheme.subtitle1),
+                trailing: const Icon(Icons.chevron_right, size: 24))));
   }
 
   Widget _clearCacheMenuItem() {
     return GestureDetector(
         onTap: () => Navigator.pushNamed(context, CleanupLocalCacheScreen.routeName),
-        child: const Card(
-            color: Colors.white,
-            surfaceTintColor: Colors.white,
+        child: Card(
             child: ListTile(
-                contentPadding: EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
-                leading: Icon(Icons.delete_outline, color: Colors.indigo, size: 30),
-                title: Text("Clear local cache",
-                    style: TextStyle(fontSize: 18, color: Colors.indigo, fontWeight: FontWeight.w500)),
-                trailing: Icon(Icons.chevron_right, color: Colors.indigo, size: 24))));
+                contentPadding: const EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
+                leading: const Icon(Icons.delete_outline, size: 30),
+                title: Text("Clear local cache", style: Theme.of(context).textTheme.subtitle1),
+                trailing: const Icon(Icons.chevron_right, size: 24))));
   }
 
   Widget _appVersionWidget() {
-    return const Padding(
-        padding: EdgeInsets.only(top: 25),
+    return Padding(
+        padding: const EdgeInsets.only(top: 25),
         child: ListTile(
             title: Text("Pumped App Release - $appVersion",
-                style: TextStyle(fontSize: 18, color: Colors.indigo, fontWeight: FontWeight.w500),
-                textAlign: TextAlign.center)));
+                style: Theme.of(context).textTheme.subtitle1, textAlign: TextAlign.center)));
   }
 }

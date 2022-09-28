@@ -45,6 +45,7 @@ ios/*
 !ios/Runner
 ios/Runner/*
 !ios/Runner/Info-Debug.plist
+ios/Runner/Info.plist
 .metadata
 .packages
 *.iml
@@ -73,5 +74,6 @@ bundle
 local.properties
 pubspec.lock
 pumped_end_device.iml
+pumpedenddevice.iml
 desktop.ini
 test/widget_test.dart

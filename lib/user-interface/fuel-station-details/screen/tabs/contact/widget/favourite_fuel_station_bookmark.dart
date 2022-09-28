@@ -23,17 +23,17 @@ import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
-class FavoriteFuelStationBookmark extends StatefulWidget {
+class FavouriteFuelStationBookmark extends StatefulWidget {
   final FuelStation _fuelStation;
   final Function _onFavouriteStatusChange;
 
-  const FavoriteFuelStationBookmark(this._fuelStation, this._onFavouriteStatusChange, {Key? key}) : super(key: key);
+  const FavouriteFuelStationBookmark(this._fuelStation, this._onFavouriteStatusChange, {Key? key}) : super(key: key);
 
   @override
-  State<FavoriteFuelStationBookmark> createState() => _FavoriteFuelStationBookmarkState();
+  State<FavouriteFuelStationBookmark> createState() => _FavouriteFuelStationBookmarkState();
 }
 
-class _FavoriteFuelStationBookmarkState extends State<FavoriteFuelStationBookmark> {
+class _FavouriteFuelStationBookmarkState extends State<FavouriteFuelStationBookmark> {
   static const _tag = 'FavoriteFuelStationBookmark';
   final FavoriteFuelStationsDao dao = FavoriteFuelStationsDao.instance;
 
@@ -72,13 +72,16 @@ class _FavoriteFuelStationBookmarkState extends State<FavoriteFuelStationBookmar
     return GestureDetector(
         onTap: callback,
         child: Column(children: [
-          Card(
+          Material(
               elevation: 2,
-              color: Colors.indigo,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15), side: const BorderSide(color: Colors.indigo, width: 1)),
-              child: Padding(padding: const EdgeInsets.all(14.0), child: Icon(icon, color: Colors.white))),
-          Text(text, style: const TextStyle(color: Colors.indigo, fontSize: 14, fontWeight: FontWeight.w500))
+              clipBehavior: Clip.antiAlias,
+              borderRadius: BorderRadius.circular(15),
+              // Cannot use Theme.of(context).primaryColor because in darkMode it does not work well
+              color: Theme.of(context).textTheme.headline3!.color,
+              shadowColor: Theme.of(context).textTheme.headline3!.color,
+              child: Padding(
+                  padding: const EdgeInsets.all(14.0), child: Icon(icon, color: Theme.of(context).backgroundColor))),
+          Text(text, style: Theme.of(context).textTheme.bodyText2)
         ]));
   }
 
@@ -87,19 +90,19 @@ class _FavoriteFuelStationBookmarkState extends State<FavoriteFuelStationBookmar
         dao.containsFavoriteFuelStation(station.favoriteFuelStationId, station.fuelStationSource);
     isFavoriteFuelStationFuture.then((value) {
       if (!value) {
-        WidgetUtils.showToastMessage(context, 'Fuel Station is not yet Favorite', Colors.indigo);
+        WidgetUtils.showToastMessage(context, 'Fuel Station is not yet Favorite');
       } else {
         final Future<dynamic> deleteFavFuelStationFuture = dao.deleteFavoriteFuelStation(station);
         deleteFavFuelStationFuture.then((value) {
-          WidgetUtils.showToastMessage(context, 'Removed from Favorite', Colors.indigo);
+          WidgetUtils.showToastMessage(context, 'Removed from Favorite');
           setState(() {});
         }, onError: (error, s) {
-          WidgetUtils.showToastMessage(context, 'Error removing from Favorite', Colors.indigo);
+          WidgetUtils.showToastMessage(context, 'Error removing from Favorite', isErrorToast: true);
           LogUtil.error(_tag, 'Error removing from Favorite $error');
         });
       }
     }, onError: (error, s) {
-      WidgetUtils.showToastMessage(context, 'Error removing from Favorite', Colors.indigo);
+      WidgetUtils.showToastMessage(context, 'Error removing from Favorite', isErrorToast: true);
       LogUtil.error(_tag, 'Error removing from Favorite $error');
     });
   }
@@ -111,17 +114,17 @@ class _FavoriteFuelStationBookmarkState extends State<FavoriteFuelStationBookmar
       if (!value) {
         final Future<dynamic> insertFuture = dao.insertFavoriteFuelStation(station);
         insertFuture.then((value) {
-          WidgetUtils.showToastMessage(context, 'Bookmarked as Favorite', Colors.indigo);
+          WidgetUtils.showToastMessage(context, 'Bookmarked as Favorite');
           setState(() {});
         }, onError: (error, s) {
-          WidgetUtils.showToastMessage(context, 'Error marking as Favorite', Colors.indigo);
+          WidgetUtils.showToastMessage(context, 'Error marking as Favorite', isErrorToast: true);
           LogUtil.error(_tag, 'Error marking as Favorite $error');
         });
       } else {
-        WidgetUtils.showToastMessage(context, 'Already Bookmarked as Favorite', Colors.indigo);
+        WidgetUtils.showToastMessage(context, 'Already Bookmarked as Favorite');
       }
     }, onError: (error, s) {
-      WidgetUtils.showToastMessage(context, 'Error marking as Favorite', Colors.indigo);
+      WidgetUtils.showToastMessage(context, 'Error marking as Favorite', isErrorToast: true);
       LogUtil.error(_tag, 'Error marking as Favorite $error');
     });
   }

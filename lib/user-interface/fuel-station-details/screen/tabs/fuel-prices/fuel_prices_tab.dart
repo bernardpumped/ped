@@ -24,6 +24,7 @@ import 'package:pumped_end_device/user-interface/fuel-station-details/screen/tab
 import 'package:pumped_end_device/models/pumped/fuel_quote.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station.dart';
 import 'package:pumped_end_device/models/pumped/fuel_type.dart';
+import 'package:pumped_end_device/util/app_theme.dart';
 
 class FuelPricesTabWidget extends StatefulWidget {
   final FuelStation _fuelStation;
@@ -56,9 +57,7 @@ class _FuelPricesTabWidgetState extends State<FuelPricesTabWidget> {
           } else if (snapshot.hasData) {
             final List<FuelType> allowedFuelTypes = snapshot.data as List<FuelType>;
             if (widget._fuelStation.hasFuelPrices()) {
-              return Container(
-                  decoration: const BoxDecoration(color: Color(0xFFF0EDFF)),
-                  child: Column(children: _getListItem(context, allowedFuelTypes)));
+              return Column(children: _getListItem(context, allowedFuelTypes));
             } else {
               return const NoFuelPricesWidget();
             }
@@ -92,21 +91,17 @@ class _FuelPricesTabWidgetState extends State<FuelPricesTabWidget> {
   final formatter = DateFormat('dd-MMM-yy HH:mm');
 
   Widget _getDeclarationRowItem() {
-    return const Card(
-        surfaceTintColor: Color(0xFFF0EDFF),
-        // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        margin: EdgeInsets.only(left: 5, right: 5, top: 15),
+    return Card(
+        margin: const EdgeInsets.only(left: 5, right: 5, top: 15),
         child: Padding(
-            padding: EdgeInsets.only(top: 10, bottom: 10, left: 20, right: 20),
+            padding: const EdgeInsets.only(top: 10, bottom: 10, left: 20, right: 20),
             child: Text('Fuel Station does not advertise prices for other fuel types',
-                style: TextStyle(fontSize: 16, color: Colors.indigo, fontWeight: FontWeight.w500))));
+                style: Theme.of(context).textTheme.caption)));
   }
 
   Widget _getFuelQuoteRowItem(final FuelQuote fuelQuote, final Map<String, FuelType> allowedFuelTypesMap) {
     final String? fuelTypeName = allowedFuelTypesMap[fuelQuote.fuelType]?.fuelName;
     return Card(
-        color: Colors.white,
-        surfaceTintColor: Colors.white,
         margin: const EdgeInsets.only(left: 5, right: 5, top: 5),
         child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
           Expanded(
@@ -116,8 +111,7 @@ class _FuelPricesTabWidgetState extends State<FuelPricesTabWidget> {
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
                     Container(
                         margin: const EdgeInsets.only(left: 25),
-                        child: Text(fuelTypeName!,
-                            style: const TextStyle(fontSize: 17, color: Colors.indigo, fontWeight: FontWeight.w500))),
+                        child: Text(fuelTypeName!, style: Theme.of(context).textTheme.subtitle2)),
                     Container(
                         padding: const EdgeInsets.only(right: 10, top: 8, bottom: 10),
                         child: Row(children: <Widget>[
@@ -136,8 +130,8 @@ class _FuelPricesTabWidgetState extends State<FuelPricesTabWidget> {
 
   Widget _getFuelQuoteValueWidget(final FuelQuote fuelQuote) {
     return fuelQuote.quoteValue != null
-        ? Text('${fuelQuote.quoteValue}', style: const TextStyle(fontSize: 19, color: Colors.indigo))
-        : const Text('---', style: TextStyle(fontSize: 18, color: Colors.indigo, fontWeight: FontWeight.w500));
+        ? Text('${fuelQuote.quoteValue}', style: Theme.of(context).textTheme.subtitle2)
+        : Text('---', style: Theme.of(context).textTheme.subtitle1);
   }
 
   Widget _getFuelQuoteSourceIcon(final FuelQuote fuelQuote, final String fuelTypeName) {
@@ -152,7 +146,7 @@ class _FuelPricesTabWidgetState extends State<FuelPricesTabWidget> {
   Widget _getLastUpdateDateWidget(final FuelQuote fuelQuote) {
     return fuelQuote.publishDate != null
         ? Text('Last Update ${_getPublishDateFormatted(fuelQuote.publishDate!)}',
-            style: const TextStyle(fontSize: 14, color: Colors.indigo, overflow: TextOverflow.ellipsis))
+            style: Theme.of(context).textTheme.overline)
         : const SizedBox(width: 0);
   }
 
@@ -164,12 +158,13 @@ class _FuelPricesTabWidgetState extends State<FuelPricesTabWidget> {
 
   GestureDetector _getFuelPriceSourceCitation(final FuelQuote fuelQuote, final String fuelTypeName) {
     final icon = fuelQuote.fuelQuoteSource == 'F'
-        ? const Icon(Icons.info_outline, color: Colors.indigo, size: 30)
-        : const Icon(Icons.people_outline, color: Colors.indigo, size: 30);
+        ? const Icon(Icons.info_outline, size: 25)
+        : const Icon(Icons.people_outline, size: 25);
     return GestureDetector(
         onTap: () {
           showModalBottomSheet(
               context: context,
+              backgroundColor: AppTheme.modalBottomSheetBg(context),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
               builder: (context) => FuelPriceSourceCitationWidget(fuelQuote, widget._fuelStation, fuelTypeName));
         },

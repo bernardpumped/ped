@@ -90,11 +90,10 @@ class _EditOperatingTimeWidgetState extends State<EditOperatingTimeWidget> {
   _getTitleWidget() {
     return Padding(
         padding: const EdgeInsets.only(left: 20, top: 10, bottom: 5),
-        child: Row(mainAxisAlignment: MainAxisAlignment.start, children: const [
-          Icon(Icons.access_time_rounded, size: 30, color: Colors.indigo),
-          SizedBox(width: 10),
-          Text('Update Operating Times',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500, color: Colors.indigo))
+        child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+          const Icon(Icons.access_time_rounded, size: 30),
+          const SizedBox(width: 10),
+          Text('Update Operating Times', style: Theme.of(context).textTheme.headline4)
         ]));
   }
 
@@ -111,7 +110,7 @@ class _EditOperatingTimeWidgetState extends State<EditOperatingTimeWidget> {
       });
       if (badDayRecs.isNotEmpty) {
         String badDays = badDayRecs.join(",");
-        WidgetUtils.showToastMessage(context, 'Fix the operating hours for $badDays and try again', Colors.indigo);
+        WidgetUtils.showToastMessage(context, 'Fix the operating hours for $badDays and try again');
         return;
       }
       final Map<String, OperatingHours?> originalOperatingHoursMap = _getOriginalOperatingHoursMap();
@@ -159,8 +158,8 @@ class _EditOperatingTimeWidgetState extends State<EditOperatingTimeWidget> {
       LogUtil.debug(_tag, 'UpdateHistory inserted for :: operatingTime :: result $insertRecordResult');
       if (!mounted) return;
       final Map<String, dynamic> responseParseMap = _isUpdateSuccessful(response);
-      WidgetUtils.showToastMessage(
-          context, responseParseMap[_responseMsg], responseParseMap[_isSuccess]! ? Colors.indigo : Colors.red);
+      WidgetUtils.showToastMessage(context, responseParseMap[_responseMsg],
+          isErrorToast: !responseParseMap[_isSuccess]!);
       Navigator.pop(context, _getUpdateResponse(request, response, originalPathAndValues, updatedValues));
     }
   }
@@ -295,19 +294,15 @@ class _EditOperatingTimeWidgetState extends State<EditOperatingTimeWidget> {
       for (var operatingHrs in fuelStationOperatingHrs.weeklyOperatingHrs) {
         final OperatingHours? updatedOperatingHrs = _updatedOperatingTimeMap[operatingHrs.dayOfWeek];
         daysOfWeek.remove(operatingHrs.dayOfWeek);
-        columnContent.add(Padding(
-            padding: const EdgeInsets.only(left: 6.0, right: 6.0, top: 3, bottom: 3),
-            child: EditOperatingTimeLineItemWidget(_fuelStation.isFaStation, operatingHrs, updatedOperatingHrs,
-                _undoOperatingTimeChange, _onOperatingTimeRangeChanged, _backendUpdateInProgress)));
+        columnContent.add(EditOperatingTimeLineItemWidget(_fuelStation.isFaStation, operatingHrs, updatedOperatingHrs,
+            _undoOperatingTimeChange, _onOperatingTimeRangeChanged, _backendUpdateInProgress));
       }
     }
     for (var dayOfWeek in daysOfWeek) {
       final OperatingHours operatingHours = OperatingHours(dayOfWeek: dayOfWeek, status: Status.unknown);
       final OperatingHours? updatedOperatingHrs = _updatedOperatingTimeMap[dayOfWeek];
-      columnContent.add(Padding(
-          padding: const EdgeInsets.only(left: 6.0, right: 6.0, top: 3, bottom: 3),
-          child: EditOperatingTimeLineItemWidget(_fuelStation.isFaStation, operatingHours, updatedOperatingHrs,
-              _undoOperatingTimeChange, _onOperatingTimeRangeChanged, _backendUpdateInProgress)));
+      columnContent.add(EditOperatingTimeLineItemWidget(_fuelStation.isFaStation, operatingHours, updatedOperatingHrs,
+          _undoOperatingTimeChange, _onOperatingTimeRangeChanged, _backendUpdateInProgress));
     }
     columnContent.add(const SizedBox(height: 200));
     return columnContent;

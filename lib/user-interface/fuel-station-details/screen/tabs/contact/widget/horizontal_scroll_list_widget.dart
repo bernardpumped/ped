@@ -29,21 +29,21 @@ class HorizontalScrollListWidget extends StatelessWidget {
         height: 150.0,
         child: ListView.builder(
             itemBuilder: (context, index) {
-              return _buildImageView(_imageUrls[index]);
+              return _buildImageView(context, _imageUrls[index]);
             },
             itemCount: _imageUrls.length,
             scrollDirection: Axis.horizontal));
   }
 
-  Padding _buildImageView(final String imgUrl) {
+  Padding _buildImageView(final BuildContext context, final String imgUrl) {
     return Padding(
         padding: const EdgeInsets.only(left: 5),
         child: Container(
             decoration: BoxDecoration(
                 shape: BoxShape.rectangle,
                 borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Colors.grey),
-                color: Colors.white),
+                border: Border.all(color: Theme.of(context).primaryColor),
+                color: Theme.of(context).backgroundColor),
             width: 170.0));
   }
 }

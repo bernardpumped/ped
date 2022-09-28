@@ -21,44 +21,39 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:pumped_end_device/util/app_theme.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
 class WidgetUtils {
   static const _tag = 'WidgetUtils';
 
-  static Widget getRating(final double? rating, final double size) {
-    return rating != null
-        ? RatingBarIndicator(
-            rating: rating,
-            itemBuilder: (context, index) => const Icon(Icons.star, color: Colors.amber),
-            itemCount: 5,
-            itemSize: size,
-            direction: Axis.horizontal)
-        : const SizedBox(width: 0);
-  }
-
-  static void showToastMessage(final BuildContext context, final String message, final Color color) {
+  static void showToastMessage(final BuildContext context, final String message, {final bool isErrorToast = false}) {
     final FToast fToast = FToast();
     fToast.init(context);
+    final Color color = AppTheme.modalBottomSheetBg(context);
+    final textColor = isErrorToast ? Theme.of(context).errorColor : Theme.of(context).colorScheme.secondary;
     final Widget toast = Container(
         padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(25.0), color: color),
-        child: Text(message, style: const TextStyle(color: Colors.white), textAlign: TextAlign.center));
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(15.0), color: color),
+        child: Text(message,
+            style: Theme.of(context).textTheme.subtitle2!.copyWith(color: textColor), textAlign: TextAlign.center));
     fToast.removeQueuedCustomToasts();
     fToast.showToast(child: toast, gravity: ToastGravity.BOTTOM, toastDuration: const Duration(seconds: 3));
   }
 
-  static SnackBar buildSnackBar2(final String text, final Color snackbarColor, final int durationToFadeIn,
+  static SnackBar buildSnackBar(final BuildContext context, final String text, final int durationToFadeIn,
       final String actionLabel, final Function() onPressedFunction,
-      {final Color? snackBarTextColor, final Color? actionLabelColor}) {
+      {final bool isError = false}) {
+    final textColor = isError ? Theme.of(context).errorColor : Theme.of(context).colorScheme.secondary;
+    final actionColor = isError ? Theme.of(context).errorColor : Theme.of(context).colorScheme.primary;
     var snackBar = SnackBar(
-        backgroundColor: snackbarColor,
-        content: Text(text, style: TextStyle(color: snackBarTextColor ?? Colors.indigo, fontWeight: FontWeight.w500)),
+        elevation: 2,
+        backgroundColor: AppTheme.modalBottomSheetBg(context),
+        content: Text(text, style: Theme.of(context).textTheme.subtitle2!.copyWith(color: textColor)),
         duration: Duration(seconds: durationToFadeIn),
-        behavior: SnackBarBehavior.floating,
-        action: SnackBarAction(label: actionLabel, onPressed: onPressedFunction, textColor: actionLabelColor));
+        behavior: SnackBarBehavior.fixed,
+        action: SnackBarAction(label: actionLabel, onPressed: onPressedFunction, textColor: actionColor));
     return snackBar;
   }
 
@@ -68,7 +63,7 @@ class WidgetUtils {
     if (underMaintenance != null && underMaintenance) {
       final String underMaintenanceMsg = underMaintenanceDocSnap['maintenanceMessage'];
       ScaffoldMessenger.of(context)
-          .showSnackBar(WidgetUtils.buildSnackBar2(underMaintenanceMsg, Colors.indigo, 12 * 60 * 60 * 30, 'Exit', () {
+          .showSnackBar(buildSnackBar(context, underMaintenanceMsg, 12 * 60 * 60 * 30, 'Exit', () {
         if (Platform.isIOS) {
           // Apple does not like  this, as it is against their Human Interface Guidelines.
           exit(0);
@@ -77,25 +72,9 @@ class WidgetUtils {
         } else {
           // Not sure if SystemNavigator.pop(); would work
         }
-      }, snackBarTextColor: Colors.white, actionLabelColor: Colors.red));
+      }, isError: true));
     } else {
       LogUtil.debug(_tag, 'Pumped Backend is not under maintenance');
     }
-  }
-
-  static ElevatedButton getRoundedElevatedButton(
-      {final Function()? onPressed,
-      final Widget? child,
-      required final Color backgroundColor,
-      final Color foreGroundColor = Colors.white,
-      required final double borderRadius}) {
-    return ElevatedButton(
-        onPressed: onPressed,
-        style: ButtonStyle(
-            foregroundColor: MaterialStateProperty.all(foreGroundColor),
-            backgroundColor: MaterialStateProperty.all(backgroundColor),
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(borderRadius)))),
-        child: Padding(padding: const EdgeInsets.only(left: 15, right: 15), child: child));
   }
 }
