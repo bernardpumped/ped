@@ -17,8 +17,10 @@
  */
 
 import 'package:pumped_end_device/models/pumped/fuel_station.dart';
+import 'package:pumped_end_device/models/pumped/fuel_type.dart';
 
 class FuelStationDetailsParam {
   final FuelStation fuelStation;
-  FuelStationDetailsParam(this.fuelStation);
+  final FuelType selectedFuelType;
+  FuelStationDetailsParam(this.fuelStation, this.selectedFuelType);
 }

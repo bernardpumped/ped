@@ -75,17 +75,16 @@ class _OperatingTimeWidgetState extends State<OperatingTimeWidget> {
             if (widget.editable) {
               _pickTime(context, widget.hours, widget.mins, true);
             } else {
-              WidgetUtils.showToastMessage(context, 'Cannot change this operating time', Colors.indigo);
+              WidgetUtils.showToastMessage(context, 'Cannot change this operating time');
               LogUtil.debug(_tag, 'Cannot mutate operating time provided by ${widget.source}');
             }
           }
         },
         child: SizedBox(
-            height: 30,
+            height: 35,
             child: Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
               const SizedBox(width: 5),
-              Text(selectedTime!,
-                  style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: Colors.indigo))
+              Text(selectedTime!, style: Theme.of(context).textTheme.bodyText1)
             ])));
   }
 

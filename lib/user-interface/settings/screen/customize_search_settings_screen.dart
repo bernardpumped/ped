@@ -77,33 +77,35 @@ class _CustomizeSearchSettingsScreenState extends State<CustomizeSearchSettingsS
   @override
   Widget build(final BuildContext context) {
     return Scaffold(
-        appBar: const PumpedAppBar(),
-        body: Container(
+        appBar: const PumpedAppBar(title: 'Pumped Settings'),
+        body: SizedBox(
             height: MediaQuery.of(context).size.height,
-            color: const Color(0xFFF0EDFF),
-            width: double.infinity,
-            padding: const EdgeInsets.only(right: 10, bottom: 15, left: 10),
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-              const Padding(
-                  padding: EdgeInsets.only(top: 10, bottom: 10, left: 10),
-                  child: Text('Customize Search',
-                      style: TextStyle(fontSize: 24, color: Colors.indigo, fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.center)),
-              Expanded(
-                  child: ListView(children: <Widget>[
-                _expansionTileDecoration(_getNumSearchResultsExpansionTile()),
-                _expansionTileDecoration(_getFuelCategoriesExpansionTile()),
-                _expansionTileDecoration(_getFuelTypesExpansionTile()),
-                _expansionTileDecoration(_getSearchRadiusExpansionTile()),
-                _expansionTileDecoration(_getSortOrderExpansionTile()),
-                _getButtonRow(context),
-                _getVersionNumberRow()
-              ]))
-            ])));
+            child: Padding(
+                padding: const EdgeInsets.only(right: 10, bottom: 15, left: 10),
+                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
+                  Padding(
+                      padding: const EdgeInsets.only(top: 10, bottom: 10, left: 20),
+                      child: Row(children: [
+                        const Icon(Icons.settings_outlined, size: 30),
+                        const SizedBox(width: 10),
+                        Text('Customize Search',
+                            style: Theme.of(context).textTheme.headline3, textAlign: TextAlign.center)
+                      ])),
+                  Expanded(
+                      child: ListView(children: <Widget>[
+                    _expansionTileDecoration(_getNumSearchResultsExpansionTile()),
+                    _expansionTileDecoration(_getFuelCategoriesExpansionTile()),
+                    _expansionTileDecoration(_getFuelTypesExpansionTile()),
+                    _expansionTileDecoration(_getSearchRadiusExpansionTile()),
+                    _expansionTileDecoration(_getSortOrderExpansionTile()),
+                    _getButtonRow(context),
+                    _getVersionNumberRow()
+                  ]))
+                ]))));
   }
 
   Widget _expansionTileDecoration(final Widget expansionTile) {
-    return Card(color: Colors.white, surfaceTintColor: Colors.white, child: expansionTile);
+    return Card(child: expansionTile);
   }
 
   FutureBuilder<DropDownValues<num>> _getNumSearchResultsExpansionTile() {
@@ -112,26 +114,23 @@ class _CustomizeSearchSettingsScreenState extends State<CustomizeSearchSettingsS
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             LogUtil.debug(_tag, '_getNumSearchResultsExpansionTile::error ${snapshot.error}');
-            return const Text('Error Loading Num Search Results Count',
-                style: TextStyle(color: Colors.red, fontSize: 18, fontWeight: FontWeight.w500));
+            return Text('Error Loading Num Search Results Count',
+                style: Theme.of(context).textTheme.subtitle2!.copyWith(color: Theme.of(context).errorColor));
           } else if (snapshot.hasData) {
             final DropDownValues<num> dropDownValues = snapshot.data!;
             _searchResultsCountSelectedValue = _searchResultsCountSelectedValue == _unselectedValDouble
                 ? dropDownValues.values[dropDownValues.selectedIndex]
                 : _searchResultsCountSelectedValue;
             return ExpansionTile(
-                title: const Text('Number of Search Results',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.indigo)),
+                title: Text('Number of Search Results', style: Theme.of(context).textTheme.subtitle1),
                 subtitle: Text('$_searchResultsCountSelectedValue fuel stations around you',
-                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.indigo)),
-                leading: const Icon(Icons.format_list_numbered, size: 30, color: Colors.indigo),
+                    style: Theme.of(context).textTheme.bodyText2),
+                leading: const Icon(Icons.format_list_numbered, size: 30),
                 children: dropDownValues.values.map<RadioListTile<num>>((num numVal) {
                   return RadioListTile<num>(
                       selected: numVal == _searchResultsCountSelectedValue,
                       value: numVal,
-                      activeColor: Colors.indigo,
-                      title: Text('${numVal.toString()} fuel stations',
-                          style: const TextStyle(fontWeight: FontWeight.w500, color: Colors.indigo)),
+                      title: Text('${numVal.toString()} fuel stations', style: Theme.of(context).textTheme.subtitle2),
                       groupValue: _searchResultsCountSelectedValue,
                       onChanged: (newNumVal) {
                         setState(() {
@@ -144,9 +143,7 @@ class _CustomizeSearchSettingsScreenState extends State<CustomizeSearchSettingsS
                       });
                 }).toList());
           } else {
-            LogUtil.debug(_tag, 'No values found in searchResultCountFuture');
-            return const Text('Loading values for Num Search Results',
-                style: TextStyle(color: Colors.red, fontSize: 18, fontWeight: FontWeight.w500));
+            return Text('Loading values for Num Search Results', style: Theme.of(context).textTheme.subtitle2);
           }
         });
   }
@@ -157,31 +154,28 @@ class _CustomizeSearchSettingsScreenState extends State<CustomizeSearchSettingsS
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             LogUtil.debug(_tag, '_fuelCategoryDropdown _fuelCategoryDropdownValues error ${snapshot.error}');
-            return const Text('Error Loading Fuel Categories',
-                style: TextStyle(color: Colors.red, fontSize: 18, fontWeight: FontWeight.w500));
+            return Text('Error Loading Fuel Categories',
+                style: Theme.of(context).textTheme.subtitle2!.copyWith(color: Theme.of(context).errorColor));
           } else if (snapshot.hasData) {
             final DropDownValues<FuelCategory> dropDownValues = snapshot.data!;
             if (dropDownValues.noDataFound) {
-              return const Text('No Fuel Categories Found',
-                  style: TextStyle(color: Colors.red, fontSize: 18, fontWeight: FontWeight.w500));
+              return Text('No Fuel Categories Found',
+                  style: Theme.of(context).textTheme.subtitle2!.copyWith(color: Theme.of(context).errorColor));
             } else {
               _fuelCategorySelectedValue =
                   _fuelCategorySelectedValue ?? dropDownValues.values[dropDownValues.selectedIndex];
               return ExpansionTile(
-                  title: const Text('Fuel Category',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.indigo)),
+                  title: Text('Fuel Category', style: Theme.of(context).textTheme.subtitle1),
                   subtitle: _fuelCategorySelectedValue != null
                       ? Text('Fuel types from ${_fuelCategorySelectedValue!.categoryName}',
-                          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.indigo))
+                          style: Theme.of(context).textTheme.bodyText2)
                       : const SizedBox(width: 0),
-                  leading: const Icon(Icons.category_outlined, size: 30, color: Colors.indigo),
+                  leading: const Icon(Icons.category_outlined, size: 30),
                   children: dropDownValues.values.map<RadioListTile<FuelCategory>>((FuelCategory fuelCategory) {
                     return RadioListTile<FuelCategory>(
                         selected: fuelCategory.categoryId == _fuelCategorySelectedValue?.categoryId,
                         value: fuelCategory,
-                        activeColor: Colors.indigo,
-                        title: Text(fuelCategory.categoryName,
-                            style: const TextStyle(fontWeight: FontWeight.w500, color: Colors.indigo)),
+                        title: Text(fuelCategory.categoryName, style: Theme.of(context).textTheme.subtitle2),
                         groupValue: _fuelCategorySelectedValue,
                         onChanged: (changedFuelType) {
                           setState(() {
@@ -197,9 +191,7 @@ class _CustomizeSearchSettingsScreenState extends State<CustomizeSearchSettingsS
                   }).toList());
             }
           } else {
-            LogUtil.debug(_tag, 'No value found in fuelCategoryFuture');
-            return const Text('Loading Fuel Categories...',
-                style: TextStyle(color: Colors.indigo, fontSize: 18, fontWeight: FontWeight.w500));
+            return Text('Loading Fuel Categories...', style: Theme.of(context).textTheme.subtitle2);
           }
         });
   }
@@ -210,30 +202,27 @@ class _CustomizeSearchSettingsScreenState extends State<CustomizeSearchSettingsS
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             LogUtil.debug(_tag, '_getFuelTypesExpansionTile::error ${snapshot.error}');
-            return const Text('Error Loading Fuel Types',
-                style: TextStyle(color: Colors.red, fontSize: 18, fontWeight: FontWeight.w500));
+            return Text('Error Loading Fuel Types',
+                style: Theme.of(context).textTheme.subtitle2!.copyWith(color: Theme.of(context).errorColor));
           } else if (snapshot.hasData) {
             final DropDownValues<FuelType> dropDownValues = snapshot.data!;
             if (dropDownValues.noDataFound) {
-              return const Text('No Fuel Types found',
-                  style: TextStyle(color: Colors.red, fontSize: 18, fontWeight: FontWeight.w500));
+              return Text('No Fuel Types found',
+                  style: Theme.of(context).textTheme.subtitle2!.copyWith(color: Theme.of(context).errorColor));
             } else {
               _fuelTypeSelectedValue = __fuelTypeSelectedValue(dropDownValues);
               return ExpansionTile(
-                  title: const Text('Fuel Types',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.indigo)),
+                  title: Text('Fuel Types', style: Theme.of(context).textTheme.subtitle1),
                   subtitle: _fuelTypeSelectedValue != null
                       ? Text('Filter results by ${_fuelTypeSelectedValue!.fuelName}',
-                          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.indigo))
+                          style: Theme.of(context).textTheme.bodyText2)
                       : const SizedBox(width: 0),
-                  leading: const Icon(Icons.class_outlined, color: Colors.indigo, size: 30),
+                  leading: const Icon(Icons.class_outlined, size: 30),
                   children: dropDownValues.values.map<RadioListTile<FuelType>>((FuelType fuelType) {
                     return RadioListTile<FuelType>(
                         selected: fuelType.fuelType == _fuelTypeSelectedValue?.fuelType,
                         value: fuelType,
-                        activeColor: Colors.indigo,
-                        title: Text(fuelType.fuelName,
-                            style: const TextStyle(fontWeight: FontWeight.w500, color: Colors.indigo)),
+                        title: Text(fuelType.fuelName, style: Theme.of(context).textTheme.subtitle2),
                         groupValue: _fuelTypeSelectedValue,
                         onChanged: (changedFuelType) {
                           setState(() {
@@ -247,9 +236,7 @@ class _CustomizeSearchSettingsScreenState extends State<CustomizeSearchSettingsS
                   }).toList());
             }
           } else {
-            LogUtil.debug(_tag, 'No value found in _fuelTypeDropdownValues future');
-            return const Text('Loading Fuel Types...',
-                style: TextStyle(color: Colors.indigo, fontSize: 18, fontWeight: FontWeight.w500));
+            return Text('Loading Fuel Types...', style: Theme.of(context).textTheme.subtitle2);
           }
         });
   }
@@ -260,26 +247,23 @@ class _CustomizeSearchSettingsScreenState extends State<CustomizeSearchSettingsS
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             LogUtil.debug(_tag, '_getSearchRadiusExpansionTile::error ${snapshot.error}');
-            return const Text('Error Loading Search Radius',
-                style: TextStyle(color: Colors.red, fontSize: 18, fontWeight: FontWeight.w500));
+            return Text('Error Loading Search Radius',
+                style: Theme.of(context).textTheme.subtitle2!.copyWith(color: Theme.of(context).errorColor));
           } else if (snapshot.hasData) {
             final DropDownValues<num> dropDownValues = snapshot.data!;
             _searchRadiusSelectedValue = _searchRadiusSelectedValue == _unselectedValDouble
                 ? dropDownValues.values[dropDownValues.selectedIndex]
                 : _searchRadiusSelectedValue;
             return ExpansionTile(
-                title: const Text('Search Radius',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.indigo)),
+                title: Text('Search Radius', style: Theme.of(context).textTheme.subtitle1),
                 subtitle: Text('Search $_searchRadiusSelectedValue Km Radius around you',
-                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.indigo)),
-                leading: const Icon(Icons.explore_outlined, color: Colors.indigo, size: 30),
+                    style: Theme.of(context).textTheme.bodyText2),
+                leading: const Icon(Icons.explore_outlined, size: 30),
                 children: dropDownValues.values.map<RadioListTile<num>>((num numVal) {
                   return RadioListTile<num>(
                       selected: numVal == _searchRadiusSelectedValue,
                       value: numVal,
-                      activeColor: Colors.indigo,
-                      title: Text('${numVal.toString()} Km Radius',
-                          style: const TextStyle(fontWeight: FontWeight.w500, color: Colors.indigo)),
+                      title: Text('${numVal.toString()} Km Radius', style: Theme.of(context).textTheme.subtitle2),
                       groupValue: _searchRadiusSelectedValue,
                       onChanged: (newNumVal) {
                         setState(() {
@@ -292,9 +276,7 @@ class _CustomizeSearchSettingsScreenState extends State<CustomizeSearchSettingsS
                       });
                 }).toList());
           } else {
-            LogUtil.debug(_tag, 'No value found in _searchRadiusDropdownValues future');
-            return const Text('Loading Search Radius...',
-                style: TextStyle(color: Colors.indigo, fontSize: 18, fontWeight: FontWeight.w500));
+            return Text('Loading Search Radius...', style: Theme.of(context).textTheme.subtitle2);
           }
         });
   }
@@ -305,26 +287,23 @@ class _CustomizeSearchSettingsScreenState extends State<CustomizeSearchSettingsS
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             LogUtil.debug(_tag, '_getSortOrderExpansionTile::error ${snapshot.error}');
-            return const Text('Error Loading Sort Order',
-                style: TextStyle(color: Colors.red, fontSize: 18, fontWeight: FontWeight.w500));
+            return Text('Error Loading Sort Order',
+                style: Theme.of(context).textTheme.subtitle2!.copyWith(color: Theme.of(context).errorColor));
           } else if (snapshot.hasData) {
             final DropDownValues<SortOrder> dropDownValues = snapshot.data!;
             _sortOrderSelectedVal = _sortOrderSelectedVal ?? dropDownValues.values[dropDownValues.selectedIndex];
             return ExpansionTile(
-                title: const Text('Result Sort Order',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.indigo)),
+                title: Text('Result Sort Order', style: Theme.of(context).textTheme.subtitle1),
                 subtitle: _sortOrderSelectedVal != null
                     ? Text('Prefer ${_sortOrderSelectedVal!.sortOrderDesc!}',
-                        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.indigo))
+                        style: Theme.of(context).textTheme.bodyText2)
                     : const SizedBox(width: 0),
-                leading: const Icon(Icons.compare_outlined, color: Colors.indigo, size: 30),
+                leading: const Icon(Icons.compare_outlined, size: 30),
                 children: dropDownValues.values.map<RadioListTile<SortOrder>>((SortOrder sortOrder) {
                   return RadioListTile<SortOrder>(
                       selected: sortOrder == _sortOrderSelectedVal,
                       value: sortOrder,
-                      activeColor: Colors.indigo,
-                      title: Text(sortOrder.sortOrderName!,
-                          style: const TextStyle(fontWeight: FontWeight.w500, color: Colors.indigo)),
+                      title: Text(sortOrder.sortOrderName!, style: Theme.of(context).textTheme.subtitle2),
                       groupValue: _sortOrderSelectedVal,
                       onChanged: (newSortOrder) {
                         setState(() {
@@ -337,8 +316,7 @@ class _CustomizeSearchSettingsScreenState extends State<CustomizeSearchSettingsS
                       });
                 }).toList());
           } else {
-            return const Text('Loading values for Sort Order...',
-                style: TextStyle(color: Colors.red, fontSize: 18, fontWeight: FontWeight.w500));
+            return Text('Loading values for Sort Order...', style: Theme.of(context).textTheme.subtitle2);
           }
         });
   }
@@ -355,11 +333,7 @@ class _CustomizeSearchSettingsScreenState extends State<CustomizeSearchSettingsS
     return Padding(
         padding: const EdgeInsets.only(top: 20),
         child: Row(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
-          WidgetUtils.getRoundedElevatedButton(
-              backgroundColor: Colors.indigo,
-              foreGroundColor: Colors.white,
-              borderRadius: 18.0,
-              child: const Text("Save"),
+          ElevatedButton(
               onPressed: () {
                 if (_userSettingsVersion != null && _userSettingsVersion! >= 1) {
                   if (_fuelCategorySelectedValue != null &&
@@ -375,11 +349,11 @@ class _CustomizeSearchSettingsScreenState extends State<CustomizeSearchSettingsS
                             _sortOrderSelectedVal!.sortOrderStr!,
                             _userSettingsVersion!)
                         .then((result) {
-                      WidgetUtils.showToastMessage(context, 'Search Settings updated', Colors.indigo);
+                      WidgetUtils.showToastMessage(context, 'Search Settings updated');
                       Navigator.of(context).pop();
                     }, onError: (error, s) {
                       LogUtil.debug(_tag, 'Failed Persistence Result $s');
-                      WidgetUtils.showToastMessage(context, 'Error updating search settings', Colors.indigo);
+                      WidgetUtils.showToastMessage(context, 'Error updating search settings', isErrorToast: true);
                     });
                   } else {
                     LogUtil.debug(
@@ -388,9 +362,13 @@ class _CustomizeSearchSettingsScreenState extends State<CustomizeSearchSettingsS
                         '  _fuelTypeSelectedValue : $_fuelTypeSelectedValue  _sortOrderSelectedVal : $_sortOrderSelectedVal');
                   }
                 } else {
-                  WidgetUtils.showToastMessage(context, 'Settings not loaded. So cannot save.', Colors.indigo);
+                  WidgetUtils.showToastMessage(context, 'Settings not loaded. So cannot save.');
                 }
-              })
+              },
+              child: Padding(
+                  padding: const EdgeInsets.only(left: 15, right: 15),
+                  child: Row(
+                      children: const [Icon(Icons.save_alt_outlined, size: 24), SizedBox(width: 10), Text('Save')])))
         ]));
   }
 
@@ -402,11 +380,11 @@ class _CustomizeSearchSettingsScreenState extends State<CustomizeSearchSettingsS
             if (snapshot.hasError) {
               _userSettingsVersion = -1;
               LogUtil.debug(_tag, '_getVersionNumberRow::${snapshot.error}');
-              return const Text('Error loading the settings', style: TextStyle(color: Colors.red, fontSize: 13));
+              return Text('Error loading the user settings version',
+                  style: Theme.of(context).textTheme.overline!.copyWith(color: Theme.of(context).errorColor));
             } else if (snapshot.hasData) {
               _userSettingsVersion = snapshot.data;
-              return Text('Version : $_userSettingsVersion',
-                  style: const TextStyle(color: Colors.indigo, fontSize: 15, fontWeight: FontWeight.w500));
+              return Text('User Settings Version : $_userSettingsVersion', style: Theme.of(context).textTheme.caption);
             } else {
               return const Text('Loading');
             }

@@ -34,19 +34,21 @@ class PhoneWidget extends StatelessWidget {
   Widget build(final BuildContext context) {
     return GestureDetector(
         child: Column(children: [
-          Card(
+          Material(
               elevation: 2,
-              color: Colors.indigo,
-              // color: Color(0xFFF0EDFF),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15), side: const BorderSide(color: Colors.indigo, width: 1)),
-              child: const Padding(
-                  padding: EdgeInsets.all(14.0),
-                  child: Icon(Icons.phone_outlined, color: Colors.white))),
-          const Text('Call', style: TextStyle(color: Colors.indigo, fontSize: 14, fontWeight: FontWeight.w500))
+              clipBehavior: Clip.antiAlias,
+              borderRadius: BorderRadius.circular(15),
+              // Cannot use Theme.of(context).primaryColor because in darkMode it does not work well
+              color: Theme.of(context).textTheme.headline3!.color,
+              shadowColor: Theme.of(context).textTheme.headline3!.color,
+              child: Padding(
+                  padding: const EdgeInsets.all(14.0),
+                  child: Icon(Icons.phone_outlined, color: Theme.of(context).backgroundColor))),
+          Text('Call', style: Theme.of(context).textTheme.bodyText2)
         ]),
         onTap: () async {
           _launchCaller(_phone, () {
-            WidgetUtils.showToastMessage(context, 'Cannot call phone', Colors.indigo);
+            WidgetUtils.showToastMessage(context, 'Cannot call phone');
           });
         });
   }

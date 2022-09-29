@@ -17,37 +17,29 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:pumped_end_device/main.dart';
-import 'package:pumped_end_device/user-interface/fuel-stations/fuel_station_screen_color_scheme.dart';
 
 class NoFavouriteStationsWidget extends StatelessWidget {
   const NoFavouriteStationsWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(final BuildContext context) {
-    final FuelStationsScreenColorScheme colorScheme =
-        getIt.get<FuelStationsScreenColorScheme>(instanceName: fsScreenColorSchemeName);
-
     return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: ListView(children: <Widget>[
-        const SizedBox(height: 120),
-        Text('No Favourites',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600, color: colorScheme.noDataScreenTextColor),
-            textAlign: TextAlign.center),
-        const SizedBox(height: 20),
-        RichText(
-            textAlign: TextAlign.center,
-            text: TextSpan(children: [
-              TextSpan(
-                  text: "Tap on the favourite ",
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: colorScheme.noDataScreenTextColor)),
-              WidgetSpan(child: Icon(Icons.favorite, size: 18, color: colorScheme.noDataScreenTextColor)),
-              TextSpan(
-                  text: " icon in Fuel Station details to add fuel station to favourites.",
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: colorScheme.noDataScreenTextColor))
-            ]))
-      ]),
-    );
+        padding: const EdgeInsets.all(8.0),
+        child: ListView(children: <Widget>[
+          const SizedBox(height: 120),
+          Text('No Favourites', style: Theme.of(context).textTheme.headline2, textAlign: TextAlign.center),
+          const SizedBox(height: 20),
+          Padding(
+              padding: const EdgeInsets.only(left: 12, right: 12),
+              child: RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(children: [
+                    TextSpan(text: "Tap on the favourite ", style: Theme.of(context).textTheme.bodyText1),
+                    const WidgetSpan(child: Icon(Icons.favorite, size: 20)),
+                    TextSpan(
+                        text: " icon in Fuel Station details to add fuel station to favourites.",
+                        style: Theme.of(context).textTheme.bodyText1)
+                  ])))
+        ]));
   }
 }

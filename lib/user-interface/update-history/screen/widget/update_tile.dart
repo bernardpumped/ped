@@ -29,63 +29,55 @@ class UpdateTile extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
+    final bgColor = Theme.of(context).backgroundColor;
     return GestureDetector(
         onTap: () {
           Navigator.pushNamed(context, UpdateHistoryDetailsScreen.routeName, arguments: _updateTileData);
           LogUtil.debug(_tag, 'Tapped Item');
         },
         child: Card(
-          color: Colors.white,
-            surfaceTintColor: Colors.white,
-            elevation: 2,
             child: Column(children: [
-              Padding(
-                  padding: const EdgeInsets.only(left: 25.0, top: 8, right: 25),
-                  child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                    Text('${_updateTileData.updateType.updateTypeReadableName} updates',
-                        style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 18, color: Colors.indigo)),
-                    const Icon(Icons.more_horiz)
-                  ])),
-              Padding(
-                  padding: const EdgeInsets.only(left: 25.0, bottom: 20, right: 25, top: 8),
-                  child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                    Card(
-                        elevation: 2,
-                        color: const Color(0xFF3F51B5),
-                        child: Container(
-                            padding: const EdgeInsets.all(12),
-                            child: Column(children: [
-                              Text('${_updateTileData.success}',
-                                  style:
-                                      const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white)),
-                              const Text('Success',
-                                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.normal, color: Colors.white))
-                            ]))),
-                    Card(
-                        elevation: 2,
-                        color: const Color(0xFFEB5D63),
-                        child: Container(
-                            padding: const EdgeInsets.all(12),
-                            child: Column(children: [
-                              Text('${_updateTileData.failure}',
-                                  style:
-                                      const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white)),
-                              const Text('Failed ',
-                                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.normal, color: Colors.white))
-                            ]))),
-                    Card(
-                        elevation: 2,
-                        color: const Color(0xFFABA9BB),
-                        child: Container(
-                            padding: const EdgeInsets.all(12),
-                            child: Column(children: [
-                              Text('${_updateTileData.pending}',
-                                  style:
-                                      const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white)),
-                              const Text('Pending',
-                                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.normal, color: Colors.white))
-                            ])))
-                  ]))
-            ])));
+          Padding(
+              padding: const EdgeInsets.only(left: 25.0, top: 8, right: 25),
+              child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                Text('${_updateTileData.updateType.updateTypeReadableName} updates',
+                    style: Theme.of(context).textTheme.subtitle2),
+                const Icon(Icons.more_horiz)
+              ])),
+          Padding(
+              padding: const EdgeInsets.only(left: 25.0, bottom: 20, right: 25, top: 8),
+              child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+                Card(
+                    elevation: 2,
+                    color: Theme.of(context).colorScheme.primary,
+                    child: Container(
+                        padding: const EdgeInsets.all(12),
+                        child: Column(children: [
+                          Text('${_updateTileData.success}',
+                              style: Theme.of(context).textTheme.headline3!.copyWith(color: bgColor)),
+                          Text('Success', style: Theme.of(context).textTheme.bodyText2!.copyWith(color: bgColor))
+                        ]))),
+                Card(
+                    elevation: 2,
+                    color: Theme.of(context).errorColor,
+                    child: Container(
+                        padding: const EdgeInsets.all(12),
+                        child: Column(children: [
+                          Text('${_updateTileData.failure}',
+                              style: Theme.of(context).textTheme.headline3!.copyWith(color: bgColor)),
+                          Text(' Failed  ', style: Theme.of(context).textTheme.bodyText2!.copyWith(color: bgColor))
+                        ]))),
+                Card(
+                    elevation: 2,
+                    color: Theme.of(context).primaryColorLight,
+                    child: Container(
+                        padding: const EdgeInsets.all(12),
+                        child: Column(children: [
+                          Text('${_updateTileData.pending}',
+                              style: Theme.of(context).textTheme.headline3!.copyWith(color: bgColor)),
+                          Text('Pending', style: Theme.of(context).textTheme.bodyText2!.copyWith(color: bgColor))
+                        ])))
+              ]))
+        ])));
   }
 }

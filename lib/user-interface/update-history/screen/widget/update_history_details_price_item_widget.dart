@@ -42,62 +42,39 @@ class UpdateHistoryDetailsPriceItemWidget extends StatelessWidget {
     final updateStatus = _getUpdateResult();
     return Card(
         margin: const EdgeInsets.all(2),
-        color: Colors.white,
-        surfaceTintColor: Colors.white,
-        elevation: 2,
         child: Column(children: <Widget>[
           Padding(
               padding: const EdgeInsets.only(top: 12, left: 20, right: 20),
               child: Row(children: <Widget>[
-                const Expanded(
-                    flex: 1,
-                    child: Text('Fuel Type',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.indigo))),
-                Expanded(flex: 1, child: Text(fuelType, style: const TextStyle(fontSize: 16, color: Colors.indigo)))
+                Expanded(flex: 1, child: Text('Fuel Type', style: Theme.of(context).textTheme.bodyText1)),
+                Expanded(flex: 1, child: Text(fuelType, style: Theme.of(context).textTheme.bodyText1))
               ])),
           Padding(
               padding: const EdgeInsets.only(top: 12, left: 20, right: 20),
               child: Row(children: <Widget>[
-                const Expanded(
-                    flex: 1,
-                    child: Text('Old Value',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.indigo))),
-                Expanded(
-                    flex: 1,
-                    child: Text(originalFuelQuoteValue, style: const TextStyle(fontSize: 16, color: Colors.indigo)))
+                Expanded(flex: 1, child: Text('Old Price', style: Theme.of(context).textTheme.bodyText1)),
+                Expanded(flex: 1, child: Text(originalFuelQuoteValue, style: Theme.of(context).textTheme.bodyText1))
               ])),
           Padding(
               padding: const EdgeInsets.only(top: 12, left: 20, right: 20),
               child: Row(children: <Widget>[
-                const Expanded(
-                    flex: 1,
-                    child: Text('New Value',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.indigo))),
-                Expanded(
-                    flex: 1,
-                    child: Text('$updatedFuelQuoteValue', style: const TextStyle(fontSize: 16, color: Colors.indigo)))
+                Expanded(flex: 1, child: Text('New Price', style: Theme.of(context).textTheme.bodyText1)),
+                Expanded(flex: 1, child: Text('$updatedFuelQuoteValue', style: Theme.of(context).textTheme.bodyText1))
               ])),
           Padding(
               padding: const EdgeInsets.only(top: 12, left: 20, right: 20),
               child: Row(children: <Widget>[
-                const Expanded(
-                    flex: 1,
-                    child: Text('Status',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.indigo))),
-                Expanded(flex: 1, child: Text(updateStatus, style: const TextStyle(fontSize: 16, color: Colors.indigo)))
+                Expanded(flex: 1, child: Text('Status', style: Theme.of(context).textTheme.bodyText1)),
+                Expanded(flex: 1, child: Text(updateStatus, style: Theme.of(context).textTheme.bodyText1))
               ])),
           _getUpdateResult() == 'Failed'
               ? Padding(
                   padding: const EdgeInsets.only(top: 12, left: 20, right: 20, bottom: 12),
                   child: Row(children: <Widget>[
-                    const Expanded(
-                        flex: 1,
-                        child: Text('Details',
-                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.indigo))),
+                    Expanded(flex: 1, child: Text('Details', style: Theme.of(context).textTheme.bodyText1)),
                     Expanded(
                         flex: 1,
-                        child: Text(_getTranslatedUpdateResult(),
-                            style: const TextStyle(fontSize: 16, color: Colors.indigo)))
+                        child: Text(_getTranslatedUpdateResult(), style: Theme.of(context).textTheme.bodyText1))
                   ]))
               : const SizedBox(height: 12)
         ]));

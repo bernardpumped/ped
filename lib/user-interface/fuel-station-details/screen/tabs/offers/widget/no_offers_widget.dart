@@ -18,8 +18,8 @@
 
 import 'package:flutter/material.dart';
 
-class NoPromotionsWidget extends StatelessWidget {
-  const NoPromotionsWidget({Key? key}) : super(key: key);
+class NoOffersWidget extends StatelessWidget {
+  const NoOffersWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(final BuildContext context) {
@@ -29,17 +29,14 @@ class NoPromotionsWidget extends StatelessWidget {
         child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: const <Widget>[
-              Text('No Current Offers',
-                  style: TextStyle(fontSize: 34, fontWeight: FontWeight.w500, color: Colors.indigo),
-                  textAlign: TextAlign.center),
+            children: <Widget>[
+              Text('No Current Offers', style: Theme.of(context).textTheme.headline2, textAlign: TextAlign.center),
               Text(
                   "\n Click here if you'd appreciate this station providing more and better offers and we'll let them know",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.indigo),
+                  style: Theme.of(context).textTheme.subtitle2,
                   textAlign: TextAlign.center),
               Text('\n Come back again soon.',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.indigo),
-                  textAlign: TextAlign.center)
+                  style: Theme.of(context).textTheme.subtitle2, textAlign: TextAlign.center)
             ]));
   }
 }

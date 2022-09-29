@@ -58,11 +58,10 @@ class _AnimEditFuelPriceLineItemWidgetState extends State<AnimEditFuelPriceLineI
   int digitsAfterDecimal = 0;
 
   final FocusNode _focus = FocusNode();
-  static const _focusHeight = 85;
-  static const _noFocusHeight = 55;
+  static const _focusHeight = 90;
+  static const _noFocusHeight = 60;
   static const _noFocusHintHeight = 0;
   static const _focusHintHeight = 30;
-  static const _exceptionColor = Colors.red;
   double _height = _noFocusHeight.toDouble();
   double _hintHeight = _noFocusHintHeight.toDouble();
   static const _focusDurationMills = 1000;
@@ -70,7 +69,7 @@ class _AnimEditFuelPriceLineItemWidgetState extends State<AnimEditFuelPriceLineI
   int _durationMills = _focusDurationMills;
   double? enteredPrice;
   String? trackingValue;
-  late Color _hintTextColor;
+  late bool _isItError;
 
   bool decimalDeleted = false;
 
@@ -97,17 +96,16 @@ class _AnimEditFuelPriceLineItemWidgetState extends State<AnimEditFuelPriceLineI
   @override
   Widget build(final BuildContext context) {
     String hintMessage = 'No Price Range';
-    _hintTextColor = Colors.indigo;
+    _isItError = false;
     if (widget.fuelAuthorityPriceMetadata != null) {
       final minPrice = _getMinPrice(widget.fuelAuthorityPriceMetadata);
       final maxPrice = _getMaxPrice(widget.fuelAuthorityPriceMetadata);
       if (enteredPrice != null && (enteredPrice! < minPrice || enteredPrice! > maxPrice)) {
         hintMessage = 'Not in range $minPrice and $maxPrice';
-        _hintTextColor = _exceptionColor;
+        _isItError = true;
       } else {
         hintMessage = 'Price Range $minPrice - $maxPrice';
       }
-
     }
     digitsAfterDecimal = int.parse(widget.currencyValueFormat.substring(2, 4));
 
@@ -115,49 +113,44 @@ class _AnimEditFuelPriceLineItemWidgetState extends State<AnimEditFuelPriceLineI
     if (!enabled) {
       return GestureDetector(
           child: Card(
-            child: Container(
-                padding: const EdgeInsets.only(left: 30, right: 30, top: 3, bottom: 3),
-                height: _noFocusHeight.toDouble(),
-                decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
-                child: _getFuelTypeQuoteValRow(_buildTextField(widget.fuelQuote))),
-          ),
+              child: Container(
+                  padding: const EdgeInsets.only(left: 30, right: 30, top: 3, bottom: 3),
+                  height: _noFocusHeight.toDouble(),
+                  child: _getFuelTypeQuoteValRow(_buildTextField(widget.fuelQuote)))),
           onTap: () {
-            WidgetUtils.showToastMessage(context, 'Fuel Price cannot be changed', Colors.indigo);
+            WidgetUtils.showToastMessage(context, 'Fuel Price cannot be changed');
           });
     } else {
       final Widget fuelQuoteTextField = _buildFuelQuoteTextField(widget.fuelPriceEditingController!);
       return Card(
-        color: Colors.white,
-        surfaceTintColor: Colors.white,
-        child: AnimatedContainer(
-            padding: const EdgeInsets.only(left: 30, right: 30, top: 3, bottom: 3),
-            height: _height,
-            duration: const Duration(milliseconds: 500),
-            curve: Curves.fastOutSlowIn,
-            child: Column(children: [
-              _getFuelTypeQuoteValRow(fuelQuoteTextField),
-              AnimatedContainer(
-                  padding: EdgeInsets.only(top: _hintHeight != _noFocusHintHeight ? 10 : 0),
-                  height: _hintHeight,
-                  duration: Duration(milliseconds: _durationMills),
-                  child: Text(hintMessage,
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400, color: _hintTextColor),
-                      textAlign: TextAlign.center))
-            ])),
-      );
+          child: AnimatedContainer(
+              padding: const EdgeInsets.only(left: 30, right: 30, top: 3, bottom: 3),
+              height: _height,
+              duration: const Duration(milliseconds: 500),
+              curve: Curves.fastOutSlowIn,
+              child: Column(children: [
+                _getFuelTypeQuoteValRow(fuelQuoteTextField),
+                AnimatedContainer(
+                    padding: EdgeInsets.only(top: _hintHeight != _noFocusHintHeight ? 10 : 0),
+                    height: _hintHeight,
+                    duration: Duration(milliseconds: _durationMills),
+                    child: Text(hintMessage,
+                        style: _isItError
+                            ? Theme.of(context).textTheme.caption!.copyWith(color: Theme.of(context).errorColor)
+                            : Theme.of(context).textTheme.caption,
+                        textAlign: TextAlign.center))
+              ])));
     }
   }
 
   Widget _getFuelTypeQuoteValRow(final Widget fuelQuoteWidget) {
     return Row(children: <Widget>[
       Expanded(
-          flex: 10,
+          flex: 9,
           child: Padding(
-              padding: const EdgeInsets.only(right: 10),
-              child: Text(widget.fuelName,
-                  style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w500, color: Colors.indigo),
-                  maxLines: 2))),
-      Expanded(flex: 4, child: fuelQuoteWidget),
+              padding: const EdgeInsets.only(right: 5),
+              child: Text(widget.fuelName, style: Theme.of(context).textTheme.subtitle2, maxLines: 2))),
+      Expanded(flex: 5, child: fuelQuoteWidget),
       Expanded(
           flex: 2,
           child: Padding(padding: const EdgeInsets.only(left: 15), child: _getFuelQuoteSourceIcon(widget.fuelQuote)))
@@ -168,8 +161,8 @@ class _AnimEditFuelPriceLineItemWidgetState extends State<AnimEditFuelPriceLineI
     if (fuelQuote.quoteValue != null && fuelQuote.fuelQuoteSource != null) {
       if (fuelQuote.fuelAuthoritySource() || fuelQuote.crowdSourced()) {
         return fuelQuote.fuelQuoteSource == 'F'
-            ? const Icon(Icons.info_outline, size: 30, color: Colors.indigo)
-            : const Icon(Icons.people_outline, size: 30, color: Colors.indigo);
+            ? const Icon(Icons.info_outline, size: 25)
+            : const Icon(Icons.people_outline, size: 25);
       }
     }
     return const SizedBox(width: 0);
@@ -179,7 +172,7 @@ class _AnimEditFuelPriceLineItemWidgetState extends State<AnimEditFuelPriceLineI
   static const _firstAllowedCharDecimalPos = 3;
   static const _alternateDecimalPos = 3;
 
-  TextField _buildFuelQuoteTextField(final TextEditingController textEditingController) {
+  _buildFuelQuoteTextField(final TextEditingController textEditingController) {
     int? firstAllowedChar;
     int? firstAllowedCharDecimalPos; //default value for decimal placement
     int? alternateDecimalPos;
@@ -193,12 +186,13 @@ class _AnimEditFuelPriceLineItemWidgetState extends State<AnimEditFuelPriceLineI
     final int finalAlternateDecimalPos = alternateDecimalPos ?? _alternateDecimalPos;
     final String currencyFormat = r'^\d+\.?\d{0,' + digitsAfterDecimal.toString() + '}';
     return TextField(
+        decoration: InputDecoration(
+            border: InputBorder.none,
+            hintText: 'Tap to update',
+            hintStyle: Theme.of(context).textTheme.caption!.copyWith(color: Theme.of(context).hintColor)),
         focusNode: _focus,
         controller: textEditingController,
-        style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w500, color: Colors.indigo),
-        cursorColor: Colors.indigo,
-        decoration: const InputDecoration(
-            focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.indigo))),
+        style: Theme.of(context).textTheme.subtitle2,
         keyboardType: TextInputType.number,
         maxLengthEnforcement: MaxLengthEnforcement.enforced,
         inputFormatters: [
@@ -272,8 +266,8 @@ class _AnimEditFuelPriceLineItemWidgetState extends State<AnimEditFuelPriceLineI
   }
 
   Text _buildTextField(final FuelQuote fuelQuote) {
-    return Text(fuelQuote.quoteValue != null ?fuelQuote.quoteValue.toString() : 'N/A',
-        style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w500, color: Colors.indigo));
+    return Text(fuelQuote.quoteValue != null ? fuelQuote.quoteValue.toString() : 'N/A',
+        style: Theme.of(context).textTheme.subtitle2);
   }
 }
 

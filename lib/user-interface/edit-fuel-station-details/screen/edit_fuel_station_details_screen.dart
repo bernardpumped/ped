@@ -42,17 +42,17 @@ class _EditFuelStationDetailsScreenState extends State<EditFuelStationDetailsScr
   @override
   Widget build(final BuildContext context) {
     params = ModalRoute.of(context)?.settings.arguments as EditFuelStationDetailsParams;
-    return Scaffold(appBar: const PumpedAppBar(), body: _drawBody());
+    return Scaffold(
+        appBar: const PumpedAppBar(title: 'Edit Fuel Station Details', icon: Icons.edit_location_alt_outlined),
+        body: _drawBody());
   }
 
   Widget _drawBody() {
     return SingleChildScrollView(
-        child: Container(
-            color: const Color(0xFFF0EDFF),
-            child: Column(children: [
-              ExpandedHeaderWidget(fuelStation: params.fuelStation, showPriceSource: false),
-              _bodyContentWidget(params.fuelStation)
-            ])));
+        child: Column(children: [
+      ExpandedHeaderWidget(fuelStation: params.fuelStation, showPriceSource: false),
+      _bodyContentWidget(params.fuelStation)
+    ]));
   }
 
   Widget _bodyContentWidget(final FuelStation fuelStation) {

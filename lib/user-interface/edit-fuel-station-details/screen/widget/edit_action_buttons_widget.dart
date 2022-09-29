@@ -17,12 +17,15 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:pumped_end_device/util/log_util.dart';
 
 class EditActionButton extends StatelessWidget {
+  static const _tag = 'EditActionButton';
   final String tag;
   final Function undoButtonAction;
   final Function saveButtonAction;
-  const EditActionButton({required this.undoButtonAction, required this.saveButtonAction, required this.tag, Key? key}) : super(key: key);
+  const EditActionButton({required this.undoButtonAction, required this.saveButtonAction, required this.tag, Key? key})
+      : super(key: key);
 
   @override
   Widget build(final BuildContext context) {
@@ -30,30 +33,28 @@ class EditActionButton extends StatelessWidget {
       AnimatedContainer(
           duration: const Duration(milliseconds: 200),
           curve: Curves.linear,
-          width: 120,
-          height: 40,
-          child: FloatingActionButton.extended(
-              heroTag: 'undo$tag',
-              backgroundColor: Colors.indigo,
+          child: OutlinedButton(
               onPressed: () {
+                LogUtil.debug(_tag, 'undo Button clicked');
                 undoButtonAction();
               },
-              icon: const Icon(Icons.restore),
-              label: const Center(child: Text("Undo", style: TextStyle(fontSize: 15, color: Colors.white))))),
+              child: Padding(
+                  padding: const EdgeInsets.only(left: 15, right: 15),
+                  child: Row(children: const [Icon(Icons.history, size: 24), SizedBox(width: 10), Text('Undo')])))),
       const SizedBox(width: 20),
       AnimatedContainer(
           duration: const Duration(milliseconds: 200),
           curve: Curves.linear,
-          width: 120,
-          height: 40,
-          child: FloatingActionButton.extended(
-              heroTag: 'save$tag',
-              backgroundColor: Colors.indigo,
+          // width: 120,
+          // height: 40,
+          child: OutlinedButton(
               onPressed: () {
+                LogUtil.debug(_tag, 'undo Button clicked');
                 saveButtonAction();
               },
-              icon: const Icon(Icons.sync),
-              label: const Center(child: Text("Save", style: TextStyle(fontSize: 15, color: Colors.white)))))
+              child: Padding(
+                  padding: const EdgeInsets.only(left: 15, right: 15),
+                  child: Row(children: const [Icon(Icons.sync, size: 24), SizedBox(width: 10), Text('Save')]))))
     ]);
   }
 }

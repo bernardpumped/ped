@@ -24,11 +24,8 @@ import 'package:pumped_end_device/main.dart';
 import 'package:pumped_end_device/models/pumped/fuel_category.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station.dart';
 import 'package:pumped_end_device/models/pumped/fuel_type.dart';
-import 'package:pumped_end_device/user-interface/fuel-stations/fuel_station_screen_color_scheme.dart';
-import 'package:pumped_end_device/user-interface/fuel-stations/screens/nearby/nearby_stations_screen.dart';
-import 'package:pumped_end_device/user-interface/fuel-stations/screens/widgets/fuel-station-sorter/fuel_station_sortater_widget.dart';
+import 'package:pumped_end_device/user-interface/fuel-stations/screens/widgets/fuel-station-sorter/fuel_station_sorter_widget.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/screens/widgets/fuel-type-switcher/fuel_type_switcher_btn.dart';
-import 'package:pumped_end_device/user-interface/fuel-stations/screens/widgets/fuel_station_switcher_widget.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/screens/widgets/fuel-type-switcher/fuel_type_switcher_widget.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/screens/widgets/fuel_station_list_widget.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/screens/widgets/fuel_station_type.dart';
@@ -46,6 +43,10 @@ import 'package:pumped_end_device/util/log_util.dart';
 
 class FavouriteStationsScreen extends StatefulWidget {
   static const routeName = '/ped/fuel-stations/favourite';
+  static const viewLabel = 'Favourite Fuel Stations';
+  static const viewIcon = Icons.favorite_outline;
+  static const viewSelectedIcon = Icons.favorite;
+
   const FavouriteStationsScreen({Key? key}) : super(key: key);
 
   @override
@@ -61,8 +62,6 @@ class _FavouriteStationsScreenState extends State<FavouriteStationsScreen> {
   ScrollController _scrollController = ScrollController();
   final FuelTypeSwitcherService _fuelTypeSwitcherDataSource = FuelTypeSwitcherService();
 
-  final FuelStationsScreenColorScheme colorScheme =
-      getIt.get<FuelStationsScreenColorScheme>(instanceName: fsScreenColorSchemeName);
   late StreamController<FuelTypeSwitcherData> _fuelTypeSwitcherDataStreamController;
 
   Future<FavoriteFuelStations>? _favoriteFuelStationsFuture;
@@ -97,10 +96,10 @@ class _FavouriteStationsScreenState extends State<FavouriteStationsScreen> {
   Widget build(final BuildContext context) {
     _fuelTypeSwitcherDataSource.addFuelTypeSwitcherDataToStream(_fuelTypeSwitcherDataStreamController);
     return Scaffold(
-        appBar: const PumpedAppBar(),
+        appBar: const PumpedAppBar(
+            title: FavouriteStationsScreen.viewLabel, icon: FavouriteStationsScreen.viewSelectedIcon),
         drawer: const NavDrawerWidget(),
-        body: _drawBody(),
-        floatingActionButton: FuelStationSorterWidget(parentUpdateFunction: scrollFuelStations));
+        body: _drawBody());
   }
 
   void scrollFuelStations(final int sortOrder) {
@@ -113,23 +112,10 @@ class _FavouriteStationsScreenState extends State<FavouriteStationsScreen> {
   }
 
   _drawBody() {
-    return Container(
-        color: colorScheme.bodyBackgroundColor,
-        child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-          Padding(
-              padding: const EdgeInsets.only(top: 5.0, left: 20, right: 20), child: _getStationTypeFuelTypeSwitcher()),
-          Expanded(child: _getFavouriteFuelStationsFutureBuilder()),
-        ]));
-  }
-
-  Widget _getStationTypeFuelTypeSwitcher() {
-    return Material(
-        color: colorScheme.stationFuelTypeSwitcherColor,
-        child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          FuelStationSwitcherWidget(
-              fuelStationType: FuelStationType.favourite, onChangeCallback: _handleFuelStationSwitch),
-          _getFuelTypeSwitcherStreamBuilder()
-        ]));
+    return Stack(children: [
+      _getFavouriteFuelStationsFutureBuilder(),
+      Positioned(right: 20, bottom: 20, child: _getFuelTypeSwitcherStreamBuilder())
+    ]);
   }
 
   StreamBuilder<FuelTypeSwitcherData> _getFuelTypeSwitcherStreamBuilder() {
@@ -173,14 +159,6 @@ class _FavouriteStationsScreenState extends State<FavouriteStationsScreen> {
     }
   }
 
-  void _handleFuelStationSwitch(final FuelStationType? fuelStationType) {
-    LogUtil.debug(_tag, 'fuelStationType found as $fuelStationType');
-    if (fuelStationType != null && fuelStationType == FuelStationType.nearby) {
-      LogUtil.debug(_tag, 'Named Replacement for ${NearbyStationsScreen.routeName}');
-      Navigator.pushReplacementNamed(context, NearbyStationsScreen.routeName);
-    }
-  }
-
   _getFavouriteFuelStationsFutureBuilder() {
     return FutureBuilder<FavoriteFuelStations>(
         future: _favoriteFuelStationsFuture,
@@ -198,7 +176,6 @@ class _FavouriteStationsScreenState extends State<FavouriteStationsScreen> {
               } else if (snapshot.hasData) {
                 final FavoriteFuelStations data = snapshot.data!;
                 return RefreshIndicator(
-                    color: Colors.blue,
                     onRefresh: () async {
                       setState(() {
                         _favoriteFuelStationsFuture = _favoriteFuelStationsDataSource.getFuelStations();
@@ -220,8 +197,11 @@ class _FavouriteStationsScreenState extends State<FavouriteStationsScreen> {
       _favouriteStations = data.fuelStations ?? [];
       if (_favouriteStations.isNotEmpty) {
         LogUtil.debug(_tag, '_favoriteFuelStationWidget::fuel type ${_selectedFuelType?.fuelType}');
-        return FuelStationListWidget(
-            _scrollController, _favouriteStations, _selectedFuelType!, sortOrder, FuelStationType.favourite);
+        return Stack(children: [
+          FuelStationListWidget(
+              _scrollController, _favouriteStations, _selectedFuelType!, sortOrder, FuelStationType.favourite),
+          Positioned(right: 20, bottom: 80, child: FuelStationSorterWidget(parentUpdateFunction: scrollFuelStations))
+        ]);
       } else {
         return const NoFavouriteStationsWidget();
       }

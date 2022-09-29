@@ -101,8 +101,8 @@ class _EditContactWidgetState extends State<EditContactWidget> {
             right: 25,
             child: Visibility(
                 visible: _fabVisible,
-                child:
-                    EditActionButton(undoButtonAction: _onContactChangeUndo, saveButtonAction: _onAddressChangeSave, tag: _tag)))
+                child: EditActionButton(
+                    undoButtonAction: _onContactChangeUndo, saveButtonAction: _onAddressChangeSave, tag: _tag)))
       ])
     ]);
   }
@@ -110,11 +110,10 @@ class _EditContactWidgetState extends State<EditContactWidget> {
   _getTitleWidget() {
     return Padding(
         padding: const EdgeInsets.only(left: 20, top: 10, bottom: 5),
-        child: Row(mainAxisAlignment: MainAxisAlignment.start, children: const [
-          Icon(Icons.location_city, size: 30, color: Colors.indigo),
-          SizedBox(width: 10),
-          Text('Update Contact Details',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Colors.indigo))
+        child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+          const Icon(Icons.location_city, size: 30),
+          const SizedBox(width: 10),
+          Text('Update Contact Details', style: Theme.of(context).textTheme.headline4)
         ]));
   }
 
@@ -127,38 +126,22 @@ class _EditContactWidgetState extends State<EditContactWidget> {
   _buildFutureBuilder() {
     final FuelStationAddress fuelStationAddress = _fuelStation.fuelStationAddress;
     List<Widget> columnContent = [];
-    columnContent.add(Padding(
-        padding: const EdgeInsets.only(left: 10, right: 10, bottom: 5),
-        child: EditFuelStationAddressLineItem('Name', UpdatableAddressComponents.stationName,
-            fuelStationAddress.contactName, _nameController, _backendUpdateInProgress, _onValueChangeListener)));
-    columnContent.add(Padding(
-        padding: const EdgeInsets.only(left: 10, right: 10, bottom: 5),
-        child: EditFuelStationAddressLineItem('Address', UpdatableAddressComponents.addressLine,
-            fuelStationAddress.addressLine1, _addressController, _backendUpdateInProgress, _onValueChangeListener)));
-    columnContent.add(Padding(
-        padding: const EdgeInsets.only(left: 10, right: 10, bottom: 5),
-        child: EditFuelStationAddressLineItem('Locality', UpdatableAddressComponents.locality,
-            fuelStationAddress.locality, _localityController, _backendUpdateInProgress, _onValueChangeListener)));
-    columnContent.add(Padding(
-        padding: const EdgeInsets.only(left: 10, right: 10, bottom: 5),
-        child: EditFuelStationAddressLineItem('Region', UpdatableAddressComponents.region, fuelStationAddress.region,
-            _regionController, _backendUpdateInProgress, _onValueChangeListener)));
-    columnContent.add(Padding(
-        padding: const EdgeInsets.only(left: 10, right: 10, bottom: 5),
-        child: EditFuelStationAddressLineItem('State', UpdatableAddressComponents.state, fuelStationAddress.state,
-            _stateController, _backendUpdateInProgress, _onValueChangeListener)));
-    columnContent.add(Padding(
-        padding: const EdgeInsets.only(left: 10, right: 10, bottom: 5),
-        child: EditFuelStationAddressLineItem('Zip', UpdatableAddressComponents.zip, fuelStationAddress.zip,
-            _zipController, _backendUpdateInProgress, _onValueChangeListener)));
-    columnContent.add(Padding(
-        padding: const EdgeInsets.only(left: 10, right: 10, bottom: 5),
-        child: EditPhoneNumberLineItem('Phone 1', UpdatableAddressComponents.phone1, fuelStationAddress.phone1,
-            _phone1Controller, _backendUpdateInProgress, _onValueChangeListener)));
-    columnContent.add(Padding(
-        padding: const EdgeInsets.only(left: 10, right: 10, bottom: 5),
-        child: EditPhoneNumberLineItem('Phone 2', UpdatableAddressComponents.phone2, fuelStationAddress.phone2,
-            _phone2Controller, _backendUpdateInProgress, _onValueChangeListener)));
+    columnContent.add(EditFuelStationAddressLineItem('Name', UpdatableAddressComponents.stationName,
+        fuelStationAddress.contactName, _nameController, _backendUpdateInProgress, _onValueChangeListener));
+    columnContent.add(EditFuelStationAddressLineItem('Address', UpdatableAddressComponents.addressLine,
+        fuelStationAddress.addressLine1, _addressController, _backendUpdateInProgress, _onValueChangeListener));
+    columnContent.add(EditFuelStationAddressLineItem('Locality', UpdatableAddressComponents.locality,
+        fuelStationAddress.locality, _localityController, _backendUpdateInProgress, _onValueChangeListener));
+    columnContent.add(EditFuelStationAddressLineItem('Region', UpdatableAddressComponents.region, fuelStationAddress.region,
+        _regionController, _backendUpdateInProgress, _onValueChangeListener));
+    columnContent.add(EditFuelStationAddressLineItem('State', UpdatableAddressComponents.state, fuelStationAddress.state,
+        _stateController, _backendUpdateInProgress, _onValueChangeListener));
+    columnContent.add(EditFuelStationAddressLineItem('Zip', UpdatableAddressComponents.zip, fuelStationAddress.zip,
+        _zipController, _backendUpdateInProgress, _onValueChangeListener));
+    columnContent.add(EditPhoneNumberLineItem('Phone 1', UpdatableAddressComponents.phone1, fuelStationAddress.phone1,
+        _phone1Controller, _backendUpdateInProgress, _onValueChangeListener));
+    columnContent.add(EditPhoneNumberLineItem('Phone 2', UpdatableAddressComponents.phone2, fuelStationAddress.phone2,
+        _phone2Controller, _backendUpdateInProgress, _onValueChangeListener));
     columnContent.add(Container(height: 100));
     return Column(children: columnContent);
   }
@@ -245,7 +228,7 @@ class _EditContactWidgetState extends State<EditContactWidget> {
     if (invalidInputs.isNotEmpty) {
       setState(() {});
       final String invalidInputMsg = invalidInputs.join(', ');
-      WidgetUtils.showToastMessage(context, invalidInputMsg, Colors.red);
+      WidgetUtils.showToastMessage(context, invalidInputMsg, isErrorToast: true);
       return;
     } else {
       if (updatePathAndValues.isNotEmpty) {
@@ -285,8 +268,8 @@ class _EditContactWidgetState extends State<EditContactWidget> {
             _tag, 'endDeviceUpdateFuelStation::updateAddress::persistenceResult : $persistUpdateHistoryResult');
         if (!mounted) return;
         final Map<String, dynamic> responseParseMap = _isUpdateSuccessful(response);
-        WidgetUtils.showToastMessage(
-            context, responseParseMap[_responseMsg], responseParseMap[_isSuccess]! ? Colors.indigo : Colors.red);
+        WidgetUtils.showToastMessage(context, responseParseMap[_responseMsg],
+            isErrorToast: !responseParseMap[_isSuccess]!);
         Navigator.pop(context, _getUpdateResponse(request, response, originalPathAndValues));
       }
     }

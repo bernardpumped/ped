@@ -51,23 +51,20 @@ class _TextLocaleMenuItemWidgetState extends State<TextLocaleMenuItemWidget> {
   @override
   Widget build(final BuildContext context) {
     return Card(
-        color: Colors.white,
-        surfaceTintColor: Colors.white,
         child: ExpansionTile(
-          title: Text("Locale - ${_locales[selectedLocale]}",
-              style: const TextStyle(fontSize: 18, color: Colors.indigo, fontWeight: FontWeight.w500)),
-          leading: const Icon(Icons.language, color: Colors.indigo, size: 30),
-          children: [
-            _getMenuItem(_systemLocale),
-            _getMenuItem(_deutschLocale),
-            _getMenuItem(_englishLocale),
-            _getMenuItem(_englishAusLocale),
-            _getMenuItem(_englishUkLocale),
-            _getMenuItem(_spanishLocale),
-            _getMenuItem(_frenchLocale),
-            _getMenuItem(_hindiLocale)
-          ],
-        ));
+      title: Text("Locale - ${_locales[selectedLocale]}", style: Theme.of(context).textTheme.subtitle1),
+      leading: const Icon(Icons.language, size: 30),
+      children: [
+        _getMenuItem(_systemLocale),
+        _getMenuItem(_deutschLocale),
+        _getMenuItem(_englishLocale),
+        _getMenuItem(_englishAusLocale),
+        _getMenuItem(_englishUkLocale),
+        _getMenuItem(_spanishLocale),
+        _getMenuItem(_frenchLocale),
+        _getMenuItem(_hindiLocale)
+      ],
+    ));
   }
 
   RadioListTile<String> _getMenuItem(final String value) {
@@ -79,6 +76,6 @@ class _TextLocaleMenuItemWidgetState extends State<TextLocaleMenuItemWidget> {
             selectedLocale = newVal!;
           });
         },
-        title: Text(_locales[value]!, style: const TextStyle(fontWeight: FontWeight.w500, color: Colors.indigo)));
+        title: Text(_locales[value]!, style: Theme.of(context).textTheme.subtitle2));
   }
 }

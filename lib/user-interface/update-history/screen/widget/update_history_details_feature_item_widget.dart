@@ -41,8 +41,6 @@ class UpdateHistoryDetailsFeatureItemWidget extends StatelessWidget {
     final String updateStatus = _getUpdateResult();
     return Card(
         margin: const EdgeInsets.all(2),
-        color: Colors.white,
-        surfaceTintColor: Colors.white,
         elevation: 2,
         child: Column(children: <Widget>[
           Padding(
@@ -51,19 +49,14 @@ class UpdateHistoryDetailsFeatureItemWidget extends StatelessWidget {
                 Expanded(
                     flex: 3,
                     child: Text(featureType,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.indigo))),
-                Expanded(flex: 2, child: Text(addRemove, style: const TextStyle(fontSize: 16, color: Colors.indigo)))
+                        overflow: TextOverflow.ellipsis, maxLines: 1, style: Theme.of(context).textTheme.bodyText1)),
+                Expanded(flex: 2, child: Text(addRemove, style: Theme.of(context).textTheme.bodyText1))
               ])),
           Padding(
               padding: const EdgeInsets.only(top: 12, left: 20, right: 20, bottom: 12),
               child: Row(children: <Widget>[
-                const Expanded(
-                    flex: 3,
-                    child: Text('Status',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.indigo))),
-                Expanded(flex: 2, child: Text(updateStatus, style: const TextStyle(fontSize: 16, color: Colors.indigo)))
+                Expanded(flex: 3, child: Text('Status', style: Theme.of(context).textTheme.bodyText1)),
+                Expanded(flex: 2, child: Text(updateStatus, style: Theme.of(context).textTheme.bodyText1))
               ]))
         ]));
   }

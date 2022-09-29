@@ -27,6 +27,10 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 class SendFeedbackScreen extends StatefulWidget {
   static const routeName = '/ped/feedback';
+  static const viewLabel = 'Send Feedback';
+  static const viewIcon = Icons.feedback_outlined;
+  static const viewSelectedIcon = Icons.feedback;
+
   const SendFeedbackScreen({Key? key}) : super(key: key);
 
   @override

@@ -27,6 +27,9 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 class HelpScreen extends StatefulWidget {
   static const routeName = '/ped/help';
+  static const viewLabel = 'Help';
+  static const viewIcon = Icons.help_outline_outlined;
+  static const viewSelectedIcon = Icons.help;
 
   const HelpScreen({Key? key}) : super(key: key);
 

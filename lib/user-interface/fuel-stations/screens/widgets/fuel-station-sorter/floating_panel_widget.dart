@@ -61,14 +61,14 @@ class _FloatBoxState extends State<FloatBoxPanelWidget> {
   Widget build(final BuildContext context) {
     final List<IconData> buttons = widget.buttons;
 
-    double _totalButtons() {
+    double totalButtons() {
       return widget.buttons.length.toDouble();
     }
 
-    double _panelHeight() {
+    double panelHeight() {
       if (widget.expansionDirection == ExpansionDirection.vertical) {
         if (_panelState == PanelState.open) {
-          return (widget.size + (widget.size + 1) * _totalButtons());
+          return (widget.size + (widget.size + 1) * totalButtons());
         } else {
           return widget.size;
         }
@@ -76,10 +76,10 @@ class _FloatBoxState extends State<FloatBoxPanelWidget> {
       return widget.size;
     }
 
-    double _panelWidth() {
+    double panelWidth() {
       if (widget.expansionDirection == ExpansionDirection.horizontal) {
         if (_panelState == PanelState.open) {
-          return (widget.size + (widget.size + 1) * _totalButtons()) * 1.4;
+          return (widget.size + (widget.size + 1) * totalButtons()) * 1.4;
         } else {
           return widget.size;
         }
@@ -87,7 +87,7 @@ class _FloatBoxState extends State<FloatBoxPanelWidget> {
       return widget.size;
     }
 
-    _getActionButtonList() {
+    getActionButtonList() {
       return List.generate(buttons.length, (index) {
         return GestureDetector(
             onTap: () {
@@ -106,15 +106,15 @@ class _FloatBoxState extends State<FloatBoxPanelWidget> {
       });
     }
 
-    _getActionButton() {
+    getActionButton() {
       if (widget.expansionDirection == ExpansionDirection.horizontal) {
-        return Row(children: _getActionButtonList());
+        return Row(children: getActionButtonList());
       } else {
-        return Column(children: _getActionButtonList());
+        return Column(children: getActionButtonList());
       }
     }
 
-    _getWrapDirection() {
+    getWrapDirection() {
       if (widget.expansionDirection == ExpansionDirection.horizontal) {
         return Axis.vertical;
       }
@@ -123,11 +123,11 @@ class _FloatBoxState extends State<FloatBoxPanelWidget> {
 
     return AnimatedContainer(
         duration: const Duration(milliseconds: 600),
-        width: _panelWidth(),
-        height: _panelHeight(),
+        width: panelWidth(),
+        height: panelHeight(),
         decoration: BoxDecoration(color: widget.backgroundColor, borderRadius: BorderRadius.circular(55)),
         curve: Curves.fastLinearToSlowEaseIn,
-        child: Wrap(direction: _getWrapDirection(), children: [
+        child: Wrap(direction: getWrapDirection(), children: [
           GestureDetector(
               onPanUpdate: (event) {
                 setState(() {
@@ -144,8 +144,13 @@ class _FloatBoxState extends State<FloatBoxPanelWidget> {
                 });
               },
               child: _FloatButton(
-                  size: widget.size, icon: getTopIcon(), color: widget.contentColor, iconSize: widget.iconSize, label: '',)),
-          Visibility(visible: _panelState == PanelState.open, child: _getActionButton())
+                size: widget.size,
+                icon: getTopIcon(),
+                color: widget.contentColor,
+                iconSize: widget.iconSize,
+                label: '',
+              )),
+          Visibility(visible: _panelState == PanelState.open, child: getActionButton())
         ]));
   }
 
@@ -171,27 +176,32 @@ class _FloatButton extends StatelessWidget {
   ExpansionDirection? expansionDirection;
 
   _FloatButton(
-      {required this.size, required this.color, required this.icon, required this.iconSize, this.expansionDirection, required this.label});
+      {required this.size,
+      required this.color,
+      required this.icon,
+      required this.iconSize,
+      this.expansionDirection,
+      required this.label});
 
   @override
   Widget build(BuildContext context) {
     if (expansionDirection == ExpansionDirection.horizontal) {
-      return Container(
-          color: Colors.white.withOpacity(0.0),
+      return SizedBox(
           width: size * 1.4,
           height: size,
           child: Row(
             children: [
               Icon(icon, color: color, size: iconSize),
               const SizedBox(width: 3),
-              Expanded(child: Text(label, style: TextStyle(color: color, overflow: TextOverflow.ellipsis)))
+              Expanded(
+                  child: Text(label,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyText1!
+                          .copyWith(color: color, overflow: TextOverflow.ellipsis)))
             ],
           ));
     }
-    return Container(
-        color: Colors.white.withOpacity(0.0),
-        width: size,
-        height: size,
-        child: Icon(icon, color: color, size: iconSize));
+    return SizedBox(width: size, height: size, child: Icon(icon, color: color, size: iconSize));
   }
 }

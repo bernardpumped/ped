@@ -36,9 +36,6 @@ class FuelStationDetailsResponseParseUtils {
     for (final MapEntry<String, dynamic> me in stationIdStationJsonMap.entries) {
       final String stationIdStr = me.key;
       final Map<String, dynamic> fuelStationJsonVal = me.value;
-      // final bool activeItemPromotions =
-      //     fuelStationJsonVal['activeItemPromotions'] ?? false;
-      // final bool activeAutoServicePromotions = fuelStationJsonVal['activeAutoServicePromotions'] ?? false;
       final List<FuelQuote>? fuelQuotes = stationIdFuelQuotes[stationIdStr];
       final bool holidayToday = fuelStationJsonVal['holidayToday'];
       final OperatingHours? operatingHours =
@@ -62,8 +59,6 @@ class FuelStationDetailsResponseParseUtils {
         merchantLogoUrl: fuelStationJsonVal['merchantLogoUrl'],
         rating: fuelStationJsonVal['rating'],
         stationType: fuelStationJsonVal['stationType'],
-        // hasPromos: activeItemPromotions || activeAutoServicePromotions,
-        // hasServices: false,
         fuelTypeFuelQuoteMap: fuelTypeQuoteMap,
         imgUrls: null, //TODO
         isFaStation: fuelStationJsonVal['faStation'],
@@ -85,20 +80,20 @@ class FuelStationDetailsResponseParseUtils {
   static _enrichOffers(final Map<String, FuelStation> stationIdStationMap) {
     //Check if none of the fuel-stations contain offers
     for (var station in stationIdStationMap.values) {
-      if (station.promos > 0 || station.services > 0) {
+      if (station.offers > 0 || station.services > 0) {
         LogUtil.debug(_tag, 'Fuel station already has offers, not enriching');
         return;
       }
     }
-    LogUtil.debug(_tag, 'None of the existing fuel-stations has promos / services. So enriching');
+    LogUtil.debug(_tag, 'None of the existing fuel-stations has offers / services. So enriching');
     LogUtil.debug(
         _tag,
-        'Enrichment will happen only for stations which have no promos and no services but have fuel-quotes');
+        'Enrichment will happen only for stations which have no offers and no services but have fuel-quotes');
     int max = 10;
     var random = Random();
     for (var station in stationIdStationMap.values) {
-      if (station.promos == 0 && station.services == 0 && station.hasFuelPrices()) {
-        station.setPromos = random.nextInt(max) - 1;
+      if (station.offers == 0 && station.services == 0 && station.hasFuelPrices()) {
+        station.setOffers = random.nextInt(max) - 1;
         station.setServices = random.nextInt(max) - 1;
       }
     }

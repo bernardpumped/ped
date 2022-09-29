@@ -20,12 +20,13 @@ import 'package:flutter/material.dart';
 import 'package:pumped_end_device/main.dart';
 import 'package:pumped_end_device/user-interface/about/screen/about_screen.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/utils/firebase_service.dart';
+import 'package:pumped_end_device/user-interface/fuel-stations/screens/favourite/favourite_stations_screen.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/screens/nearby/nearby_stations_screen.dart';
 import 'package:pumped_end_device/user-interface/help/screen/help_screen.dart';
-import 'package:pumped_end_device/user-interface/nav-drawer/nav_drawer_color_scheme.dart';
 import 'package:pumped_end_device/user-interface/send-feedback/screens/send_feedback_screen.dart';
 import 'package:pumped_end_device/user-interface/settings/screen/settings_screen.dart';
 import 'package:pumped_end_device/user-interface/update-history/screen/update_history_screen.dart';
+import 'package:pumped_end_device/util/app_theme.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
 import 'nav_drawer_item_widget.dart';
@@ -43,87 +44,106 @@ int selectedIndex = 0;
 
 class _NavDrawerWidgetState extends State<NavDrawerWidget> {
   static const _tag = 'NavigationDrawer';
-  final NavDrawerColorScheme colorScheme = getIt.get<NavDrawerColorScheme>(instanceName: navDrawerColorSchemeName);
   final FirebaseService service = getIt.get<FirebaseService>(instanceName: firebaseServiceInstanceName);
+  static const _nearbyViewIndex = 0;
+  static const _favouriteViewIndex = 1;
+  static const _settingsViewIndex = 2;
+  static const _updateHistoryViewIndex = 3;
+  static const _aboutViewIndex = 4;
+  static const _feedbackViewIndex = 5;
+  static const _helpViewIndex = 6;
+  static const _logoutFunctionIndex = 7;
 
   @override
   Widget build(final BuildContext context) {
     LogUtil.debug(_tag, 'Building NavigationDrawer drawer : selected = $selectedIndex');
     SignedInUser? signedInUser = service.getSignedInUser();
     return Drawer(
-        child: Material(
-            color: colorScheme.backgroundColor,
-            child: ListView(children: [
-              _drawerHeaderWidget(),
-              const SizedBox(height: 10),
-              Divider(color: colorScheme.dividerColor),
-              _userDetailsWidget(signedInUser),
-              Divider(color: colorScheme.dividerColor),
-              const SizedBox(height: 10),
-              NavDrawerItemWidget(
-                  itemIndex: 0,
-                  label: 'Fuel Stations',
-                  icon: Icons.local_gas_station,
-                  callback: () => _selectItem(context, 0, NearbyStationsScreen.routeName),
-                  selected: selectedIndex == 0),
-              const SizedBox(height: 10),
-              Divider(color: colorScheme.dividerColor),
-              NavDrawerItemWidget(
-                  itemIndex: 1,
-                  label: 'Settings',
-                  icon: Icons.settings_outlined,
-                  callback: () => _selectItem(context, 1, SettingsScreen.routeName),
-                  selected: selectedIndex == 1),
-              const SizedBox(height: 10),
-              NavDrawerItemWidget(
-                  itemIndex: 2,
-                  label: 'Updates History',
-                  icon: Icons.update,
-                  callback: () => _selectItem(context, 2, UpdateHistoryScreen.routeName),
-                  selected: selectedIndex == 2),
-              const SizedBox(height: 10),
-              NavDrawerItemWidget(
-                  itemIndex: 3,
-                  label: 'About',
-                  icon: Icons.info_outline,
-                  callback: () => _selectItem(context, 3, AboutScreen.routeName),
-                  selected: selectedIndex == 3),
-              const SizedBox(height: 10),
-              Divider(color: colorScheme.dividerColor),
-              NavDrawerItemWidget(
-                  itemIndex: 4,
-                  label: 'Send Feedback',
-                  icon: Icons.feedback_outlined,
-                  callback: () => _selectItem(context, 4, SendFeedbackScreen.routeName),
-                  selected: selectedIndex == 4),
-              const SizedBox(height: 10),
-              NavDrawerItemWidget(
-                  itemIndex: 5,
-                  label: 'Help',
-                  icon: Icons.help_outline_outlined,
-                  callback: () => _selectItem(context, 5, HelpScreen.routeName),
-                  selected: selectedIndex == 5),
-              Divider(color: colorScheme.dividerColor),
-              signedInUser != null && signedInUser.isSignedIn()
-                  ? NavDrawerItemWidget(
-                      itemIndex: 6,
-                      label: 'Logout',
-                      icon: Icons.logout,
-                      callback: () => _signOut(signedInUser),
-                      selected: selectedIndex == 6)
-                  : const SizedBox(height: 0)
-            ])));
+        child: ListView(children: [
+      _drawerHeaderWidget(),
+      const SizedBox(height: 10),
+      const Divider(),
+      _userDetailsWidget(signedInUser),
+      const Divider(),
+      const SizedBox(height: 10),
+      NavDrawerItemWidget(
+          itemIndex: _nearbyViewIndex,
+          label: NearbyStationsScreen.viewLabel,
+          icon: NearbyStationsScreen.viewIcon,
+          selectedStateIcon: NearbyStationsScreen.viewSelectedIcon,
+          callback: () => _selectItem(context, _nearbyViewIndex, NearbyStationsScreen.routeName),
+          selected: selectedIndex == _nearbyViewIndex),
+      const SizedBox(height: 10),
+      NavDrawerItemWidget(
+          itemIndex: _favouriteViewIndex,
+          label: FavouriteStationsScreen.viewLabel,
+          icon: FavouriteStationsScreen.viewIcon,
+          selectedStateIcon: FavouriteStationsScreen.viewSelectedIcon,
+          callback: () => _selectItem(context, _favouriteViewIndex, FavouriteStationsScreen.routeName),
+          selected: selectedIndex == _favouriteViewIndex),
+      const SizedBox(height: 10),
+      const Divider(),
+      NavDrawerItemWidget(
+          itemIndex: _settingsViewIndex,
+          label: SettingsScreen.viewLabel,
+          icon: SettingsScreen.viewIcon,
+          selectedStateIcon: SettingsScreen.viewSelectedIcon,
+          callback: () => _selectItem(context, _settingsViewIndex, SettingsScreen.routeName),
+          selected: selectedIndex == _settingsViewIndex),
+      const SizedBox(height: 10),
+      NavDrawerItemWidget(
+          itemIndex: _updateHistoryViewIndex,
+          label: UpdateHistoryScreen.viewLabel,
+          icon: UpdateHistoryScreen.viewIcon,
+          selectedStateIcon: UpdateHistoryScreen.viewSelectedIcon,
+          callback: () => _selectItem(context, _updateHistoryViewIndex, UpdateHistoryScreen.routeName),
+          selected: selectedIndex == _updateHistoryViewIndex),
+      const SizedBox(height: 10),
+      NavDrawerItemWidget(
+          itemIndex: _aboutViewIndex,
+          label: AboutScreen.viewLabel,
+          icon: AboutScreen.viewIcon,
+          selectedStateIcon: AboutScreen.viewSelectedIcon,
+          callback: () => _selectItem(context, _aboutViewIndex, AboutScreen.routeName),
+          selected: selectedIndex == _aboutViewIndex),
+      const SizedBox(height: 10),
+      const Divider(),
+      NavDrawerItemWidget(
+          itemIndex: _feedbackViewIndex,
+          label: SendFeedbackScreen.viewLabel,
+          icon: SendFeedbackScreen.viewIcon,
+          selectedStateIcon: SendFeedbackScreen.viewSelectedIcon,
+          callback: () => _selectItem(context, _feedbackViewIndex, SendFeedbackScreen.routeName),
+          selected: selectedIndex == _feedbackViewIndex),
+      const SizedBox(height: 10),
+      NavDrawerItemWidget(
+          itemIndex: _helpViewIndex,
+          label: HelpScreen.viewLabel,
+          icon: HelpScreen.viewIcon,
+          selectedStateIcon: HelpScreen.viewSelectedIcon,
+          callback: () => _selectItem(context, _helpViewIndex, HelpScreen.routeName),
+          selected: selectedIndex == _helpViewIndex),
+      const Divider(),
+      signedInUser != null && signedInUser.isSignedIn()
+          ? NavDrawerItemWidget(
+              itemIndex: _logoutFunctionIndex,
+              label: 'Logout',
+              icon: Icons.logout_outlined,
+              selectedStateIcon: Icons.logout,
+              callback: () => _signOut(signedInUser),
+              selected: selectedIndex == _logoutFunctionIndex)
+          : const SizedBox(height: 0)
+    ]));
   }
 
   _drawerHeaderWidget() {
     return Padding(
         padding: const EdgeInsets.only(left: 30),
         child: Row(children: [
-          const Image(image: AssetImage(NavDrawerColorScheme.pumpedImage), height: 65),
+          Image(image: AssetImage(AppTheme.getPumpedLogo(context)), height: 65),
           Padding(
               padding: const EdgeInsets.only(left: 20),
-              child: Text('Fuel Finder',
-                  style: TextStyle(color: colorScheme.textColor, fontSize: 24, fontWeight: FontWeight.w500)))
+              child: Text('Fuel Finder', style: Theme.of(context).textTheme.headline3))
         ]));
   }
 
@@ -142,12 +162,10 @@ class _NavDrawerWidgetState extends State<NavDrawerWidget> {
           Padding(
               padding: const EdgeInsets.only(left: 15),
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text(userDisplayName,
-                    style: TextStyle(color: colorScheme.textColor, fontSize: 18, fontWeight: FontWeight.w500)),
+                Text(userDisplayName, style: Theme.of(context).textTheme.subtitle1),
                 const SizedBox(height: 15),
                 userEmail != null
-                    ? Text(userEmail,
-                        style: TextStyle(color: colorScheme.textColor, fontSize: 13, fontWeight: FontWeight.normal))
+                    ? Text(userEmail, style: Theme.of(context).textTheme.overline)
                     : const SizedBox(height: 0)
               ]))
         ]));

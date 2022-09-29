@@ -16,17 +16,18 @@
  *     along with Pumped End Device.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'dart:io';
+import 'package:flutter/material.dart';
 
-import 'package:flutter/foundation.dart';
+class OffersWidget extends StatefulWidget {
+  const OffersWidget ( {Key? key} ) : super( key: key );
 
-class PlatformWrapper {
-  bool platformIsLinux() {
-    return Platform.isLinux;
+  @override
+  State<OffersWidget> createState ( ) => _OffersWidgetState ( );
+}
+
+class _OffersWidgetState extends State<OffersWidget> {
+  @override
+  Widget build (final BuildContext context) {
+    return const Center(child: Text("Offers"),);
   }
-
-  bool deviceIsBrowser() {
-    return kIsWeb;
-  }
-
 }

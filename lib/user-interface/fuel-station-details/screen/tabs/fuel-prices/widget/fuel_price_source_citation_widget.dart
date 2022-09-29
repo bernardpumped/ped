@@ -16,16 +16,19 @@
  *     along with Pumped End Device.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station_address.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/screen/widget/email_widget.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/screen/tabs/fuel-prices/widget/notification_widget.dart';
-import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/models/pumped/fuel_quote.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station.dart';
+import 'package:pumped_end_device/util/log_util.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class FuelPriceSourceCitationWidget extends StatelessWidget {
+  static const _tag = 'FuelPriceSourceCitationWidget';
   final FuelQuote fuelQuote;
   final FuelStation fuelStation;
   final String fuelTypeName;
@@ -44,18 +47,10 @@ class FuelPriceSourceCitationWidget extends StatelessWidget {
     } else {
       child = const SizedBox(height: 0);
     }
-    return Container(
-        padding: const EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 40),
-        decoration: BoxDecoration(
-            color: Colors.white,
-            shape: BoxShape.rectangle,
-            borderRadius: BorderRadius.circular(15.0),
-            boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 10.0, offset: Offset(0.0, 10.0))]),
-        child: child);
+    return Container(padding: const EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 40), child: child);
   }
 
   String _getPublishDateFormatted(final int publishDateSeconds) {
-
     final formatter = DateFormat('dd-MMM-yy HH:mm');
     return formatter.format(DateTime.fromMillisecondsSinceEpoch(publishDateSeconds * 1000));
   }
@@ -63,24 +58,22 @@ class FuelPriceSourceCitationWidget extends StatelessWidget {
   Column _getFuelAuthorityMessage(final BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: <Widget>[
       Row(children: [
-        Text(fuelTypeName, style: const TextStyle(fontSize: 22, color: Colors.indigo, fontWeight: FontWeight.bold)),
+        Text(fuelTypeName, style: Theme.of(context).textTheme.headline4),
         const SizedBox(width: 10),
-        Text(fuelQuote.quoteValue.toString(),
-            style: const TextStyle(fontSize: 22, color: Colors.indigo, fontWeight: FontWeight.bold))
+        Text(fuelQuote.quoteValue.toString(), style: Theme.of(context).textTheme.headline4)
       ]),
       const SizedBox(height: 12),
-      const Divider(color: Colors.indigo, height: 1),
-      const SizedBox(height: 8),
-      Text('Price Source ${_getFuelAuthorityQuotePublisher()}',
-          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500, color: Colors.indigo)),
-      const SizedBox(height: 8),
+      const Divider(height: 1),
+      const SizedBox(height: 6),
+      Text('Price Source ${_getFuelAuthorityQuotePublisher()}', style: Theme.of(context).textTheme.headline6),
+      const SizedBox(height: 6),
       Text('Price updated near realtime ${_getPublishDateFormatted(fuelQuote.publishDate!)}',
-          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.indigo)),
-      const SizedBox(height: 12),
-      const Divider(color: Colors.indigo, height: 1),
-      const SizedBox(height: 12),
-      _getAdminContactMessage(),
-      const SizedBox(height: 12),
+          style: Theme.of(context).textTheme.bodyText2),
+      const SizedBox(height: 6),
+      const Divider(height: 1),
+      const SizedBox(height: 6),
+      _getAdminContactMessage(context),
+      const SizedBox(height: 8),
       _getOkActionButton(context)
     ]);
   }
@@ -88,41 +81,36 @@ class FuelPriceSourceCitationWidget extends StatelessWidget {
   Column _getCrowdSourceMessage(final BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: <Widget>[
       Row(children: [
-        Text(fuelTypeName, style: const TextStyle(fontSize: 22, color: Colors.indigo, fontWeight: FontWeight.bold)),
+        Text(fuelTypeName, style: Theme.of(context).textTheme.headline4),
         const SizedBox(width: 10),
-        Text(fuelQuote.quoteValue.toString(),
-            style: const TextStyle(fontSize: 22, color: Colors.indigo, fontWeight: FontWeight.bold))
+        Text(fuelQuote.quoteValue.toString(), style: Theme.of(context).textTheme.headline4)
       ]),
       const SizedBox(height: 12),
-      const Divider(color: Colors.indigo, height: 1),
-      const SizedBox(height: 8),
-      const Text('Fuel Price Crowd Sourced',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500, color: Colors.indigo)),
-      const SizedBox(height: 8),
+      const Divider(height: 1),
+      const SizedBox(height: 6),
+      Text('Fuel Price Crowd Sourced', style: Theme.of(context).textTheme.headline6),
+      const SizedBox(height: 6),
       Text('Price updated ${_getPublishDateFormatted(fuelQuote.publishDate!)}',
-          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.indigo)),
-      const SizedBox(height: 12),
-      const Divider(color: Colors.indigo, height: 1),
-      const SizedBox(height: 12),
-      _getAdminContactMessage(),
-      const SizedBox(height: 12),
+          style: Theme.of(context).textTheme.bodyText2),
+      const SizedBox(height: 6),
+      const Divider(height: 1),
+      const SizedBox(height: 6),
+      _getAdminContactMessage(context),
+      const SizedBox(height: 8),
       _getOkActionButton(context)
     ]);
   }
 
   Row _getOkActionButton(final BuildContext context) {
     return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-      WidgetUtils.getRoundedElevatedButton(
-          child: Row(children: const [
-            Icon(Icons.cancel_outlined, size: 24, color: Colors.white),
-            SizedBox(width: 10),
-            Text('Cancel', style: TextStyle(color: Colors.white))
-          ]),
+      ElevatedButton(
           onPressed: () {
             Navigator.pop(context);
           },
-          borderRadius: 10.0,
-          backgroundColor: Colors.indigo),
+          child: Padding(
+              padding: const EdgeInsets.only(left: 15, right: 15),
+              child:
+                  Row(children: const [Icon(Icons.cancel_outlined, size: 24), SizedBox(width: 10), Text('Cancel')]))),
       const SizedBox(width: 10),
       _getNotificationWidget()
     ]);
@@ -131,20 +119,54 @@ class FuelPriceSourceCitationWidget extends StatelessWidget {
   Widget _getNotificationWidget() {
     var notificationType = notificationTypeMap[fuelQuote.fuelQuoteSourceName];
     if (notificationType == emailNotificationType || fuelQuote.crowdSourced()) {
-      // fuelQuote.fuelQuoteSourceName can never be null.
       return EmailNotificationWidget(
-          emailBody: _getEmailBody(),
-          emailSubject: _getEmailSubject(),
-          sourceName: fuelQuote.fuelQuoteSourceName!);
+          emailBody: _getEmailBody(), emailSubject: _getEmailSubject(), sourceName: fuelQuote.fuelQuoteSourceName!);
     } else if (notificationType == externalUrlNotificationType) {
       return NotificationWidget(fuelStation: fuelStation);
     }
     return const SizedBox(width: 0);
   }
 
-  Text _getAdminContactMessage() {
-    return const Text('If fuel price is incorrect please let us know',
-        textAlign: TextAlign.start, style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w400, color: Colors.red));
+  Widget _getAdminContactMessage(final BuildContext context) {
+    final List<String?> publishers = fuelStation.getPublishers();
+    if (publishers.isNotEmpty && publishers[0] == 'sa') {
+      return _getTextForSa(context);
+    } else {
+      return _getTextForOtherFa(context);
+    }
+  }
+
+  Text _getTextForOtherFa(final BuildContext context) {
+    return Text('If fuel price is incorrect please let us know',
+        textAlign: TextAlign.start,
+        style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Theme.of(context).errorColor));
+  }
+
+  Text _getTextForSa(final BuildContext context) {
+    return Text.rich(TextSpan(
+        style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Theme.of(context).errorColor),
+        children: [
+          const TextSpan(text: "If fuel price is incorrect please let us know by either raising a ticket with "),
+          TextSpan(
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyText2!
+                  .copyWith(color: Theme.of(context).errorColor, decoration: TextDecoration.underline),
+              text: "SA Fuel Pricing - Complaint Site",
+              recognizer: TapGestureRecognizer()
+                ..onTap = () async {
+                  const url =
+                      "https://sagov.iapply.com.au/#/form/6029c6a9ad9c5a1dd463e6db/app/605a2b11ad9c5b4258bbf31b";
+                  if (await canLaunchUrlString(url)) {
+                    await launchUrlString(url);
+                  } else {
+                    LogUtil.debug(_tag, "Cannot launch Url $url");
+                  }
+                }),
+          TextSpan(
+              text: " or email us and we'll follow it up",
+              style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Theme.of(context).errorColor)),
+        ]));
   }
 
   String? _getFuelAuthorityQuotePublisher() {

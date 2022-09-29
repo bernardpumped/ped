@@ -18,12 +18,10 @@
 
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station_address.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/screen/tabs/contact/widget/feature_support.dart';
 import 'package:pumped_end_device/util/log_util.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class RateWidget extends StatelessWidget {
@@ -37,14 +35,17 @@ class RateWidget extends StatelessWidget {
   Widget build(final BuildContext context) {
     return GestureDetector(
         child: Column(children: [
-          Card(
+          Material(
               elevation: 2,
-              color: Colors.indigo,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15), side: const BorderSide(color: Colors.indigo, width: 1)),
-              child: const Padding(
-                  padding: EdgeInsets.all(14.0), child: Icon(Icons.star_rate_outlined, color: Colors.white))),
-          const Text('Rate', style: TextStyle(color: Colors.indigo, fontSize: 14, fontWeight: FontWeight.w500))
+              clipBehavior: Clip.antiAlias,
+              borderRadius: BorderRadius.circular(15),
+              // Cannot use Theme.of(context).primaryColor because in darkMode it does not work well
+              color: Theme.of(context).textTheme.headline3!.color,
+              shadowColor: Theme.of(context).textTheme.headline3!.color,
+              child: Padding(
+                  padding: const EdgeInsets.all(14.0),
+                  child: Icon(Icons.star_rate_outlined, color: Theme.of(context).backgroundColor))),
+          Text('Rate', style: Theme.of(context).textTheme.bodyText2)
         ]),
         onTap: () async {
           if (!FeatureSupport.rating.contains(Platform.operatingSystem)) {

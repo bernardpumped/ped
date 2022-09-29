@@ -17,38 +17,34 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:pumped_end_device/main.dart';
-import 'package:pumped_end_device/user-interface/fuel-stations/fuel_station_screen_color_scheme.dart';
 
 class NoNearByStationsWidget extends StatelessWidget {
   const NoNearByStationsWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(final BuildContext context) {
-    final FuelStationsScreenColorScheme colorScheme =
-        getIt.get<FuelStationsScreenColorScheme>(instanceName: fsScreenColorSchemeName);
     return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Text('No Nearby Stations',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: colorScheme.noDataScreenTextColor),
-              textAlign: TextAlign.center),
+          Text('No Nearby Stations', style: Theme.of(context).textTheme.headline2, textAlign: TextAlign.center),
           const SizedBox(height: 20),
-          RichText(
-              textAlign: TextAlign.center,
-              text: TextSpan(children: [
-                TextSpan(
-                    text: "Sorry your neighbourhood not yet covered by Pumped. We have informed Pumped admin.\n",
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: colorScheme.noDataScreenTextColor)),
-                TextSpan(
-                    text: "\nYou can refine your Search Options. Tap on ",
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: colorScheme.noDataScreenTextColor)),
-                const WidgetSpan(child: Icon(Icons.settings, color: Colors.indigo, size: 24)),
-                TextSpan(
-                    text: " icon on bottom bar, to customize search.",
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: colorScheme.noDataScreenTextColor))
-              ]))
+          Padding(
+            padding: const EdgeInsets.only(left: 12, right: 12),
+            child: RichText(
+                textAlign: TextAlign.center,
+                text: TextSpan(children: [
+                  TextSpan(
+                      text: "Sorry your neighbourhood not yet covered by Pumped. We have informed Pumped admin.\n",
+                      style: Theme.of(context).textTheme.bodyText1),
+                  TextSpan(
+                      text: "\nYou can refine your Search Options. Tap on Settings ",
+                      style: Theme.of(context).textTheme.bodyText1),
+                  const WidgetSpan(child: Icon(Icons.settings, size: 24)),
+                  TextSpan(
+                      text: " icon in the navigation bar, to customize search.", style: Theme.of(context).textTheme.bodyText1)
+                ])),
+          )
         ]);
   }
 }

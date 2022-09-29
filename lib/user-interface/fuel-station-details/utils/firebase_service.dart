@@ -151,13 +151,18 @@ class FirebaseService {
 
   Future<Resource> _signInWithGoogleInternal() async {
     try {
+      LogUtil.debug(_tag, 'statement-1');
       final GoogleSignInAccount? googleSignInAccount = await _googleSignIn.signIn();
+      LogUtil.debug(_tag, 'statement-2');
       final GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount!.authentication;
+      LogUtil.debug(_tag, 'statement-3');
       final AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleSignInAuthentication.accessToken,
         idToken: googleSignInAuthentication.idToken,
       );
+      LogUtil.debug(_tag, 'statement-4');
       final UserCredential userCredential = await _auth.signInWithCredential(credential);
+      LogUtil.debug(_tag, 'statement-5');
       if (userCredential.user != null) {
         LogUtil.debug(_tag, '_signInWithGoogleInternal::signin successful');
         return Resource(status: Status.success);
