@@ -146,11 +146,11 @@ class _AnimEditFuelPriceLineItemWidgetState extends State<AnimEditFuelPriceLineI
   Widget _getFuelTypeQuoteValRow(final Widget fuelQuoteWidget) {
     return Row(children: <Widget>[
       Expanded(
-          flex: 10,
+          flex: 9,
           child: Padding(
-              padding: const EdgeInsets.only(right: 10),
+              padding: const EdgeInsets.only(right: 5),
               child: Text(widget.fuelName, style: Theme.of(context).textTheme.subtitle2, maxLines: 2))),
-      Expanded(flex: 4, child: fuelQuoteWidget),
+      Expanded(flex: 5, child: fuelQuoteWidget),
       Expanded(
           flex: 2,
           child: Padding(padding: const EdgeInsets.only(left: 15), child: _getFuelQuoteSourceIcon(widget.fuelQuote)))
@@ -172,7 +172,7 @@ class _AnimEditFuelPriceLineItemWidgetState extends State<AnimEditFuelPriceLineI
   static const _firstAllowedCharDecimalPos = 3;
   static const _alternateDecimalPos = 3;
 
-  TextField _buildFuelQuoteTextField(final TextEditingController textEditingController) {
+  _buildFuelQuoteTextField(final TextEditingController textEditingController) {
     int? firstAllowedChar;
     int? firstAllowedCharDecimalPos; //default value for decimal placement
     int? alternateDecimalPos;
@@ -186,6 +186,10 @@ class _AnimEditFuelPriceLineItemWidgetState extends State<AnimEditFuelPriceLineI
     final int finalAlternateDecimalPos = alternateDecimalPos ?? _alternateDecimalPos;
     final String currencyFormat = r'^\d+\.?\d{0,' + digitsAfterDecimal.toString() + '}';
     return TextField(
+        decoration: InputDecoration(
+            border: InputBorder.none,
+            hintText: 'Tap to update',
+            hintStyle: Theme.of(context).textTheme.caption!.copyWith(color: Theme.of(context).hintColor)),
         focusNode: _focus,
         controller: textEditingController,
         style: Theme.of(context).textTheme.subtitle2,

@@ -47,7 +47,7 @@ class FuelStationListItemWidget extends StatelessWidget {
     return GestureDetector(
         onTap: () async {
           await Navigator.pushNamed(context, FuelStationDetailsScreen.routeName,
-                  arguments: FuelStationDetailsParam(fuelStation))
+                  arguments: FuelStationDetailsParam(fuelStation, selectedFuelType))
               .then((val) {
             final bool? homeScreenRefreshNeeded = val as bool?;
             LogUtil.debug(_tag, 'homeScreenRefreshNeeded : $homeScreenRefreshNeeded');
@@ -93,7 +93,7 @@ class FuelStationListItemWidget extends StatelessWidget {
       _getRatingWidget(context),
       const SizedBox(width: 5),
       _getDistanceWidget(context),
-      FuelStationContextMenu(fuelStation: fuelStation)
+      FuelStationContextMenu(fuelStation: fuelStation, selectedFuelType: selectedFuelType)
     ]);
   }
 

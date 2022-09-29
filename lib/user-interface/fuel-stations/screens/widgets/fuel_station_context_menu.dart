@@ -22,6 +22,7 @@ import 'package:pumped_end_device/data/local/dao/hidden_result_dao.dart';
 import 'package:pumped_end_device/data/local/model/favorite_fuel_station.dart';
 import 'package:pumped_end_device/data/local/model/hidden_result.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station.dart';
+import 'package:pumped_end_device/models/pumped/fuel_type.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/params/fuel_station_details_param.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/screen/fuel_station_details_screen.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
@@ -29,8 +30,9 @@ import 'package:pumped_end_device/util/log_util.dart';
 
 class FuelStationContextMenu extends StatefulWidget {
   final FuelStation fuelStation;
+  final FuelType selectedFuelType;
 
-  const FuelStationContextMenu({Key? key, required this.fuelStation}) : super(key: key);
+  const FuelStationContextMenu({Key? key, required this.fuelStation, required this.selectedFuelType}) : super(key: key);
 
   @override
   State<FuelStationContextMenu> createState() => _FuelStationContextMenuState();
@@ -66,7 +68,7 @@ class _FuelStationContextMenuState extends State<FuelStationContextMenu> {
         onSelected: (value) {
           if (value == 'preview') {
             Navigator.pushNamed(context, FuelStationDetailsScreen.routeName,
-                arguments: FuelStationDetailsParam(widget.fuelStation));
+                arguments: FuelStationDetailsParam(widget.fuelStation, widget.selectedFuelType));
           }
           if (value == 'favourite') {
             if (isFavourite) {

@@ -8,8 +8,9 @@ class AppTheme {
   static const primaryColorSwatchLgTh = Colors.indigo;
   static const bgColorLgTh = Colors.white;
 
-  static const primaryColorDkTh = Colors.greenAccent;
-  static const primaryColorSwatchDkTh = Colors.green;
+  static const primaryColorDkTh = Colors.white;
+  // static const primaryColorSwatchDkTh = Color(0xFFDEE1FC); gmail buttons etc.
+  static const primaryColorSwatchDkTh = Colors.lightBlue;
   static const bgColorDkTh = Colors.black54;
 
   static const stationOpenColor = Color(0xFF05A985);
@@ -46,6 +47,7 @@ class AppTheme {
 
   get lightTheme => ThemeData(
       drawerTheme: const DrawerThemeData(backgroundColor: bgColorLgTh, elevation: 2),
+      hintColor: primaryColorLgTh.shade200,
       errorColor: Colors.red,
       highlightColor: Colors.amber,
       brightness: Brightness.light,
@@ -155,6 +157,7 @@ class AppTheme {
       brightness: Brightness.dark,
       errorColor: Colors.red,
       highlightColor: Colors.amber,
+      radioTheme: RadioThemeData(fillColor: MaterialStateProperty.all(primaryColorDkTh)),
       outlinedButtonTheme: OutlinedButtonThemeData(
           style: OutlinedButton.styleFrom(
               elevation: 2,

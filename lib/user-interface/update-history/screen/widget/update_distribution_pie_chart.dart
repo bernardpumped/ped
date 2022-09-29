@@ -20,6 +20,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:pumped_end_device/models/update_type.dart';
 import 'package:pumped_end_device/user-interface/update-history/screen/widget/indicator.dart';
+import 'package:pumped_end_device/user-interface/update-history/screen/widget/no_update_history_widget.dart';
 
 class UpdateDistributionPieChart extends StatefulWidget {
   final Map<UpdateType, double> _data;
@@ -34,11 +35,7 @@ class _UpdateDistributionPieChartState extends State<UpdateDistributionPieChart>
   @override
   Widget build(final BuildContext context) {
     if (widget._data.isEmpty || noValues(widget._data)) {
-      return Center(
-          child: Card(
-              child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Text('No Update History', style: Theme.of(context).textTheme.subtitle1))));
+      return const Center(child: NoUpdateHistory());
     }
     return AspectRatio(
         aspectRatio: 1,

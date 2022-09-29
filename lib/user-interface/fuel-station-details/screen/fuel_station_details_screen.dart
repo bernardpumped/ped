@@ -143,19 +143,19 @@ class _FuelStationDetailsScreenState extends State<FuelStationDetailsScreen> {
                       ];
                     },
                     body: CustomScrollView(key: PageStorageKey<String>(_tabs[_selectedTabIndex]), slivers: <Widget>[
-                      SliverToBoxAdapter(child: _getChildTabContent(fuelStation, _tabs[_selectedTabIndex]))
+                      SliverToBoxAdapter(child: _getChildTabContent(param, _tabs[_selectedTabIndex]))
                     ])))));
   }
 
-  Widget? _getChildTabContent(final FuelStation fuelStation, final String tabName) {
+  Widget? _getChildTabContent(final FuelStationDetailsParam param, final String tabName) {
     dynamic offers;
     Widget? tabWidget;
     switch (tabName) {
       case _contactTabHeader:
-        tabWidget = ContactTabWidget(fuelStation, onFavouriteStatusChange);
+        tabWidget = ContactTabWidget(param, onFavouriteStatusChange);
         break;
       case _fuelPricesTabHeader:
-        tabWidget = FuelPricesTabWidget(fuelStation);
+        tabWidget = FuelPricesTabWidget(param);
         break;
       case _offersTabHeader:
         tabWidget = offers == null ? const NoOffersWidget() : const OffersWidget();

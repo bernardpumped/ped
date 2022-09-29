@@ -20,6 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/data/remote/model/request/get_fuel_station_operating_hrs_request.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/data/remote/model/response/get_fuel_station_operating_hrs_response.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/data/remote/response-parser/get_fuel_station_operating_hrs_response_parser.dart';
+import 'package:pumped_end_device/user-interface/fuel-station-details/params/fuel_station_details_param.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/screen/tabs/contact/widget/action_bar.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/screen/tabs/contact/widget/operating_hours_widget.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/data/remote/get_fuel_station_operating_hrs.dart';
@@ -31,10 +32,10 @@ import 'package:pumped_end_device/util/log_util.dart';
 import 'package:uuid/uuid.dart';
 
 class ContactTabWidget extends StatefulWidget {
-  final FuelStation _fuelStation;
+  final FuelStationDetailsParam _param;
   final Function onFavouriteStatusChange;
 
-  const ContactTabWidget(this._fuelStation, this.onFavouriteStatusChange, {Key? key}) : super(key: key);
+  const ContactTabWidget(this._param, this.onFavouriteStatusChange, {Key? key}) : super(key: key);
 
   @override
   State<ContactTabWidget> createState() => _ContactTabWidgetState();
@@ -51,11 +52,12 @@ class _ContactTabWidgetState extends State<ContactTabWidget> {
   }
 
   Future<GetFuelStationOperatingHrsResponse> _getFuelStationOperatingHrsFuture() async {
+    final FuelStation fuelStation = widget._param.fuelStation;
     try {
       final GetFuelStationOperatingHrsRequest request = GetFuelStationOperatingHrsRequest(
           requestUuid: const Uuid().v1(),
-          fuelStationId: widget._fuelStation.stationId,
-          fuelStationSource: widget._fuelStation.getFuelStationSource());
+          fuelStationId: fuelStation.stationId,
+          fuelStationSource: fuelStation.getFuelStationSource());
       return await GetFuelStationOperatingHrs(GetFuelStationOperatingHrsResponseParser()).execute(request);
     } on Exception catch (e, s) {
       LogUtil.debug(_tag, 'Exception occurred while calling GetFuelStationOperatingHrsNew.execute $s');
@@ -66,7 +68,7 @@ class _ContactTabWidgetState extends State<ContactTabWidget> {
 
   @override
   Widget build(final BuildContext context) {
-    final FuelStation fuelStation = widget._fuelStation;
+    final FuelStation fuelStation = widget._param.fuelStation;
     final FuelStationAddress fuelStationAddress = fuelStation.fuelStationAddress;
     final bool phonePresent = fuelStationAddress.phone1 != null || fuelStationAddress.phone2 != null;
     bool imgUrlsPresent = fuelStation.imgUrls != null && fuelStation.imgUrls!.isNotEmpty;
