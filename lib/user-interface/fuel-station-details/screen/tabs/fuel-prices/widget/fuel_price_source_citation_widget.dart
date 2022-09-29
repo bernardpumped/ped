@@ -16,6 +16,7 @@
  *     along with Pumped End Device.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station_address.dart';
@@ -24,8 +25,11 @@ import 'package:pumped_end_device/user-interface/fuel-station-details/screen/tab
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/models/pumped/fuel_quote.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station.dart';
+import 'package:pumped_end_device/util/log_util.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class FuelPriceSourceCitationWidget extends StatelessWidget {
+  static const _tag = 'FuelPriceSourceCitationWidget';
   final FuelQuote fuelQuote;
   final FuelStation fuelStation;
   final String fuelTypeName;
@@ -132,8 +136,45 @@ class FuelPriceSourceCitationWidget extends StatelessWidget {
   }
 
   Text _getAdminContactMessage(final BuildContext context) {
+    final List<String?> publishers = fuelStation.getPublishers();
+    if (publishers.isNotEmpty && publishers[0] == 'sa') {
+      return _getTextForSa(context);
+    } else {
+      return _getTextForOtherFa(context);
+    }
+  }
+
+  Text _getTextForSa(final BuildContext context) {
+    return Text.rich(TextSpan(
+        style: Theme.of(context).textTheme.subtitle2!.copyWith(color: Theme.of(context).errorColor),
+        children: [
+          const TextSpan(text: "If fuel price is incorrect please let us know by either raising a ticket with "),
+          TextSpan(
+              style: Theme.of(context)
+                  .textTheme
+                  .subtitle2!
+                  .copyWith(color: Theme.of(context).errorColor, decoration: TextDecoration.underline),
+              text: "SA Fuel Pricing - Complaint Site",
+              recognizer: TapGestureRecognizer()
+                ..onTap = () async {
+                  const url =
+                      "https://sagov.iapply.com.au/#/form/6029c6a9ad9c5a1dd463e6db/app/605a2b11ad9c5b4258bbf31b";
+                  if (await canLaunchUrlString(url)) {
+                    await launchUrlString(url);
+                  } else {
+                    LogUtil.debug(_tag, "Cannot launch Url $url");
+                  }
+                }),
+          TextSpan(
+              text: " or email us and we'll follow it up",
+              style: Theme.of(context).textTheme.subtitle2!.copyWith(color: Theme.of(context).errorColor)),
+        ]));
+  }
+
+  Text _getTextForOtherFa(final BuildContext context) {
     return Text('If fuel price is incorrect please let us know',
-        textAlign: TextAlign.start, style: Theme.of(context).textTheme.subtitle2!.copyWith(color: Colors.red));
+        textAlign: TextAlign.start,
+        style: Theme.of(context).textTheme.subtitle2!.copyWith(color: Theme.of(context).errorColor));
   }
 
   String? _getFuelAuthorityQuotePublisher() {

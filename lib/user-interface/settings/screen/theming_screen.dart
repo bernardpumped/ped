@@ -17,7 +17,13 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:pumped_end_device/data/local/dao/ui_settings_dao.dart';
+import 'package:pumped_end_device/data/local/model/ui_settings.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
+import 'package:pumped_end_device/util/log_util.dart';
+import 'package:pumped_end_device/util/theme_notifier.dart';
+import 'package:pumped_end_device/util/ui_themes.dart';
 
 class ThemingScreen extends StatefulWidget {
   const ThemingScreen({Key? key}) : super(key: key);
@@ -27,13 +33,9 @@ class ThemingScreen extends StatefulWidget {
 }
 
 class _ThemingScreenState extends State<ThemingScreen> {
-  static const _lightTheme = 'LIGHT_THEME';
-  static const _darkTheme = 'DARK_THEME';
-  static const _systemTheme = 'SYSTEM_THEME';
-
-  static const _themes = {_lightTheme: 'Light Theme', _darkTheme: 'Dark Theme', _systemTheme: 'System Theme'};
-
-  String selectedTheme = _lightTheme;
+  static const _tag = 'ThemingScreen';
+  String? selectedTheme;
+  bool _loadSelectedThemeFromDb = true;
 
   @override
   Widget build(final BuildContext context) {
@@ -48,9 +50,7 @@ class _ThemingScreenState extends State<ThemingScreen> {
                 const SizedBox(width: 10),
                 Text('Theme ', style: Theme.of(context).textTheme.headline2, textAlign: TextAlign.center)
               ])),
-          Card(
-              child:
-                  Column(children: [_getMenuItem(_lightTheme), _getMenuItem(_darkTheme), _getMenuItem(_systemTheme)])),
+          _getCard(),
           Padding(
               padding: const EdgeInsets.only(top: 20, right: 20),
               child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
@@ -58,20 +58,88 @@ class _ThemingScreenState extends State<ThemingScreen> {
                     context: context,
                     buttonText: 'Set App Theme',
                     iconData: Icons.compare_outlined,
-                    onTapFunction: () {})
+                    onTapFunction: () {
+                      UiSettingsDao.instance.insertUiSettings(UiSettings(uiTheme: selectedTheme!)).whenComplete(() {
+                        final themeNotifier = Provider.of<ThemeNotifier>(context, listen: false);
+                        themeNotifier.setThemeMode(UiThemes.getThemeMode(selectedTheme!));
+                        LogUtil.debug(_tag, 'Inserted instance $selectedTheme');
+                        if (mounted) {
+                          LogUtil.debug(_tag, 'Still mounted, calling setState');
+                          setState(() {
+                            _loadSelectedThemeFromDb = true;
+                          });
+                        }
+                      });
+                    })
               ]))
         ]));
+  }
+
+  Widget _getCard() {
+    return _loadSelectedThemeFromDb ? _loadInitialThemeFromDb() : _loadSelectedThemeFromState();
+  }
+
+  Card _loadSelectedThemeFromState() {
+    return Card(
+        child: Column(children: [
+      _getMenuItem(UiThemes.lightTheme),
+      _getMenuItem(UiThemes.darkTheme),
+      _getMenuItem(UiThemes.systemTheme)
+    ]));
+  }
+
+  Card _loadInitialThemeFromDb() {
+    return Card(
+        child: FutureBuilder(
+            future: getUiSettings(),
+            builder: (context, snapShot) {
+              if (snapShot.hasData) {
+                UiSettings? uiSettings = snapShot.data as UiSettings?;
+                if (uiSettings != null) {
+                  LogUtil.debug(_tag, 'Read UiSettings : ${uiSettings.uiTheme}');
+                  if (uiSettings.uiTheme != null) {
+                    selectedTheme = uiSettings.uiTheme;
+                  } else {
+                    // No theme was yet set in UiSettings
+                    // setting the default values
+                    selectedTheme = UiThemes.lightTheme;
+                  }
+                } else {
+                  // Ui Settings is not set yet
+                  // Creating instance now with default value
+                  selectedTheme = UiThemes.lightTheme;
+                }
+                return Column(children: [
+                  _getMenuItem(UiThemes.lightTheme),
+                  _getMenuItem(UiThemes.darkTheme),
+                  _getMenuItem(UiThemes.systemTheme)
+                ]);
+              } else if (snapShot.hasError) {
+                LogUtil.debug(_tag, 'Error found while loading UiSettings ${snapShot.error}');
+                return Text('Error Loading',
+                    style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Theme.of(context).errorColor));
+              } else {
+                return Text('Loading', style: Theme.of(context).textTheme.subtitle1);
+              }
+            }));
   }
 
   RadioListTile<String> _getMenuItem(final String themeValue) {
     return RadioListTile<String>(
         value: themeValue,
+        selected: themeValue == selectedTheme,
         groupValue: selectedTheme,
         onChanged: (newVal) {
+          LogUtil.debug(_tag, 'Selected Theme $newVal');
           setState(() {
-            selectedTheme = newVal!;
+            _loadSelectedThemeFromDb = false;
+            selectedTheme = newVal;
           });
         },
-        title: Text(_themes[themeValue]!, style: Theme.of(context).textTheme.headline6));
+        title: Text(UiThemes.themes[themeValue]!, style: Theme.of(context).textTheme.subtitle2));
+  }
+
+  Future<UiSettings?>? getUiSettings() {
+    return UiSettingsDao.instance.getUiSettings();
   }
 }

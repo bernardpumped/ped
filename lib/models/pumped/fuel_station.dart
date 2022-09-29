@@ -110,4 +110,11 @@ class FuelStation {
   set setServices(int services){
     this.services = services;
   }
+
+  List<String?> getPublishers() {
+    return fuelQuotes()
+        .where((fq) => fq.fuelQuoteSource != null && fq.fuelQuoteSource != 'C')
+        .map((fq) => fq.fuelQuoteSourceName)
+        .toList();
+  }
 }

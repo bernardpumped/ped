@@ -175,7 +175,7 @@ class _FavouriteStationsScreenState extends State<FavouriteStationsScreen> {
 
   _getDetailsSectionWidget() {
     if (_fuelStationToDisplay != null) {
-      return FuelStationDetailsScreen(selectedFuelStation: _fuelStationToDisplay!);
+      return FuelStationDetailsScreen(selectedFuelStation: _fuelStationToDisplay!, selectedFuelType: _selectedFuelType!);
     } else if (_displayFuelTypeSwitcher) {
       return FuelTypeSwitcherWidget(
           selectedFuelType: _selectedFuelType!,
