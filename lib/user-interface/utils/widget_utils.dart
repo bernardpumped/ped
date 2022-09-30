@@ -20,6 +20,17 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class WidgetUtils {
+  static void showToastMessageWithGravity(final BuildContext context, final String message, final ToastGravity gravity) {
+    final FToast fToast = FToast();
+    fToast.init(context);
+    final Widget toast = Container(
+        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(25.0), color: Theme.of(context).primaryColor),
+        child: Text(message, style: const TextStyle(color: Colors.white), textAlign: TextAlign.center));
+    fToast.removeQueuedCustomToasts();
+    fToast.showToast(child: toast, gravity: gravity, toastDuration: const Duration(seconds: 3));
+  }
+
   static void showToastMessage(final BuildContext context, final String message) {
     final FToast fToast = FToast();
     fToast.init(context);
@@ -28,7 +39,7 @@ class WidgetUtils {
         decoration: BoxDecoration(borderRadius: BorderRadius.circular(25.0), color: Theme.of(context).primaryColor),
         child: Text(message, style: const TextStyle(color: Colors.white), textAlign: TextAlign.center));
     fToast.removeQueuedCustomToasts();
-    fToast.showToast(child: toast, gravity: ToastGravity.BOTTOM, toastDuration: const Duration(seconds: 3));
+    fToast.showToast(child: toast, gravity: ToastGravity.CENTER, toastDuration: const Duration(seconds: 3));
   }
 
   static SnackBar buildSnackBar2(final BuildContext context, final String text, final int durationToFadeIn,

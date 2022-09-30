@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:pumped_end_device/main.dart';
+import 'package:pumped_end_device/models/pumped/fuel_type.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/screen/tabs/contact/contact_tab.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/screen/tabs/fuel-prices/fuel_prices_tab.dart';
 import 'package:pumped_end_device/user-interface/utils/under_maintenance_service.dart';
@@ -31,8 +32,9 @@ import 'package:pumped_end_device/util/log_util.dart';
 class FuelStationDetailsScreen extends StatefulWidget {
   static const routeName = '/ped/fuel-stations/details';
   final FuelStation selectedFuelStation;
+  final FuelType selectedFuelType;
 
-  const FuelStationDetailsScreen({Key? key, required this.selectedFuelStation}) : super(key: key);
+  const FuelStationDetailsScreen({Key? key, required this.selectedFuelStation, required this.selectedFuelType}) : super(key: key);
 
   @override
   State<FuelStationDetailsScreen> createState() => _FuelStationDetailsScreenState();
@@ -112,19 +114,19 @@ class _FuelStationDetailsScreenState extends State<FuelStationDetailsScreen> {
               ];
             },
             body: CustomScrollView(key: PageStorageKey<String>(_tabs[_selectedTabIndex]), slivers: <Widget>[
-              SliverToBoxAdapter(child: _getChildTabContent(fuelStation, _tabs[_selectedTabIndex]))
+              SliverToBoxAdapter(child: _getChildTabContent(_tabs[_selectedTabIndex]))
             ])));
   }
 
-  Widget? _getChildTabContent(final FuelStation fuelStation, final String tabName) {
+  Widget? _getChildTabContent(final String tabName) {
     dynamic promotions;
     Widget? tabWidget;
     switch (tabName) {
       case _contactTabHeader:
-        tabWidget = ContactTabWidget(fuelStation);
+        tabWidget = ContactTabWidget(widget.selectedFuelStation);
         break;
       case _fuelPricesTabHeader:
-        tabWidget = FuelPricesTabWidget(fuelStation);
+        tabWidget = FuelPricesTabWidget(widget.selectedFuelStation, widget.selectedFuelType);
         break;
       case _promotionsTabHeader:
         tabWidget = promotions == null ? const NoPromotionsWidget() : const PromotionsWidget();

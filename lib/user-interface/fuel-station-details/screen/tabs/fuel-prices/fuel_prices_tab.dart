@@ -17,6 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:pumped_end_device/data/local/market_region_zone_config_utils.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/screen/tabs/fuel-prices/widget/fuel_price_source_citation_widget.dart';
@@ -24,11 +25,13 @@ import 'package:pumped_end_device/user-interface/fuel-station-details/screen/tab
 import 'package:pumped_end_device/models/pumped/fuel_quote.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station.dart';
 import 'package:pumped_end_device/models/pumped/fuel_type.dart';
+import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 
 class FuelPricesTabWidget extends StatefulWidget {
   final FuelStation _fuelStation;
+  final FuelType _selectedFuelType;
 
-  const FuelPricesTabWidget(this._fuelStation, {Key? key}) : super(key: key);
+  const FuelPricesTabWidget(this._fuelStation, this._selectedFuelType, {Key? key}) : super(key: key);
 
   @override
   State<FuelPricesTabWidget> createState() => _FuelPricesTabWidgetState();
@@ -75,11 +78,22 @@ class _FuelPricesTabWidgetState extends State<FuelPricesTabWidget> {
       allowedFuelTypesMap.putIfAbsent(fuelType.fuelType, () => fuelType);
     }
     int rowItemsGenerated = 0;
+    int selectedFuelTypeIndex = -1;
     for (int i = 0; i < fuelQuotes.length; i++) {
-      if (fuelQuotes[i].quoteValue != null) {
-        rowItemsGenerated++;
+      if (fuelQuotes[i].fuelType == widget._selectedFuelType.fuelType &&
+          fuelQuotes[i].quoteValue != null &&
+          fuelQuotes[i].quoteValue! > 0) {
+        selectedFuelTypeIndex = i;
+        widgets.insert(0, _getFuelQuoteRowItem(fuelQuotes[i], allowedFuelTypesMap));
+      } else {
         widgets.add(_getFuelQuoteRowItem(fuelQuotes[i], allowedFuelTypesMap));
       }
+    }
+    if (selectedFuelTypeIndex == -1) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        WidgetUtils.showToastMessageWithGravity(
+            context, 'This Station does not sell ${widget._selectedFuelType.fuelName}', ToastGravity.CENTER);
+      });
     }
     if (rowItemsGenerated != fuelQuotes.length) {
       widgets.add(_getDeclarationRowItem());
@@ -94,11 +108,12 @@ class _FuelPricesTabWidgetState extends State<FuelPricesTabWidget> {
         margin: const EdgeInsets.only(left: 5, right: 5, top: 15),
         child: Padding(
             padding: const EdgeInsets.only(top: 10, bottom: 10, left: 20, right: 20),
-            child: Text('Fuel Station does not advertise prices for other fuel types',
+            child: Text('Station only sells these Fuel Types',
                 style: Theme.of(context).textTheme.headline6)));
   }
 
   Widget _getFuelQuoteRowItem(final FuelQuote fuelQuote, final Map<String, FuelType> allowedFuelTypesMap) {
+    final bool isSelectedFuelType = widget._selectedFuelType.fuelType == fuelQuote.fuelType;
     final String? fuelTypeName = allowedFuelTypesMap[fuelQuote.fuelType]?.fuelName;
     return Card(
         margin: const EdgeInsets.only(left: 5, right: 5, top: 5, bottom: 5),
@@ -110,7 +125,10 @@ class _FuelPricesTabWidgetState extends State<FuelPricesTabWidget> {
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
                     Container(
                         margin: const EdgeInsets.only(left: 25),
-                        child: Text(fuelTypeName!, style: Theme.of(context).textTheme.headline3)),
+                        child: Text(fuelTypeName!,
+                            style: isSelectedFuelType
+                                ? Theme.of(context).textTheme.headline3!.copyWith(fontWeight: FontWeight.w600)
+                                : Theme.of(context).textTheme.headline3)),
                     Container(
                         padding: const EdgeInsets.only(right: 10, top: 10, bottom: 10),
                         child: Row(children: <Widget>[
@@ -119,7 +137,9 @@ class _FuelPricesTabWidgetState extends State<FuelPricesTabWidget> {
                   ]))),
           Expanded(
               flex: 4,
-              child: Container(margin: const EdgeInsets.only(left: 30), child: _getFuelQuoteValueWidget(fuelQuote))),
+              child: Container(
+                  margin: const EdgeInsets.only(left: 30),
+                  child: _getFuelQuoteValueWidget(fuelQuote, isSelectedFuelType))),
           Expanded(
               flex: 2,
               child:
@@ -127,9 +147,12 @@ class _FuelPricesTabWidgetState extends State<FuelPricesTabWidget> {
         ]));
   }
 
-  Widget _getFuelQuoteValueWidget(final FuelQuote fuelQuote) {
+  Widget _getFuelQuoteValueWidget(final FuelQuote fuelQuote, final bool isSelectedFuelType) {
     return fuelQuote.quoteValue != null
-        ? Text('${fuelQuote.quoteValue}', style: Theme.of(context).textTheme.headline3)
+        ? Text('${fuelQuote.quoteValue}',
+            style: isSelectedFuelType
+                ? Theme.of(context).textTheme.headline3!.copyWith(fontWeight: FontWeight.w600)
+                : Theme.of(context).textTheme.headline3)
         : Text('---', style: Theme.of(context).textTheme.headline2);
   }
 

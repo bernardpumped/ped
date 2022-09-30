@@ -7,8 +7,10 @@ class AppTheme {
   static const primaryColorLgTh = Colors.indigo;
   static const bgColorLgTh = Colors.white;
 
-  static const primaryColorDkTh = Colors.green;
-  static const bgColorDkTh = Colors.black45;
+  static const primaryColorDkTh = Colors.white;
+  // static const primaryColorSwatchDkTh = Color(0xFFDEE1FC); gmail buttons etc.
+  static const primaryColorSwatchDkTh = Colors.lightBlue;
+  static const bgColorDkTh = Colors.black54;
 
   //https://api.flutter.dev/flutter/material/TextTheme-class.html
   static const textTheme = TextTheme(
@@ -103,7 +105,7 @@ class AppTheme {
           unselectedLabelColor: primaryColorDkTh,
           indicator: const UnderlineTabIndicator(borderSide: BorderSide(color: primaryColorDkTh))),
       useMaterial3: true,
-      primarySwatch: primaryColorDkTh,
+      primarySwatch: primaryColorSwatchDkTh,
       colorScheme: const ColorScheme.dark(),
       iconTheme: const IconThemeData(color: primaryColorDkTh),
       dividerColor: primaryColorDkTh.withOpacity(0.3),

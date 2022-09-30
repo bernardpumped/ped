@@ -19,6 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/screen/tabs/contact/widget/action_bar.dart';
+import 'package:pumped_end_device/user-interface/fuel-station-details/screen/widget/sa_fuel_station_source_citation.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/screens/widgets/fuel_station_logo_widget.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/screen/widget/qld_fuel_station_source_citation.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station.dart';
@@ -76,11 +77,7 @@ class ExpandedHeaderWidget extends StatelessWidget {
 
   Widget _getFuelAuthorityQuotePublisher(final FuelStation fuelStation, final BuildContext context) {
     if (fuelStation.fuelQuotes().isNotEmpty) {
-      final List<String?> publishers = fuelStation
-          .fuelQuotes()
-          .where((fq) => fq.fuelQuoteSource != null && fq.fuelQuoteSource != 'C')
-          .map((fq) => fq.fuelQuoteSourceName)
-          .toList();
+      final List<String?> publishers = fuelStation.getPublishers();
       if (publishers.isNotEmpty) {
         return Row(children: [
           Text('Fuel Price Source ${publishers[0]} ', style: Theme.of(context).textTheme.headline6),
@@ -93,18 +90,21 @@ class ExpandedHeaderWidget extends StatelessWidget {
 
   Widget _getFuelStationSourceCitationIcon(
       final List<String?> publishers, final BuildContext context, final FuelStation fuelStation) {
-    if (publishers[0] == 'qld') {
+    Widget content = (publishers[0] == 'qld')
+        ? QldFuelStationSourceCitation(fuelStation: fuelStation)
+        : ((publishers[0] == 'sa') ? const SaFuelStationSourceCitation() : const SizedBox(width: 0));
+    if (publishers[0] == 'qld' || publishers[0] == 'sa') {
       return GestureDetector(
           onTap: () {
             showDialog(
                 barrierDismissible: false,
                 context: context,
-                builder: (BuildContext context) {
+                builder: (final BuildContext context) {
                   return AlertDialog(
                       contentPadding: const EdgeInsets.all(0),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10), side: const BorderSide(width: 0.2)),
-                      content: QldFuelStationSourceCitation(fuelStation: fuelStation));
+                      content: content);
                 });
           },
           child: const Icon(Icons.info_outline, size: 24)); // Info icon
