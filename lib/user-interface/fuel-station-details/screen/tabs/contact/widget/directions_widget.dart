@@ -27,6 +27,7 @@ import 'package:pumped_end_device/data/local/location/location_data_source.dart'
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import 'feature_support.dart';
 
