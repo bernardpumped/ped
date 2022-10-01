@@ -38,12 +38,11 @@ dependencies:
 
 # plugins general
   fluttertoast: ^8.0.9      # Toast which requires BuildContext all platforms supported
-  # geocoding: ^2.0.4       # to be reviewed
-  geolocator: ^9.0.1        # required for geolocator_linux
+  geocoding: ^2.0.5         # to be reviewed
+  geolocator: ^9.0.2        # required for geolocator_linux
   geolocator_linux: ^0.1.2  # required for geolocator
-  path: ^1.8.0              # Supported on Linux
-  url_launcher: ^6.0.11     # Supported on Linux. certain functions do not work google maps, phone calling etc.
-  #webview_flutter: ^3.0.4  # not Supported on linux to be removed
+  path: ^1.8.2              # Supported on Linux
+  url_launcher: 6.1.6       # Supported on Linux. certain functions do not work google maps, phone calling etc.
 
 dev_dependencies:
   build_runner: ^2.1.5
