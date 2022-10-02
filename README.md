@@ -9,12 +9,8 @@
 |<a href="#5-running-on-android-emulator">5. Running on Android Emulator</a>
 |<a href="#6-running-on-ios-simulator">6. Running on iOS Simulator</a>
 |<a href="#7-running-on-local-web">7. Running on Local Web</a>
-|<a href="#8-running-on-linux-desktop">8. Running on Linux Desktop</a>
-|<a href="#9-running-on-toyota-ivi-homescreen">9. Running on Toyota IVI Homescreen</a>
-|<a href="#10-deploying-on-agl">10. Deploying on AGL</a>
-|<a href="#11-deploying-on-embedded">11. Deploying on Embedded</a>
-|<a href="#12-ped-testability">12. PED Testability</a>
-|<a href="#13-faq">13. FAQ</a>
+|<a href="#8-ped-testability">8.. PED Testability</a>
+|<a href="#9-faq">9. FAQ</a>
 
 
 ## Important Note - Please Read
