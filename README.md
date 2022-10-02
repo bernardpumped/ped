@@ -70,7 +70,7 @@ As stated above ped mobile is now wired to firebase and social logins for androi
 ###     3.1.4 Firebase Services
   ped/lib/firebase_options.dart for both android and iOS - Please add 'YOUR_apiKey', 'YOUR_appId', 'YOUR_messagingSenderId', 'YOUR_projectId', 'YOUR_storageBucket' and only for iOS add YOUR_iosClientId' and lastly 'YOUR_iosBundleId'
 
-###     3.1.4 Firebase Options
+###     3.1.5 Firebase Options
   ped/lib/user-interface/fuel-station-details/utils/firebase_service.dart - Please add "YOUR-twitter-api-key" and "YOUR-twitter-secrete",
 
 
