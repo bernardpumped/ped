@@ -9,16 +9,12 @@
 |<a href="#5-running-on-android-emulator">5. Running on Android Emulator</a>
 |<a href="#6-running-on-ios-simulator">6. Running on iOS Simulator</a>
 |<a href="#7-running-on-local-web">7. Running on Local Web</a>
-|<a href="#8-running-on-linux-desktop">8. Running on Linux Desktop</a>
-|<a href="#9-running-on-toyota-ivi-homescreen">9. Running on Toyota IVI Homescreen</a>
-|<a href="#10-deploying-on-agl">10. Deploying on AGL</a>
-|<a href="#11-deploying-on-embedded">11. Deploying on Embedded</a>
-|<a href="#12-ped-testability">12. PED Testability</a>
-|<a href="#13-faq">13. FAQ</a>
+|<a href="#8-ped-testability">8.. PED Testability</a>
+|<a href="#9-faq">9. FAQ</a>
 
 
 ## Important Note - Please Read
-This branch now only supports iOS and Android mobile phones and is wired to firebase for backend SaaS including social logins for Google, Meta and Twitter, as such if you wish to adopt this branch into your environment you "must" configre each of the aforementioned services using your own account, or remove as you see fit. This also implies you can build web but it won't run unless you also configure web for firwebase. Of course we're happy to customise for your requirements
+This branch now only supports portrait mode held hands iOS and Android mobile and is wired to firebase for backend SaaS including social logins for Google, Meta and Twitter, as such if you wish to adopt this branch you "must" configre each of the aforementioned services using your own account documented in following 3.1 Build Configuration. Of course as this is free and open software fork and change how you see fit or alternatively let us customise for your bespoke requirements.
 
 Concerning automotive in-vehicle infotainment (IVI) we will fork new branches as necessitates commencing with AGL branch for https://www.automotivelinux.org/
 IVI by design controlled via vehicle manufactures and partners so will not "by default" be pre-configured with other 3rd party backend software services
@@ -55,9 +51,26 @@ Pumped End Device code base is shared under GNU Public License V3 [![GPLv3 Licen
 ## 3. Development Environment Setup and Build on Mac
 Before commencing with any of the following it's highly recommended to remain current with regards to patches as Flutter is evolving quickly with no concept of long term support
 
-### 3.1. Flutter Installation
-Download and install Flutter following the steps narrated on [Flutter Website](https://docs.flutter.dev/get-started/install). This readme assumes your operating system is macOS with steps as follows:
+### 3.1. Build Configuration
+As stated above ped mobile is now wired to firebase and social logins for android, iOS (in progress) and web (todo) therefore if you wish to build this branch add your account detils to the follow
 
+###     3.1.1 Social Login
+ ped/android/app/src/main/res/values/strings.xml - Please add YOUR_facebook_ap_id, YOUR_app_name, YOUR_fb_login_protocol_scheme and YOUR_facebook_client_token
+
+###     3.1.2 Gradle build
+  ped/android/app/build.gradle - Please add YOUR Google Account Keystore Properties inluding signingConfigs & buildTypes for debug, release and playStore and opies of your key.properties, YOUR-play-deployment.keystore, YOUR-play-upload.keystore and local copy of YOUR-debug.keystore
+
+###     3.1.3 Google Services
+  ped/android/app/google-services.json (system generated)
+
+###     3.1.4 Firebase Services
+  ped/lib/firebase_options.dart for both android and iOS - Please add 'YOUR_apiKey', 'YOUR_appId', 'YOUR_messagingSenderId', 'YOUR_projectId', 'YOUR_storageBucket' and only for iOS add YOUR_iosClientId' and lastly 'YOUR_iosBundleId'
+
+###     3.1.5 Firebase Options
+  ped/lib/user-interface/fuel-station-details/utils/firebase_service.dart - Please add "YOUR-twitter-api-key" and "YOUR-twitter-secrete",
+
+### 3.2. Flutter Installation
+Download and install Flutter following the steps narrated on [Flutter Website](https://docs.flutter.dev/get-started/install). This readme assumes your operating system is macOS with steps as follows:
 * Download flutter (by default downloads into ~/Downloads folder)
 * Create directory ~/development and unzip downloaded Flutter into it. It creates a Flutter sub-directory.
 ```bash
@@ -84,7 +97,7 @@ $ which flutter
 $ which flutter dart
 ```
 
-### 3.2. Android Studio Setup
+### 3.3. Android Studio Setup
 Internally we use Android Studio as our IDE for Pumped End Device (PED) Flutter devlopment, which provides many useful features including tools and plugins for executing code on both iOS and Android simulators in addition to physical devices. Other IDEs such as Visual Studio are also commonly used for flutter development.
 * Visit [Android Studio Website](https://developer.android.com/studio) to download Android Studio. By default it shows platform specific build to download.
 * Drag and drop the downloaded executable in Applications folder as shown so that it easily comes under spotlight search. <img src="documentation/assets/Screenshot-1.png" width="450" />
@@ -93,7 +106,7 @@ Internally we use Android Studio as our IDE for Pumped End Device (PED) Flutter 
 * Note - Android SDK Command-line is important and separately prompts you to accept android licenses. <img src="documentation/assets/Screenshot-7.png" width="450" />
 * Navigate to Menu > Preferences > Plugins. Install following Android Studio plugins. They provide necessary tools to enable compilation & execution of Flutter application. <img src="documentation/assets/Screenshot-4.png" width="450" />
 
-### 3.3. XCode Setup
+### 3.4. XCode Setup
 XCode is only available for Mac and is mandatory when building Flutter apps for macOS and iOS. Therefore, if you're not building for apple you can bypass this section. Xcode provides Simulator application which emulates iOS device.
 * Open App Store on Mac and search for XCode. Click on install if not already installed, and note download is large 10gb+ and can take several hours based upon your network bandwidth. If it is already installed it shows "Open" button <img src="documentation/assets/Screenshot-5.png" width="450" />
 * Configure the Xcode command-line tools to use the newly-installed version of Xcode by running the following from the command line:
@@ -104,7 +117,7 @@ $ sudo xcodebuild -runFirstLaunch
 * Make sure the Xcode license agreement is signed by either opening Xcode once and confirming or running `sudo xcodebuild -license` from the command line.
 * Important - we will configure Apple developer account later which is another mandatory requirement when running app on physical iOS device. It is not required when running on iOS Simulator.
 
-### 3.4 Other Tools
+### 3.5 Other Tools
 * Install Chrome, which will be used in development and testing of web. 
 * Execute command `flutter doctor`- which validates your Mac dev host install and setup to ensure building and running Flutter application.
 * Output of the command on initial run will be <img src="documentation/assets/Screenshot-8.png" width="550" /> . It complains of unaccepted android licenses and missing Apple cocoapods.
@@ -113,7 +126,7 @@ $ sudo xcodebuild -runFirstLaunch
 * you may wish to also install Visual Studio Code, as it is another great IDE for Flutter development.
 * Output of the command when everything is setup properly <img src="documentation/assets/Screenshot-6.png" width="400" />
 
-### 3.5 PED Code Setup
+### 3.6 PED Code Setup
 * Clone PED Github repository on local box. https://github.com/bernardpumped/ped
 * Open Android Studio. Click Open. Browse to the downloaded PED repository (~/development/code/ped). Click Open.
 * Open command prompt and execute following commands.
@@ -124,9 +137,9 @@ or
 $ flutter create --org FLUTTER_APP .
 ```
 * Above command prepares workspace for building of iOS, Android and Web releases. It also pulls the relevant dependencies as mentioned in pubspec.yaml, with successful completion resulting in correct setup of Android Studio workspace. <img src="documentation/assets/Screenshot-14.png" width="800" />
-#### 3.5.1 Android Build
+#### 3.6.1 Android Build
 * Execute `$ flutter build apk --debug` for Android builds. Successful execution will generate apk in path`build/app/outputs/flutter-apk/app-debug.apk`
-#### 3.5.2 iOS Build
+#### 3.6.2 iOS Build
 * Building for iOS requires connecting to Apple Developer account by signing in with Apple ID in Xcode and creating an iOS Development Certificate as well as a Provisioning Profile for project.
 * Open the Flutter project's Xcode target with `open ios/Runner.xcworkspace`
 * Select the 'Runner' project in the navigator then the 'Runner' target in the project settings
@@ -137,7 +150,7 @@ $ flutter create --org FLUTTER_APP .
   - Let Xcode automatically provision a profile for your app
 * Execute `$ flutter build ios --debug` for iOS builds. It results into generation of `build/ios/iphoneos/Runner.app` file.
 * Note - In case of M1 Macs build failing with error message `incompatible architecture (have 'arm64', need 'x86_64')` . To fix this execute the command `$ sudo arch -x86_64 gem install ffi`
-#### 3.5.3 Web Build
+#### 3.6.3 Web Build
 * Execute `$ flutter build web` for web builds. It results into generation of js and html code in directory `build/web/`
 
 ## 4. Prerequisite for running PED
@@ -192,148 +205,7 @@ The command `flutter create .` executed as part of [Code Setup](#35-ped-code-set
 * Note - Chrome, unlike the Emulator/Simulator, currently does not provide any mechanism to override location. Hence, until such time Google resolve, we've temporaily hard-coded Sydney location when it runs within a browser, and note it is still necessary to permit location service access for PED to function.
 * <table><tr><td><img src="documentation/assets/Screenshot-24.png" width="250" /></td><td><img src="documentation/assets/Screenshot-25.png" width="250" /></td><td><img src="documentation/assets/Screenshot-26.png" width="250" /></td></tr></table>
 
-### 7.2 Hosting on a web server
-* The generated html/javascript files can also be hosted within a web-server eg ngnix. For brevity this Readme will not detail nginx server install.
-* `$ flutter build web` command transpiles Flutter/dart to html/javascript into the build/web directory. Copy the contents to a separate directory eg ~/ped-web.
-* Adding a new document root to ngnix is done by modifying the ngnix.conf file, the location varies depending upon OS type and installation method. Example - on Mac if ngnix installed using Homebrew, then config file might be located in`/opt/homebrew/etc/nginx/nginx.conf`. On Linux, if installed using yum config might be located in `/etc/nginx/nginx.conf`
-* Modify the ngnix.conf file, add the ~/ped-web as additional unique location example
-```
-location /ped {
-  root /home/<user>/ped-web/;
-  autoindex on;
-} 
-```
-* Also make sure that all users have read permissions on these files, otherwise ngnix will not serve them over web
-```bash
-$ chmod a+rwx ~/ped-web
-$ cd ~/ped-web
-$ chmod a+rwx *
-```
-* Restart ngnix. Depending on OS, the command varies. Example on Linux it is ```bash $ sudo nginx -s reload ``` on Mac it is 
-```bash
-$ sudo nginx -s stop
-$ sudo nginx 
-``` 
-* Assuming, host is localhost and ngnix is running on 8080, visit http://localhost:8080/ped/index.html. PED Application works.
-* Important considerations
-  - On Linux, if there are permissions denied issues accessing above url, then check `/var/log/nginx/error.log`for errors. If there are errors related to permissions or SELinux related issues, then check corresponding chmod commands have been run.
-  - If the server is run on local machine at an HTTP endpoint, then there are no issues while accessing the location, to non-HTTPS urls. However, if the server is not a local machine, then for security reasons, browsers do not allow access to location. To circumvent, purchase an SSL certificate OR create a self signed certificate, and configure ngnix to use it. Firefox allows HTTPs URLs using self signed certificates to access location, whilst Chrome/Edge and Safari do not.  
-
-## 8. Running on Linux Desktop
-The Linux distro we adopted is Ubuntu-20.04.x, which can be standalone or virtualized using Parallels / VirtualBox etc, and in our case using Macs we virtualized using Parallels.
-* Install Flutter on linux following the process detailed in [installation link]( https://flutter.dev/docs/get-started/install/linux)
-* Flutter Installation
-  - Install using snap tool. In Ubuntu-20.04.2 the snap tool was default installed. In case it is not, install following the instruction narrated [here](https://snapcraft.io/docs/installing-snapd)
-    - Install flutter using command `$ sudo snap install flutter --classic`
-    - Use the following command to display your Flutter SDK path `$ flutter sdk-path`
-    - Find the installed location of flutter `$ which flutter`
-  - Other option is to install manually, by downloading the latest Flutter installation bundle, for the stable release 
-    - ```bash
-      $ mkdir ~/development
-      $ cd ~/development
-      $ tar xf ~/Downloads/flutter_linux_2.5.3-stable.tar.xz
-      $ export PATH="$PATH:`pwd`/flutter/bin"
-      ```
-    - Flutter can be added permanently to the path by modifying the rc file of the default shell. 
-  - Run `$ flutter doctor`. which may complain about missing Chrome browser, missing flutter IDE (we did not install Android Studio/VS Code) and no connected devices (we did not install Chrome, Emulator / Simulator). 
-  - Current intent is only to build and test Linux platform binary, that is Pumped team who develop on Mac can safely ignore these doctor complaints. This setup does not assume Linux to be development machine. 
-  - Building Flutter application on Linux would require additional tools. 
-    ```bash 
-    $ sudo apt-get install clang cmake ninja-build pkg-config libgtk-3-dev
-    ```
-  - Enable Linux Support
-    ```bash
-     $ flutter config --enable-linux-desktop
-     $ flutter channel beta
-     $ flutter upgrade
-     $ flutter devices
-    ```
-    Flutter devices should show Linux Desktop as connected device.
- - Building PED on Linux
-   - Get PED source code on Linux desktop from Github repository. Assume it is downloaded in ~/development/ped directory
-   - Execute following commands
-     ```bash
-     $ cd  ~/development/ped
-     $ flutter create .
-     ```
- - Running application on Linux Device
-     ```bash
-     $ flutter run -d linux
-     ```
-   <table><tr><td><img src="documentation/assets/Screenshot-27.png" width="250" /></td><td><img src="documentation/assets/Screenshot-28.png" width="250" /></td></tr></table>
-   - Note:
-     - The Location library (geolocator) used in PED does not yet have Linux implementation. Hence, for Linux platform, the lat-long coordinates are hard coded.
-  
-## 9. Running on Toyota IVI Homescreen
-* This involves building and installing Toyota IVI Homescreen and then building and installing PED. Here we will be running it on desktop. Caveat when building using Mac 
-  This process only works on x86, in conjunction with others, we're investigating what and how to get this working on apple silicon the M1      
-  - Build Toyota IVI Homescreen - Refer to [Toyota IVI Homescreen README](https://github.com/toyota-connected/ivi-homescreen/blob/main/README.md) notes
-    * Ubuntu-20.04.2 comes with a default installation of Wayland. While logging in, click on gear icon below username and choose *Ubuntu on Wayland* as login option.
-    * Download the [Toyota IVI Homescreen code](https://github.com/toyota-connected/ivi-homescreen) . For reference purpose, assume it is in ~/development/ivi-homescreen/
-    * Execute following commands, which adds a new update repository and installs set of libraries needed by Toyota IVI
-    ```bash
-     $ sudo add-apt-repository ppa:kisak/kisak-mesa    
-     $ sudo apt-get update -y    
-     $ sudo apt-get -y install libwayland-dev wayland-protocols \    
-       mesa-common-dev libegl1-mesa-dev libgles2-mesa-dev mesa-utils \
-       libxkbcommon-dev
-    ```
-    * Validate cmake utility is installed by executing command `$ which cmake`. In case it is not installed, execute commands `$ sudo apt install cmake`
-    * Validate rpmbuild utility is installed by executing command `$ which rpmbuild`. In case it is not installed, execute command `$ sudo apt-get install rpm`  
-    * Build Toyota IVI Homescreen
-    ```bash
-     $ cd ~/development/ivi-homescreen/
-     $ mkdir build && cd build
-     $ cmake .. -DCMAKE_STAGING_PREFIX=`pwd`/out/usr/local
-     $ make install -j
-    ```
-    * Create a debian package `$ make package -j`
-      - This results in creation of deb package for Linux at path ~/development/ivi-homescreen/build/ivi-homescreen-1.0.0-linux-x86_64.deb
-    * Install `$ sudo apt install ./ivi-homescreen-1.0.0-linux-x86_64.deb `
-  - Build Pumped End Device
-    * Download PED source code from Github. For reference, assume it is in ~/development/ped
-    * Flip to Flutter beta channel and enable linux desktop build
-    ```bash
-     $ flutter channel beta
-     $ flutter upgrade
-     $ flutter config --enable-linux-desktop
-    ```
-    * Build PED
-    ```bash
-     $ cd ~/development/ped
-     $ flutter create .
-     $ flutter build bundle
-    ```
-  - Install on Toyota IVI Homescreen
-    ```bash
-     $ cd /usr/local/share/homescreen
-     $ sudo rm -rf bundle
-     $ sudo ln -sf ~/development/ped/build/ bundle
-    ```
-  - Running on Desktop
-    * Copy a current icudtl.dat to /usr/local/share/flutter. One can be found in local Flutter installation
-      ```bash
-       $ sudo mkdir -p /usr/local/share/flutter
-       $ sudo cp ~/snap/flutter/common/flutter/bin/cache/artifacts/engine/linux-x64/icudtl.dat /usr/local/share/flutter/
-      ```
-    * Building Toyota IVI Homescreen generated libflutter_engine.so. Copy it to /usr/local/lib. You can also use LD_LIBRARY_PATH to point downloaded engine for build
-    ```bash
-      $ sudo cp ~/development/ivi-homescreen/build/libflutter_engine.so /usr/local/lib
-    ```
-    * Running
-    ```bash
-     $ cd ~/development/ivi-homescreen/build
-     $ export LD_LIBRARY_PATH=`pwd`:$LD_LIBRARY_PATH
-     $ homescreen
-    ```
-    
-## 10. Deploying on AGL
-* Yet to be defined
-
-## 11. Deploying on Embedded
-* Yet to be defined [Google Flutter Embedded](https://flutter.dev/multi-platform/embedded)
-
-## 12. PED Testability
+## 8. PED Testability
 Being able to test is the key criteria to build a stable application. PED supports different testing strategies - 
  * **Unit tests** -  Writing plain vanilla flutter test require adding dependency on [flutter_test](https://api.flutter.dev/flutter/flutter_test/flutter_test-library.html) Core Flutter SDK Library under dev_dependencies section in pubspec.yaml. Executing a test file requires executing the *flutter test* command. Example command referring PED test 
    ```bash
@@ -359,7 +231,7 @@ $ flutter driver --target test_driver/main.dart
 ```
 This command needs a device to launch an instrumented version of app, so before executing this command, bring up either Simulator/Emulator or attach a physical device (compatible of running flutter app). Also, make sure that the location which is used by the device belongs to a place, supported by Pumped, else the application will fail fetching the fuel stations from backend.
 
-## 13. FAQ
+## 9. FAQ
    
 **Q: how to set my location**
 
