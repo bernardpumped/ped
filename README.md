@@ -59,45 +59,19 @@ Before commencing with any of the following it's highly recommended to remain cu
 As stated above ped mobile is now wired to firebase and social logins for android, iOS (in progress) and web (todo) therefore if you wish to build this branch add your account detils to the follow
 
 ###     3.1.1 Social Login
- ped/android/app/src/main/res/values/strings.xml
-    <?xml version="1.0" encoding="utf-8"?>
-    <resources>
-        <string name="facebook_app_id">YOUR_facebook_ap_id</string>
-        <string name="app_name">YOUR_app_name</string>
-        <string name="fb_login_protocol_scheme">YOUR_fb_login_protocol_scheme</string>
-        <string name="facebook_client_token">YOUR_facebook_client_token</string>
-    </resources>
+ ped/android/app/src/main/res/values/strings.xml - Please add YOUR_facebook_ap_id, YOUR_app_name, YOUR_fb_login_protocol_scheme and YOUR_facebook_client_token
 
 ###     3.1.2 Gradle build
-  ped/android/app/build.gradle
-    Your Google Account Keystore Properties inluding signingConfigs & buildTypes for debug, release and playStore
-    Copies of your key.propertie, YOUR-play-deployment.keystore, YOUR-play-upload.keystore and local copy of YOUR-debug.keystore
+  ped/android/app/build.gradle - Please add YOUR Google Account Keystore Properties inluding signingConfigs & buildTypes for debug, release and playStore and opies of your key.properties, YOUR-play-deployment.keystore, YOUR-play-upload.keystore and local copy of YOUR-debug.keystore
 
 ###     3.1.3 Google Services
   ped/android/app/google-services.json (system generated)
 
 ###     3.1.4 Firebase Services
-  ped/lib/firebase_options.dart
-       static const FirebaseOptions android = FirebaseOptions(
-        apiKey: 'YOUR_apiKey',
-        appId:  'YOUR_appId',
-        messagingSenderId: 'YOUR_messagingSenderId',
-        projectId: 'YOUR_projectId',
-        storageBucket: 'YOUR_storageBucket',
-      );
-      static const FirebaseOptions ios = FirebaseOptions(
-          apiKey: 'YOUR_apiKey',
-          appId: 'YOUR_appId',
-          messagingSenderId: 'YOUR_messagingSenderId',
-          projectId: 'YOUR_projectId',
-          storageBucket: 'YOUR_storageBucket',
-          iosClientId: 'YOUR_iosClientId',
-          iosBundleId: 'YOUR_iosBundleId',
-        );
+  ped/lib/firebase_options.dart for both android and iOS - Please add 'YOUR_apiKey', 'YOUR_appId', 'YOUR_messagingSenderId', 'YOUR_projectId', 'YOUR_storageBucket' and only for iOS add YOUR_iosClientId' and lastly 'YOUR_iosBundleId'
 
 ###     3.1.4 Firebase Options
-  ped/lib/user-interface/fuel-station-details/utils/firebase_service.dart
-          apiKey: "YOUR-twitter-api-key", apiSecretKey: "YOUR-twitter-secrete",
+  ped/lib/user-interface/fuel-station-details/utils/firebase_service.dart - Please add "YOUR-twitter-api-key" and "YOUR-twitter-secrete",
 
 
 ### 3.2. Flutter Installation
