@@ -55,7 +55,52 @@ Pumped End Device code base is shared under GNU Public License V3 [![GPLv3 Licen
 ## 3. Development Environment Setup and Build on Mac
 Before commencing with any of the following it's highly recommended to remain current with regards to patches as Flutter is evolving quickly with no concept of long term support
 
-### 3.1. Flutter Installation
+### 3.1. Build Configuration
+As stated above ped mobile is now wired to firebase and social logins for android, iOS (in progress) and web (todo) therefore if you wish to build this branch add your account detils to the follow
+
+###     3.1.1 Social Login
+ ped/android/app/src/main/res/values/strings.xml
+    <?xml version="1.0" encoding="utf-8"?>
+    <resources>
+        <string name="facebook_app_id">YOUR_facebook_ap_id</string>
+        <string name="app_name">YOUR_app_name</string>
+        <string name="fb_login_protocol_scheme">YOUR_fb_login_protocol_scheme</string>
+        <string name="facebook_client_token">YOUR_facebook_client_token</string>
+    </resources>
+
+###     3.1.2 Gradle build
+  ped/android/app/build.gradle
+    Your Google Account Keystore Properties inluding signingConfigs & buildTypes for debug, release and playStore
+    Copies of your key.propertie, YOUR-play-deployment.keystore, YOUR-play-upload.keystore and local copy of YOUR-debug.keystore
+
+###     3.1.3 Google Services
+  ped/android/app/google-services.json (system generated)
+
+###     3.1.4 Firebase Services
+  ped/lib/firebase_options.dart
+       static const FirebaseOptions android = FirebaseOptions(
+        apiKey: 'YOUR_apiKey',
+        appId:  'YOUR_appId',
+        messagingSenderId: 'YOUR_messagingSenderId',
+        projectId: 'YOUR_projectId',
+        storageBucket: 'YOUR_storageBucket',
+      );
+      static const FirebaseOptions ios = FirebaseOptions(
+          apiKey: 'YOUR_apiKey',
+          appId: 'YOUR_appId',
+          messagingSenderId: 'YOUR_messagingSenderId',
+          projectId: 'YOUR_projectId',
+          storageBucket: 'YOUR_storageBucket',
+          iosClientId: 'YOUR_iosClientId',
+          iosBundleId: 'YOUR_iosBundleId',
+        );
+
+###     3.1.4 Firebase Options
+  ped/lib/user-interface/fuel-station-details/utils/firebase_service.dart
+          apiKey: "YOUR-twitter-api-key", apiSecretKey: "YOUR-twitter-secrete",
+
+
+### 3.2. Flutter Installation
 Download and install Flutter following the steps narrated on [Flutter Website](https://docs.flutter.dev/get-started/install). This readme assumes your operating system is macOS with steps as follows:
 
 * Download flutter (by default downloads into ~/Downloads folder)
@@ -84,7 +129,7 @@ $ which flutter
 $ which flutter dart
 ```
 
-### 3.2. Android Studio Setup
+### 3.3. Android Studio Setup
 Internally we use Android Studio as our IDE for Pumped End Device (PED) Flutter devlopment, which provides many useful features including tools and plugins for executing code on both iOS and Android simulators in addition to physical devices. Other IDEs such as Visual Studio are also commonly used for flutter development.
 * Visit [Android Studio Website](https://developer.android.com/studio) to download Android Studio. By default it shows platform specific build to download.
 * Drag and drop the downloaded executable in Applications folder as shown so that it easily comes under spotlight search. <img src="documentation/assets/Screenshot-1.png" width="450" />
@@ -93,7 +138,7 @@ Internally we use Android Studio as our IDE for Pumped End Device (PED) Flutter 
 * Note - Android SDK Command-line is important and separately prompts you to accept android licenses. <img src="documentation/assets/Screenshot-7.png" width="450" />
 * Navigate to Menu > Preferences > Plugins. Install following Android Studio plugins. They provide necessary tools to enable compilation & execution of Flutter application. <img src="documentation/assets/Screenshot-4.png" width="450" />
 
-### 3.3. XCode Setup
+### 3.4. XCode Setup
 XCode is only available for Mac and is mandatory when building Flutter apps for macOS and iOS. Therefore, if you're not building for apple you can bypass this section. Xcode provides Simulator application which emulates iOS device.
 * Open App Store on Mac and search for XCode. Click on install if not already installed, and note download is large 10gb+ and can take several hours based upon your network bandwidth. If it is already installed it shows "Open" button <img src="documentation/assets/Screenshot-5.png" width="450" />
 * Configure the Xcode command-line tools to use the newly-installed version of Xcode by running the following from the command line:
@@ -104,7 +149,7 @@ $ sudo xcodebuild -runFirstLaunch
 * Make sure the Xcode license agreement is signed by either opening Xcode once and confirming or running `sudo xcodebuild -license` from the command line.
 * Important - we will configure Apple developer account later which is another mandatory requirement when running app on physical iOS device. It is not required when running on iOS Simulator.
 
-### 3.4 Other Tools
+### 3.5 Other Tools
 * Install Chrome, which will be used in development and testing of web. 
 * Execute command `flutter doctor`- which validates your Mac dev host install and setup to ensure building and running Flutter application.
 * Output of the command on initial run will be <img src="documentation/assets/Screenshot-8.png" width="550" /> . It complains of unaccepted android licenses and missing Apple cocoapods.
@@ -113,7 +158,7 @@ $ sudo xcodebuild -runFirstLaunch
 * you may wish to also install Visual Studio Code, as it is another great IDE for Flutter development.
 * Output of the command when everything is setup properly <img src="documentation/assets/Screenshot-6.png" width="400" />
 
-### 3.5 PED Code Setup
+### 3.6 PED Code Setup
 * Clone PED Github repository on local box. https://github.com/bernardpumped/ped
 * Open Android Studio. Click Open. Browse to the downloaded PED repository (~/development/code/ped). Click Open.
 * Open command prompt and execute following commands.
@@ -124,9 +169,9 @@ or
 $ flutter create --org FLUTTER_APP .
 ```
 * Above command prepares workspace for building of iOS, Android and Web releases. It also pulls the relevant dependencies as mentioned in pubspec.yaml, with successful completion resulting in correct setup of Android Studio workspace. <img src="documentation/assets/Screenshot-14.png" width="800" />
-#### 3.5.1 Android Build
+#### 3.6.1 Android Build
 * Execute `$ flutter build apk --debug` for Android builds. Successful execution will generate apk in path`build/app/outputs/flutter-apk/app-debug.apk`
-#### 3.5.2 iOS Build
+#### 3.6.2 iOS Build
 * Building for iOS requires connecting to Apple Developer account by signing in with Apple ID in Xcode and creating an iOS Development Certificate as well as a Provisioning Profile for project.
 * Open the Flutter project's Xcode target with `open ios/Runner.xcworkspace`
 * Select the 'Runner' project in the navigator then the 'Runner' target in the project settings
@@ -137,7 +182,7 @@ $ flutter create --org FLUTTER_APP .
   - Let Xcode automatically provision a profile for your app
 * Execute `$ flutter build ios --debug` for iOS builds. It results into generation of `build/ios/iphoneos/Runner.app` file.
 * Note - In case of M1 Macs build failing with error message `incompatible architecture (have 'arm64', need 'x86_64')` . To fix this execute the command `$ sudo arch -x86_64 gem install ffi`
-#### 3.5.3 Web Build
+#### 3.6.3 Web Build
 * Execute `$ flutter build web` for web builds. It results into generation of js and html code in directory `build/web/`
 
 ## 4. Prerequisite for running PED
