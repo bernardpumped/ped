@@ -14,7 +14,7 @@
 
 
 ## Important Note - Please Read
-This branch now only supports iOS and Android mobile phones and is wired to firebase for backend SaaS including social logins for Google, Meta and Twitter, as such if you wish to adopt this branch into your environment you "must" configre each of the aforementioned services using your own account, or remove as you see fit. This also implies you can build web but it won't run unless you also configure web for firwebase. Of course we're happy to customise for your requirements
+This branch now only supports portrait mode held hands iOS and Android mobile and is wired to firebase for backend SaaS including social logins for Google, Meta and Twitter, as such if you wish to adopt this branch you "must" configre each of the aforementioned services using your own account documented in following 3.1 Build Configuration. Of course as this is free and open software fork and change how you see fit or alternatively let us customise for your bespoke requirements.
 
 Concerning automotive in-vehicle infotainment (IVI) we will fork new branches as necessitates commencing with AGL branch for https://www.automotivelinux.org/
 IVI by design controlled via vehicle manufactures and partners so will not "by default" be pre-configured with other 3rd party backend software services
