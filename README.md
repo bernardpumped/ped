@@ -5,7 +5,7 @@
 |<a href="#1-ivi-intro">1. IVI Introduction</a>
 |<a href="#2-hosting-on-web-server">2. Hosting on web server</a>
 |<a href="#3-running-on-linux-desktop">3. Running on Linux Desktop</a>
-|<a href="#4-running-in-meta-flutter">4. Running in Meta Flutter</a>
+|<a href="#4-running-on-meta-flutter">4. Running on Meta Flutter</a>
 |<a href="#5-running-on-toyota-ivi-homescreen">5. Running on Toyota IVI Homescreen</a>
 |<a href="#6-deploying-on-agl">6. Deploying on AGL</a>
 |<a href="#7-deploying-on-embedded">7. Deploying on Embedded</a>
@@ -106,8 +106,8 @@ The Linux distro adopted Ubuntu-20.04.x, which can be standalone or virtualized 
    - Note:
      - The Location library (geolocator) used in PED does not yet have Linux implementation. Hence, for Linux platform, the lat-long coordinates are hard coded.
   
-### 4. Running in Meta Flutter
-* In-progress
+### 4. Running on Meta Flutter
+* In Development
 
 ### 5. Running on Toyota IVI Homescreen
 * Pending refactoring
@@ -146,7 +146,7 @@ The Linux distro adopted Ubuntu-20.04.x, which can be standalone or virtualized 
     ```
     
 ### 6. Deploying on AGL
-* Yet to be defined
+* In Development
 
 ### 7. Deploying on Embedded
 * Yet to be defined [Google Flutter Embedded](https://flutter.dev/multi-platform/embedded)
