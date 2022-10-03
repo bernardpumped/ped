@@ -10,7 +10,7 @@
 |<a href="#6-deploying-on-agl">6. Deploying on AGL</a>
 |<a href="#7-deploying-on-embedded">7. Deploying on Embedded</a>
 
-## 1. IVI Introduction
+### 1. IVI Introduction
 This branch was created to primarily support In-vehicle infotainment (IVI) as per https://www.automotivelinux.org/ and perhaps https://www.covesa.global/
 it's designed to support desktop-linux and web. If you're primary interest is handhelds android and iOS please switch and review https://github.com/bernardpumped/ped main branch
 
@@ -107,10 +107,10 @@ The Linux distro adopted Ubuntu-20.04.x, which can be standalone or virtualized 
    - Note:
      - The Location library (geolocator) used in PED does not yet have Linux implementation. Hence, for Linux platform, the lat-long coordinates are hard coded.
   
-## 4. Running on Meta Flutter
+### 4. Running in Meta Flutter
 * In-progress
 
-## 5. Running on Toyota IVI Homescreen
+### 5. Running on Toyota IVI Homescreen
 * Pending refactoring
 * This involves building and installing Toyota IVI Homescreen and then building and installing PED. Here we will be running it on desktop. Caveat when building using Mac 
   This process only works on x86, in conjunction with others, we're investigating what and how to get this working on apple silicon the M1      
@@ -145,58 +145,11 @@ The Linux distro adopted Ubuntu-20.04.x, which can be standalone or virtualized 
      $ flutter upgrade
      $ flutter config --enable-linux-desktop
     ```
-    * Build PED
-### 5 Hosting on a web server
-* The generated html/javascript files can also be hosted within a web-server eg ngnix. For brevity this Readme will not detail nginx server install.
-* `$ flutter build web` command transpiles Flutter/dart to html/javascript into the build/web directory. Copy the contents to a separate directory eg ~/ped-web.
-* Adding a new document root to ngnix is done by modifying the ngnix.conf file, the location varies depending upon OS type and installation method. Example - on Mac if ngnix installed using Homebrew, then config file might be located in`/opt/homebrew/etc/nginx/nginx.conf`. On Linux, if installed using yum config might be located in `/etc/nginx/nginx.conf`
-* Modify the ngnix.conf file, add the ~/ped-web as additional unique location example
-```
-location /ped {
-  root /home/<user>/ped-web/;
-  autoindex on;
-} 
-```
-* Also make sure that all users have read permissions on these files, otherwise ngnix will not serve them over web
-```bash
-$ chmod a+rwx ~/ped-web
-$ cd ~/ped-web
-$ chmod a+rwx *
-```
-* Restart ngnix. Depending on OS, the command varies. Example on Linux it is ```bash $ sudo nginx -s reload ``` on Mac it is 
-```bash
-$ sudo nginx -s stop
-$ sudo nginx 
-``` 
-* Assuming, host is localhost and ngnix is running on 8080, visit http://localhost:8080/ped/index.html. PED Application works.
-* Important considerations
-  - On Linux, if there are permissions denied issues accessing above url, then check `/var/log/nginx/error.log`for errors. If there are errors related to permissions or SELinux related issues, then check corresponding chmod commands have been run.
-  - If the server is run on local machine at an HTTP endpoint, then there are no issues while accessing the location, to non-HTTPS urls. However, if the server is not a local machine, then for security reasons, browsers do not allow access to location. To circumvent, purchase an SSL certificate OR create a self signed certificate, and configure ngnix to use it. Firefox allows HTTPs URLs using self signed certificates to access location, whilst Chrome/Edge and Safari do not.  
-    ```bash
-     $ cd /usr/local/share/homescreen
-     $ sudo rm -rf bundle
-     $ sudo ln -sf ~/development/ped/build/ bundle
-    ```
-  - Running on Desktop
-    * Copy a current icudtl.dat to /usr/local/share/flutter. One can be found in local Flutter installation
-      ```bash
-       $ sudo mkdir -p /usr/local/share/flutter
-       $ sudo cp ~/snap/flutter/common/flutter/bin/cache/artifacts/engine/linux-x64/icudtl.dat /usr/local/share/flutter/
-      ```
-    * Building Toyota IVI Homescreen generated libflutter_engine.so. Copy it to /usr/local/lib. You can also use LD_LIBRARY_PATH to point downloaded engine for build
-    ```bash
-      $ sudo cp ~/development/ivi-homescreen/build/libflutter_engine.so /usr/local/lib
-    ```
-    * Running
-    ```bash
-     $ cd ~/development/ivi-homescreen/build
-     $ export LD_LIBRARY_PATH=`pwd`:$LD_LIBRARY_PATH
-     $ homescreen
-    ```
     
-## 10. Deploying on AGL
+### 6. Deploying on AGL
 * Yet to be defined
 
-## 11. Deploying on Embedded
+### 7. Deploying on Embedded
 * Yet to be defined [Google Flutter Embedded](https://flutter.dev/multi-platform/embedded)
   $ flutter build [ bundle linux web ]
+
