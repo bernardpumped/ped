@@ -2,7 +2,7 @@
 ## Table Of Contents
 | Title
 |:-------------
-|<a href="#1-ivi-intro">1. IVI Introduction</a>
+|<a href="#1-ivi-introduction">1. IVI Introduction</a>
 |<a href="#2-hosting-on-web-server">2. Hosting on web server</a>
 |<a href="#3-running-on-linux-desktop">3. Running on Linux Desktop</a>
 |<a href="#4-running-on-meta-flutter">4. Running on Meta Flutter</a>
@@ -110,7 +110,7 @@ The Linux distro adopted Ubuntu-20.04.x, which can be standalone or virtualized 
 * In Development
 
 ### 5. Running on Toyota IVI Homescreen
-* Pending refactoring
+**Pending refactoring
 * This involves building and installing Toyota IVI Homescreen and then building and installing PED. Here we will be running it on desktop. Caveat when building using Mac 
   This process only works on x86, in conjunction with others, we're investigating what and how to get this working on apple silicon the M1      
   - Build Toyota IVI Homescreen - Refer to [Toyota IVI Homescreen README](https://github.com/toyota-connected/ivi-homescreen/blob/main/README.md) notes
