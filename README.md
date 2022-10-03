@@ -5,16 +5,15 @@
 |<a href="#1-ivi-intro">1. IVI Introduction</a>
 |<a href="#2-hosting-on-web-server">2. Hosting on web server</a>
 |<a href="#3-running-on-linux-desktop">3. Running on Linux Desktop</a>
-|<a href="#4-running-in-meta-flutter">4. Running in Meta Flutter</a>
+|<a href="#4-running-on-meta-flutter">4. Running on Meta Flutter</a>
 |<a href="#5-running-on-toyota-ivi-homescreen">5. Running on Toyota IVI Homescreen</a>
 |<a href="#6-deploying-on-agl">6. Deploying on AGL</a>
 |<a href="#7-deploying-on-embedded">7. Deploying on Embedded</a>
 
 ### 1. IVI Introduction
-This branch was created to primarily support In-vehicle infotainment (IVI) as per https://www.automotivelinux.org/ and perhaps https://www.covesa.global/
-it's designed to support desktop-linux and web. If you're primary interest is handhelds android and iOS please switch and review https://github.com/bernardpumped/ped main branch
+This branch was created to primarily support In-vehicle infotainment (IVI) as per [Automotive Grade Linux](https://www.automotivelinux.org "Automotive Grade Linux org") and perhpas [Covesa](https://www.covesa.global "Covesa Global") intiailly supporting desktop-linux and web. If you're interest is handhelds primarily android and iOS please switch and review [ped main](https://github.com/bernardpumped/ped "Pumped End Device") branch
 
-### 2. Hosting on a web server
+### 2. Hosting on web server
 * The generated html/javascript files can also be hosted within a web-server eg ngnix. For brevity this Readme will not detail nginx server install.
 * `$ flutter build web` command transpiles Flutter/dart to html/javascript into the build/web directory. Copy the contents to a separate directory eg ~/ped-web.
 * Adding a new document root to ngnix is done by modifying the ngnix.conf file, the location varies depending upon OS type and installation method. Example - on Mac if ngnix installed using Homebrew, then config file might be located in`/opt/homebrew/etc/nginx/nginx.conf`. On Linux, if installed using yum config might be located in `/etc/nginx/nginx.conf`
@@ -107,8 +106,8 @@ The Linux distro adopted Ubuntu-20.04.x, which can be standalone or virtualized 
    - Note:
      - The Location library (geolocator) used in PED does not yet have Linux implementation. Hence, for Linux platform, the lat-long coordinates are hard coded.
   
-### 4. Running in Meta Flutter
-* In-progress
+### 4. Running on Meta Flutter
+* In Development
 
 ### 5. Running on Toyota IVI Homescreen
 * Pending refactoring
@@ -147,7 +146,7 @@ The Linux distro adopted Ubuntu-20.04.x, which can be standalone or virtualized 
     ```
     
 ### 6. Deploying on AGL
-* Yet to be defined
+* In Development
 
 ### 7. Deploying on Embedded
 * Yet to be defined [Google Flutter Embedded](https://flutter.dev/multi-platform/embedded)
