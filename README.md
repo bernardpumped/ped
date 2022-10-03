@@ -54,20 +54,20 @@ Before commencing with any of the following it's highly recommended to remain cu
 ### 3.1. Build Configuration
 As stated above ped mobile is now wired to firebase and social logins for android, iOS (in progress) and web (todo) therefore if you wish to build this branch add your account detils to the follow
 
-###     3.1.1 Social Login
- ped/android/app/src/main/res/values/strings.xml - Please add YOUR_facebook_ap_id, YOUR_app_name, YOUR_fb_login_protocol_scheme and YOUR_facebook_client_token
+#### 3.1.1 Social Login
+ `ped/android/app/src/main/res/values/strings.xml` - add YOUR_facebook_ap_id, YOUR_app_name, YOUR_fb_login_protocol_scheme and YOUR_facebook_client_token
 
-###     3.1.2 Gradle build
-  ped/android/app/build.gradle - Please add YOUR Google Account Keystore Properties inluding signingConfigs & buildTypes for debug, release and playStore and opies of your key.properties, YOUR-play-deployment.keystore, YOUR-play-upload.keystore and local copy of YOUR-debug.keystore
+#### 3.1.2 Gradle build
+  `ped/android/app/build.gradle` - add YOUR Google Account Keystore Properties inluding signingConfigs & buildTypes for debug, release and playStore and opies of your key.properties, YOUR-play-deployment.keystore, YOUR-play-upload.keystore and local copy of YOUR-debug.keystore
 
-###     3.1.3 Google Services
-  ped/android/app/google-services.json (system generated)
+#### 3.1.3 Google Services
+  `ped/android/app/google-services.json` (system generated)
 
-###     3.1.4 Firebase Services
-  ped/lib/firebase_options.dart for both android and iOS - Please add 'YOUR_apiKey', 'YOUR_appId', 'YOUR_messagingSenderId', 'YOUR_projectId', 'YOUR_storageBucket' and only for iOS add YOUR_iosClientId' and lastly 'YOUR_iosBundleId'
+#### 3.1.4 Firebase Services
+  `ped/lib/firebase_options.dart` for both android and iOS - add 'YOUR_apiKey', 'YOUR_appId', 'YOUR_messagingSenderId', 'YOUR_projectId', 'YOUR_storageBucket' and only for iOS add YOUR_iosClientId' and lastly 'YOUR_iosBundleId'
 
-###     3.1.5 Firebase Options
-  ped/lib/user-interface/fuel-station-details/utils/firebase_service.dart - Please add "YOUR-twitter-api-key" and "YOUR-twitter-secrete",
+#### 3.1.5 Firebase Options
+  `ped/lib/user-interface/fuel-station-details/utils/firebase_service.dart` - add "YOUR-twitter-api-key" and "YOUR-twitter-secrete",
 
 ### 3.2. Flutter Installation
 Download and install Flutter following the steps narrated on [Flutter Website](https://docs.flutter.dev/get-started/install). This readme assumes your operating system is macOS with steps as follows:
