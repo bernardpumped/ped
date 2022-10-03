@@ -11,8 +11,7 @@
 |<a href="#7-deploying-on-embedded">7. Deploying on Embedded</a>
 
 ### 1. IVI Introduction
-This branch was created to primarily support In-vehicle infotainment (IVI) as per https://www.automotivelinux.org/ and perhaps https://www.covesa.global/
-it's designed to support desktop-linux and web. If you're primary interest is handhelds android and iOS please switch and review https://github.com/bernardpumped/ped main branch
+This branch was created to primarily support In-vehicle infotainment (IVI) as per [Automotive Grade Linux](https://www.automotivelinux.org "Automotive Grade Linux org") and perhpas [Covesa](https://www.covesa.global "Covesa Global") intiailly supporting desktop-linux and web. If you're interest is handhelds primarily android and iOS please switch and review [ped main](https://github.com/bernardpumped/ped "Pumped End Device") branch
 
 ### 2. Hosting on a web server
 * The generated html/javascript files can also be hosted within a web-server eg ngnix. For brevity this Readme will not detail nginx server install.
