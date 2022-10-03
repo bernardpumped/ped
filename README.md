@@ -11,11 +11,11 @@
 |<a href="#7-deploying-on-embedded">7. Deploying on Embedded</a>
 
 ### 1. IVI Introduction
-This branch was created to primarily support In-vehicle infotainment (IVI) as per [Automotive Grade Linux](https://www.automotivelinux.org "Automotive Grade Linux org") and perhpas [Covesa](https://www.covesa.global "Covesa Global") intiailly supporting desktop-linux and web. If you're interest is handhelds primarily android and iOS please switch and review [ped main](https://github.com/bernardpumped/ped "Pumped End Device") branch
+This branch was created to primarily support In-vehicle infotainment (IVI) as per [Automotive Grade Linux](https://www.automotivelinux.org "Automotive Grade Linux org") and perhaps [Covesa](https://www.covesa.global "Covesa Global") initially supporting desktop-linux and web. If you're interest is handhelds primarily android and iOS please switch and review [ped main](https://github.com/bernardpumped/ped "Pumped End Device") branch
 
 ### 2. Hosting on web server
-* The generated html/javascript files can also be hosted within a web-server eg ngnix. For brevity this Readme will not detail nginx server install.
-* `$ flutter build web` command transpiles Flutter/dart to html/javascript into the build/web directory. Copy the contents to a separate directory eg ~/ped-web.
+* The generated html/javascript files can also be hosted within a web-server e.g. ngnix. For brevity this Readme will not detail nginx server install.
+* `$ flutter build web` command trans-piles Flutter/dart to html/javascript into the build/web directory. Copy the contents to a separate directory eg ~/ped-web.
 * Adding a new document root to ngnix is done by modifying the ngnix.conf file, the location varies depending upon OS type and installation method. Example - on Mac if ngnix installed using Homebrew, then config file might be located in`/opt/homebrew/etc/nginx/nginx.conf`. On Linux, if installed using yum config might be located in `/etc/nginx/nginx.conf`
 * Modify the ngnix.conf file, add the ~/ped-web as additional unique location example
 ```
@@ -38,7 +38,7 @@ $ sudo nginx
 * Assuming, host is localhost and ngnix is running on 8080, visit http://localhost:8080/ped/index.html. PED Application works.
 * Important considerations
   - On Linux, if there are permissions denied issues accessing above url, then check `/var/log/nginx/error.log`for errors. If there are errors related to permissions or SELinux related issues, then check corresponding chmod commands have been run.
-  - If the server is run on local machine at an HTTP endpoint, then there are no issues while accessing the location, to non-HTTPS urls. However, if the server is not a local machine, then for security reasons, browsers do not allow access to location. To circumvent, purchase an SSL certificate OR create a self signed certificate, and configure ngnix to use it. Firefox allows HTTPs URLs using self signed certificates to access location, whilst Chrome/Edge and Safari do not.  
+  - If the server is run on local machine at an HTTP endpoint, then there are no issues while accessing the location, to non-HTTPS URLs. However, if the server is not a local machine, then for security reasons, browsers do not allow access to location. To circumvent, purchase an SSL certificate OR create a self-signed certificate, and configure ngnix to use it. Firefox allows HTTPs URLs using self-signed certificates to access location, whilst Chrome/Edge and Safari do not.  
     ```bash
      $ cd /usr/local/share/homescreen
      $ sudo rm -rf bundle
@@ -92,10 +92,11 @@ The Linux distro adopted Ubuntu-20.04.x, which can be standalone or virtualized 
     ```
     Flutter devices should show Linux Desktop as connected device.
  - Building PED on Linux
-   - Get PED source code on Linux desktop from Github repository. Assume it is downloaded in ~/development/ped directory
+   - Get PED source code on Linux desktop from GitHub repository. Assume it is downloaded in ~/development/ped directory
    - Execute following commands
      ```bash
-     $ cd  ~/development/ped
+     $ cd ![image](https://user-images.githubusercontent.com/4497211/193545208-c56373c0-4b54-4a73-ad76-a533f1e24631.png)
+~/development/ped
      $ flutter create .
      ```
  - Running application on Linux Device
@@ -104,12 +105,12 @@ The Linux distro adopted Ubuntu-20.04.x, which can be standalone or virtualized 
      ```
    <table><tr><td><img src="documentation/assets/Screenshot-27.png" width="250" /></td><td><img src="documentation/assets/Screenshot-28.png" width="250" /></td></tr></table>
    - Note:
-     - The Location library (geolocator) used in PED does not yet have Linux implementation. Hence, for Linux platform, the lat-long coordinates are hard coded.
+     - The Location library (geolocator) used in PED does not yet have Linux implementation. Hence, for Linux platform, the lat-lng coordinates are hard coded.
   
 ### 4. Running on Meta Flutter
 * In-Development
 
-[Joel Winarske](https://github.com/jwinarske "@jwinarske") created [meta-flutter](https://github.com/meta-flutter/meta-flutter "Google Flutter for Yocto") enabling the running of flutter apps on other (non Google supported) target platforms, without of which it would be impossible for us to port PED to AGL. Then without provocation he went a step further and wrote [Flutter Workspace Automation](https://github.com/meta-flutter/meta-flutter/blob/kirkstone/tools/README.md "automation tool") which hugely reducers the the steps necessary and learning curve involved for dev to test pipepline thus easing the transition for non-systems engineers - thankyou Joel
+[Joel Winarske](https://github.com/jwinarske "@jwinarske") created [meta-flutter](https://github.com/meta-flutter/meta-flutter "Google Flutter for Yocto") enabling the running of flutter apps on other (non Google supported) target platforms, without of which it would be impossible for us to port PED to AGL. Then without provocation he went a step further and wrote [Flutter Workspace Automation](https://github.com/meta-flutter/meta-flutter/blob/kirkstone/tools/README.md "automation tool") therefore hugely reducing the steps necessary and learning curve involved for dev-to-test pipeline thus easing the transition for non-systems engineers like myself.
 
 ### 5. Running on Toyota IVI Homescreen
 * TODO In the light of above step 4 this now pending Meta Flutter refactoring and Integration
