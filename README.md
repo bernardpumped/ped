@@ -107,10 +107,13 @@ The Linux distro adopted Ubuntu-20.04.x, which can be standalone or virtualized 
      - The Location library (geolocator) used in PED does not yet have Linux implementation. Hence, for Linux platform, the lat-long coordinates are hard coded.
   
 ### 4. Running on Meta Flutter
-* In Development
+* In-Development
+
+[Joel Winarske](https://github.com/jwinarske "@jwinarske") created [meta-flutter](https://github.com/meta-flutter/meta-flutter "Google Flutter for Yocto") enabling the running of flutter apps on other (non Google supported) target platforms, without of which it would be impossible for us to port PED to AGL. Then without provocation he went a step further and wrote [Flutter Workspace Automation](https://github.com/meta-flutter/meta-flutter/blob/kirkstone/tools/README.md "automation tool") which hugely reducers the the steps necessary and learning curve involved for dev to test pipepline thus easing the transition for non-systems engineers - thankyou Joel
 
 ### 5. Running on Toyota IVI Homescreen
-**Pending refactoring
+* TODO In the light of above step 4 this now pending Meta Flutter refactoring and Integration
+
 * This involves building and installing Toyota IVI Homescreen and then building and installing PED. Here we will be running it on desktop. Caveat when building using Mac 
   This process only works on x86, in conjunction with others, we're investigating what and how to get this working on apple silicon the M1      
   - Build Toyota IVI Homescreen - Refer to [Toyota IVI Homescreen README](https://github.com/toyota-connected/ivi-homescreen/blob/main/README.md) notes
@@ -146,7 +149,7 @@ The Linux distro adopted Ubuntu-20.04.x, which can be standalone or virtualized 
     ```
     
 ### 6. Deploying on AGL
-* In Development
+* In progress - working with but mainly learning from the talented AGL engineers
 
 ### 7. Deploying on Embedded
 * Yet to be defined [Google Flutter Embedded](https://flutter.dev/multi-platform/embedded)
