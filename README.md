@@ -13,7 +13,7 @@
 ### 1. IVI Introduction
 This branch was created to primarily support In-vehicle infotainment (IVI) as per [Automotive Grade Linux](https://www.automotivelinux.org "Automotive Grade Linux org") and perhpas [Covesa](https://www.covesa.global "Covesa Global") intiailly supporting desktop-linux and web. If you're interest is handhelds primarily android and iOS please switch and review [ped main](https://github.com/bernardpumped/ped "Pumped End Device") branch
 
-### 2. Hosting on a web server
+### 2. Hosting on web server
 * The generated html/javascript files can also be hosted within a web-server eg ngnix. For brevity this Readme will not detail nginx server install.
 * `$ flutter build web` command transpiles Flutter/dart to html/javascript into the build/web directory. Copy the contents to a separate directory eg ~/ped-web.
 * Adding a new document root to ngnix is done by modifying the ngnix.conf file, the location varies depending upon OS type and installation method. Example - on Mac if ngnix installed using Homebrew, then config file might be located in`/opt/homebrew/etc/nginx/nginx.conf`. On Linux, if installed using yum config might be located in `/etc/nginx/nginx.conf`
