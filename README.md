@@ -1,4 +1,4 @@
-# Pumped End Device
+# Pumped End Device (PED)
 ## Table Of Contents
 | Title
 |:-------------
@@ -14,10 +14,9 @@
 
 
 ## Important Note - Please Read
-This branch now only supports portrait mode held hands iOS and Android mobile and is wired to firebase for backend SaaS including social logins for Google, Meta and Twitter, as such if you wish to adopt this branch you "must" configre each of the aforementioned services using your own account documented in following 3.1 Build Configuration. Of course as this is free and open software fork and change how you see fit or alternatively let us customise for your bespoke requirements.
+This branch now only "proper" supports portrait mode held hand devices iOS and Android mobiles and is wired to firebase for backend SaaS and social logins Google, Meta and Twitter, as such if you wish to adopt this branch you "must" configure each of the aforementioned services using your own account documented in following 3.1 Build Configuration. Of course, as this is free and open software fork and change how you see fit or alternatively let us customise for your bespoke requirements.
 
-Concerning automotive in-vehicle infotainment (IVI) we will fork new branches as necessitates commencing with AGL branch for https://www.automotivelinux.org/
-IVI by design controlled via vehicle manufactures and partners so will not "by default" be pre-configured with other 3rd party backend software services
+If your interest is primarily Automotive In-vehicle Infotainment (IVI) we have fork new branch [ped agl](https://github.com/bernardpumped/ped/tree/agl "Pumped End Device AGL") specifically for [Automotive Grade Linux](https://www.automotivelinux.org "Automotive Grade Linux org") and perhaps others so feel free to jump across.  
 ##
 
 ## 1. Introduction
@@ -29,17 +28,17 @@ Retailers, beat your competition! If you can't compete on fuel price alone, prom
 ### Pumped Projects
 **Backend -** Enterprise grade globally scalable web app providing centralized integration for all external parties. Phase-1 Complete and in production. Currently sourcing near real time fuel prices and associated data for >75% of fuel stations throughout Australia. Please note, if you're interested in covering your location - country, state, province, emirate or continent, we’ll be happy to discuss options with you.
 
-**Merchant -** B2B SaaS, Fully integrated retailer driven reactive web app to maintain station details, brand, fuel prices, products, offers and services directly to their target consumer audience. Pumped Merchant will also be open sourced with phase-1 65% complete and due for Merchant client demos 2022 Q3.
+**Merchant -** B2B SaaS, fully integrated retailer driven reactive web app to maintain station details, brand, fuel prices, products, offers and services directly to their target consumer audience. Pumped Merchant will also be open sourced with phase-1 65% complete and due for Merchant client demos 2022 Q3.
 
-**End Device (PED) -**  This project, a Flutter based app, representing the user interface of the above projects. Phase-1 75% complete for Android, iphone and web and will be released to Google Play and App store 2022 Q2. PED,
+**End Device (PED) -**  This project, a Flutter based app, representing the user interface of the above projects. Phase-1 75% complete for Android, iPhone and web and will be released to Google Play and App store 2022 Q2. PED,
 fetches fuel station data from the pumped backend based upon the user's current location. Data currently includes fuel prices, contact details, features/facilities, ratings, reviews and photos.
 And, with the integration of Pumped Merchant in Phase-2 in-store products and garage service promotions. For the purposes of this project and repo the backend is hosted on our integration test server.
 As such, prices are not real time but rather, updated weekly. You may also be wondering if we cover EV's. The answer is yes, but only tentatively - we’re very interested in EV's and happy to discuss options with you.
 
 ### Audience
-Within the following steps you’ll see we’ve gone into considerable detail on the what and how to set up, deploy and run PED upon multiple platforms in an attempt to reach as many people as possible who may be interested in PED but not necessarily app developers. We are specifically interested in the embedded space as it is our long term goal to connect PED within vehicles as part of InVehicle Infotainment (IVI), thus realigning vehicle manufacturers and retail industry domains.
+Within the following steps you’ll see we’ve gone into considerable detail on the what and how to set up, deploy and run PED upon multiple platforms in an attempt to reach as many people as possible who may be interested in PED but not necessarily app developers. We are specifically interested in the embedded space as it is our long-term goal to connect PED within vehicles as part of In-Vehicle Infotainment (IVI), thus realigning vehicle manufacturers and retail industry domains.
 
-Of course, this is hugely ambitious and impossibly difficult for a burgeoning startup, and we’re initially focused on merchant integration and global scalability. There are many other components that need to be built with a focus on providing reciprocity and partnership between multiple parties including, but not limited to OEM’s, retailer/logistic, payment, app distribution/management and devs/engineers.
+Of course, this is hugely ambitious and impossibly difficult for a burgeoning start-up, and we’re initially focused on merchant integration and global scalability. There are many other components that need to be built with a focus on providing reciprocity and partnership between multiple parties including, but not limited to OEM’s, retailer/logistic, payment, app distribution/management and devs/engineers.
 We trust you find PED useful and deploy/test to your platform of choice and perhaps contribute a little. We’re here to answer your questions as best we can.
 
 ### Investing
@@ -49,25 +48,25 @@ If you think perhaps what we’re doing may be of interest to you or your compan
 Pumped End Device code base is shared under GNU Public License V3 [![GPLv3 License](https://img.shields.io/badge/License-GPL%20v3-yellow.svg)](https://opensource.org/licenses/). A copy of the license text is also present in the [COPYING](/COPYING) file. Please read through it thoroughly before using code in any shape/form.
 
 ## 3. Development Environment Setup and Build on Mac
-Before commencing with any of the following it's highly recommended to remain current with regards to patches as Flutter is evolving quickly with no concept of long term support
+Before commencing with any of the following it's highly recommended to remain current with regards to patches as Flutter is evolving quickly with no concept of long-term support
 
 ### 3.1. Build Configuration
-As stated above ped mobile is now wired to firebase and social logins for android, iOS (in progress) and web (todo) therefore if you wish to build this branch add your account detils to the follow
+As stated above ped mobile is now wired to firebase and social logins for android, iOS (in progress) and web (to-do) therefore if you wish to build this branch add your account details to the follow
 
-###     3.1.1 Social Login
- ped/android/app/src/main/res/values/strings.xml - Please add YOUR_facebook_ap_id, YOUR_app_name, YOUR_fb_login_protocol_scheme and YOUR_facebook_client_token
+#### 3.1.1 Social Login
+ `ped/android/app/src/main/res/values/strings.xml` - add YOUR_facebook_ap_id, YOUR_app_name, YOUR_fb_login_protocol_scheme and YOUR_facebook_client_token
 
-###     3.1.2 Gradle build
-  ped/android/app/build.gradle - Please add YOUR Google Account Keystore Properties inluding signingConfigs & buildTypes for debug, release and playStore and opies of your key.properties, YOUR-play-deployment.keystore, YOUR-play-upload.keystore and local copy of YOUR-debug.keystore
+#### 3.1.2 Gradle build
+  `ped/android/app/build.gradle` - add YOUR Google Account Keystore Properties inluding signingConfigs & buildTypes for debug, release and playStore and copies of your key.properties, YOUR-play-deployment.keystore, YOUR-play-upload.keystore and local copy of YOUR-debug.keystore
 
-###     3.1.3 Google Services
-  ped/android/app/google-services.json (system generated)
+#### 3.1.3 Google Services
+  `ped/android/app/google-services.json` (system generated)
 
-###     3.1.4 Firebase Services
-  ped/lib/firebase_options.dart for both android and iOS - Please add 'YOUR_apiKey', 'YOUR_appId', 'YOUR_messagingSenderId', 'YOUR_projectId', 'YOUR_storageBucket' and only for iOS add YOUR_iosClientId' and lastly 'YOUR_iosBundleId'
+#### 3.1.4 Firebase Services
+  `ped/lib/firebase_options.dart` for both android and iOS - add 'YOUR_apiKey', 'YOUR_appId', 'YOUR_messagingSenderId', 'YOUR_projectId', 'YOUR_storageBucket' and only for iOS add YOUR_iosClientId' and lastly 'YOUR_iosBundleId'
 
-###     3.1.5 Firebase Options
-  ped/lib/user-interface/fuel-station-details/utils/firebase_service.dart - Please add "YOUR-twitter-api-key" and "YOUR-twitter-secrete",
+#### 3.1.5 Firebase Options
+  `ped/lib/user-interface/fuel-station-details/utils/firebase_service.dart` - add "YOUR-twitter-api-key" and "YOUR-twitter-secrete",
 
 ### 3.2. Flutter Installation
 Download and install Flutter following the steps narrated on [Flutter Website](https://docs.flutter.dev/get-started/install). This readme assumes your operating system is macOS with steps as follows:
@@ -98,16 +97,16 @@ $ which flutter dart
 ```
 
 ### 3.3. Android Studio Setup
-Internally we use Android Studio as our IDE for Pumped End Device (PED) Flutter devlopment, which provides many useful features including tools and plugins for executing code on both iOS and Android simulators in addition to physical devices. Other IDEs such as Visual Studio are also commonly used for flutter development.
-* Visit [Android Studio Website](https://developer.android.com/studio) to download Android Studio. By default it shows platform specific build to download.
+Internally we use Android Studio as our IDE for Pumped End Device (PED) Flutter development, which provides many useful features including tools and plugins for executing code on both iOS and Android simulators in addition to physical devices. Other IDEs such as Visual Studio are also commonly used for flutter development.
+* Visit [Android Studio Website](https://developer.android.com/studio) to download Android Studio. By default, it shows platform specific build to download.
 * Drag and drop the downloaded executable in Applications folder as shown so that it easily comes under spotlight search. <img src="documentation/assets/Screenshot-1.png" width="450" />
 * 1st time launching Android Studio prompts for the installation of multiple dependencies.
-* Open SDK Manager [Menu > Preferences > Appearance and Behavior > System Settings > Android SDK]. Refer to the images to validate and install missing SDK Platforms and SDK Tools <table><tr><td><img src="documentation/assets/Screenshot-2.png" width="500" /></td></tr><tr><td><img src="documentation/assets/Screenshot-3.png" width="500" /></td></tr></table>
+* Open SDK Manager [Menu > Preferences > Appearance and Behaviour > System Settings > Android SDK]. Refer to the images to validate and install missing SDK Platforms and SDK Tools <table><tr><td><img src="documentation/assets/Screenshot-2.png" width="500" /></td></tr><tr><td><img src="documentation/assets/Screenshot-3.png" width="500" /></td></tr></table>
 * Note - Android SDK Command-line is important and separately prompts you to accept android licenses. <img src="documentation/assets/Screenshot-7.png" width="450" />
 * Navigate to Menu > Preferences > Plugins. Install following Android Studio plugins. They provide necessary tools to enable compilation & execution of Flutter application. <img src="documentation/assets/Screenshot-4.png" width="450" />
 
 ### 3.4. XCode Setup
-XCode is only available for Mac and is mandatory when building Flutter apps for macOS and iOS. Therefore, if you're not building for apple you can bypass this section. Xcode provides Simulator application which emulates iOS device.
+XCode is only available for Mac and is mandatory when building Flutter apps for macOS and iOS. Therefore, if you're not building for apple, you can bypass this section. Xcode provides Simulator application which emulates iOS device.
 * Open App Store on Mac and search for XCode. Click on install if not already installed, and note download is large 10gb+ and can take several hours based upon your network bandwidth. If it is already installed it shows "Open" button <img src="documentation/assets/Screenshot-5.png" width="450" />
 * Configure the Xcode command-line tools to use the newly-installed version of Xcode by running the following from the command line:
 ```bash
@@ -127,7 +126,7 @@ $ sudo xcodebuild -runFirstLaunch
 * Output of the command when everything is setup properly <img src="documentation/assets/Screenshot-6.png" width="400" />
 
 ### 3.6 PED Code Setup
-* Clone PED Github repository on local box. https://github.com/bernardpumped/ped
+* Clone PED GitHub repository on local box. https://github.com/bernardpumped/ped
 * Open Android Studio. Click Open. Browse to the downloaded PED repository (~/development/code/ped). Click Open.
 * Open command prompt and execute following commands.
 ```bash
@@ -138,7 +137,7 @@ $ flutter create --org FLUTTER_APP .
 ```
 * Above command prepares workspace for building of iOS, Android and Web releases. It also pulls the relevant dependencies as mentioned in pubspec.yaml, with successful completion resulting in correct setup of Android Studio workspace. <img src="documentation/assets/Screenshot-14.png" width="800" />
 #### 3.6.1 Android Build
-* Execute `$ flutter build apk --debug` for Android builds. Successful execution will generate apk in path`build/app/outputs/flutter-apk/app-debug.apk`
+* Execute `$ flutter build apk --debug` for Android builds. Successful execution will generate apk in path `build/app/outputs/flutter-apk/app-debug.apk`
 #### 3.6.2 iOS Build
 * Building for iOS requires connecting to Apple Developer account by signing in with Apple ID in Xcode and creating an iOS Development Certificate as well as a Provisioning Profile for project.
 * Open the Flutter project's Xcode target with `open ios/Runner.xcworkspace`
@@ -202,7 +201,7 @@ The command `flutter create .` executed as part of [Code Setup](#35-ped-code-set
 * Ensure Location Services under System Preferences > Security & Privacy is enabled on your Mac
 * Select the `Chrome (Web)` as the run target and Click the Run button (green triangle). <img src="documentation/assets/Screenshot-23.png" width="500" />
 * Chrome browser comes up and on start it asks for the location access. 
-* Note - Chrome, unlike the Emulator/Simulator, currently does not provide any mechanism to override location. Hence, until such time Google resolve, we've temporaily hard-coded Sydney location when it runs within a browser, and note it is still necessary to permit location service access for PED to function.
+* Note - Chrome, unlike the Emulator/Simulator, currently does not provide any mechanism to override location. Hence, until such time Google resolve, we've temporarily hard-coded Sydney location when it runs within a browser, and note it is still necessary to permit location service access for PED to function.
 * <table><tr><td><img src="documentation/assets/Screenshot-24.png" width="250" /></td><td><img src="documentation/assets/Screenshot-25.png" width="250" /></td><td><img src="documentation/assets/Screenshot-26.png" width="250" /></td></tr></table>
 
 ## 8. PED Testability
@@ -211,7 +210,7 @@ Being able to test is the key criteria to build a stable application. PED suppor
    ```bash
    $ flutter test test/data/local/location/geo_location_wrapper_test.dart
    ```
- * **Unit Tests with Mocking** - If the object being tested is dependent on another object, then mockito can be used to mock the dependency and fix dependency behavior. This enables isolation and comprehensive validation of the object under test. In case, if object under test does not have dependency or there is no need to fix the dependency behavior then Mockito is not required. To enable mocking, add [mockito](https://pub.dev/packages/mockito) dependency under dev_dependencies section of pubspec.yaml in addition to flutter_test. To use Mockito's generated mock classes, add a [build_runner](https://pub.dev/packages/build_runner) dependency under dev_dependencies section. Refer test/data/local/location/location_data_source_test.dart file as an example of how Mocks are declared. Annotate the main method with @GenerateMocks annotation and specify the list of classes whose mocks are needed to be generated. In general, these classes would be the dependencies of the class under test. Execute following command to generate the mocks
+ * **Unit Tests with Mocking** - If the object being tested is dependent on another object, then mockito can be used to mock the dependency and fix dependency behaviour. This enables isolation and comprehensive validation of the object under test. In case, if object under test does not have dependency or there is no need to fix the dependency behaviour then Mockito is not required. To enable mocking, add [mockito](https://pub.dev/packages/mockito) dependency under dev_dependencies section of pubspec.yaml in addition to flutter_test. To use Mockito's generated mock classes, add a [build_runner](https://pub.dev/packages/build_runner) dependency under dev_dependencies section. Refer test/data/local/location/location_data_source_test.dart file as an example of how Mocks are declared. Annotate the main method with @GenerateMocks annotation and specify the list of classes whose mocks are needed to be generated. In general, these classes would be the dependencies of the class under test. Execute following command to generate the mocks
    ```bash
    $ dart run build_runner build
    ```
@@ -219,13 +218,13 @@ Being able to test is the key criteria to build a stable application. PED suppor
    ```bash
    $ flutter packages pub run build_runner build --delete-conflicting-outputs
    ```
-   It will generate mocks in a file whose name follows pattern <test_file>.mocks.dart. Referring the example - the file name will be location_data_source_test.mocks.dart. The generated mocks provide methods which can be used to fix the behavior of mock in a particular scenario. Use these mocks to enable isolation of the logic under test. Refer the [pub.dev mockito page](https://pub.dev/packages/mockito) to understand various features provided by mockito.  Command for executing the test remains the same. 
+   It will generate mocks in a file whose name follows pattern <test_file>.mocks.dart. Referring the example - the file name will be location_data_source_test.mocks.dart. The generated mocks provide methods which can be used to fix the behaviour of mock in a particular scenario. Use these mocks to enable isolation of the logic under test. Refer the [pub.dev mockito page](https://pub.dev/packages/mockito) to understand various features provided by mockito.  Command for executing the test remains the same. 
    ```bash
    $ flutter test test/data/local/location/location_data_source_test.dart
    ```
    *Code should follow certain design patterns so that dependencies could be easily mocked. Example - injecting the dependencies at the time of object creation, instead of creating them dynamically when needed. A dependency injection framework [GetIt](https://pub.dev/packages/get_it) is being introduced in PED to enable this, and the code is slowly refactored to use GetIt where ever applicable.*
 
- * **UI test cases** - The purpose of UI testing is to mimic the behavior and experience of end user. It provides completeness to testing, as this covers testing scenarios which cannot be easily covered with the unit testing. It is an integration testing mechanism for the application. These test run in a separate process and can be done on real devices/simulators/emulators. To enable UI testing Flutter SDK package [flutter_driver](https://api.flutter.dev/flutter/flutter_driver/flutter_driver-library.html) as dependency in dev_dependencies section of pubspec.yaml. General strategy for UI testing is to a) initiate an instrumented version of the app b) run the unit test on the instrumented app c) validate the assertion d) teardown the instrumented app. For brevity, this README.md would not go in all the details of how this is done. In PED code base, the UI instrumented tests are present in test_driver folder. Command to execute the tests is 
+ * **UI test cases** - The purpose of UI testing is to mimic the behaviour and experience of end user. It provides completeness to testing, as this covers testing scenarios which cannot be easily covered with the unit testing. It is an integration testing mechanism for the application. These test run in a separate process and can be done on real devices/simulators/emulators. To enable UI testing Flutter SDK package [flutter_driver](https://api.flutter.dev/flutter/flutter_driver/flutter_driver-library.html) as dependency in dev_dependencies section of pubspec.yaml. General strategy for UI testing is to a) initiate an instrumented version of the app b) run the unit test on the instrumented app c) validate the assertion d) teardown the instrumented app. For brevity, this README.md would not go in all the details of how this is done. In PED code base, the UI instrumented tests are present in test_driver folder. Command to execute the tests is 
 ```bash
 $ flutter driver --target test_driver/main.dart
 ```
