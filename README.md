@@ -14,7 +14,7 @@
 
 
 ## Important Note - Please Read
-This branch now only "proper" supports portrait mode held hands iOS and Android mobiles and is wired to firebase for backend SaaS and social logins Google, Meta and Twitter, as such if you wish to adopt this branch you "must" configure each of the aforementioned services using your own account documented in following 3.1 Build Configuration. Of course, as this is free and open software fork and change how you see fit or alternatively let us customise for your bespoke requirements.
+This branch now only "proper" supports portrait mode held hand devices iOS and Android mobiles and is wired to firebase for backend SaaS and social logins Google, Meta and Twitter, as such if you wish to adopt this branch you "must" configure each of the aforementioned services using your own account documented in following 3.1 Build Configuration. Of course, as this is free and open software fork and change how you see fit or alternatively let us customise for your bespoke requirements.
 
 If your interest is primarily Automotive In-vehicle Infotainment (IVI) we have fork new branch [ped agl](https://github.com/bernardpumped/ped/tree/agl "Pumped End Device AGL") specifically for [Automotive Grade Linux](https://www.automotivelinux.org "Automotive Grade Linux org") and perhaps others so feel free to jump across.  
 ##
