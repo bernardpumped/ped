@@ -50,22 +50,92 @@ Pumped End Device code base is shared under GNU Public License V3 [![GPLv3 Licen
 ## 3. Development Environment Setup and Build on Mac
 Before commencing with any of the following it's highly recommended to remain current with regards to patches as Flutter is evolving quickly with no concept of long-term support
 
-### 3.1. Build Configuration
+### 3.1. Developer Build Configuration
 As stated above ped mobile is now wired to firebase and social logins for android, iOS (in progress) and web (to-do) therefore if you wish to build this branch add your account details to the follow
 
-#### 3.1.1 Social Login
- `ped/android/app/src/main/res/values/strings.xml` - add YOUR_facebook_ap_id, YOUR_app_name, YOUR_fb_login_protocol_scheme and YOUR_facebook_client_token
+#### 3.1.1 Meta Social Login
+```bash
+$ cd ~/development/code/ped/android/app/src/main/res/values
+$ edit strings.xml
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="facebook_app_id">YOUR_facebook_ap_id</string>
+    <string name="app_name">PYOUR_app_name</string>
+    <string name="fb_login_protocol_scheme">YOUR_fb_login_protocol_scheme</string>
+    <string name="facebook_client_token">YOUR_facebook_client_token</string>
+</resources>
+```
+#### 3.1.2 Gradle Signing Configs
+```bash
+$ cd ~/development/code/ped/android/app
+$ edit build.gradle
+   signingConfigs {
+        debug {
+            storeFile keystoreProperties['YOUR_debug_storeFile'] ? file(System.getProperty("user.home") + keystoreProperties['YOUR_debug_storeFile']) : null
+            storePassword keystoreProperties['YOUR_debug_storePassword']
+        }
+        release {
+            keyAlias keystoreProperties['YOUR_release_keyAlias']
+            keyPassword keystoreProperties['YOUR_release_keyPassword']
+            storeFile keystoreProperties['YOUR_release_storeFile'] ? file(keystoreProperties['YOUR_release_storeFile']) : null
+            storePassword keystoreProperties['YOUR_release_storePassword']
+        }
+        playStore {
+            keyAlias keystoreProperties['YOUR_playStore_keyAlias']
+            keyPassword keystoreProperties['YOUR_playStore_keyPassword']
+            storeFile keystoreProperties['YOUR_playStore_storeFile'] ? file(keystoreProperties['YOUR_playStore_storeFile']) : null
+            storePassword keystoreProperties['YOUR_playStore_storePassword']
+        }
+    }  
+```
+#### 3.1.3 Google Services (System Generated following example only)
+```bash
+$ cd ~/development/code/ped/android/app
+$ edit google-services.json
+{
+  project_info: {
+    project_number: 'YOUR_project_number',
+    project_id": 'YOUR_project_id',
+    storage_bucket": 'YOUR_storage_bucket'
+  },
+    client: [
+    {
+      client_info: {'YOUR_client_info'...},
+      oauth_client: ['YOUR_oauth_client'...],
+      api_key: ['YOUR_api_key'...],
+      services: {'YOUR_services'...}
+    }
+  ],
+  configuration_version: 1
+}
+```
+#### 3.1.4 Firebase Options (System Generated)
+```bash
+$ cd ~/development/code/ped/lib
+$ edit firebase_options.dart
+{
+  static const FirebaseOptions android = FirebaseOptions(
+    apiKey: 'YOUR_android_apiKey',
+    appId: 'YOUR_android_appId',
+    messagingSenderId: 'YOUR_messagingSenderId',
+    projectId: 'YOUR_projectId',
+    storageBucket: 'YOUR_storageBucket',
+  );
 
-#### 3.1.2 Gradle build
-  `ped/android/app/build.gradle` - add YOUR Google Account Keystore Properties inluding signingConfigs & buildTypes for debug, release and playStore and copies of your key.properties, YOUR-play-deployment.keystore, YOUR-play-upload.keystore and local copy of YOUR-debug.keystore
-
-#### 3.1.3 Google Services
-  `ped/android/app/google-services.json` (system generated)
-
-#### 3.1.4 Firebase Services
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'YOUR_ios_apiKey',
+    appId: 'YOUR_ios_appId',
+    messagingSenderId: 'YOUR_messagingSenderId',
+    projectId: 'YOUR_projectId',
+    storageBucket: 'YOUR_storageBucket',
+    iosClientId: 'YOUR_iosClientId',
+    iosBundleId: 'YOUR_iosBundleId',
+  );
+ }
+```
   `ped/lib/firebase_options.dart` for both android and iOS - add 'YOUR_apiKey', 'YOUR_appId', 'YOUR_messagingSenderId', 'YOUR_projectId', 'YOUR_storageBucket' and only for iOS add YOUR_iosClientId' and lastly 'YOUR_iosBundleId'
 
-#### 3.1.5 Firebase Options
+#### 3.1.5 Firebase Services
   `ped/lib/user-interface/fuel-station-details/utils/firebase_service.dart` - add "YOUR-twitter-api-key" and "YOUR-twitter-secrete",
 
 ### 3.2. Flutter Installation
