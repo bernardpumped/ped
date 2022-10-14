@@ -14,7 +14,7 @@
 
 
 ## Important Note - Please Read
-This branch now only "proper" supports portrait mode held hand devices iOS and Android mobiles and is wired to firebase for backend SaaS and social logins Google, Meta and Twitter, as such if you wish to adopt this branch you "must" configure each of the aforementioned services using your own account documented in following 3.1 Build Configuration. Of course, as this is free and open software fork and change how you see fit or alternatively let us customise for your bespoke requirements.
+This branch now only "proper" supports portrait mode held hand devices iOS and Android mobiles and is wired to firebase for backend SaaS and social logins Google, Meta and Twitter, as such if you wish to adopt this branch you "must" configure each of the aforementioned services using your own account documented in following 3.6.1. Of course, as this is FOSS fork and change how you see fit or alternatively let us customise your bespoke requirements.
 
 If your interest is primarily Automotive In-vehicle Infotainment (IVI) we have fork new branch [ped agl](https://github.com/bernardpumped/ped/tree/agl "Pumped End Device AGL") specifically for [Automotive Grade Linux](https://www.automotivelinux.org "Automotive Grade Linux org") and perhaps others so feel free to jump across.  
 ##
@@ -49,95 +49,6 @@ Pumped End Device code base is shared under GNU Public License V3 [![GPLv3 Licen
 
 ## 3. Development Environment Setup and Build on Mac
 Before commencing with any of the following it's highly recommended to remain current with regards to patches as Flutter is evolving quickly with no concept of long-term support
-
-### 3.1. Developer Build Configuration
-As stated above ped mobile is now wired to firebase and social logins for android, iOS (in progress) and web (to-do) therefore if you wish to build this branch add your account details to the follow
-
-#### 3.1.1 Meta Social Login
-```bash
-$ cd ~/development/code/ped/android/app/src/main/res/values
-$ edit strings.xml
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="facebook_app_id">YOUR_facebook_ap_id</string>
-    <string name="app_name">PYOUR_app_name</string>
-    <string name="fb_login_protocol_scheme">YOUR_fb_login_protocol_scheme</string>
-    <string name="facebook_client_token">YOUR_facebook_client_token</string>
-</resources>
-```
-#### 3.1.2 Gradle Signing Configs
-```bash
-$ cd ~/development/code/ped/android/app
-$ edit build.gradle
-   signingConfigs {
-        debug {
-            storeFile keystoreProperties['YOUR_debug_storeFile'] ? file(System.getProperty("user.home") + keystoreProperties['YOUR_debug_storeFile']) : null
-            storePassword keystoreProperties['YOUR_debug_storePassword']
-        }
-        release {
-            keyAlias keystoreProperties['YOUR_release_keyAlias']
-            keyPassword keystoreProperties['YOUR_release_keyPassword']
-            storeFile keystoreProperties['YOUR_release_storeFile'] ? file(keystoreProperties['YOUR_release_storeFile']) : null
-            storePassword keystoreProperties['YOUR_release_storePassword']
-        }
-        playStore {
-            keyAlias keystoreProperties['YOUR_playStore_keyAlias']
-            keyPassword keystoreProperties['YOUR_playStore_keyPassword']
-            storeFile keystoreProperties['YOUR_playStore_storeFile'] ? file(keystoreProperties['YOUR_playStore_storeFile']) : null
-            storePassword keystoreProperties['YOUR_playStore_storePassword']
-        }
-    }  
-```
-#### 3.1.3 Google Services (System Generated following example only)
-```bash
-$ cd ~/development/code/ped/android/app
-$ edit google-services.json
-{
-  project_info: {
-    project_number: 'YOUR_project_number',
-    project_id": 'YOUR_project_id',
-    storage_bucket": 'YOUR_storage_bucket'
-  },
-    client: [
-    {
-      client_info: {'YOUR_client_info'...},
-      oauth_client: ['YOUR_oauth_client'...],
-      api_key: ['YOUR_api_key'...],
-      services: {'YOUR_services'...}
-    }
-  ],
-  configuration_version: 1
-}
-```
-#### 3.1.4 Firebase Options (System Generated)
-```bash
-$ cd ~/development/code/ped/lib
-$ edit firebase_options.dart
-{
-  static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'YOUR_android_apiKey',
-    appId: 'YOUR_android_appId',
-    messagingSenderId: 'YOUR_messagingSenderId',
-    projectId: 'YOUR_projectId',
-    storageBucket: 'YOUR_storageBucket',
-  );
-
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'YOUR_ios_apiKey',
-    appId: 'YOUR_ios_appId',
-    messagingSenderId: 'YOUR_messagingSenderId',
-    projectId: 'YOUR_projectId',
-    storageBucket: 'YOUR_storageBucket',
-    iosClientId: 'YOUR_iosClientId',
-    iosBundleId: 'YOUR_iosBundleId',
-  );
- }
-```
-  `ped/lib/firebase_options.dart` for both android and iOS - add 'YOUR_apiKey', 'YOUR_appId', 'YOUR_messagingSenderId', 'YOUR_projectId', 'YOUR_storageBucket' and only for iOS add YOUR_iosClientId' and lastly 'YOUR_iosBundleId'
-
-#### 3.1.5 Firebase Services
-  `ped/lib/user-interface/fuel-station-details/utils/firebase_service.dart` - add "YOUR-twitter-api-key" and "YOUR-twitter-secrete",
-
 ### 3.2. Flutter Installation
 Download and install Flutter following the steps narrated on [Flutter Website](https://docs.flutter.dev/get-started/install). This readme assumes your operating system is macOS with steps as follows:
 * Download flutter (by default downloads into ~/Downloads folder)
@@ -207,6 +118,127 @@ $ flutter create --org FLUTTER_APP .
 ```
 * Above command prepares workspace for building of iOS, Android and Web releases. It also pulls the relevant dependencies as mentioned in pubspec.yaml, with successful completion resulting in correct setup of Android Studio workspace. <img src="documentation/assets/Screenshot-14.png" width="800" />
 #### 3.6.1 Android Build
+As stated above ped mobile is now wired to firebase and social logins for android and iOS (in progress) therefore if you wish to build this branch add your account details to the follow
+
+##### 3.6.1.1 Meta Social Login
+```bash
+$ cd ~/development/code/ped/android/app/src/main/res/values
+$ edit strings.xml
+<resources>
+    <string name=facebook_app_id>'YOUR_facebook_ap_id'</string>
+    <string name=app_name>'YOUR_app_name'</string>
+    <string name=fb_login_protocol_scheme>'YOUR_fb_login_protocol_scheme'</string>
+    <string name=facebook_client_token>'YOUR_facebook_client_token'</string>
+</resources>
+```
+##### 3.6.1.2 Gradle Signing Configuration
+```bash
+$ cd ~/development/code/ped/android/app
+$ edit build.gradle
+   signingConfigs {
+        debug {
+            storeFile keystoreProperties['YOUR_debug_storeFile'] ? file(System.getProperty("user.home") + keystoreProperties['YOUR_debug_storeFile']) : null
+            storePassword keystoreProperties['YOUR_debug_storePassword']
+        }
+        release {
+            keyAlias keystoreProperties['YOUR_release_keyAlias']
+            keyPassword keystoreProperties['YOUR_release_keyPassword']
+            storeFile keystoreProperties['YOUR_release_storeFile'] ? file(keystoreProperties['YOUR_release_storeFile']) : null
+            storePassword keystoreProperties['YOUR_release_storePassword']
+        }
+        playStore {
+            keyAlias keystoreProperties['YOUR_playStore_keyAlias']
+            keyPassword keystoreProperties['YOUR_playStore_keyPassword']
+            storeFile keystoreProperties['YOUR_playStore_storeFile'] ? file(keystoreProperties['YOUR_playStore_storeFile']) : null
+            storePassword keystoreProperties['YOUR_playStore_storePassword']
+        }
+    }  
+```
+##### 3.6.1.3 Google Services (System Generated following example only)
+```bash
+$ cd ~/development/code/ped/android/app
+$ edit google-services.json
+{
+  project_info: {
+    project_number: 'YOUR_project_number',
+    project_id": 'YOUR_project_id',
+    storage_bucket": 'YOUR_storage_bucket'
+  },
+    client: [
+    {
+      client_info: {'YOUR_client_info'...},
+      oauth_client: ['YOUR_oauth_client'...],
+      api_key: ['YOUR_api_key'...],
+      services: {'YOUR_services'...}
+    }
+  ],
+  configuration_version: 1
+}
+```
+##### 3.6.1.4 Firebase Options (System Generated)
+```bash
+$ cd ~/development/code/ped/lib
+$ edit firebase_options.dart
+{
+  static const FirebaseOptions android = FirebaseOptions(
+    apiKey: 'YOUR_android_apiKey',
+    appId: 'YOUR_android_appId',
+    messagingSenderId: 'YOUR_messagingSenderId',
+    projectId: 'YOUR_projectId',
+    storageBucket: 'YOUR_storageBucket',
+  );
+
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'YOUR_ios_apiKey',
+    appId: 'YOUR_ios_appId',
+    messagingSenderId: 'YOUR_messagingSenderId',
+    projectId: 'YOUR_projectId',
+    storageBucket: 'YOUR_storageBucket',
+    iosClientId: 'YOUR_iosClientId',
+    iosBundleId: 'YOUR_iosBundleId',
+  );
+ }
+```
+##### 3.6.1.5 Firebase Services (Twitter Provider)
+```bash
+$ cd ~/development/code/ped/lib/user-interface/fuel-station-details/utils
+$ edit firebase_service.dart
+FirebaseService() {
+      .../...
+      if (platformSupport.contains(twitterIdProvider)) {
+        _twitterLogin = TwitterLogin(
+            apiKey: 'YOUR_twitter_apiKey', apiSecretKey: 'YOUR_twittew_apiSecretKey', redirectURI: twittersdk://);
+      }
+    } else {
+      LogUtil.debug(_tag, Platform does not yet support firebase);
+    }
+  }
+```
+##### 3.6.1.6 Android Key Properties
+```bash
+$ cd ~/development/code/ped/android
+$ edit key.properties
+
+#debug version
+debug_storePassword='YOUR_debug_storePassword'
+#debug_storeFile should be appended with the user home directory
+debug_storeFile=~/.android/debug.keystore
+
+#Release version
+release_storePassword='YOUR_release_storePassword'
+release_keyPassword='YOUR_release_keyPassword'
+release_keyAlias='YOUR_release_keyAlias'
+release_storeFile=../'YOUR_release_storeFile'.keystore
+
+#Play Store upload
+playStore_storePassword='YOUR_playStore_storePassword'
+playStore_keyPassword='YOUR_playStore_keyPassword'
+playStore_keyAlias=upload
+playStore_storeFile=../'YOUR_playStore_storeFile'-play-upload.keystore
+
+#Play Store Deploy
+# for you to define
+```
 * Execute `$ flutter build apk --debug` for Android builds. Successful execution will generate apk in path `build/app/outputs/flutter-apk/app-debug.apk`
 #### 3.6.2 iOS Build
 * Building for iOS requires connecting to Apple Developer account by signing in with Apple ID in Xcode and creating an iOS Development Certificate as well as a Provisioning Profile for project.
@@ -217,6 +249,7 @@ $ flutter create --org FLUTTER_APP .
   - Ensure you have a valid unique Bundle ID
   - Register your device with your Apple Developer Account
   - Let Xcode automatically provision a profile for your app
+* iOS Developer Account Configuration Yet to-be-defined
 * Execute `$ flutter build ios --debug` for iOS builds. It results into generation of `build/ios/iphoneos/Runner.app` file.
 * Note - In case of M1 Macs build failing with error message `incompatible architecture (have 'arm64', need 'x86_64')` . To fix this execute the command `$ sudo arch -x86_64 gem install ffi`
 #### 3.6.3 Web Build
