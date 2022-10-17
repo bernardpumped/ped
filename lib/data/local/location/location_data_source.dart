@@ -19,7 +19,11 @@
 import 'dart:async';
 
 import 'package:geolocator/geolocator.dart';
+import 'package:pumped_end_device/data/local/dao/mock_location_dao.dart';
+import 'package:pumped_end_device/data/local/dao/ui_settings_dao.dart';
 import 'package:pumped_end_device/data/local/location/geo_location_wrapper.dart';
+import 'package:pumped_end_device/data/local/model/mock_location.dart';
+import 'package:pumped_end_device/data/local/model/ui_settings.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
 import 'geo_location_data.dart';
@@ -34,6 +38,23 @@ class LocationDataSource {
   LocationDataSource(this._geoLocationWrapper);
 
   Future<GetLocationResult> getLocationData({String thread = 'default'}) async {
+    UiSettings? uiSettings = await UiSettingsDao.instance.getUiSettings();
+    if (uiSettings != null) {
+      if (uiSettings.developerOptions != null && uiSettings.developerOptions!) {
+        final MockLocation? pinnedLocation = await MockLocationDao.instance.getPinnedMockLocation();
+        if (pinnedLocation != null) {
+          LogUtil.debug(_tag, 'Pinned Mock Location found as : ${pinnedLocation.toString()}');
+          return Future.value(GetLocationResult(LocationInitResultCode.success,
+              Future.value(GeoLocationData(latitude: pinnedLocation.latitude, longitude: pinnedLocation.longitude))));
+        } else {
+          LogUtil.debug(_tag, 'No pinned location found');
+        }
+      } else {
+        LogUtil.debug(_tag, 'Developer Options not turned on');
+      }
+    } else {
+      LogUtil.debug(_tag, 'No UiSettings found configured');
+    }
     LogUtil.debug(_tag, "Checking Location Service Enabled");
     bool serviceEnabled = await _geoLocationWrapper.isLocationServiceEnabled();
     LogUtil.debug(_tag, "Location Service is Enabled ? $serviceEnabled");

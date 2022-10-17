@@ -32,25 +32,22 @@ class PhoneWidget extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    return GestureDetector(
-        child: Column(children: [
-          Material(
-              elevation: 2,
-              clipBehavior: Clip.antiAlias,
-              borderRadius: BorderRadius.circular(15),
-              // Cannot use Theme.of(context).primaryColor because in darkMode it does not work well
-              color: Theme.of(context).textTheme.headline3!.color,
-              shadowColor: Theme.of(context).textTheme.headline3!.color,
-              child: Padding(
-                  padding: const EdgeInsets.all(14.0),
-                  child: Icon(Icons.phone_outlined, color: Theme.of(context).backgroundColor))),
-          Text('Call', style: Theme.of(context).textTheme.bodyText2)
-        ]),
-        onTap: () async {
-          _launchCaller(_phone, () {
-            WidgetUtils.showToastMessage(context, 'Cannot call phone');
-          });
-        });
+    return Column(children: [
+      const SizedBox(height: 5),
+      ElevatedButton(
+          clipBehavior: Clip.antiAlias,
+          style: ElevatedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0))),
+          child: Padding(
+              padding: const EdgeInsets.only(top: 15.0, bottom: 15.0, left: 0, right: 0),
+              child: Icon(Icons.phone_outlined, color: Theme.of(context).backgroundColor)),
+          onPressed: () async {
+            _launchCaller(_phone, () {
+              WidgetUtils.showToastMessage(context, 'Cannot call phone');
+            });
+          }),
+      const SizedBox(height: 5),
+      Text('Call', style: Theme.of(context).textTheme.bodyText2)
+    ]);
   }
 
   static void _launchCaller(final String phone, final Function function) async {

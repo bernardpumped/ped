@@ -42,6 +42,7 @@ class NavDrawerItemWidget extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     final backgroundColor = selected ? Theme.of(context).secondaryHeaderColor : Theme.of(context).backgroundColor;
+    final color = selected ? Theme.of(context).highlightColor : Theme.of(context).iconTheme.color;
     return GestureDetector(
         onTap: () {
           LogUtil.debug(_tag, '$label is currently selected');
@@ -56,10 +57,10 @@ class NavDrawerItemWidget extends StatelessWidget {
                 borderRadius: const BorderRadius.horizontal(right: Radius.circular(50.0))),
             child: Row(children: [
               Padding(
-                  padding: const EdgeInsets.only(left: 20), child: Icon(selected ? selectedStateIcon : icon, size: 25)),
+                  padding: const EdgeInsets.only(left: 20), child: Icon(selected ? selectedStateIcon : icon, size: 25, color: color)),
               Padding(
                   padding: const EdgeInsets.only(left: 20),
-                  child: Text(label, style: Theme.of(context).textTheme.subtitle2))
+                  child: Text(label, style: Theme.of(context).textTheme.subtitle2!.copyWith(color: color)))
             ])));
   }
 }

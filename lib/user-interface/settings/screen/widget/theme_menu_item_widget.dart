@@ -38,26 +38,28 @@ class _ThemeMenuItemWidgetState extends State<ThemeMenuItemWidget> {
   Widget build(final BuildContext context) {
     return Card(
         child: FutureBuilder(
-            future: getUiSettings(),
+            future: _getUiSettings(),
             builder: (context, snapShot) {
-              String? selectedTheme;
+              // String? selectedTheme;
               if (snapShot.hasData) {
                 UiSettings? uiSettings = snapShot.data as UiSettings?;
                 if (uiSettings != null) {
                   LogUtil.debug(_tag, 'Read UiSettings : ${uiSettings.uiTheme}');
-                  if (uiSettings.uiTheme != null) {
-                    selectedTheme = uiSettings.uiTheme;
-                  } else {
-                    // No theme was yet set in UiSettings
-                    // setting the default values
-                    selectedTheme = UiThemes.lightTheme;
-                  }
+                  // if (uiSettings.uiTheme != null) {
+                  //   selectedTheme = uiSettings.uiTheme;
+                  // } else {
+                  //   // No theme was yet set in UiSettings
+                  //   // setting the default values
+                  //   selectedTheme = UiThemes.lightTheme;
+                  // }
+                  uiSettings.uiTheme ??= UiThemes.lightTheme;
                 } else {
                   // Ui Settings is not set yet
                   // Creating instance now with default value
-                  selectedTheme = UiThemes.lightTheme;
+                  // selectedTheme = UiThemes.lightTheme;
+                  uiSettings = UiSettings(uiTheme: UiThemes.lightTheme);
                 }
-                return _getExpansionTile(selectedTheme!);
+                return _getExpansionTile(uiSettings);
               } else if (snapShot.hasError) {
                 LogUtil.debug(_tag, 'Error found while loading UiSettings ${snapShot.error}');
                 return Text('Error Loading',
@@ -68,25 +70,26 @@ class _ThemeMenuItemWidgetState extends State<ThemeMenuItemWidget> {
             }));
   }
 
-  _getExpansionTile(final String selectedTheme) {
+  _getExpansionTile(final UiSettings uiSettings) {
     return ExpansionTile(
-        title: Text("Theme - ${UiThemes.themes[selectedTheme]}", style: Theme.of(context).textTheme.subtitle1),
+        title: Text("Theme - ${UiThemes.themes[uiSettings.uiTheme]}", style: Theme.of(context).textTheme.subtitle1),
         leading: const Icon(Icons.compare_outlined, size: 30),
         children: [
-          _getMenuItem(UiThemes.lightTheme, selectedTheme),
-          _getMenuItem(UiThemes.darkTheme, selectedTheme),
-          _getMenuItem(UiThemes.systemTheme, selectedTheme)
+          _getMenuItem(UiThemes.lightTheme, uiSettings),
+          _getMenuItem(UiThemes.darkTheme, uiSettings),
+          _getMenuItem(UiThemes.systemTheme, uiSettings)
         ]);
   }
 
-  RadioListTile<String> _getMenuItem(final String themeValue, final String selectedTheme) {
+  RadioListTile<String> _getMenuItem(final String themeValue, final UiSettings uiSettings) {
     return RadioListTile<String>(
         value: themeValue,
-        selected: themeValue == selectedTheme,
-        groupValue: selectedTheme,
+        selected: themeValue == uiSettings.uiTheme,
+        groupValue: uiSettings.uiTheme,
         onChanged: (newVal) {
           LogUtil.debug(_tag, 'Selected Theme $newVal');
-          UiSettingsDao.instance.insertUiSettings(UiSettings(uiTheme: newVal!)).whenComplete(() {
+          uiSettings.uiTheme = newVal!;
+          UiSettingsDao.instance.insertUiSettings(uiSettings).whenComplete(() {
             final themeNotifier = Provider.of<ThemeNotifier>(context, listen: false);
             themeNotifier.setThemeMode(UiThemes.getThemeMode(newVal));
             LogUtil.debug(_tag, 'Inserted instance $newVal');
@@ -99,7 +102,7 @@ class _ThemeMenuItemWidgetState extends State<ThemeMenuItemWidget> {
         title: Text(UiThemes.themes[themeValue]!, style: Theme.of(context).textTheme.subtitle2));
   }
 
-  Future<UiSettings?>? getUiSettings() {
+  Future<UiSettings?>? _getUiSettings() {
     return UiSettingsDao.instance.getUiSettings();
   }
 }

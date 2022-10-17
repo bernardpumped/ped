@@ -62,6 +62,7 @@ class _FuelStationContextMenuState extends State<FuelStationContextMenu> {
 
   PopupMenuButton<String> _getPopupMenu(final BuildContext context, final bool isFavourite) {
     return PopupMenuButton<String>(
+        icon: const Icon(Icons.more_vert_outlined),
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(15)), side: BorderSide(width: .1)),
         padding: EdgeInsets.zero,

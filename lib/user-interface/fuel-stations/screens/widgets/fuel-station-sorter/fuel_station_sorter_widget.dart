@@ -26,7 +26,7 @@ class _FuelStationSorterWidgetState extends State<FuelStationSorterWidget> {
         iconSize: 24,
         size: 50,
         panelIcon: Icons.sort_outlined,
-        backgroundColor: Theme.of(context).chipTheme.backgroundColor!,
+        backgroundColor: Theme.of(context).highlightColor,
         contentColor: const Color(0xFFffd629),
         nonSelColor: Theme.of(context).backgroundColor,
         buttons: sortIcons.values.toList(),

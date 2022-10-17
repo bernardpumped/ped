@@ -29,9 +29,7 @@ class FuelStation {
 
   final bool? managed;
   final double? rating;
- // final bool hasoffers;
   int offers = 0;
-  // final bool hasServices;
   int services = 0;
   final String? stationType;
   final List<String>? imgUrls;

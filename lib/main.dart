@@ -34,6 +34,7 @@ import 'package:pumped_end_device/user-interface/send-feedback/screens/send_feed
 import 'package:pumped_end_device/user-interface/settings/screen/cleanup_local_cache_screen.dart';
 import 'package:pumped_end_device/user-interface/settings/screen/customize_search_settings_screen.dart';
 import 'package:pumped_end_device/user-interface/settings/screen/settings_screen.dart';
+import 'package:pumped_end_device/user-interface/settings/screen/widget/mock_location_settings_screen.dart';
 import 'package:pumped_end_device/user-interface/splash/screen/splash_screen.dart';
 import 'package:pumped_end_device/user-interface/update-history/screen/update_history_details_screen.dart';
 import 'package:pumped_end_device/user-interface/update-history/screen/update_history_screen.dart';
@@ -50,7 +51,7 @@ import 'firebase_options.dart';
 GetIt getIt = GetIt.instance;
 // Set this variable to false when in release mode.
 bool enrichOffers = true;
-const appVersion = "31";
+const appVersion = "32";
 const getLocationWrapperInstanceName = 'geoLocationWrapper';
 const platformWrapperInstanceName = 'platformWrapper';
 const locationDataSourceInstanceName = 'locationDataSource';
@@ -100,6 +101,7 @@ class PumpedApp extends StatelessWidget {
           SettingsScreen.routeName: (context) => const SettingsScreen(),
           FuelStationDetailsScreen.routeName: (context) => const FuelStationDetailsScreen(),
           CustomizeSearchSettingsScreen.routeName: (context) => const CustomizeSearchSettingsScreen(),
+          MockLocationSettingsScreen.routeName: (context) => const MockLocationSettingsScreen(),
           CleanupLocalCacheScreen.routeName: (context) => const CleanupLocalCacheScreen(),
           EditFuelStationDetailsScreen.routeName: (context) => const EditFuelStationDetailsScreen(),
           UpdateHistoryScreen.routeName: (context) => const UpdateHistoryScreen(),

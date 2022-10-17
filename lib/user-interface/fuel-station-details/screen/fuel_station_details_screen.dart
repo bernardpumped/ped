@@ -46,7 +46,7 @@ class FuelStationDetailsScreen extends StatefulWidget {
 
 class _FuelStationDetailsScreenState extends State<FuelStationDetailsScreen> {
   static const _tag = 'FuelStationDetailsScreen';
-  static const _fuelPricesTabHeader = "Fuel Prices";
+  static const _fuelPricesTabHeader = "Fuel Price";
   static const _offersTabHeader = "Offers";
   static const _contactTabHeader = "Contact";
 
@@ -109,7 +109,10 @@ class _FuelStationDetailsScreenState extends State<FuelStationDetailsScreen> {
             floatingActionButton: _selectedTabIndex == 2 || _selectedTabIndex == 0
                 ? ContextAwareFab(fuelStation, _selectedTabIndex, onUpdateResult)
                 : const SizedBox(width: 0),
-            appBar: const PumpedAppBar(title: 'Fuel Station Details', icon: Icons.local_gas_station,),
+            appBar: const PumpedAppBar(
+              title: 'Fuel Station Details',
+              icon: Icons.local_gas_station,
+            ),
             body: DefaultTabController(
                 length: _tabs.length,
                 child: NestedScrollView(
@@ -135,10 +138,7 @@ class _FuelStationDetailsScreenState extends State<FuelStationDetailsScreen> {
                                 },
                                 padding: const EdgeInsets.only(left: 8, right: 8),
                                 tabs: _tabs.map((tabName) {
-                                  return Tab(
-                                      child: Text(tabName,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: Theme.of(context).textTheme.subtitle1));
+                                  return Tab(text: tabName);
                                 }).toList())))
                       ];
                     },

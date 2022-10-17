@@ -16,7 +16,6 @@
  *     along with Pumped End Device.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'package:floating_action_bubble/floating_action_bubble.dart';
 import 'package:flutter/material.dart';
 import 'package:pumped_end_device/main.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station.dart';
@@ -24,6 +23,7 @@ import 'package:pumped_end_device/models/pumped/fuel_station_address.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station_operating_hrs.dart';
 import 'package:pumped_end_device/user-interface/edit-fuel-station-details/params/edit_fuel_station_details_params.dart';
 import 'package:pumped_end_device/user-interface/edit-fuel-station-details/screen/edit_fuel_station_details_screen.dart';
+import 'package:pumped_end_device/user-interface/fuel-station-details/screen/widget/floating_action_bubble.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/screen/widget/pumped_sign_in_widget.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/utils/firebase_service.dart';
 import 'package:pumped_end_device/user-interface/splash/screen/splash_screen.dart';
@@ -49,10 +49,6 @@ class _ContextAwareFabState extends State<ContextAwareFab> with SingleTickerProv
   late Animation<double> _animation;
   late AnimationController _animationController;
   late FirebaseService service;
-  late final Color iconColor = Theme.of(context).backgroundColor;
-  late final Color textColor = Theme.of(context).backgroundColor;
-  // Not using Theme.of(context).primaryColor; because in darkMode it does not produce right color
-  late final Color backgroundColor = Theme.of(context).textTheme.headline3!.color!;
 
   @override
   void initState() {
@@ -74,9 +70,7 @@ class _ContextAwareFabState extends State<ContextAwareFab> with SingleTickerProv
         animation: _animation,
         onPress: () =>
             _animationController.isCompleted ? _animationController.reverse() : _animationController.forward(),
-        iconColor: iconColor,
-        iconData: Icons.edit,
-        backGroundColor: backgroundColor);
+        iconData: Icons.edit);
   }
 
   _getContextAwareBubbles() {
@@ -84,10 +78,7 @@ class _ContextAwareFabState extends State<ContextAwareFab> with SingleTickerProv
       return [
         Bubble(
             title: "Fuel Prices",
-            iconColor: iconColor,
-            bubbleColor: backgroundColor,
             icon: Icons.monetization_on_outlined,
-            titleStyle: Theme.of(context).textTheme.caption!.copyWith(color: textColor),
             onPress: () {
               _animationController.reverse();
               if (_shouldEdit(widget._fuelStation, editFuelPrices: true)) {
@@ -99,10 +90,7 @@ class _ContextAwareFabState extends State<ContextAwareFab> with SingleTickerProv
       return [
         Bubble(
             title: "Operating Time",
-            iconColor: iconColor,
-            bubbleColor: backgroundColor,
             icon: Icons.access_alarm,
-            titleStyle: Theme.of(context).textTheme.caption!.copyWith(color: textColor),
             onPress: () {
               _animationController.reverse();
               if (_shouldEdit(widget._fuelStation, editOperatingTime: true)) {
@@ -111,10 +99,7 @@ class _ContextAwareFabState extends State<ContextAwareFab> with SingleTickerProv
             }),
         Bubble(
             title: "Contact Details",
-            iconColor: iconColor,
-            bubbleColor: backgroundColor,
             icon: Icons.location_on_outlined,
-            titleStyle: Theme.of(context).textTheme.caption!.copyWith(color: textColor),
             onPress: () {
               _animationController.reverse();
               if (_shouldEdit(widget._fuelStation, editDetails: true)) {
@@ -123,10 +108,7 @@ class _ContextAwareFabState extends State<ContextAwareFab> with SingleTickerProv
             }),
         Bubble(
             title: "Features",
-            iconColor: iconColor,
-            bubbleColor: backgroundColor,
             icon: Icons.flag_outlined,
-            titleStyle: Theme.of(context).textTheme.caption!.copyWith(color: textColor),
             onPress: () {
               _animationController.reverse();
               if (_shouldEdit(widget._fuelStation, editFeatures: true)) {
@@ -135,10 +117,7 @@ class _ContextAwareFabState extends State<ContextAwareFab> with SingleTickerProv
             }),
         Bubble(
             title: "Suggest Edit",
-            iconColor: iconColor,
-            bubbleColor: backgroundColor,
             icon: Icons.comment_outlined,
-            titleStyle: Theme.of(context).textTheme.caption!.copyWith(color: textColor),
             onPress: () {
               _animationController.reverse();
               if (_shouldEdit(widget._fuelStation, suggestEdit: true)) {
@@ -150,10 +129,7 @@ class _ContextAwareFabState extends State<ContextAwareFab> with SingleTickerProv
       return [
         Bubble(
             title: "Bad data",
-            iconColor: iconColor,
-            bubbleColor: backgroundColor,
             icon: Icons.fmd_bad,
-            titleStyle: Theme.of(context).textTheme.caption!.copyWith(color: textColor),
             onPress: () {
               _animationController.reverse();
               Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const SplashScreen()));

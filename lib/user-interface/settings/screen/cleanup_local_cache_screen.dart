@@ -22,6 +22,7 @@ import 'package:pumped_end_device/data/local/dao/hidden_result_dao.dart';
 import 'package:pumped_end_device/data/local/dao/update_history_dao.dart';
 import 'package:pumped_end_device/data/local/dao/user_configuration_dao.dart';
 import 'package:pumped_end_device/data/local/model/user_configuration.dart';
+import 'package:pumped_end_device/user-interface/settings/screen/settings_screen.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/user-interface/widgets/pumped_app_bar.dart';
 import 'package:pumped_end_device/util/log_util.dart';
@@ -43,7 +44,7 @@ class _CleanupLocalCacheScreenState extends State<CleanupLocalCacheScreen> {
   @override
   Widget build(final BuildContext context) {
     return Scaffold(
-        appBar: const PumpedAppBar(title: 'Pumped Settings'),
+        appBar: const PumpedAppBar(title: SettingsScreen.viewLabel, icon: SettingsScreen.viewSelectedIcon),
         body: SizedBox(
             height: MediaQuery.of(context).size.height,
             width: double.infinity,
