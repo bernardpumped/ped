@@ -156,10 +156,7 @@ class FuelStationListItemWidget extends StatelessWidget {
           Text(fuelStation.offers.toString(), style: Theme.of(context).textTheme.bodyText1)
         ]);
       }
-      final offersIcon = Theme.of(context).brightness == Brightness.light
-          ? SvgPicture.asset('assets/images/ic_car_service.svg',
-              width: 20, height: 20, fit: BoxFit.fill, color: Theme.of(context).primaryColor)
-          : const Icon(Icons.car_repair, size: 20);
+      const offersIcon = Icon(Icons.car_repair, size: 20);
       Widget? child3;
       if (fuelStation.services > 0) {
         child3 = Row(children: [

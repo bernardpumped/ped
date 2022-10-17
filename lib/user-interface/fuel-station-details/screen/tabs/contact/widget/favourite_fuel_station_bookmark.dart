@@ -69,20 +69,18 @@ class _FavouriteFuelStationBookmarkState extends State<FavouriteFuelStationBookm
   }
 
   Widget _getWidget(final IconData icon, final String text, final GestureTapCallback callback) {
-    return GestureDetector(
-        onTap: callback,
-        child: Column(children: [
-          Material(
-              elevation: 2,
-              clipBehavior: Clip.antiAlias,
-              borderRadius: BorderRadius.circular(15),
-              // Cannot use Theme.of(context).primaryColor because in darkMode it does not work well
-              color: Theme.of(context).textTheme.headline3!.color,
-              shadowColor: Theme.of(context).textTheme.headline3!.color,
-              child: Padding(
-                  padding: const EdgeInsets.all(14.0), child: Icon(icon, color: Theme.of(context).backgroundColor))),
-          Text(text, style: Theme.of(context).textTheme.bodyText2)
-        ]));
+    return Column(children: [
+      const SizedBox(height: 5),
+      ElevatedButton(
+          clipBehavior: Clip.antiAlias,
+          style: ElevatedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0))),
+          onPressed: callback,
+          child: Padding(
+              padding: const EdgeInsets.only(top: 15.0, bottom: 15.0, left: 0, right: 0),
+              child: Icon(icon, color: Theme.of(context).backgroundColor))),
+      const SizedBox(height: 5),
+      Text(text, style: Theme.of(context).textTheme.bodyText2)
+    ]);
   }
 
   void _favoriteRemoveAction(final FavoriteFuelStation station) {

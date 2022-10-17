@@ -30,13 +30,11 @@ Retailers, beat your competition! If you can't compete on fuel price alone, prom
 
 **Merchant -** B2B SaaS, fully integrated retailer driven reactive web app to maintain station details, brand, fuel prices, products, offers and services directly to their target consumer audience. Pumped Merchant will also be open sourced with phase-1 65% complete and due for Merchant client demos 2022 Q3.
 
-**End Device (PED) -**  This project, a Flutter based app, representing the user interface of the above projects. Phase-1 75% complete for Android, iPhone and web and will be released to Google Play and App store 2022 Q2. PED,
-fetches fuel station data from the pumped backend based upon the user's current location. Data currently includes fuel prices, contact details, features/facilities, ratings, reviews and photos.
-And, with the integration of Pumped Merchant in Phase-2 in-store products and garage service promotions. For the purposes of this project and repo the backend is hosted on our integration test server.
+**End Device (PED) -**  Flutter apps, representing the user end device of the above projects. Phase-1a android and iphone 85% complete scheduled Play and App store release 2023 Q1. Phase-1b Web and linux 65% complete schedule automotive release 2023 Q3. PED fetches fuel station data from the pumped backend based upon the user's current location (true or mocked). Data currently includes fuel prices, contact details, features/facilities, ratings, reviews and photos. And, with the integration of Pumped Merchant in Phase-2 in-store products and garage service promotions. For the purposes of this project and repo the backend is hosted on our integration test server.
 As such, prices are not real time but rather, updated weekly. You may also be wondering if we cover EV's. The answer is yes, but only tentatively - we’re very interested in EV's and happy to discuss options with you.
 
 ### Audience
-Within the following steps you’ll see we’ve gone into considerable detail on the what and how to set up, deploy and run PED upon multiple platforms in an attempt to reach as many people as possible who may be interested in PED but not necessarily app developers. We are specifically interested in the embedded space as it is our long-term goal to connect PED within vehicles as part of In-Vehicle Infotainment (IVI), thus realigning vehicle manufacturers and retail industry domains.
+Within the following steps you’ll see we’ve gone into considerable detail on the what and how to set up, deploy and run PED upon multiple platforms in an attempt to reach as many people as possible who may be interested in PED but not necessarily app developers. We are specifically interested in the embedded space as it is our long term goal to connect PED within vehicles as part of InVehicle Infotainment (IVI), thus realigning vehicle manufacturers and retail industry domains.
 
 Of course, this is hugely ambitious and impossibly difficult for a burgeoning start-up, and we’re initially focused on merchant integration and global scalability. There are many other components that need to be built with a focus on providing reciprocity and partnership between multiple parties including, but not limited to OEM’s, retailer/logistic, payment, app distribution/management and devs/engineers.
 We trust you find PED useful and deploy/test to your platform of choice and perhaps contribute a little. We’re here to answer your questions as best we can.
@@ -49,8 +47,10 @@ Pumped End Device code base is shared under GNU Public License V3 [![GPLv3 Licen
 
 ## 3. Development Environment Setup and Build on Mac
 Before commencing with any of the following it's highly recommended to remain current with regards to patches as Flutter is evolving quickly with no concept of long-term support
-### 3.2. Flutter Installation
+
+### 3.1. Flutter Installation
 Download and install Flutter following the steps narrated on [Flutter Website](https://docs.flutter.dev/get-started/install). This readme assumes your operating system is macOS with steps as follows:
+
 * Download flutter (by default downloads into ~/Downloads folder)
 * Create directory ~/development and unzip downloaded Flutter into it. It creates a Flutter sub-directory.
 ```bash
@@ -77,7 +77,7 @@ $ which flutter
 $ which flutter dart
 ```
 
-### 3.3. Android Studio Setup
+### 3.2. Android Studio Setup
 Internally we use Android Studio as our IDE for Pumped End Device (PED) Flutter development, which provides many useful features including tools and plugins for executing code on both iOS and Android simulators in addition to physical devices. Other IDEs such as Visual Studio are also commonly used for flutter development.
 * Visit [Android Studio Website](https://developer.android.com/studio) to download Android Studio. By default, it shows platform specific build to download.
 * Drag and drop the downloaded executable in Applications folder as shown so that it easily comes under spotlight search. <img src="documentation/assets/Screenshot-1.png" width="450" />
@@ -86,7 +86,7 @@ Internally we use Android Studio as our IDE for Pumped End Device (PED) Flutter 
 * Note - Android SDK Command-line is important and separately prompts you to accept android licenses. <img src="documentation/assets/Screenshot-7.png" width="450" />
 * Navigate to Menu > Preferences > Plugins. Install following Android Studio plugins. They provide necessary tools to enable compilation & execution of Flutter application. <img src="documentation/assets/Screenshot-4.png" width="450" />
 
-### 3.4. XCode Setup
+### 3.3. XCode Setup
 XCode is only available for Mac and is mandatory when building Flutter apps for macOS and iOS. Therefore, if you're not building for apple, you can bypass this section. Xcode provides Simulator application which emulates iOS device.
 * Open App Store on Mac and search for XCode. Click on install if not already installed, and note download is large 10gb+ and can take several hours based upon your network bandwidth. If it is already installed it shows "Open" button <img src="documentation/assets/Screenshot-5.png" width="450" />
 * Configure the Xcode command-line tools to use the newly-installed version of Xcode by running the following from the command line:
@@ -97,7 +97,7 @@ $ sudo xcodebuild -runFirstLaunch
 * Make sure the Xcode license agreement is signed by either opening Xcode once and confirming or running `sudo xcodebuild -license` from the command line.
 * Important - we will configure Apple developer account later which is another mandatory requirement when running app on physical iOS device. It is not required when running on iOS Simulator.
 
-### 3.5 Other Tools
+### 3.4 Other Tools
 * Install Chrome, which will be used in development and testing of web. 
 * Execute command `flutter doctor`- which validates your Mac dev host install and setup to ensure building and running Flutter application.
 * Output of the command on initial run will be <img src="documentation/assets/Screenshot-8.png" width="550" /> . It complains of unaccepted android licenses and missing Apple cocoapods.
@@ -106,7 +106,7 @@ $ sudo xcodebuild -runFirstLaunch
 * you may wish to also install Visual Studio Code, as it is another great IDE for Flutter development.
 * Output of the command when everything is setup properly <img src="documentation/assets/Screenshot-6.png" width="400" />
 
-### 3.6 PED Code Setup
+### 3.5 PED Code Setup
 * Clone PED GitHub repository on local box. https://github.com/bernardpumped/ped
 * Open Android Studio. Click Open. Browse to the downloaded PED repository (~/development/code/ped). Click Open.
 * Open command prompt and execute following commands.
@@ -117,10 +117,10 @@ or
 $ flutter create --org FLUTTER_APP .
 ```
 * Above command prepares workspace for building of iOS, Android and Web releases. It also pulls the relevant dependencies as mentioned in pubspec.yaml, with successful completion resulting in correct setup of Android Studio workspace. <img src="documentation/assets/Screenshot-14.png" width="800" />
-#### 3.6.1 Android Build
+#### 3.5.1 Android Build
 As stated above ped mobile is now wired to firebase and social logins for android and iOS (in progress) therefore if you wish to build this branch add your account details to the follow
 
-##### 3.6.1.1 Meta Social Login
+##### 3.5.1.1 Meta Social Login
 ```bash
 $ cd ~/development/code/ped/android/app/src/main/res/values
 $ edit strings.xml
@@ -131,7 +131,7 @@ $ edit strings.xml
     <string name=facebook_client_token>'YOUR_facebook_client_token'</string>
 </resources>
 ```
-##### 3.6.1.2 Gradle Signing Configuration
+##### 3.5.1.2 Gradle Signing Configuration
 ```bash
 $ cd ~/development/code/ped/android/app
 $ edit build.gradle
@@ -154,7 +154,7 @@ $ edit build.gradle
         }
     }  
 ```
-##### 3.6.1.3 Google Services (System Generated following example only)
+##### 3.5.1.3 Google Services (System Generated following example only)
 ```bash
 $ cd ~/development/code/ped/android/app
 $ edit google-services.json
@@ -175,7 +175,7 @@ $ edit google-services.json
   configuration_version: 1
 }
 ```
-##### 3.6.1.4 Firebase Options (System Generated)
+##### 3.5.1.4 Firebase Options (System Generated)
 ```bash
 $ cd ~/development/code/ped/lib
 $ edit firebase_options.dart
@@ -199,7 +199,7 @@ $ edit firebase_options.dart
   );
  }
 ```
-##### 3.6.1.5 Firebase Services (Twitter Provider)
+##### 3.5.1.5 Firebase Services (Twitter Provider)
 ```bash
 $ cd ~/development/code/ped/lib/user-interface/fuel-station-details/utils
 $ edit firebase_service.dart
@@ -214,7 +214,7 @@ FirebaseService() {
     }
   }
 ```
-##### 3.6.1.6 Android Key Properties
+##### 3.5.1.6 Android Key Properties
 ```bash
 $ cd ~/development/code/ped/android
 $ edit key.properties
@@ -240,7 +240,7 @@ playStore_storeFile=../'YOUR_playStore_storeFile'-play-upload.keystore
 # for you to define
 ```
 * Execute `$ flutter build apk --debug` for Android builds. Successful execution will generate apk in path `build/app/outputs/flutter-apk/app-debug.apk`
-#### 3.6.2 iOS Build
+#### 3.5.2 iOS Build
 * Building for iOS requires connecting to Apple Developer account by signing in with Apple ID in Xcode and creating an iOS Development Certificate as well as a Provisioning Profile for project.
 * Open the Flutter project's Xcode target with `open ios/Runner.xcworkspace`
 * Select the 'Runner' project in the navigator then the 'Runner' target in the project settings
@@ -252,7 +252,7 @@ playStore_storeFile=../'YOUR_playStore_storeFile'-play-upload.keystore
 * iOS Developer Account Configuration Yet to-be-defined
 * Execute `$ flutter build ios --debug` for iOS builds. It results into generation of `build/ios/iphoneos/Runner.app` file.
 * Note - In case of M1 Macs build failing with error message `incompatible architecture (have 'arm64', need 'x86_64')` . To fix this execute the command `$ sudo arch -x86_64 gem install ffi`
-#### 3.6.3 Web Build
+#### 3.5.3 Web Build
 * Execute `$ flutter build web` for web builds. It results into generation of js and html code in directory `build/web/`
 
 ## 4. Prerequisite for running PED

@@ -22,7 +22,6 @@ dependencies:
 
 # packages
   basic_utils: ^4.2.2
-  floating_action_bubble: ^1.1.4
   flutter_rating_bar: ^4.0.1
   flutter_signin_button: ^2.0.0
   flutter_svg: ^1.0.3

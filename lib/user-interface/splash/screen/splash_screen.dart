@@ -78,7 +78,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   Container(
                       width: 120,
                       margin: const EdgeInsets.only(top: 40),
-                      child: const LinearProgressIndicator(color: Colors.white)),
+                      child: const LinearProgressIndicator(color: Colors.white, backgroundColor: Colors.indigo)),
                   const SizedBox(height: 100),
                   Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
                     AnimatedOpacity(

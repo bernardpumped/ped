@@ -45,8 +45,6 @@ class EditActionButton extends StatelessWidget {
       AnimatedContainer(
           duration: const Duration(milliseconds: 200),
           curve: Curves.linear,
-          // width: 120,
-          // height: 40,
           child: OutlinedButton(
               onPressed: () {
                 LogUtil.debug(_tag, 'undo Button clicked');

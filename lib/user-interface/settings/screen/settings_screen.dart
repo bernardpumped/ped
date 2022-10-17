@@ -19,6 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:pumped_end_device/main.dart';
 import 'package:pumped_end_device/user-interface/nav-drawer/nav_drawer_widget.dart';
+import 'package:pumped_end_device/user-interface/settings/screen/widget/developer_options.dart';
 import 'package:pumped_end_device/user-interface/settings/screen/widget/text_direction_menu_item_widget.dart';
 import 'package:pumped_end_device/user-interface/settings/screen/widget/text_locale_menu_item_widget.dart';
 import 'package:pumped_end_device/user-interface/settings/screen/widget/text_scaling_menu_item_widget.dart';
@@ -86,6 +87,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       const ThemeMenuItemWidget(),
                       const TextDirectionMenuItemWidget(),
                       const TextLocaleMenuItemWidget(),
+                      const DeveloperOptions(),
                       _appVersionWidget(),
                       const ServerVersionWidget()
                     ]))));

@@ -33,30 +33,27 @@ class RateWidget extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    return GestureDetector(
-        child: Column(children: [
-          Material(
-              elevation: 2,
-              clipBehavior: Clip.antiAlias,
-              borderRadius: BorderRadius.circular(15),
-              // Cannot use Theme.of(context).primaryColor because in darkMode it does not work well
-              color: Theme.of(context).textTheme.headline3!.color,
-              shadowColor: Theme.of(context).textTheme.headline3!.color,
-              child: Padding(
-                  padding: const EdgeInsets.all(14.0),
-                  child: Icon(Icons.star_rate_outlined, color: Theme.of(context).backgroundColor))),
-          Text('Rate', style: Theme.of(context).textTheme.bodyText2)
-        ]),
-        onTap: () async {
-          if (!FeatureSupport.rating.contains(Platform.operatingSystem)) {
-            LogUtil.debug(_tag, '${Platform.operatingSystem} does not yet support ${FeatureSupport.ratingFeature}');
-            return;
-          }
-          final bool launchRateAction = await _rateAction();
-          if (!launchRateAction) {
-            LogUtil.debug(_tag, 'Unable to launch Rating action');
-          }
-        });
+    return Column(children: [
+      const SizedBox(height: 5),
+      ElevatedButton(
+          clipBehavior: Clip.antiAlias,
+          style: ElevatedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0))),
+          child: Padding(
+              padding: const EdgeInsets.only(top: 15.0, bottom: 15.0, left: 0, right: 0),
+              child: Icon(Icons.star_rate_outlined, color: Theme.of(context).backgroundColor)),
+          onPressed: () async {
+            if (!FeatureSupport.rating.contains(Platform.operatingSystem)) {
+              LogUtil.debug(_tag, '${Platform.operatingSystem} does not yet support ${FeatureSupport.ratingFeature}');
+              return;
+            }
+            final bool launchRateAction = await _rateAction();
+            if (!launchRateAction) {
+              LogUtil.debug(_tag, 'Unable to launch Rating action');
+            }
+          }),
+      const SizedBox(height: 5),
+      Text('Rate', style: Theme.of(context).textTheme.bodyText2)
+    ]);
   }
 
   Future<bool> _rateAction() async {

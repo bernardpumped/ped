@@ -44,59 +44,56 @@ class DirectionsWidget extends StatefulWidget {
 class _DirectionsWidgetState extends State<DirectionsWidget> {
   @override
   Widget build(final BuildContext context) {
-    return GestureDetector(
-        child: Column(children: [
-          Material(
-              elevation: 2,
-              clipBehavior: Clip.antiAlias,
-              borderRadius: BorderRadius.circular(15),
-              // Cannot use Theme.of(context).primaryColor because in darkMode it does not work well
-              color: Theme.of(context).textTheme.headline3!.color,
-              shadowColor: Theme.of(context).textTheme.headline3!.color,
-              child: Padding(
-                  padding: const EdgeInsets.all(14.0),
-                  child: Icon(Icons.directions_outlined, color: Theme.of(context).backgroundColor))),
-          Text('Directions', style: Theme.of(context).textTheme.bodyText2)
-        ]),
-        onTap: () async {
-          if (!FeatureSupport.directions.contains(Platform.operatingSystem)) {
-            LogUtil.debug(DirectionsWidget._tag,
-                '${Platform.operatingSystem} does not yet support ${FeatureSupport.directionsFeature}');
-            return;
-          }
-          final GetLocationResult locationResult = await widget._locationDataSource.getLocationData();
-          final LocationInitResultCode resultCode = locationResult.locationInitResultCode;
-          if (!mounted) return;
-          switch (resultCode) {
-            case LocationInitResultCode.locationServiceDisabled:
-              WidgetUtils.buildSnackBar(context, 'Location Service is disabled', 2, '', () {});
-              break;
-            case LocationInitResultCode.permissionDenied:
-              WidgetUtils.buildSnackBar(context, 'Location Permission denied', 2, '', () {});
-              break;
-            case LocationInitResultCode.notFound:
-              WidgetUtils.buildSnackBar(context, 'Location Not Found', 2, '', () {});
-              break;
-            case LocationInitResultCode.failure:
-              WidgetUtils.buildSnackBar(context, 'Location Failure', 2, '', () {});
-              break;
-            case LocationInitResultCode.success:
-              {
-                final GeoLocationData? geoLocationData = await locationResult.geoLocationData;
-                if (geoLocationData != null) {
-                  final sLat = geoLocationData.latitude;
-                  final sLng = geoLocationData.longitude;
-                  _launchMaps(sLat, sLng, widget._dLat, widget._dLng, () {
-                    WidgetUtils.showToastMessage(context, 'Cannot call phone', isErrorToast: true);
-                  });
-                } else {
-                  if (!mounted) return;
-                  WidgetUtils.buildSnackBar(context, 'Location Failure', 2, '', () {});
+    return Column(children: [
+      const SizedBox(height: 5),
+      ElevatedButton(
+          clipBehavior: Clip.antiAlias,
+          style: ElevatedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0))),
+          child: Padding(
+              padding: const EdgeInsets.only(top: 15.0, bottom: 15.0, left: 0, right: 0),
+              child: Icon(Icons.directions_outlined, color: Theme.of(context).backgroundColor)),
+          onPressed: () async {
+            if (!FeatureSupport.directions.contains(Platform.operatingSystem)) {
+              LogUtil.debug(DirectionsWidget._tag,
+                  '${Platform.operatingSystem} does not yet support ${FeatureSupport.directionsFeature}');
+              return;
+            }
+            final GetLocationResult locationResult = await widget._locationDataSource.getLocationData();
+            final LocationInitResultCode resultCode = locationResult.locationInitResultCode;
+            if (!mounted) return;
+            switch (resultCode) {
+              case LocationInitResultCode.locationServiceDisabled:
+                WidgetUtils.buildSnackBar(context, 'Location Service is disabled', 2, '', () {});
+                break;
+              case LocationInitResultCode.permissionDenied:
+                WidgetUtils.buildSnackBar(context, 'Location Permission denied', 2, '', () {});
+                break;
+              case LocationInitResultCode.notFound:
+                WidgetUtils.buildSnackBar(context, 'Location Not Found', 2, '', () {});
+                break;
+              case LocationInitResultCode.failure:
+                WidgetUtils.buildSnackBar(context, 'Location Failure', 2, '', () {});
+                break;
+              case LocationInitResultCode.success:
+                {
+                  final GeoLocationData? geoLocationData = await locationResult.geoLocationData;
+                  if (geoLocationData != null) {
+                    final sLat = geoLocationData.latitude;
+                    final sLng = geoLocationData.longitude;
+                    _launchMaps(sLat, sLng, widget._dLat, widget._dLng, () {
+                      WidgetUtils.showToastMessage(context, 'Cannot call phone', isErrorToast: true);
+                    });
+                  } else {
+                    if (!mounted) return;
+                    WidgetUtils.buildSnackBar(context, 'Location Failure', 2, '', () {});
+                  }
                 }
-              }
-              break;
-          }
-        });
+                break;
+            }
+          }),
+      const SizedBox(height: 5),
+      Text('Directions', style: Theme.of(context).textTheme.bodyText2)
+    ]);
   }
 
   void _launchMaps(
