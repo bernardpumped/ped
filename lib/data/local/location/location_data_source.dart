@@ -64,11 +64,11 @@ class LocationDataSource {
   Future<GetLocationResult> _getDeviceLocation(final Map<dynamic, dynamic> data) async {
     if (kIsWeb || Platform.isLinux) {
       LogUtil.debug(_tag,
-          'Overriding the actual location with static one, as the Browser / Linux does not allow mocking the location');
+          'Overriding users actual location with static value, temporary dev workaround for AGL Web and Linux');
       return Future.value(GetLocationResult(
           LocationInitResultCode.static,
           Future.value(GeoLocationData(
-              latitude: Places.adelaideSa.latitude, longitude: Places.adelaideSa.longitude, altitude: 0))));
+              latitude: Places.fishBurnerSydney.latitude, longitude: Places.fishBurnerSydney.longitude, altitude: 0))));
     } else {
       LogUtil.debug(_tag, 'Platform is neither web nor linux');
     }

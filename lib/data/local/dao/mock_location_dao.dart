@@ -55,7 +55,7 @@ class MockLocationDao {
 
   Future<MockLocation?> getPinnedMockLocation() async {
     final db = Localstore.instance;
-    LogUtil.debug(_tag, 'getting the pinned mock location');
+    LogUtil.debug(_tag, 'retrieving pinned mock location if exist');
     Map<String, dynamic>? record = await db.collection(_collectionPinnedMockLocation).doc(_pinnedMockLocationDocId).get();
     if (record != null) {
       LogUtil.debug(_tag, 'Retrieved pinned mock location');
