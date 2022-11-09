@@ -18,15 +18,16 @@
 
 class UiSettings {
   String? uiTheme;
+  bool? developerOptions;
 
-  UiSettings({this.uiTheme});
+  UiSettings({this.uiTheme, this.developerOptions});
 
-  Map<String, dynamic> toMap() => {'uiTheme': uiTheme};
+  Map<String, dynamic> toMap() => {'uiTheme': uiTheme, 'developerOptions': developerOptions};
 
-  Map<String, dynamic> toJson() => {'uiTheme': uiTheme};
+  Map<String, dynamic> toJson() => {'uiTheme': uiTheme, 'developerOptions': developerOptions};
 
   factory UiSettings.fromJson(final Map<String, dynamic> data) {
-    return UiSettings(uiTheme: data['uiTheme']);
+    return UiSettings(uiTheme: data['uiTheme'], developerOptions: data['developerOptions']);
   }
 
   factory UiSettings.fromMap(final Map<String, dynamic> data) => UiSettings.fromJson(data);

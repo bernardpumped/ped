@@ -23,6 +23,8 @@ import 'package:pumped_end_device/user-interface/settings/screen/locale_screen.d
 import 'package:pumped_end_device/user-interface/settings/screen/text_direction_screen.dart';
 import 'package:pumped_end_device/user-interface/settings/screen/text_scaling_screen.dart';
 import 'package:pumped_end_device/user-interface/settings/screen/theming_screen.dart';
+import 'package:pumped_end_device/user-interface/settings/screen/widget/developer_options.dart';
+import 'package:pumped_end_device/user-interface/settings/screen/widget/mock_location_settings_screen.dart';
 import 'package:pumped_end_device/user-interface/settings/screen/widget/server_version_widget.dart';
 import 'package:pumped_end_device/user-interface/utils/under_maintenance_service.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
@@ -32,7 +34,6 @@ import 'cleanup_local_cache_screen.dart';
 import 'customize_search_settings_screen.dart';
 
 class SettingsScreen extends StatefulWidget {
-  static const routeName = '/ped/settings';
   const SettingsScreen({Key? key}) : super(key: key);
 
   @override
@@ -93,6 +94,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   _themingMenuItem(),
                   _textDirectionMenuItem(),
                   _localeMenuItem(),
+                  DeveloperOptions(callback: _callback),
                   _appVersionWidget(),
                   const ServerVersionWidget()
                 ])));
@@ -115,8 +117,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
           return const TextDirectionScreen();
         case SettingsMenu.locale:
           return const LocaleScreen();
+        case SettingsMenu.mock_location:
+          return const MockLocationSettingsScreen();
       }
     }
+  }
+
+  _callback() {
+    setState(() {
+      _selectedSettings = SettingsMenu.mock_location;
+    });
   }
 
   Widget _selectASettingsMsg() {
@@ -227,4 +237,4 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 }
 
-enum SettingsMenu { customizeSearch, clearLocalCache, textScaling, theming, textDirection, locale }
+enum SettingsMenu { customizeSearch, clearLocalCache, textScaling, theming, textDirection, locale, mock_location }

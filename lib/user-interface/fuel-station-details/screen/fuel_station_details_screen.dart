@@ -34,7 +34,8 @@ class FuelStationDetailsScreen extends StatefulWidget {
   final FuelStation selectedFuelStation;
   final FuelType selectedFuelType;
 
-  const FuelStationDetailsScreen({Key? key, required this.selectedFuelStation, required this.selectedFuelType}) : super(key: key);
+  const FuelStationDetailsScreen({Key? key, required this.selectedFuelStation, required this.selectedFuelType})
+      : super(key: key);
 
   @override
   State<FuelStationDetailsScreen> createState() => _FuelStationDetailsScreenState();
@@ -91,10 +92,10 @@ class _FuelStationDetailsScreenState extends State<FuelStationDetailsScreen> {
               return <Widget>[
                 SliverAppBar(
                     pinned: true,
-                    expandedHeight: 250,
+                    expandedHeight: 240,
                     automaticallyImplyLeading: false,
                     centerTitle: false,
-                    collapsedHeight: 250,
+                    collapsedHeight: 240,
                     flexibleSpace: FlexibleSpaceBar(background: ExpandedHeaderWidget(fuelStation: fuelStation))),
                 SliverPersistentHeader(
                     pinned: true,
@@ -107,15 +108,13 @@ class _FuelStationDetailsScreenState extends State<FuelStationDetailsScreen> {
                         labelPadding: const EdgeInsets.only(left: 5, right: 5),
                         padding: const EdgeInsets.only(left: 8, right: 8, top: 8),
                         tabs: _tabs.map((tabName) {
-                          return Tab(
-                              child: Text(tabName,
-                                  overflow: TextOverflow.ellipsis, style: Theme.of(context).textTheme.headline4));
+                          return Tab(text: tabName);
                         }).toList())))
               ];
             },
-            body: CustomScrollView(key: PageStorageKey<String>(_tabs[_selectedTabIndex]), slivers: <Widget>[
-              SliverToBoxAdapter(child: _getChildTabContent(_tabs[_selectedTabIndex]))
-            ])));
+            body: CustomScrollView(
+                key: PageStorageKey<String>(_tabs[_selectedTabIndex]),
+                slivers: <Widget>[SliverToBoxAdapter(child: _getChildTabContent(_tabs[_selectedTabIndex]))])));
   }
 
   Widget? _getChildTabContent(final String tabName) {

@@ -21,7 +21,11 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:pumped_end_device/data/local/dao/mock_location_dao.dart';
+import 'package:pumped_end_device/data/local/dao/ui_settings_dao.dart';
 import 'package:pumped_end_device/data/local/location/geo_location_wrapper.dart';
+import 'package:pumped_end_device/data/local/model/mock_location.dart';
+import 'package:pumped_end_device/data/local/model/ui_settings.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/data/local/places.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
@@ -36,16 +40,42 @@ class LocationDataSource {
 
   LocationDataSource(this._geoLocationWrapper);
 
-  Future<GetLocationResult> getLocationData({String thread = 'default'}) async {
-    // if (!_platformWrapper.deviceIsBrowser() && _platformWrapper.platformIsLinux()) {
-    //   return Future.value(GetLocationResult(
-    //       LocationInitResultCode.success,
-    //       Future.value(GeoLocationData(
-    //           latitude: Places.fishBurnerSydney.latitude, longitude: Places.fishBurnerSydney.longitude, altitude: 0))));
-    // }
+  Future<GetLocationResult> getLocationData({thread = 'default'}) async {
+    UiSettings? uiSettings = await UiSettingsDao.instance.getUiSettings();
+    if (uiSettings != null) {
+      if (uiSettings.developerOptions != null && uiSettings.developerOptions!) {
+        final MockLocation? pinnedLocation = await MockLocationDao.instance.getPinnedMockLocation();
+        if (pinnedLocation != null) {
+          LogUtil.debug(_tag, 'Pinned Mock Location found as : ${pinnedLocation.toString()}');
+          return Future.value(GetLocationResult(LocationInitResultCode.success,
+              Future.value(GeoLocationData(latitude: pinnedLocation.latitude, longitude: pinnedLocation.longitude))));
+        } else {
+          LogUtil.debug(_tag, 'No pinned location found');
+        }
+      } else {
+        LogUtil.debug(_tag, 'Developer Options not turned on');
+      }
+    } else {
+      LogUtil.debug(_tag, 'No UiSettings found configured');
+    }
+    return _getDeviceLocation({});
+  }
+
+  Future<GetLocationResult> _getDeviceLocation(final Map<dynamic, dynamic> data) async {
+    if (kIsWeb || Platform.isLinux) {
+      LogUtil.debug(_tag,
+          'Overriding the actual location with static one, as the Browser / Linux does not allow mocking the location');
+      return Future.value(GetLocationResult(
+          LocationInitResultCode.static,
+          Future.value(GeoLocationData(
+              latitude: Places.adelaideSa.latitude, longitude: Places.adelaideSa.longitude, altitude: 0))));
+    } else {
+      LogUtil.debug(_tag, 'Platform is neither web nor linux');
+    }
     LogUtil.debug(_tag, "Checking Location Service Enabled");
     bool serviceEnabled = await _geoLocationWrapper.isLocationServiceEnabled();
     LogUtil.debug(_tag, "Location Service is Enabled ? $serviceEnabled");
+
     if (!serviceEnabled) {
       return Future.value(GetLocationResult(LocationInitResultCode.locationServiceDisabled, null));
     }
@@ -64,35 +94,11 @@ class LocationDataSource {
 
     try {
       final Position position = await _geoLocationWrapper.getCurrentPosition();
-      LogUtil.debug(_tag, "Location found as : $position");
-      // final List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
-      // String? isoCountryCode;
-      // if (placemarks.isNotEmpty) {
-      //   isoCountryCode = placemarks[0].isoCountryCode;
-      //   LogUtil.debug(_tag, 'CountryCode found is $isoCountryCode');
-      // }
-      if (kIsWeb || Platform.isLinux || Platform.isAndroid) {
-        // LogUtil.debug(_tag, 'Overriding the location, as the current country is not AU/Australia');
-        LogUtil.debug(_tag, 'Overriding the actual location with static one, as the Browser / Linux does not allow mocking the location');
-        return Future.value(GetLocationResult(
-            LocationInitResultCode.success,
-            Future.value(GeoLocationData(
-                latitude: Places.fishBurnerSydney.latitude,
-                longitude: Places.fishBurnerSydney.longitude,
-                altitude: 0))));
-      } else {
-        LogUtil.debug(_tag, 'Returning from !kIsWeb');
-        return Future.value(GetLocationResult(
-            LocationInitResultCode.success,
-            Future.value(GeoLocationData(
-                latitude: position.latitude, longitude: position.longitude, altitude: position.altitude))));
-        // return Future.value(GetLocationResult(LocationInitResultCode.success,
-        //     Future.value(GeoLocationData(
-        //       latitude: Places.cairnsQld.latitude,
-        //       longitude: Places.cairnsQld.longitude,
-        //       altitude: 1,
-        //     ))));
-      }
+      LogUtil.debug(_tag, "Location found as : $position. Platform is Android ? ${Platform.isAndroid}");
+      return Future.value(GetLocationResult(
+          LocationInitResultCode.success,
+          Future.value(GeoLocationData(
+              latitude: position.latitude, longitude: position.longitude, altitude: position.altitude))));
     } catch (e) {
       return Future.value(GetLocationResult(LocationInitResultCode.failure, null));
     }

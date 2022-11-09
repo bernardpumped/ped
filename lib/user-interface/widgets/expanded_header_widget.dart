@@ -33,7 +33,7 @@ class ExpandedHeaderWidget extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     return Card(
-        margin: const EdgeInsets.all(6),
+        // margin: const EdgeInsets.all(6),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
           Row(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -47,7 +47,7 @@ class ExpandedHeaderWidget extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                       Padding(
-                          padding: const EdgeInsets.only(bottom: 8, left: 8),
+                          padding: const EdgeInsets.only(bottom: 8, left: 8, top: 12),
                           child: _getFuelStationName(context, fuelStation)),
                       Padding(
                           padding: const EdgeInsets.only(bottom: 8, left: 8),
@@ -72,6 +72,9 @@ class ExpandedHeaderWidget extends StatelessWidget {
       fsName = fuelStation.fuelStationName;
     }
     fsName = fsName.toTitleCase();
+    if (fuelStation.isFaStation && 'unmatched' == fuelStation.fuelAuthMatchStatus) {
+      fsName = '$fsName**';
+    }
     return Text(fsName, style: Theme.of(context).textTheme.headline2, overflow: TextOverflow.ellipsis, maxLines: 2);
   }
 
@@ -131,7 +134,7 @@ class ExpandedHeaderWidget extends StatelessWidget {
               const SizedBox(width: 3),
               RatingBarIndicator(
                   rating: fuelStation.rating!,
-                  itemBuilder: (context, index) => const Icon(Icons.star, color: Colors.amber),
+                  itemBuilder: (context, index) => Icon(Icons.star, color: Theme.of(context).highlightColor),
                   itemCount: 5,
                   itemSize: 22,
                   direction: Axis.horizontal) //22 comes from titleLarge

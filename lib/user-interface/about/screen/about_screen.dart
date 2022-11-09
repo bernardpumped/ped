@@ -17,6 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:pumped_end_device/util/app_theme.dart';
 
 class AboutScreen extends StatelessWidget {
   const AboutScreen({Key? key}) : super(key: key);
@@ -38,10 +39,9 @@ class AboutScreen extends StatelessWidget {
             height: MediaQuery.of(context).size.height,
             padding: const EdgeInsets.only(left: 50, right: 50),
             child: Column(children: [
-              const Padding(
-                  padding: EdgeInsets.only(top: 50),
-                  child: Image(
-                      image: AssetImage('assets/images/ic_pumped_black_text.png'), height: 120, fit: BoxFit.fill)),
+              Padding(
+                  padding: const EdgeInsets.only(top: 50),
+                  child: Image(image: AssetImage(AppTheme.getPumpedLogo(context)), height: 120, fit: BoxFit.fill)),
               Padding(
                   padding: const EdgeInsets.only(bottom: 5),
                   child: Text('About', style: Theme.of(context).textTheme.headline1, textAlign: TextAlign.center)),

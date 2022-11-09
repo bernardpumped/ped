@@ -30,8 +30,6 @@ import 'package:pumped_end_device/models/quote_sort_order.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
 class CustomizeSearchSettingsScreen extends StatefulWidget {
-  static const routeName = '/ped/settings/edit';
-
   const CustomizeSearchSettingsScreen({Key? key}) : super(key: key);
 
   @override
@@ -113,7 +111,7 @@ class _CustomizeSearchSettingsScreenState extends State<CustomizeSearchSettingsS
           if (snapshot.hasError) {
             LogUtil.debug(_tag, '_getNumSearchResultsExpansionTile::error ${snapshot.error}');
             return Text('Error Loading Num Search Results Count',
-                style: Theme.of(context).textTheme.headline5!.copyWith(color: Colors.red));
+                style: Theme.of(context).textTheme.headline5!.copyWith(color: Theme.of(context).errorColor));
           } else if (snapshot.hasData) {
             final DropDownValues<num> dropDownValues = snapshot.data!;
             _searchResultsCountSelectedValue = _searchResultsCountSelectedValue == _unselectedValDouble
@@ -154,12 +152,12 @@ class _CustomizeSearchSettingsScreenState extends State<CustomizeSearchSettingsS
           if (snapshot.hasError) {
             LogUtil.debug(_tag, '_fuelCategoryDropdown _fuelCategoryDropdownValues error ${snapshot.error}');
             return Text('Error Loading Fuel Categories',
-                style: Theme.of(context).textTheme.headline5!.copyWith(color: Colors.red));
+                style: Theme.of(context).textTheme.headline5!.copyWith(color: Theme.of(context).errorColor));
           } else if (snapshot.hasData) {
             final DropDownValues<FuelCategory> dropDownValues = snapshot.data!;
             if (dropDownValues.noDataFound) {
               return Text('No Fuel Categories Found',
-                  style: Theme.of(context).textTheme.headline5!.copyWith(color: Colors.red));
+                  style: Theme.of(context).textTheme.headline5!.copyWith(color: Theme.of(context).errorColor));
             } else {
               _fuelCategorySelectedValue =
                   _fuelCategorySelectedValue ?? dropDownValues.values[dropDownValues.selectedIndex];
@@ -203,12 +201,12 @@ class _CustomizeSearchSettingsScreenState extends State<CustomizeSearchSettingsS
           if (snapshot.hasError) {
             LogUtil.debug(_tag, '_getFuelTypesExpansionTile::error ${snapshot.error}');
             return Text('Error Loading Fuel Types',
-                style: Theme.of(context).textTheme.headline5!.copyWith(color: Colors.red));
+                style: Theme.of(context).textTheme.headline5!.copyWith(color: Theme.of(context).errorColor));
           } else if (snapshot.hasData) {
             final DropDownValues<FuelType> dropDownValues = snapshot.data!;
             if (dropDownValues.noDataFound) {
               return Text('No Fuel Types found',
-                  style: Theme.of(context).textTheme.headline5!.copyWith(color: Colors.red));
+                  style: Theme.of(context).textTheme.headline5!.copyWith(color: Theme.of(context).errorColor));
             } else {
               _fuelTypeSelectedValue = __fuelTypeSelectedValue(dropDownValues);
               return ExpansionTile(
@@ -249,7 +247,7 @@ class _CustomizeSearchSettingsScreenState extends State<CustomizeSearchSettingsS
           if (snapshot.hasError) {
             LogUtil.debug(_tag, '_getSearchRadiusExpansionTile::error ${snapshot.error}');
             return Text('Error Loading Search Radius',
-                style: Theme.of(context).textTheme.headline5!.copyWith(color: Colors.red));
+                style: Theme.of(context).textTheme.headline5!.copyWith(color: Theme.of(context).errorColor));
           } else if (snapshot.hasData) {
             final DropDownValues<num> dropDownValues = snapshot.data!;
             _searchRadiusSelectedValue = _searchRadiusSelectedValue == _unselectedValDouble
@@ -290,7 +288,7 @@ class _CustomizeSearchSettingsScreenState extends State<CustomizeSearchSettingsS
           if (snapshot.hasError) {
             LogUtil.debug(_tag, '_getSortOrderExpansionTile::error ${snapshot.error}');
             return Text('Error Loading Sort Order',
-                style: Theme.of(context).textTheme.headline5!.copyWith(color: Colors.red));
+                style: Theme.of(context).textTheme.headline5!.copyWith(color: Theme.of(context).errorColor));
           } else if (snapshot.hasData) {
             final DropDownValues<SortOrder> dropDownValues = snapshot.data!;
             _sortOrderSelectedVal = _sortOrderSelectedVal ?? dropDownValues.values[dropDownValues.selectedIndex];
@@ -354,7 +352,7 @@ class _CustomizeSearchSettingsScreenState extends State<CustomizeSearchSettingsS
               _userSettingsVersion = -1;
               LogUtil.debug(_tag, '_getVersionNumberRow::${snapshot.error}');
               return Text('Error loading the settings',
-                  style: Theme.of(context).textTheme.headline6!.copyWith(color: Colors.red));
+                  style: Theme.of(context).textTheme.headline6!.copyWith(color: Theme.of(context).errorColor));
             } else if (snapshot.hasData) {
               _userSettingsVersion = snapshot.data;
               return Text('Version : $_userSettingsVersion', style: Theme.of(context).textTheme.headline6);
@@ -376,7 +374,7 @@ class _CustomizeSearchSettingsScreenState extends State<CustomizeSearchSettingsS
           WidgetUtils.showToastMessage(context, 'Search Settings updated');
         }, onError: (error, s) {
           LogUtil.debug(_tag, 'Failed Persistence Result $s');
-          WidgetUtils.showToastMessage(context, 'Error updating search settings');
+          WidgetUtils.showToastMessage(context, 'Error updating search settings', isErrorToast: true);
         });
       } else {
         LogUtil.debug(

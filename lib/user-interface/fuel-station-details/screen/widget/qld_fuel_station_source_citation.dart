@@ -82,7 +82,7 @@ class QldFuelStationSourceCitation extends StatelessWidget {
 
   Text _getAdminContactMessage(final BuildContext context) {
     return Text(_pumpedMessage,
-        textAlign: TextAlign.start, style: Theme.of(context).textTheme.subtitle2!.copyWith(color: Colors.red));
+        textAlign: TextAlign.start, style: Theme.of(context).textTheme.subtitle2!.copyWith(color: Theme.of(context).errorColor));
   }
 
   Row _getOkActionButton(final BuildContext context) {

@@ -39,7 +39,7 @@ class PhoneWidget extends StatelessWidget {
         iconData: Icons.phone_outlined,
         onTapFunction: () async {
           _launchCaller(_phone, () {
-            WidgetUtils.showToastMessage(context, 'Cannot call phone');
+            WidgetUtils.showToastMessage(context, 'Cannot call phone', isErrorToast: true);
           });
         });
   }

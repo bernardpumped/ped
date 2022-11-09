@@ -94,11 +94,11 @@ class _HideFuelStationWidgetState extends State<HideFuelStationWidget> {
           WidgetUtils.showToastMessage(context, 'Added to hidden list. Refresh screen to update');
           widget._onHideStatusChange();
         }, onError: (error, s) {
-          WidgetUtils.showToastMessage(context, 'Error hiding fuel station.');
+          WidgetUtils.showToastMessage(context, 'Error hiding fuel station.', isErrorToast: true);
         });
       }
     }, onError: (error, s) {
-      WidgetUtils.showToastMessage(context, 'Error checking eligibility to hide.');
+      WidgetUtils.showToastMessage(context, 'Error checking eligibility to hide.', isErrorToast: true);
     });
   }
 
@@ -109,7 +109,7 @@ class _HideFuelStationWidgetState extends State<HideFuelStationWidget> {
       WidgetUtils.showToastMessage(context, 'Successfully un-hidden the fuel station');
       widget._onHideStatusChange();
     }, onError: (error, s) {
-      WidgetUtils.showToastMessage(context, 'Error un-hiding the fuel station');
+      WidgetUtils.showToastMessage(context, 'Error un-hiding the fuel station', isErrorToast: true);
     });
   }
 }

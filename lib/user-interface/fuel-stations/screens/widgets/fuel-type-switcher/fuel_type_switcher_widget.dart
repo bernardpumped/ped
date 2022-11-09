@@ -78,7 +78,7 @@ class _FuelTypeSwitcherWidgetState extends State<FuelTypeSwitcherWidget> {
           if (snapshot.hasError) {
             LogUtil.debug(_tag, 'Error loading ${snapshot.error}');
             return Text('Error loading Fuel Categories',
-                style: Theme.of(context).textTheme.headline5!.copyWith(color: Colors.red));
+                style: Theme.of(context).textTheme.headline5!.copyWith(color: Theme.of(context).errorColor));
           } else if (snapshot.hasData) {
             final DropDownValues<FuelCategory> dropDownValues = snapshot.data!;
             _fuelCategorySelectedValue ??= dropDownValues.values[dropDownValues.selectedIndex];
@@ -115,11 +115,13 @@ class _FuelTypeSwitcherWidgetState extends State<FuelTypeSwitcherWidget> {
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             LogUtil.debug(_tag, 'Error loading ${snapshot.error}');
-            return Text('Error loading', style: Theme.of(context).textTheme.headline5!.copyWith(color: Colors.red));
+            return Text('Error loading',
+                style: Theme.of(context).textTheme.headline5!.copyWith(color: Theme.of(context).errorColor));
           } else if (snapshot.hasData) {
             final DropDownValues<FuelType> dropDownValues = snapshot.data!;
             if (dropDownValues.noDataFound) {
-              return Text('No data found', style: Theme.of(context).textTheme.headline5!.copyWith(color: Colors.red));
+              return Text('No data found',
+                  style: Theme.of(context).textTheme.headline5!.copyWith(color: Theme.of(context).errorColor));
             } else {
               _fuelTypeSelectedValue ??= __fuelTypeSelectedValue(dropDownValues);
               return ExpansionTile(

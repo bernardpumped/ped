@@ -36,7 +36,7 @@ class NotificationWidget extends StatelessWidget {
         iconData: Icons.email_outlined,
         onTapFunction: () {
           _sendNotification(() {
-            WidgetUtils.showToastMessage(context, 'Cannot send notification');
+            WidgetUtils.showToastMessage(context, 'Cannot send notification', isErrorToast: true);
           });
         });
   }

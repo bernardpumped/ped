@@ -26,8 +26,6 @@ import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
 class CleanupLocalCacheScreen extends StatefulWidget {
-  static const routeName = '/ped/settings/clean-cache';
-
   const CleanupLocalCacheScreen({Key? key}) : super(key: key);
 
   @override
@@ -48,13 +46,11 @@ class _CleanupLocalCacheScreenState extends State<CleanupLocalCacheScreen> {
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
           Padding(
               padding: const EdgeInsets.only(top: 10, bottom: 10, left: 10),
-              child: Row(
-                children: [
-                  const Icon(Icons.delete_outline, size: 35),
-                  const SizedBox(width: 10),
-                  Text('Clear Local Cache', style: Theme.of(context).textTheme.headline3, textAlign: TextAlign.center),
-                ],
-              )),
+              child: Row(children: [
+                const Icon(Icons.delete_outline, size: 35),
+                const SizedBox(width: 10),
+                Text('Clear Local Cache', style: Theme.of(context).textTheme.headline3, textAlign: TextAlign.center)
+              ])),
           Expanded(
               child: ListView(children: <Widget>[
             _buildListTile(Icons.search, "Search Settings",
@@ -145,7 +141,7 @@ class _CleanupLocalCacheScreenState extends State<CleanupLocalCacheScreen> {
       }
       if (mounted) {
         if (failedString.isNotEmpty) {
-          WidgetUtils.showToastMessage(context, failedString);
+          WidgetUtils.showToastMessage(context, failedString, isErrorToast: true);
         } else {
           Navigator.pop(context);
         }
@@ -174,7 +170,6 @@ class _CleanupLocalCacheScreenState extends State<CleanupLocalCacheScreen> {
     }
     return _getFailedString(
         searchSettingsDeleted, updateHistoryDeleted, favouriteStationsDeleted, hiddenFuelStationsDeleted);
-    // Navigator.pop(context);
   }
 
   Future<bool> _cleanUpSearchSettings() async {

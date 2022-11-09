@@ -28,8 +28,8 @@ class _FuelStationSorterWidgetState extends State<FuelStationSorterWidget> {
         panelIcon: Icons.sort_outlined,
         // Intentionally using Theme.of(context).textTheme.headline1!.color! for border, because using primaryColor
         // for text here does not work well when theme is dark.
-        backgroundColor: Theme.of(context).textTheme.headline1!.color!,
-        contentColor: const Color(0xFFffd629),
+        backgroundColor: Theme.of(context).highlightColor,
+        contentColor: Theme.of(context).backgroundColor.withAlpha(255),
         nonSelColor: Theme.of(context).backgroundColor,
         buttons: sortIcons.values.toList(),
         buttonLabels: sortHeaders.values.toList(),

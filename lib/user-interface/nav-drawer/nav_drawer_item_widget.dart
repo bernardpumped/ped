@@ -49,6 +49,6 @@ class NavDrawerItemWidget extends StatelessWidget {
         },
         child: Container(
             padding: const EdgeInsets.only(top: 16, bottom: 16, left: 8, right: 8),
-            child: Icon(displayIcon, size: 35)));
+            child: Icon(displayIcon, size: 35, color: Theme.of(context).highlightColor)));
   }
 }

@@ -23,6 +23,7 @@ import 'package:pumped_end_device/models/pumped/operating_hours.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/model/operating_time_range.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/data/remote/model/response/get_fuel_station_operating_hrs_response.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/screen/tabs/contact/widget/operating_hours_source_citation.dart';
+import 'package:pumped_end_device/util/app_theme.dart';
 import 'package:pumped_end_device/util/data_utils.dart';
 import 'package:pumped_end_device/util/date_time_utils.dart';
 import 'package:pumped_end_device/util/log_util.dart';
@@ -47,8 +48,8 @@ class _OperatingHoursWidgetState extends State<OperatingHoursWidget> {
 
   @override
   Widget build(final BuildContext context) {
-    _closedStyle = Theme.of(context).textTheme.headline5!.copyWith(color: Colors.red);
-    _openStatusStyle = Theme.of(context).textTheme.headline5!.copyWith(color: Colors.green);
+    _closedStyle = Theme.of(context).textTheme.headline5!.copyWith(color: AppTheme.stationCloseColor);
+    _openStatusStyle = Theme.of(context).textTheme.headline5!.copyWith(color: AppTheme.stationOpenColor);
     return FutureBuilder<GetFuelStationOperatingHrsResponse>(
         future: widget.operatingHrsResponseFuture,
         builder: (context, snapshot) {
@@ -59,8 +60,8 @@ class _OperatingHoursWidgetState extends State<OperatingHoursWidget> {
             final GetFuelStationOperatingHrsResponse data = snapshot.data!;
             if (data.responseCode != 'SUCCESS') {
               return ListTile(
-                  title:
-                      Text('Error Loading', style: Theme.of(context).textTheme.headline5!.copyWith(color: Colors.red)));
+                  title: Text('Error Loading',
+                      style: Theme.of(context).textTheme.headline5!.copyWith(color: Theme.of(context).errorColor)));
             } else {
               final FuelStationOperatingHrs? fuelStationOperatingHrs = data.fuelStationOperatingHrs;
               widget.fuelStation.fuelStationOperatingHrs = fuelStationOperatingHrs;

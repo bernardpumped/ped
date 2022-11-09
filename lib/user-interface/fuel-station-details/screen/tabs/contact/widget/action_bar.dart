@@ -42,7 +42,7 @@ class _ActionBarState extends State<ActionBar> {
         ? widget.fuelStation.fuelStationAddress.phone1
         : widget.fuelStation.fuelStationAddress.phone2;
     return Container(
-        padding: const EdgeInsets.only(top: 10, bottom: 10),
+        padding: const EdgeInsets.only(top: 10),
         margin: const EdgeInsets.only(left: 5, right: 5),
         child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
