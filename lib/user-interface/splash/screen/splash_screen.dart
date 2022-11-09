@@ -138,7 +138,7 @@ class _SplashScreenState extends State<SplashScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
             WidgetUtils.buildSnackBar(context, underMaintenanceMsg, 12 * 60 * 60 * 30, 'Exit', SystemUtils.exitApp));
       } else {
-        LogUtil.debug(_tag, 'Backend is not under maintenance.');
+        LogUtil.debug(_tag, 'Pumped Backend not scheduled for maintenance, ped is up and available for business');
         _getLocation();
       }
     }).onError((error, stackTrace) {
