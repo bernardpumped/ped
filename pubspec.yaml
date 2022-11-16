@@ -37,12 +37,12 @@ dependencies:
   provider: 6.0.3
 
 # plugins general
-  fluttertoast: ^8.0.9                                     # <- Toast which requires BuildContext all platforms supported
-  geocoding: ^2.0.5                                        # <- to be reviewed
-  geolocator: ^9.0.2                                       # <- required for geolocator_linux
-  geolocator_linux: ^0.1.2                                 # <- required for geolocator
-  path: ^1.8.2                                             # <- Supported on Linux
-  url_launcher: 6.1.6                                      # <- Supported on Linux. certain functions do not work google maps, phone calling etc.
+  fluttertoast: ^8.0.9                                     # Toast which requires BuildContext all platforms supported
+  geocoding: ^2.0.5                                        # To be reviewed
+  geolocator: ^9.0.2                                       # Requires AGL rewrite 
+  #geolocator_linux: ^0.1.2                                # *** commented as implemented workaround for AGL demo ***
+  path: ^1.8.2                                             # Supported on Linux
+  url_launcher: 6.1.6                                      # Supported on Linux. certain functions do not work google maps, phone calling etc.
 
 dev_dependencies:
   build_runner: ^2.1.5
