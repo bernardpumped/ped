@@ -1,5 +1,15 @@
 name: pumped_end_device
-description: Pumped End Device
+description:  >-
+  Pumped Fuel is a combination of 3 core projects to connect
+  vehicle drivers with retail merchants, initially starting
+  with fuel stations. Our objective is to offer the best fuel
+  prices, closest stations, friendliest service, cleanest restrooms,
+  tastiest coffee and so much more, direct to vehicle drivers.
+  Pumped End Device (ped) is the IVI presentation layer
+homepage: https://www.pumpedfuel.com/
+repository: https://github.com/bernardpumped/ped/tree/agl
+issue_tracker: https://github.com/bernardpumped/ped/issues
+documentation: https://github.com/bernardpumped/ped/tree/agl#readme
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -11,7 +21,12 @@ description: Pumped End Device
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.0+1
+version: 1.0.0+32
+
+# AGL branch is landscape and specific to web and linux - then hopefully Yocto/AGL
+platforms:
+  linux:
+    web:
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -36,10 +51,10 @@ dependencies:
   uuid: ^3.0.4
   provider: 6.0.3
 
-# plugins general
+# plugins general - *** danger will robinson danger *** the linux implementation of these plugins not work on Yocto/AGL
   fluttertoast: ^8.0.9                                     # Toast which requires BuildContext all platforms supported
   geocoding: ^2.0.5                                        # To be reviewed
-  geolocator: ^9.0.2                                       # Requires AGL rewrite 
+  geolocator: ^9.0.2                                       # Requires AGL rewrite
   #geolocator_linux: ^0.1.2                                # *** commented as implemented workaround for AGL demo ***
   path: ^1.8.2                                             # Supported on Linux
   url_launcher: 6.1.6                                      # Supported on Linux. certain functions do not work google maps, phone calling etc.
