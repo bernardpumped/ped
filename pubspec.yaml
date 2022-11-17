@@ -52,7 +52,7 @@ dependencies:
   provider: 6.0.3
 
 # plugins general - *** danger will robinson danger *** the linux implementation of these plugins not work on Yocto/AGL
-  fluttertoast: ^8.0.9                                     # Toast which requires BuildContext all platforms supported
+  fluttertoast: ^8.1.1                                     # Toast which requires BuildContext all platforms supported
   geocoding: ^2.0.5                                        # To be reviewed
   geolocator: ^9.0.2                                       # Requires AGL rewrite
   #geolocator_linux: ^0.1.2                                # *** commented as implemented workaround for AGL demo ***
