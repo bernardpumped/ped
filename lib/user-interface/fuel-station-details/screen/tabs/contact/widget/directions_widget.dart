@@ -57,7 +57,7 @@ class _DirectionsWidgetState extends State<DirectionsWidget> {
           }
           if (!FeatureSupport.directions.contains(Platform.operatingSystem)) {
             LogUtil.debug(DirectionsWidget._tag,
-                '${Platform.operatingSystem} does not yet support ${FeatureSupport.directionsFeature}');
+                '${Platform.operatingSystem} Yocto/AGL does not yet support ${FeatureSupport.directionsFeature}');
             return;
           }
           final GetLocationResult locationResult = await widget._locationDataSource.getLocationData();

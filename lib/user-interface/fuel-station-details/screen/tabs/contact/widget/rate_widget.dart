@@ -47,7 +47,7 @@ class RateWidget extends StatelessWidget {
             }
           }
           if (!FeatureSupport.rating.contains(Platform.operatingSystem)) {
-            LogUtil.debug(_tag, '${Platform.operatingSystem} does not yet support ${FeatureSupport.ratingFeature}');
+            LogUtil.debug(_tag, '${Platform.operatingSystem} Yocto/AGL does not yet support ${FeatureSupport.ratingFeature}');
             return;
           }
           final bool launchRateAction = await _rateAction();

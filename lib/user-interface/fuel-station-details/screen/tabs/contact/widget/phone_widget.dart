@@ -51,7 +51,7 @@ class PhoneWidget extends StatelessWidget {
       }
     }
     if (!FeatureSupport.call.contains(Platform.operatingSystem)) {
-      LogUtil.debug(_tag, '${Platform.operatingSystem} does not yet support ${FeatureSupport.callFeature}');
+      LogUtil.debug(_tag, '${Platform.operatingSystem} Yocto/AGL does not yet support ${FeatureSupport.callFeature}');
       return;
     }
     final String phoneUrl = Uri.encodeFull("tel:$phone");
