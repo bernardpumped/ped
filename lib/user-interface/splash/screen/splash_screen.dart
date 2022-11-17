@@ -16,11 +16,7 @@
  *     along with Pumped End Device.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'dart:io';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:pumped_end_device/data/local/location/geo_location_data.dart';
 import 'package:pumped_end_device/data/local/location/get_location_result.dart';
 import 'package:pumped_end_device/data/local/location/location_access_result_code.dart';

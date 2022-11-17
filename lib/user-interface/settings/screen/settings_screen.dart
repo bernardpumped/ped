@@ -117,7 +117,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           return const TextDirectionScreen();
         case SettingsMenu.locale:
           return const LocaleScreen();
-        case SettingsMenu.mock_location:
+        case SettingsMenu.mockLocation:
           return const MockLocationSettingsScreen();
       }
     }
@@ -125,7 +125,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   _callback() {
     setState(() {
-      _selectedSettings = SettingsMenu.mock_location;
+      _selectedSettings = SettingsMenu.mockLocation;
     });
   }
 
@@ -237,4 +237,4 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 }
 
-enum SettingsMenu { customizeSearch, clearLocalCache, textScaling, theming, textDirection, locale, mock_location }
+enum SettingsMenu { customizeSearch, clearLocalCache, textScaling, theming, textDirection, locale, mockLocation }

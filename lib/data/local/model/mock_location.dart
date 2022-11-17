@@ -81,6 +81,7 @@ class MockLocation {
       latitude == other.latitude &&
       longitude == other.longitude;
 
+  @override
   int get hashCode => Object.hash(addressLine, city, state, country, latitude, longitude);
 
 }
