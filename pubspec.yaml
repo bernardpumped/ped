@@ -55,7 +55,7 @@ dependencies:
   fluttertoast: ^8.1.1                                     # <- Toast requires BuildContext all platforms supported
   geocoding: ^2.0.5                                        # <- To be reviewed
   geolocator: ^9.0.2                                       # <- Yocto/AGL custom rewrite required?
-  geolocator_linux: ^0.1.2                                 # <- Bypassed included for reference purposes only, implemented workaround location mocking for AGL demos,
+  geolocator_linux: ^0.1.2                                 # <- Bypassed included for reference purposes only, implemented location mocking workaround for AGL demos,
                                                            #    utilises plugin dependency package_info_plus_linux, Yocto/AGL custom rewrite required?
   path: ^1.8.2                                             # <- Supported on Linux
   url_launcher: 6.1.6                                      # <- Stub only required for navigation, calling, speech etc. Yocto/AGL custom rewrite required
