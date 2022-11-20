@@ -12,7 +12,7 @@ issue_tracker: https://github.com/bernardpumped/ped/issues
 documentation: https://github.com/bernardpumped/ped/tree/agl#readme
 version: 1.0.0+32
 
-# AGL branch is landscape and specific to web and linux - then hopefully Yocto/AGL
+# AGL branch is landscape and specific to web and linux for Yocto/AGL
 platforms:
   linux:
     web:
