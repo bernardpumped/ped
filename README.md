@@ -11,7 +11,7 @@
 |<a href="#7-deploying-on-embedded">7. Deploying on Embedded</a>
 
 ### 1. IVI Introduction
-This branch was created to primarily support In-vehicle infotainment (IVI) as per [Automotive Grade Linux](https://www.automotivelinux.org "Automotive Grade Linux org") and perhaps [Covesa](https://www.covesa.global "Covesa Global") initially supporting desktop-linux and web. If you're interest is handhelds primarily android and iOS please switch and review [ped main](https://github.com/bernardpumped/ped "Pumped End Device") branch
+This branch was created to primarily support In-vehicle infotainment (IVI) as per [Meta Flutter](https://github.com/meta-flutter/meta-flutter "Meta Flutter"), [Automotive Grade Linux](https://www.automotivelinux.org "Automotive Grade Linux org") and perhaps others initially supporting desktop-linux and web. If you're interest is handhelds primarily android and iOS please switch and review [ped main](https://github.com/bernardpumped/ped "Pumped End Device") branch
 
 ### 2. Hosting on web server
 * The generated html/javascript files can also be hosted within a web-server e.g. ngnix. For brevity this Readme will not detail nginx server install.
