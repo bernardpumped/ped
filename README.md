@@ -5,7 +5,7 @@
 |<a href="#1-ivi-introduction">1. IVI Introduction</a>
 |<a href="#2-investing">2. Investing</a>
 |<a href="#3-license">3. License</a>
-|<a href="#4-hosting-on-web-server">4. Hosting on web server</a>
+|<a href="#4-running-on-local-web">4. Running on Local Web</a>
 |<a href="#5-running-on-linux-desktop">5. Running on Linux Desktop</a>
 |<a href="#6-running-on-meta-flutter">6. Running on Meta Flutter</a>
 |<a href="#7-running-on-toyota-ivi-homescreen">7. Running on Toyota IVI Homescreen</a>
@@ -21,9 +21,18 @@ If you think perhaps what we’re doing may be of interest to you or your compan
 ## 3. License
 Pumped End Device code base is shared under GNU Public License V3 [![GPLv3 License](https://img.shields.io/badge/License-GPL%20v3-yellow.svg)](https://opensource.org/licenses/). A copy of the license text is also present in the [COPYING](/COPYING) file. Please read through it thoroughly before using code in any shape/form.
 
-### 4. Hosting on web server
-* The generated html/javascript files can also be hosted within a web-server e.g. ngnix. For brevity this Readme will not detail nginx server install.
-* `$ flutter build web` command trans-piles Flutter/dart to html/javascript into the build/web directory. Copy the contents to a separate directory eg ~/ped-web.
+### 4. Running on Local Web
+The command `flutter create .` executed as part of [Code Setup](#35-ped-code-setup) also generates relevant files to enable PED run as web application in either of the following two ways:
+### 4.1 Running via Android Studio
+* Ensure Location Services under System Preferences > Security & Privacy is enabled on your Mac
+* Select the `Chrome (Web)` as the run target and Click the Run button (green triangle). <img src="documentation/assets/Screenshot-23.png" width="500" />
+* Chrome browser comes up and on start it asks for the location access. 
+* Note - Chrome, unlike the Emulator/Simulator, currently does not provide any mechanism to override location. Hence, until such time Google resolve, we've temporarily hard-coded Sydney location when it runs within a browser, and note it is still necessary to permit location service access for PED to function.
+* <table><tr><td><img src="documentation/assets/Screenshot-24.png" width="250" /></td><td><img src="documentation/assets/Screenshot-25.png" width="250" /></td><td><img src="documentation/assets/Screenshot-26.png" width="250" /></td></tr></table>
+
+### 4.2 Hosting on a web server
+* The generated html/javascript files can also be hosted within a web-server eg ngnix. For brevity this Readme will not detail nginx server install.
+* `$ flutter build web` command transpiles Flutter/dart to html/javascript into the build/web directory. Copy the contents to a separate directory eg ~/ped-web.
 * Adding a new document root to ngnix is done by modifying the ngnix.conf file, the location varies depending upon OS type and installation method. Example - on Mac if ngnix installed using Homebrew, then config file might be located in`/opt/homebrew/etc/nginx/nginx.conf`. On Linux, if installed using yum config might be located in `/etc/nginx/nginx.conf`
 * Modify the ngnix.conf file, add the ~/ped-web as additional unique location example
 ```
@@ -46,27 +55,7 @@ $ sudo nginx
 * Assuming, host is localhost and ngnix is running on 8080, visit http://localhost:8080/ped/index.html. PED Application works.
 * Important considerations
   - On Linux, if there are permissions denied issues accessing above url, then check `/var/log/nginx/error.log`for errors. If there are errors related to permissions or SELinux related issues, then check corresponding chmod commands have been run.
-  - If the server is run on local machine at an HTTP endpoint, then there are no issues while accessing the location, to non-HTTPS URLs. However, if the server is not a local machine, then for security reasons, browsers do not allow access to location. To circumvent, purchase an SSL certificate OR create a self-signed certificate, and configure ngnix to use it. Firefox allows HTTPs URLs using self-signed certificates to access location, whilst Chrome/Edge and Safari do not.  
-    ```bash
-     $ cd /usr/local/share/homescreen
-     $ sudo rm -rf bundle
-     $ sudo ln -sf ~/development/ped/build/ bundle
-    ```
-  - Running on Desktop
-    * Copy a current icudtl.dat to /usr/local/share/flutter. One can be found in local Flutter installation
-      ```bash
-       $ sudo mkdir -p /usr/local/share/flutter
-       $ sudo cp ~/snap/flutter/common/flutter/bin/cache/artifacts/engine/linux-x64/icudtl.dat /usr/local/share/flutter/
-      ```
-    * Building Toyota IVI Homescreen generated libflutter_engine.so. Copy it to /usr/local/lib. You can also use LD_LIBRARY_PATH to point downloaded engine for build
-    ```bash
-      $ sudo cp ~/development/ivi-homescreen/build/libflutter_engine.so /usr/local/lib
-    ```
-    * Running
-    ```bash
-     $ cd ~/development/ivi-homescreen/build
-     $ export LD_LIBRARY_PATH=`pwd`:$LD_LIBRARY_PATH
-     $ homescreen
+  - If the server is run on local machine at an HTTP endpoint, then there are no issues while accessing the location, to non-HTTPS urls. However, if the server is not a local machine, then for security reasons, browsers do not allow access to location. To circumvent, purchase an SSL certificate OR create a self signed certificate, and configure ngnix to use it. Firefox allows HTTPs URLs using self signed certificates to access location, whilst Chrome/Edge and Safari do not.  
 
 ### 5. Running on Linux Desktop
 The Linux distro adopted Ubuntu-20.04.x, which can be standalone or virtualized using Parallels / VirtualBox etc, and in our case using Macs we virtualized using Parallels.
