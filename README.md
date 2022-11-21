@@ -29,14 +29,14 @@ Retailers, beat your competition! If you can't compete on fuel price alone, prom
 
 **Merchant -** B2B SaaS, fully integrated retailer driven reactive web app to maintain station details, brand, fuel prices, products, offers and services directly to their target consumer audience. Pumped Merchant will also be open sourced with phase-1 65% complete and due for Merchant client demos 2022 Q3.
 
-**End Device (PED) -**  Flutter apps, representing the user end device of the above projects, fetches fuel station data from the pumped backend based upon the user's current location (true or mocked). Data currently includes fuel prices, contact details, features/facilities, ratings, reviews and photos. And, with the integration of Pumped Merchant Phase-2 in-store products and garage service products and promotions. For the purposes of this project and repo the backend is hosted on our integration test server. You may also be wondering if we cover EV's. The answer is yes, but only tentatively - we’re very interested in EV's and happy to discuss options with you.
-Main branch android and iphone scheduled for Google Play and App store release 2023 Q2.
-AGL branch Web and linux scheduled for IVI Automotive demo release 2023 Q1.
+**End Device (PED) -**  Flutter apps, representing the user end device of the above projects, fetches fuel station data from the pumped backend based upon the user's current location (true or mocked). Data currently includes fuel prices, contact details, features/facilities, ratings, reviews and photos. And, with the integration of Pumped Merchant Phase-2 in-store products and garage service promotions. For the purposes of this project and repo the backend is hosted on our integration test server. You may also be wondering if we cover EV's. The answer is yes, but only tentatively - we’re very interested in EV's and happy to discuss options with you.
+#### Main branch - is portrait and android, iphone specific scheduled for Google Play and App store production release 2023 Q2.
+#### AGL branch - is landscape and web, linux specific scheduled for IVI Automotive demo release 2023 Q2.
 
 ### Audience
-Within the following steps you’ll see we’ve gone into considerable detail on the what and how to set up, deploy and run PED upon multiple platforms in an attempt to reach as many people as possible who may be interested in PED but not necessarily app developers. We are specifically interested in the embedded space as it is our long term goal to connect PED within vehicles as part of InVehicle Infotainment (IVI), thus realigning vehicle manufacturers and retail industry domains.
+Within the following steps you’ll see we’ve gone into considerable detail on the what and how to set up, deploy and run PED upon multiple platforms in an attempt to reach as wide an audience as possible who may be interested in PED but not necessarily app developers. We are specifically interested in the embedded space as it is our long term goal to connect PED within vehicles as part of InVehicle Infotainment (IVI), thus realigning vehicle manufacturers and retail industry domains.
 
-Of course, this is hugely ambitious and impossibly challenging for a burgeoning start-up, and we’re initially focused on merchant integration and global scalability. There are many other components that need to be built with a focus on providing reciprocity and partnership between multiple parties including, but not limited to OEM’s, retail/logistic and IT Cloud/devs/engineers. We trust you find PED useful so deploy & test to your platform of choice and please let us know should you have any questions.
+Of course, this is hugely ambitious and incredibly challenging for anyone let alone a burgeoning start-up, and we’re initially focused on merchant integration, global scalability and IVI. There are many other components that need to be built with a focus on providing reciprocity and partnership between multiple parties including, but not limited to OEM’s, retail/logistic and IT Cloud/devs/engineers. We trust you find PED useful so deploy & test to your platform of choice and please let us know should you have any questions.
 
 ### 2. Investing
 If you think perhaps what we’re doing may be of interest to you or your company, we are seeking investment/partnership so please feel free to reach out bernard@pumpedfuel.com
@@ -55,7 +55,7 @@ Download and install Flutter following the steps narrated on [Flutter Website](h
 ```bash
 $ mkdir ~/development
 $ cd ~/development
-$ unzip ~/Downloads/flutter_macos_2.5.3-stable.zip
+$ unzip ~/Downloads/flutter_macos_3.x.y-stable.zip
 ```
 * Add Flutter to the PATH variable
 ```bash
@@ -117,7 +117,7 @@ $ flutter create --org FLUTTER_APP .
 ```
 * Above command prepares workspace for building of iOS, Android and Web releases. It also pulls the relevant dependencies as mentioned in pubspec.yaml, with successful completion resulting in correct setup of Android Studio workspace. <img src="documentation/assets/Screenshot-14.png" width="800" />
 #### 4.5.1 Android Build
-As stated above ped mobile is now wired to firebase and social logins for android and iOS (in progress) therefore if you wish to build this branch add your account details to the follow
+As stated above ped main branch portrait mode for handhelds android/iOS (in progress) is wired to firebase and social logins therefore if you wish to build main branch for android you must add your account details to the following for it to successfully build
 
 ##### 4.5.1.1 Meta Social Login
 ```bash
@@ -374,7 +374,10 @@ The Linux distro we adopted is Ubuntu-20.04.x, which can be standalone or virtua
      ```bash
      $ flutter run -d linux
      ```
-   <table><tr><td><img src="documentation/assets/Screenshot-27.png" width="250" /></td><td><img src="documentation/assets/Screenshot-28.png" width="250" /></td></tr></table>
+   <table><tr><td><img src="documentation/assets/Screenshot-27.png" width="250" /></td>
+              <td><img src="documentation/assets/Screenshot-29.png" width="650" /></td>
+              <td><img src="documentation/assets/Screenshot-30.png" width="650" /></td>
+    </tr></table>
    - Note:
      - The Location library (geolocator) used in PED does not yet have Linux implementation. Hence, for Linux platform, the lat-long coordinates are hard coded.
   
@@ -384,7 +387,7 @@ The Linux distro we adopted is Ubuntu-20.04.x, which can be standalone or virtua
 [Joel Winarske](https://github.com/jwinarske "@jwinarske") created [meta-flutter](https://github.com/meta-flutter/meta-flutter "Google Flutter for Yocto") enabling the running of flutter apps on non Google supported target platforms, without of which it would be impossible for us to port PED to AGL. He also wrote [Flutter Workspace Automation](https://github.com/meta-flutter/meta-flutter/blob/kirkstone/tools/README.md "automation tool") reducing the learning curve and step necessary to test your app in a yocto environment thus easing the transition for non-systems engineers.
 
 ### 11. Running on Toyota IVI Homescreen
-* TODO In the light of above step 4 this task now pending Meta Flutter refactoring and Integration
+* TODO In the light of above step 10 this task now pending Meta Flutter refactoring - to be continued
 
 * This involves building and installing Toyota IVI Homescreen and then building and installing PED. Here we will be running it on desktop. Caveat when building using Mac 
   This process only works on x86, in conjunction with others, we're investigating what and how to get this working on apple silicon the M1      
@@ -455,8 +458,9 @@ The Linux distro we adopted is Ubuntu-20.04.x, which can be standalone or virtua
 * Yet to be defined [Google Flutter Embedded](https://flutter.dev/multi-platform/embedded)
 
 ## 14. PED Testability
-* TODO PED Testability pending refactoring
-Being able to test is the key criteria to build a stable application. PED supports different testing strategies - 
+* TODO PED Testability pending refactoring - to be continued
+
+* Being able to test is the key criteria to build a stable application. PED supports different testing strategies - 
  * **Unit tests** -  Writing plain vanilla flutter test require adding dependency on [flutter_test](https://api.flutter.dev/flutter/flutter_test/flutter_test-library.html) Core Flutter SDK Library under dev_dependencies section in pubspec.yaml. Executing a test file requires executing the *flutter test* command. Example command referring PED test 
    ```bash
    $ flutter test test/data/local/location/geo_location_wrapper_test.dart
