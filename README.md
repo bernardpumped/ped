@@ -3,18 +3,25 @@
 | Title
 |:-------------
 |<a href="#1-ivi-introduction">1. IVI Introduction</a>
-|<a href="#2-license">2. License</a>
-|<a href="#3-hosting-on-web-server">3. Hosting on web server</a>
-|<a href="#4-running-on-linux-desktop">4. Running on Linux Desktop</a>
-|<a href="#5-running-on-meta-flutter">5. Running on Meta Flutter</a>
-|<a href="#6-running-on-toyota-ivi-homescreen">6. Running on Toyota IVI Homescreen</a>
-|<a href="#7-deploying-on-agl">7. Deploying on AGL</a>
-|<a href="#8-deploying-on-embedded">8. Deploying on Embedded</a>
+|<a href="#2-investing">2. Investing</a>
+|<a href="#3-license">3. License</a>
+|<a href="#4-hosting-on-web-server">4. Hosting on web server</a>
+|<a href="#5-running-on-linux-desktop">5. Running on Linux Desktop</a>
+|<a href="#6-running-on-meta-flutter">6. Running on Meta Flutter</a>
+|<a href="#7-running-on-toyota-ivi-homescreen">7. Running on Toyota IVI Homescreen</a>
+|<a href="#8-deploying-on-agl">8. Deploying on AGL</a>
+|<a href="#9-deploying-on-embedded">9. Deploying on Embedded</a>
 
 ### 1. IVI Introduction
 This branch was created to primarily support In-vehicle infotainment (IVI) as per [Meta Flutter](https://github.com/meta-flutter/meta-flutter "Meta Flutter"), [Automotive Grade Linux](https://www.automotivelinux.org "Automotive Grade Linux org") and perhaps others initially supporting desktop-linux and web. If you're interest is handhelds primarily android and iOS please switch and review [ped main](https://github.com/bernardpumped/ped "Pumped End Device") branch
 
-### 3. Hosting on web server
+### 2. Investing
+If you think perhaps what we’re doing may be of interest to you or your company, we are seeking investment/partnership so please feel free to reach out.
+
+## 3. License
+Pumped End Device code base is shared under GNU Public License V3 [![GPLv3 License](https://img.shields.io/badge/License-GPL%20v3-yellow.svg)](https://opensource.org/licenses/). A copy of the license text is also present in the [COPYING](/COPYING) file. Please read through it thoroughly before using code in any shape/form.
+
+### 4. Hosting on web server
 * The generated html/javascript files can also be hosted within a web-server e.g. ngnix. For brevity this Readme will not detail nginx server install.
 * `$ flutter build web` command trans-piles Flutter/dart to html/javascript into the build/web directory. Copy the contents to a separate directory eg ~/ped-web.
 * Adding a new document root to ngnix is done by modifying the ngnix.conf file, the location varies depending upon OS type and installation method. Example - on Mac if ngnix installed using Homebrew, then config file might be located in`/opt/homebrew/etc/nginx/nginx.conf`. On Linux, if installed using yum config might be located in `/etc/nginx/nginx.conf`
@@ -61,7 +68,7 @@ $ sudo nginx
      $ export LD_LIBRARY_PATH=`pwd`:$LD_LIBRARY_PATH
      $ homescreen
 
-### 4. Running on Linux Desktop
+### 5. Running on Linux Desktop
 The Linux distro adopted Ubuntu-20.04.x, which can be standalone or virtualized using Parallels / VirtualBox etc, and in our case using Macs we virtualized using Parallels.
 * Install Flutter on linux following the process detailed in [installation link]( https://flutter.dev/docs/get-started/install/linux)
 * Flutter Installation
@@ -108,12 +115,12 @@ The Linux distro adopted Ubuntu-20.04.x, which can be standalone or virtualized 
    - Note:
      - The Location library (geolocator) used in PED does not yet have Linux implementation. Hence, for Linux platform, the lat-lng coordinates are hard coded.
   
-### 5. Running on Meta Flutter
+### 6. Running on Meta Flutter
 * In-Development
 
 [Joel Winarske](https://github.com/jwinarske "@jwinarske") created [meta-flutter](https://github.com/meta-flutter/meta-flutter "Google Flutter for Yocto") enabling the running of flutter apps on other (non Google supported) target platforms, without of which it would be impossible for us to port PED to AGL. Then without provocation he went a step further and wrote [Flutter Workspace Automation](https://github.com/meta-flutter/meta-flutter/blob/kirkstone/tools/README.md "automation tool") therefore hugely reducing the steps necessary and learning curve involved for dev-to-test pipeline thus easing the transition for non-systems engineers like myself.
 
-### 6. Running on Toyota IVI Homescreen
+### 7. Running on Toyota IVI Homescreen
 * TODO In the light of above step 4 this now pending Meta Flutter refactoring and Integration
 
 * This involves building and installing Toyota IVI Homescreen and then building and installing PED. Here we will be running it on desktop. Caveat when building using Mac 
@@ -150,10 +157,9 @@ The Linux distro adopted Ubuntu-20.04.x, which can be standalone or virtualized 
      $ flutter config --enable-linux-desktop
     ```
     
-### 7. Deploying on AGL
+### 8. Deploying on AGL
 * In progress - working with but mainly learning from the talented AGL engineers
 
-### 8. Deploying on Embedded
+### 9. Deploying on Embedded
 * Yet to be defined [Google Flutter Embedded](https://flutter.dev/multi-platform/embedded)
-  $ flutter build [ bundle linux web ]
 
