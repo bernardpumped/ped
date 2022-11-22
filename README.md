@@ -378,17 +378,21 @@ The Linux distro we adopted is Ubuntu-20.04.x, which can be standalone or virtua
      $ cd  ~/development/ped
      $ flutter create .
      ```
- - Running application on Linux Device
+ - Running ped on Linux (desktop) light theme
      ```bash
      $ flutter run -d linux
      ```   
-   </table><tr><td><img src="documentation/assets/Screenshot-27.png" width="250" /></td>
-               <td><img src="documentation/assets/Screenshot-29.png" width="650" /></td>
-    </tr></table>
+   </table><tr><td><img src="documentation/assets/Screenshot-29.png" width="750" /></td></tr></table>
+ 
+ - Running ped on Chrome (web) dark theme
+     ```bash
+     $ flutter run -d web
+     ```   
+   </table><tr><td><img src="documentation/assets/Screenshot-31.png" width="750" /></td></tr></table>
     
    - Note:
      - The Location library (geolocator) used in PED does not yet have Linux implementation. Hence, for Linux platform, we initially mock the location to Sydney CBD on startup then within settings\ Dev option\ have built location mocking features which currently covers Australia, which can of course be extended for other countries 
-   <table><tr><td><img src="documentation/assets/Screenshot-30.png" width="800" /></td></tr></table>
+   <table><tr><td><img src="documentation/assets/Screenshot-30.png" width="750" /></td></tr></table>
   
 ### 10. Running on Meta Flutter
 * In-Development
