@@ -16,11 +16,7 @@
  *     along with Pumped End Device.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'dart:io';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:pumped_end_device/data/local/location/geo_location_data.dart';
 import 'package:pumped_end_device/data/local/location/get_location_result.dart';
 import 'package:pumped_end_device/data/local/location/location_access_result_code.dart';
@@ -29,6 +25,7 @@ import 'package:pumped_end_device/main.dart';
 import 'package:pumped_end_device/user-interface/ped_base_page_view.dart';
 import 'package:pumped_end_device/user-interface/utils/under_maintenance_service.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
+import 'package:pumped_end_device/util/app_theme.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 import 'package:pumped_end_device/util/system_utils.dart';
 
@@ -70,8 +67,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  const Image(
-                      image: AssetImage('assets/images/ic_splash.png'), width: 153, height: 133, fit: BoxFit.fill),
+                  const Image(image: AssetImage(AppTheme.pumpedImage), width: 153, height: 133, fit: BoxFit.fill),
                   const SizedBox(height: 30),
                   Center(
                       child: Text('Your friendly \n neighbourhood fuel finder',
@@ -136,9 +132,9 @@ class _SplashScreenState extends State<SplashScreen> {
       if (isUnderMaintenance) {
         final String underMaintenanceMsg = underMaintenanceR.underMaintenanceMessage;
         ScaffoldMessenger.of(context).showSnackBar(
-            WidgetUtils.buildSnackBar2(context, underMaintenanceMsg, 12 * 60 * 60 * 30, 'Exit', SystemUtils.exitApp));
+            WidgetUtils.buildSnackBar(context, underMaintenanceMsg, 12 * 60 * 60 * 30, 'Exit', SystemUtils.exitApp));
       } else {
-        LogUtil.debug(_tag, 'Backend is not under maintenance.');
+        LogUtil.debug(_tag, 'Pumped Backend not scheduled for maintenance, ped is up and available for business');
         _getLocation();
       }
     }).onError((error, stackTrace) {
@@ -155,19 +151,20 @@ class _SplashScreenState extends State<SplashScreen> {
       switch (code) {
         case LocationInitResultCode.locationServiceDisabled:
           ScaffoldMessenger.of(context).showSnackBar(
-              WidgetUtils.buildSnackBar2(context, 'Location Service is disabled', 2, 'Exit', SystemUtils.exitApp));
+              WidgetUtils.buildSnackBar(context, 'Location Service is disabled', 2, 'Exit', SystemUtils.exitApp));
           break;
         case LocationInitResultCode.permissionDenied:
           ScaffoldMessenger.of(context).showSnackBar(
-              WidgetUtils.buildSnackBar2(context, 'Location Service is disabled', 2, 'Exit', SystemUtils.exitApp));
+              WidgetUtils.buildSnackBar(context, 'Location Service is disabled', 2, 'Exit', SystemUtils.exitApp));
           break;
         case LocationInitResultCode.notFound:
-          WidgetUtils.buildSnackBar2(context, 'Location Not Found', 2, 'Exit', SystemUtils.exitApp);
+          WidgetUtils.buildSnackBar(context, 'Location Not Found', 2, 'Exit', SystemUtils.exitApp);
           break;
         case LocationInitResultCode.failure:
-          WidgetUtils.buildSnackBar2(context, 'Location Failure', 2, 'Exit', SystemUtils.exitApp);
+          WidgetUtils.buildSnackBar(context, 'Location Failure', 2, 'Exit', SystemUtils.exitApp);
           break;
         case LocationInitResultCode.success:
+        case LocationInitResultCode.static:
           _takeActionOnLocation(locationResult);
           break;
       }

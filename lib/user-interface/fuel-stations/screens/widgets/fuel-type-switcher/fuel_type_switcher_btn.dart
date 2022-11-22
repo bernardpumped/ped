@@ -33,7 +33,7 @@ class FuelTypeSwitcherButton extends StatelessWidget {
           // Intentionally using Theme.of(context).textTheme.headline1!.color! for fill color, because using primaryColor
           // for border does not work well when theme is dark.
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(24), color: Theme.of(context).textTheme.headline2!.color),
+                borderRadius: BorderRadius.circular(24), color: Theme.of(context).highlightColor),
             child: Padding(
                 padding: const EdgeInsets.only(left: 14.0, right: 14, top: 12, bottom: 12),
                 child: Row(children: [

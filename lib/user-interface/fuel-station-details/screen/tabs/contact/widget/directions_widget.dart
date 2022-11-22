@@ -27,17 +27,21 @@ import 'package:pumped_end_device/data/local/location/location_data_source.dart'
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 import 'feature_support.dart';
 
-class DirectionsWidget extends StatelessWidget {
+class DirectionsWidget extends StatefulWidget {
   static const _tag = 'DirectionsWidget';
   final double _dLat;
   final double _dLng;
   final LocationDataSource _locationDataSource;
   const DirectionsWidget(this._dLat, this._dLng, this._locationDataSource, {Key? key}) : super(key: key);
 
+  @override
+  State<DirectionsWidget> createState() => _DirectionsWidgetState();
+}
+
+class _DirectionsWidgetState extends State<DirectionsWidget> {
   @override
   Widget build(final BuildContext context) {
     return WidgetUtils.getRoundedButton(
@@ -47,41 +51,44 @@ class DirectionsWidget extends StatelessWidget {
         onTapFunction: () async {
           if (kIsWeb) {
             if (!FeatureSupport.webPlatform.contains(FeatureSupport.directionsFeature)) {
-              LogUtil.debug(_tag, 'Web does not yet support ${FeatureSupport.directionsFeature}');
+              LogUtil.debug(DirectionsWidget._tag, 'Web does not yet support ${FeatureSupport.directionsFeature}');
               return;
             }
           }
           if (!FeatureSupport.directions.contains(Platform.operatingSystem)) {
-            LogUtil.debug(_tag, '${Platform.operatingSystem} does not yet support ${FeatureSupport.directionsFeature}');
+            LogUtil.debug(DirectionsWidget._tag,
+                '${Platform.operatingSystem} Yocto/AGL does not yet support ${FeatureSupport.directionsFeature}');
             return;
           }
-          final GetLocationResult locationResult = await _locationDataSource.getLocationData();
+          final GetLocationResult locationResult = await widget._locationDataSource.getLocationData();
           final LocationInitResultCode resultCode = locationResult.locationInitResultCode;
-
+          if (!mounted) return;
           switch (resultCode) {
             case LocationInitResultCode.locationServiceDisabled:
-              WidgetUtils.buildSnackBar2(context, 'Location Service is disabled', 2, '', () {});
+              WidgetUtils.buildSnackBar(context, 'Location Service is disabled', 2, '', () {});
               break;
             case LocationInitResultCode.permissionDenied:
-              WidgetUtils.buildSnackBar2(context, 'Location Permission denied', 2, '', () {});
+              WidgetUtils.buildSnackBar(context, 'Location Permission denied', 2, '', () {});
               break;
             case LocationInitResultCode.notFound:
-              WidgetUtils.buildSnackBar2(context, 'Location Not Found', 2, '', () {});
+              WidgetUtils.buildSnackBar(context, 'Location Not Found', 2, '', () {});
               break;
             case LocationInitResultCode.failure:
-              WidgetUtils.buildSnackBar2(context, 'Location Failure', 2, '', () {});
+              WidgetUtils.buildSnackBar(context, 'Location Failure', 2, '', () {});
               break;
             case LocationInitResultCode.success:
+            case LocationInitResultCode.static:
               {
                 final GeoLocationData? geoLocationData = await locationResult.geoLocationData;
                 if (geoLocationData != null) {
                   final sLat = geoLocationData.latitude;
                   final sLng = geoLocationData.longitude;
-                  _launchMaps(sLat, sLng, _dLat, _dLng, () {
-                    WidgetUtils.showToastMessage(context, 'Cannot call phone');
+                  _launchMaps(sLat, sLng, widget._dLat, widget._dLng, () {
+                    WidgetUtils.showToastMessage(context, 'Cannot call phone', isErrorToast: true);
                   });
                 } else {
-                  WidgetUtils.buildSnackBar2(context, 'Location Failure', 2, '', () {});
+                  if (!mounted) return;
+                  WidgetUtils.buildSnackBar(context, 'Location Failure', 2, '', () {});
                 }
               }
               break;
@@ -98,18 +105,18 @@ class DirectionsWidget extends StatelessWidget {
     final Future<bool> googleMapsLaunchedFuture = _launchGoogleMaps(slat, slng, dlat, dlng);
     googleMapsLaunchedFuture.then((googleMapsLaunched) {
       if (!googleMapsLaunched) {
-        LogUtil.debug(_tag, 'Could not launch Google Maps');
+        LogUtil.debug(DirectionsWidget._tag, 'Could not launch Google Maps');
         final Future<bool> wazeMapsLaunchedFuture = _launchWazeMaps(slat, slng, dlat, dlng);
         wazeMapsLaunchedFuture.then((wazeMapsLaunched) {
           if (!wazeMapsLaunched) {
             function.call();
-            LogUtil.debug(_tag, 'No suitable Maps app launched on device');
+            LogUtil.debug(DirectionsWidget._tag, 'No suitable Maps app launched on device');
           } else {
-            LogUtil.debug(_tag, 'Waze launched successful');
+            LogUtil.debug(DirectionsWidget._tag, 'Waze launched successful');
           }
         });
       } else {
-        LogUtil.debug(_tag, 'Google Maps launched successfully');
+        LogUtil.debug(DirectionsWidget._tag, 'Google Maps launched successfully');
       }
     }, onError: (e) => function.call());
   }

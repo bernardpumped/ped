@@ -68,12 +68,12 @@ class _FavoriteFuelStationBookmarkState extends State<FavoriteFuelStationBookmar
           WidgetUtils.showToastMessage(context, 'Removed from Favorite');
           setState(() {});
         }, onError: (error, s) {
-          WidgetUtils.showToastMessage(context, 'Error removing from Favorite');
+          WidgetUtils.showToastMessage(context, 'Error removing from Favorite', isErrorToast: true);
           LogUtil.error(_tag, 'Error removing from Favorite $error');
         });
       }
     }, onError: (error, s) {
-      WidgetUtils.showToastMessage(context, 'Error removing from Favorite');
+      WidgetUtils.showToastMessage(context, 'Error removing from Favorite', isErrorToast: true);
       LogUtil.error(_tag, 'Error removing from Favorite $error');
     });
   }
@@ -88,14 +88,14 @@ class _FavoriteFuelStationBookmarkState extends State<FavoriteFuelStationBookmar
           WidgetUtils.showToastMessage(context, 'Bookmarked as Favorite');
           setState(() {});
         }, onError: (error, s) {
-          WidgetUtils.showToastMessage(context, 'Error marking as Favorite');
+          WidgetUtils.showToastMessage(context, 'Error marking as Favorite', isErrorToast: true);
           LogUtil.error(_tag, 'Error marking as Favorite $error');
         });
       } else {
         WidgetUtils.showToastMessage(context, 'Already Bookmarked as Favorite');
       }
     }, onError: (error, s) {
-      WidgetUtils.showToastMessage(context, 'Error marking as Favorite');
+      WidgetUtils.showToastMessage(context, 'Error marking as Favorite', isErrorToast: true);
       LogUtil.error(_tag, 'Error marking as Favorite $error');
     });
   }

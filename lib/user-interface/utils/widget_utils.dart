@@ -20,37 +20,44 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class WidgetUtils {
-  static void showToastMessageWithGravity(final BuildContext context, final String message, final ToastGravity gravity) {
+  static void showToastMessageWithGravity(final BuildContext context, final String message, final ToastGravity gravity,
+      {final bool isErrorToast = false}) {
     final FToast fToast = FToast();
     fToast.init(context);
+    final textColor = isErrorToast ? Theme.of(context).errorColor : Theme.of(context).colorScheme.secondary;
     final Widget toast = Container(
         padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
         decoration: BoxDecoration(borderRadius: BorderRadius.circular(25.0), color: Theme.of(context).primaryColor),
-        child: Text(message, style: const TextStyle(color: Colors.white), textAlign: TextAlign.center));
+        child: Text(message,
+            style: Theme.of(context).textTheme.subtitle2!.copyWith(color: textColor), textAlign: TextAlign.center));
     fToast.removeQueuedCustomToasts();
     fToast.showToast(child: toast, gravity: gravity, toastDuration: const Duration(seconds: 3));
   }
 
-  static void showToastMessage(final BuildContext context, final String message) {
+  static void showToastMessage(final BuildContext context, final String message, {final bool isErrorToast = false}) {
     final FToast fToast = FToast();
     fToast.init(context);
+    final textColor = isErrorToast ? Theme.of(context).errorColor : Theme.of(context).colorScheme.secondary;
     final Widget toast = Container(
         padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
         decoration: BoxDecoration(borderRadius: BorderRadius.circular(25.0), color: Theme.of(context).primaryColor),
-        child: Text(message, style: const TextStyle(color: Colors.white), textAlign: TextAlign.center));
+        child: Text(message,
+            style: Theme.of(context).textTheme.subtitle2!.copyWith(color: textColor), textAlign: TextAlign.center));
     fToast.removeQueuedCustomToasts();
     fToast.showToast(child: toast, gravity: ToastGravity.CENTER, toastDuration: const Duration(seconds: 3));
   }
 
-  static SnackBar buildSnackBar2(final BuildContext context, final String text, final int durationToFadeIn,
-      final String actionLabel, final Function() onPressedFunction) {
+  static SnackBar buildSnackBar(final BuildContext context, final String text, final int durationToFadeIn,
+      final String actionLabel, final Function() onPressedFunction,
+      {final bool isError = false}) {
+    final textColor = isError ? Theme.of(context).errorColor : Theme.of(context).colorScheme.secondary;
+    final actionColor = isError ? Theme.of(context).errorColor : Theme.of(context).colorScheme.primary;
     var snackBar = SnackBar(
         backgroundColor: Theme.of(context).dialogBackgroundColor,
-        content: Text(text, style: TextStyle(color: Theme.of(context).primaryColor, fontWeight: FontWeight.w500)),
+        content: Text(text, style: Theme.of(context).textTheme.subtitle2!.copyWith(color: textColor)),
         duration: Duration(seconds: durationToFadeIn),
         behavior: SnackBarBehavior.floating,
-        action: SnackBarAction(
-            label: actionLabel, onPressed: onPressedFunction, textColor: Theme.of(context).primaryColor));
+        action: SnackBarAction(label: actionLabel, onPressed: onPressedFunction, textColor: actionColor));
     return snackBar;
   }
 
@@ -61,20 +68,21 @@ class WidgetUtils {
       required String buttonText,
       required Function() onTapFunction,
       final IconData? iconData}) {
+    final Color highLightColor = Theme.of(context).highlightColor;
     return GestureDetector(
         onTap: onTapFunction,
         child: Container(
-          // Intentionally using Theme.of(context).textTheme.headline1!.color! for border, because using primaryColor
-          // for border does not work well when theme is dark.
+            // Intentionally using Theme.of(context).textTheme.headline1!.color! for border, because using primaryColor
+            // for border does not work well when theme is dark.
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(24),
-                border: Border.all(color: Theme.of(context).textTheme.headline1!.color!, width: 1)),
+                border: Border.all(color: highLightColor, width: 1)),
             child: Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Row(children: [
-                  Text(buttonText, style: Theme.of(context).textTheme.button),
+                  Text(buttonText, style: Theme.of(context).textTheme.button!.copyWith(color: highLightColor)),
                   const SizedBox(width: 8),
-                  iconData != null ? Icon(iconData, size: 24) : const SizedBox(width: 0)
+                  iconData != null ? Icon(iconData, size: 24, color: highLightColor) : const SizedBox(width: 0)
                 ]))));
   }
 }

@@ -17,13 +17,13 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:pumped_end_device/models/pumped/fuel_quote.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station.dart';
 import 'package:pumped_end_device/models/pumped/fuel_type.dart';
 import 'package:pumped_end_device/models/status.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/screens/widgets/fuel_station_logo_widget.dart';
+import 'package:pumped_end_device/util/app_theme.dart';
 import 'package:pumped_end_device/util/data_utils.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
@@ -129,8 +129,9 @@ class FuelStationListItemWidget extends StatelessWidget {
   Widget _getOpenCloseWidget(final BuildContext context) {
     if (fuelStation.status != null && fuelStation.status != Status.unknown) {
       final String status = fuelStation.status!.statusName!;
-      final Color color =
-          (fuelStation.status == Status.open || fuelStation.status == Status.open24Hrs) ? Colors.green : Colors.red;
+      final Color color = (fuelStation.status == Status.open || fuelStation.status == Status.open24Hrs)
+          ? AppTheme.stationOpenColor
+          : AppTheme.stationCloseColor;
       final childWidget = Text(status, style: Theme.of(context).textTheme.caption!.copyWith(color: color));
       return _getElevatedBoxSingleChild(childWidget, context);
     }

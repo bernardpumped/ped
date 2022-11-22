@@ -55,6 +55,13 @@ class DataUtils {
     return phoneNumber != null && regExp.hasMatch(phoneNumber);
   }
 
+  static bool isNumeric(final String? s) {
+    if (s == null) {
+      return false;
+    }
+    return double.tryParse(s) != null;
+  }
+
   // Assumption is that this method is called after every typed or deleted char
   static String? charDeleted(final String? oldValue, final String? newValue) {
     if (oldValue == null) {
@@ -84,6 +91,6 @@ class DataUtils {
 }
 
 extension StringCasingExtension on String {
-  String toCapitalized() => length > 0 ?'${this[0].toUpperCase()}${substring(1).toLowerCase()}':'';
+  String toCapitalized() => length > 0 ? '${this[0].toUpperCase()}${substring(1).toLowerCase()}' : '';
   String toTitleCase() => replaceAll(RegExp(' +'), ' ').split(' ').map((str) => str.toCapitalized()).join(' ');
 }

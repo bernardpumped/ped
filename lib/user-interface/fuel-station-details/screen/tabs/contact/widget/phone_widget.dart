@@ -23,7 +23,6 @@ import 'package:flutter/material.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/screen/tabs/contact/widget/feature_support.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/util/log_util.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class PhoneWidget extends StatelessWidget {
@@ -39,7 +38,7 @@ class PhoneWidget extends StatelessWidget {
         iconData: Icons.phone_outlined,
         onTapFunction: () async {
           _launchCaller(_phone, () {
-            WidgetUtils.showToastMessage(context, 'Cannot call phone');
+            WidgetUtils.showToastMessage(context, 'Cannot call phone', isErrorToast: true);
           });
         });
   }
@@ -52,7 +51,7 @@ class PhoneWidget extends StatelessWidget {
       }
     }
     if (!FeatureSupport.call.contains(Platform.operatingSystem)) {
-      LogUtil.debug(_tag, '${Platform.operatingSystem} does not yet support ${FeatureSupport.callFeature}');
+      LogUtil.debug(_tag, '${Platform.operatingSystem} Yocto/AGL does not yet support ${FeatureSupport.callFeature}');
       return;
     }
     final String phoneUrl = Uri.encodeFull("tel:$phone");
