@@ -5,7 +5,7 @@
 |<a href="#1-introduction">1. Introduction</a>
 |<a href="#2-investing">2. Investing</a>
 |<a href="#3-license">3. License</a>
-|<a href="#4-development-environment-setup-and-build-on-mac">4. Development Environment Setup and Build on Mac</a>
+|<a href="#4-dev-env-setup-and-build-on-mac">4. Dev Env Setup and Build on Mac</a>
 |<a href="#5-prerequisite-for-running-ped">5. Prerequisite for running PED</a>
 |<a href="#6-running-on-android-emulator">6. Running on Android Emulator</a>
 |<a href="#7-running-on-ios-simulator">7. Running on iOS Simulator</a>
@@ -29,12 +29,16 @@ Retailers, beat your competition! If you can't compete on fuel price alone, prom
 
 **Merchant -** B2B SaaS, fully integrated retailer driven reactive web app to maintain station details, brand, fuel prices, products, offers and services directly to their target consumer audience. Pumped Merchant will also be open sourced with phase-1 65% complete and due for Merchant client demos 2022 Q3.
 
-**End Device (PED) -**  Flutter apps, representing the user end device of the above projects, fetches fuel station data from the pumped backend based upon the user's current location (true or mocked). Data currently includes fuel prices, contact details, features/facilities, ratings, reviews and photos. And, with the integration of Pumped Merchant Phase-2 in-store products and garage service promotions. For the purposes of this project and repo the backend is hosted on our integration test server. You may also be wondering if we cover EV's. The answer is yes, but only tentatively - we’re very interested in EV's and happy to discuss options with you.
-#### Main branch - is portrait and android, iphone specific scheduled for Google Play and App store production release 2023 Q2.
-#### AGL branch - is landscape and web, linux specific scheduled for IVI Automotive demo release 2023 Q2.
+**End Device (PED) -**  Flutter apps, representing the user end device of the above projects, fetches fuel station data from the pumped backend based upon the user's current location (true or mocked). Data currently includes fuel prices, contact details, features/facilities, ratings, reviews and photos. And, with the integration of Merchant B2B Phase-2 in-store products and garage service promotions.
+You may be wondering if we cover EV's. The answer is not yet, we are of course very interested and happy to discuss options with you.
+
+***PED Branches -***
+We have two branches main & agl and yes appreciate flutter is designed as a single code base which should suffice, but in reality mobile phones and automotive usecases are far too many differences to be shared
+* main - portrait mode handhelds for android and iOS scheduled for Google App store production release 2023 Q2.<br>
+* agl - landscape mode InVehicle Infotainment (IVI) web and linux for Automotive demo release scheduled 2023 Q2.
 
 ### Audience
-Within the following steps you’ll see we’ve gone into considerable detail on the what and how to set up, deploy and run PED upon multiple platforms in an attempt to reach as wide an audience as possible who may be interested in PED but not necessarily app developers. We are specifically interested in the embedded space as it is our long term goal to connect PED within vehicles as part of InVehicle Infotainment (IVI), thus realigning vehicle manufacturers and retail industry domains.
+Within the following steps you’ll see we’ve gone into considerable detail on the what and how to set up, deploy and run PED upon multiple platforms in an attempt to reach as wide an audience as possible who may be interested in PED but not necessarily app developers. We are specifically interested in the embedded space as it is our long-term goal to connect PED within vehicles as part of IVI, thus realigning vehicle manufacturers and retail industry domains.
 
 Of course, this is hugely ambitious and incredibly challenging for anyone let alone a burgeoning start-up, and we’re initially focused on merchant integration, global scalability and IVI. There are many other components that need to be built with a focus on providing reciprocity and partnership between multiple parties including, but not limited to OEM’s, retail/logistic and IT Cloud/devs/engineers. We trust you find PED useful so deploy & test to your platform of choice and please let us know should you have any questions.
 
@@ -44,7 +48,7 @@ If you think perhaps what we’re doing may be of interest to you or your compan
 ## 3. License
 Pumped End Device code base is shared under GNU Public License V3 [![GPLv3 License](https://img.shields.io/badge/License-GPL%20v3-yellow.svg)](https://opensource.org/licenses/). A copy of the license text is also present in the [COPYING](/COPYING) file. Please read through it thoroughly before using code in any shape/form.
 
-## 4. Development Environment Setup and Build on Mac
+## 4. Dev Env Setup and Build on Mac
 Before commencing with any of the following it's highly recommended to remain current with regards to patches as Flutter is evolving quickly with no concept of long-term support
 
 ### 4.1. Flutter Installation
@@ -77,7 +81,7 @@ $ which flutter dart
 ```
 
 ### 4.2. Android Studio Setup
-Internally we use Android Studio as our IDE for Pumped End Device (PED) Flutter development, which provides many useful features including tools and plugins for executing code on both iOS and Android simulators in addition to physical devices. Other IDEs such as Visual Studio are also commonly used for flutter development.
+Internally we use Android Studio as our IDE for PED Flutter development, which provides many useful features including tools and plugins for executing code on both iOS and Android simulators in addition to physical devices. Other IDEs such as Visual Studio are also commonly used for flutter development.
 * Visit [Android Studio Website](https://developer.android.com/studio) to download Android Studio. By default, it shows platform specific build to download.
 * Drag and drop the downloaded executable in Applications folder as shown so that it easily comes under spotlight search. <img src="documentation/assets/Screenshot-1.png" width="450" />
 * 1st time launching Android Studio prompts for the installation of multiple dependencies.
@@ -98,16 +102,17 @@ $ sudo xcodebuild -runFirstLaunch
 
 ### 4.4 Other Tools
 * Install Chrome, which will be used in development and testing of web. 
-* Execute command `flutter doctor`- which validates your Mac dev host install and setup to ensure building and running Flutter application.
-* Output of the command on initial run will be <img src="documentation/assets/Screenshot-8.png" width="550" /> . It complains of unaccepted android licenses and missing Apple cocoapods.
-* Accept licenses by executing command `$ flutter doctor --android-licenses`
+* Execute command `flutter doctor` which validates your Mac dev host install and setup to ensure building and running Flutter application.
+* Output of the command on initial run will be <img src="documentation/assets/Screenshot-8.png" width="550" />
+* If it complains of unaccepted android licenses and missing Apple cocoapods accept licenses by executing command `$ flutter doctor --android-licenses`
 * If deploying to iOS, install missing cocoapods by executing command `$ sudo gem install cocoapods`
 * you may wish to also install Visual Studio Code, as it is another great IDE for Flutter development.
 * Output of the command when everything is setup properly <img src="documentation/assets/Screenshot-6.png" width="400" />
 
 ### 4.5 PED Code Setup
-* Clone PED GitHub repository on local box. https://github.com/bernardpumped/ped
-* Open Android Studio. Click Open. Browse to the downloaded PED repository (~/development/code/ped). Click Open.
+* Clone PED GitHub repository on local box main https://github.com/bernardpumped/ped for mobiles and agl https://github.com/bernardpumped/ped/tree/agl for IVI
+* Open Android Studio. Click Open. Browse to the downloaded PED repository (~/development/code/ped).
+* Click Open.
 * Open command prompt and execute following commands.
 ```bash
 $ cd ~/development/code/ped
@@ -116,8 +121,9 @@ or
 $ flutter create --org FLUTTER_APP .
 ```
 * Above command prepares workspace for building of iOS, Android and Web releases. It also pulls the relevant dependencies as mentioned in pubspec.yaml, with successful completion resulting in correct setup of Android Studio workspace. <img src="documentation/assets/Screenshot-14.png" width="800" />
+
 #### 4.5.1 Android Build
-As stated above ped main branch portrait mode for handhelds android/iOS (in progress) is wired to firebase and social logins therefore if you wish to build main branch for android you must add your account details to the following for it to successfully build
+As stated above ped main branch portrait mode for handhelds android/iOS (in progress) is wired to firebase and social logins therefore if you wish to build main branch for android you must add your account details to the following for it to successfully build and run
 
 ##### 4.5.1.1 Meta Social Login
 ```bash
@@ -239,6 +245,7 @@ playStore_storeFile=../'YOUR_playStore_storeFile'-play-upload.keystore
 # for you to define
 ```
 * Execute `$ flutter build apk --debug` for Android builds. Successful execution will generate apk in path `build/app/outputs/flutter-apk/app-debug.apk`
+
 #### 4.5.2 iOS Build
 * Building for iOS requires connecting to Apple Developer account by signing in with Apple ID in Xcode and creating an iOS Development Certificate as well as a Provisioning Profile for project.
 * Open the Flutter project's Xcode target with `open ios/Runner.xcworkspace`
@@ -251,8 +258,9 @@ playStore_storeFile=../'YOUR_playStore_storeFile'-play-upload.keystore
 * iOS Developer Account Configuration Yet to-be-defined
 * Execute `$ flutter build ios --debug` for iOS builds. It results into generation of `build/ios/iphoneos/Runner.app` file.
 * Note - In case of M1 Macs build failing with error message `incompatible architecture (have 'arm64', need 'x86_64')` . To fix this execute the command `$ sudo arch -x86_64 gem install ffi`
+
 #### 4.5.3 Web Build
-* Execute `$ flutter build web` for web builds. It results into generation of js and html code in directory `build/web/`
+* Execute `$ flutter build web` for web builds. Successful build generates js, html and CanvasKit (Skia + webassembly) code in directory `build/web/`
 
 ## 5. Prerequisite for running PED
 * Fuel Station details displayed on PED are served from the Pumped backend server. PED code base open sourced is configured to hit the pre-production server to get this data. Though we maintain high standards, there are sometimes situations when the pre-prod backend server is not up and running, due to activities like maintenance etc. In situations, when PED is launching on the device, but fails to show any fuel stations, there are couple of possibilities 
@@ -283,7 +291,7 @@ playStore_storeFile=../'YOUR_playStore_storeFile'-play-upload.keystore
 * Verify Configuration > AVD Name (Pixel 5 API 31) > Click Show advanced setting, modify the internal storage to 4096 MB. Finish. Review other configurations.
 * When done, it presents a list of your Virtual Devices. Click on Action icon (green triangle) to start the virtual device. <img src="documentation/assets/Screenshot-13.png" width="450" />
 * PED requires access location in order to search nearby. Clicking on the three dots (annotated as 1) will present with device settings, where the location can be set (annotated as 2). Click on the `Send` button (annotated as 3) to forward location to the emulator <img src="documentation/assets/Screenshot-12.png" width="700" />
-* As narrated within the [Introduction](#1-introduction) section, PED data is currently available throughout Australia only hence, please provide latitude and longitude of places within Australia, except the state of Victoria. Example (-33.865107, 151.205282) Sydney location. Once location has been set you can check emulator received it by opening google maps within the emulator, it should show Sydney CBD Wynyard Station.
+* As narrated within the [Introduction](#1-introduction) section, PED data is currently available throughout Australia only hence, please provide latitude and longitude of places within Australia, except the state of Victoria. Example (-33.865107, 151.205282) Sydney location. Once location has been set you can check emulator received it by opening google maps within the emulator, it should show Sydney Central Business District (CBD) Wynyard Station.
 * Once the Android Emulator is up and running, Android Studio automatically detects it. Click the Run button (green triangle) to run the application on emulator. <img src="documentation/assets/Screenshot-15.png" width="500" />
 * On first start, application asks for access to location service, allow "While using the app" <table><tr><td><img src="documentation/assets/Screenshot-16.png" width="250" /></td><td><img src="documentation/assets/Screenshot-17.png" width="250" /></td><td><img src="documentation/assets/Screenshot-18.png" width="250" /></td></tr></table>
 
@@ -373,13 +381,14 @@ The Linux distro we adopted is Ubuntu-20.04.x, which can be standalone or virtua
  - Running application on Linux Device
      ```bash
      $ flutter run -d linux
-     ```
-   <table><tr><td><img src="documentation/assets/Screenshot-27.png" width="250" /></td>
-              <td><img src="documentation/assets/Screenshot-29.png" width="650" /></td>
-              <td><img src="documentation/assets/Screenshot-30.png" width="650" /></td>
+     ```   
+   </table><tr><td><img src="documentation/assets/Screenshot-27.png" width="250" /></td>
+               <td><img src="documentation/assets/Screenshot-29.png" width="650" /></td>
     </tr></table>
+    
    - Note:
-     - The Location library (geolocator) used in PED does not yet have Linux implementation. Hence, for Linux platform, the lat-long coordinates are hard coded.
+     - The Location library (geolocator) used in PED does not yet have Linux implementation. Hence, for Linux platform, we initially mock the location to Sydney CBD on startup then within settings\ Dev option\ have built location mocking features which currently covers Australia, which can of course be extended for other countries 
+   <table><tr><td><img src="documentation/assets/Screenshot-30.png" width="800" /></td></tr></table>
   
 ### 10. Running on Meta Flutter
 * In-Development
@@ -487,15 +496,8 @@ This command needs a device to launch an instrumented version of app, so before 
 
 ## 15. FAQ
    
-**Q: how to set my location**
-
- If you currently reside outside of Australia then you need to fake an Australian place for PED to work. PED has fuel station  prices throughout Australia except within the state of VIC .
-Therefore, when using physical device Android or iPhone you can fake a location using one of the many fake GPS apps available on Google Play and App store
-When using virtual device emulator or simulator you can fake your location within those aps
-When using web you can fake your location as per your particular browser settings, and to ensure PED covers as many browsers as possible we fake the location kIsWeb within LocationDataSource to Sydney Fishburners https://fishburners.org/ Pumped Fuel Home.
-As of today flutter library implementation of linux desktop location is not working therefore we again fake the location to Sydney Fishburners, and within places.dart we've setup various other locations within Australia
-
-**Q: No version of NDK matched the requested version nn.n.vvvvvvv. Versions available locally: nn.n.nnnnnnn?**
-
-After a recent flutter upgrade android builds started failing with this NDK mis-match error, the issue appears to be gradle related of which there are various ways to resolve dependant upon your setup
-https://stackoverflow.com/questions/60404457/no-version-of-ndk-matched-the-requested-version. As PED is not (yet) using NDK we simply choose to uninstall it sdkmanager --uninstall 'ndk-bundle'
+**Q1: I live outside of Australia how do i set my location**
+ As of release 0.32 we've introduced location mocking for those who reside outside of Australia, on initial installation ped opens with your location mocked to Sydney Australia CBD - Wynyard Station, and as stated above via app settings\ dev options\ mock locations you now have the abiity to set any location within Australia, including a dozen very popular pre-set locations
+ 
+Q2: Will flutter's pub.dev linx plugins work on AGL
+1P Linux Plugins are only intended for the Linux GTK embedder and therefore will/may not work on other Linux distribution, this is by far the single biggest obstacle implementing ped on AGL, or any other Linux distribution as tracked here https://github.com/flutter/flutter/issues/103660
