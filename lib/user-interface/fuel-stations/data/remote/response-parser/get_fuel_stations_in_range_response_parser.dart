@@ -34,8 +34,9 @@ import 'package:pumped_end_device/util/log_util.dart';
 class GetFuelStationsInRangeResponseParser extends ResponseParser<GetFuelStationsInRangeResponse> {
   static const _tag = 'GetFuelStationsInRangeResponseParser';
   final String? fuelAuthorityId;
+  final bool enrichOffers;
 
-  GetFuelStationsInRangeResponseParser(this.fuelAuthorityId);
+  GetFuelStationsInRangeResponseParser(this.fuelAuthorityId, this.enrichOffers);
 
   @override
   GetFuelStationsInRangeResponse parseResponse(final String response) {
@@ -63,7 +64,7 @@ class GetFuelStationsInRangeResponseParser extends ResponseParser<GetFuelStation
     final Map<String, List<FuelQuote>> stationIdFuelQuotes =
         FuelStationDetailsResponseParseUtils.getStationIdFuelQuotesMap(responseJson, resolvedFuelAuthorityId);
     final Map<String, FuelStation> stationIdStationMap =
-        FuelStationDetailsResponseParseUtils.getStationIdStationMap(responseJson, stationIdFuelQuotes);
+        FuelStationDetailsResponseParseUtils.getStationIdStationMap(responseJson, stationIdFuelQuotes, enrichOffers);
     LogUtil.debug(_tag, 'stationIdStationMap ${stationIdStationMap.length}');
     return GetFuelStationsInRangeResponse(responseCode, responseDetails, invalidArguments, responseEpoch,
         stationIdStationMap.values.toList(), marketRegionZoneConfiguration, configChanged);

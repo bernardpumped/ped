@@ -18,12 +18,11 @@
 
 import 'dart:async';
 
+import 'package:pumped_end_device/data/local/dao2/market_region_zone_config_dao.dart';
+import 'package:pumped_end_device/data/local/location/location_data_source.dart';
+import 'package:pumped_end_device/data/local/location/location_service_subscription.dart';
+import 'package:pumped_end_device/data/local/model/market_region_zone_config.dart';
 import 'package:pumped_end_device/util/log_util.dart';
-
-import 'dao/market_region_zone_config_dao.dart';
-import 'location/location_data_source.dart';
-import 'location/location_service_subscription.dart';
-import 'model/market_region_zone_config.dart';
 
 class LocationUtils {
   static const _tag = 'LocationUtils';

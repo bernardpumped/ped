@@ -16,8 +16,10 @@
  *     along with Pumped End Device. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'package:localstore/localstore.dart';
+import 'package:pumped_end_device/data/local/dao2/secure_storage.dart';
 import 'package:pumped_end_device/data/local/model/hidden_result.dart';
+import 'dart:convert' as convert;
+
 import 'package:pumped_end_device/util/log_util.dart';
 
 class HiddenResultDao {
@@ -30,34 +32,29 @@ class HiddenResultDao {
   HiddenResultDao._();
 
   Future<dynamic> insertHiddenResult(final HiddenResult hiddenResult) async {
-    final db = Localstore.instance;
-    LogUtil.debug(_tag, 'insertHiddenResult::${hiddenResult.toJson()}');
-    db.collection(_getCollection(hiddenResult)).doc(hiddenResult.hiddenStationId.toString()).set(hiddenResult.toJson());
+    final SecureStorage instance = SecureStorage.instance;
+    instance.writeData(StorageItem(_getCollectionName(hiddenResult.hiddenStationSource),
+        hiddenResult.hiddenStationId.toString(), convert.jsonEncode(hiddenResult)));
   }
 
   Future<List<HiddenResult>> getAllHiddenResults() async {
-    final List<HiddenResult> hiddenResults = [];
-    final db = Localstore.instance;
-
-    var hrItemsG = await db.collection(_hiddenResultsCollectionG).get();
-    if (hrItemsG != null) {
-      for (var hrItemG in hrItemsG.entries) {
-        hiddenResults.add(HiddenResult.fromJson(hrItemG.value));
-      }
+    final SecureStorage instance = SecureStorage.instance;
+    final List<HiddenResult> results = [];
+    final List<StorageItem> resultsG = await instance.readAllData(_hiddenResultsCollectionG);
+    for (final StorageItem resultG in resultsG) {
+      results.add(HiddenResult.fromJson(convert.jsonDecode(resultG.getValue())));
     }
-    var hrItemsF = await db.collection(_hiddenResultsCollectionF).get();
-    if (hrItemsF != null) {
-      for (var hrItemF in hrItemsF.entries) {
-        hiddenResults.add(HiddenResult.fromJson(hrItemF.value));
-      }
+    final List<StorageItem> resultsF = await instance.readAllData(_hiddenResultsCollectionF);
+    for (final StorageItem resultF in resultsF) {
+      results.add(HiddenResult.fromJson(convert.jsonDecode(resultF.getValue())));
     }
-    LogUtil.debug(_tag, 'getAllHiddenResults::Num Hidden Results : ${hiddenResults.length}');
-    return hiddenResults;
+    LogUtil.debug(_tag, 'getAllHiddenResults::Num Hidden Results : ${results.length}');
+    return results;
   }
 
-  Future<dynamic> deleteHiddenResults(final HiddenResult hiddenResult) async {
-    final db = Localstore.instance;
-    return db.collection(_getCollection(hiddenResult)).doc(hiddenResult.hiddenStationId.toString()).delete();
+  Future<void> deleteHiddenResults(final HiddenResult hiddenResult) async {
+    final SecureStorage instance = SecureStorage.instance;
+    instance.deleteData(_getCollectionName(hiddenResult.hiddenStationSource), hiddenResult.hiddenStationId.toString());
   }
 
   Future<int> deleteAllHiddenResults() async {
@@ -71,22 +68,17 @@ class HiddenResultDao {
   }
 
   Future<bool> containsHiddenFuelStation(final int hiddenStationId, final String hiddenStationSource) async {
-    final db = Localstore.instance;
-    if (hiddenStationSource == 'G') {
-      return await db.collection(_hiddenResultsCollectionG).doc(hiddenStationId.toString()).get() != null;
-    } else if (hiddenStationSource == 'F') {
-      return await db.collection(_hiddenResultsCollectionF).doc(hiddenStationId.toString()).get() != null;
-    }
-    return false;
+    final SecureStorage instance = SecureStorage.instance;
+    return await instance.contains(_getCollectionName(hiddenStationSource), hiddenStationId.toString());
   }
 
-  _getCollection(final HiddenResult hiddenResult) {
-    if (hiddenResult.hiddenStationSource == 'G') {
+  _getCollectionName(final String hiddenStationSource) {
+    if (hiddenStationSource == 'G') {
       return _hiddenResultsCollectionG;
-    } else if (hiddenResult.hiddenStationSource == 'F') {
+    } else if (hiddenStationSource == 'F') {
       return _hiddenResultsCollectionF;
     } else {
-      throw Exception('Invalid fuelStationSource $hiddenResult.hiddenStationSource');
+      throw Exception('Invalid fuelStationSource $hiddenStationSource');
     }
   }
 }

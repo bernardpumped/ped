@@ -21,8 +21,8 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:pumped_end_device/data/local/dao/mock_location_dao.dart';
-import 'package:pumped_end_device/data/local/dao/ui_settings_dao.dart';
+import 'package:pumped_end_device/data/local/dao2/mock_location_dao.dart';
+import 'package:pumped_end_device/data/local/dao2/ui_settings_dao.dart';
 import 'package:pumped_end_device/data/local/location/geo_location_wrapper.dart';
 import 'package:pumped_end_device/data/local/model/mock_location.dart';
 import 'package:pumped_end_device/data/local/model/ui_settings.dart';

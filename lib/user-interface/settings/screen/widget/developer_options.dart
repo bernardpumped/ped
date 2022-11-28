@@ -17,7 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:pumped_end_device/data/local/dao/ui_settings_dao.dart';
+import 'package:pumped_end_device/data/local/dao2/ui_settings_dao.dart';
 import 'package:pumped_end_device/data/local/model/ui_settings.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
@@ -40,7 +40,7 @@ class _DeveloperOptionsState extends State<DeveloperOptions> {
             builder: (context, snapShot) {
               if (snapShot.hasData) {
                 UiSettings? uiSettings = snapShot.data as UiSettings?;
-                uiSettings ??= UiSettings(developerOptions: false);
+                uiSettings ??= UiSettings(developerOptions: false, devOptionsEnrichOffers: false);
                 uiSettings.developerOptions ??= false;
                 return _getTileForDeveloperOptions(uiSettings);
               } else if (snapShot.hasError) {
@@ -78,7 +78,19 @@ class _DeveloperOptionsState extends State<DeveloperOptions> {
                   title: Text("Mock Location of Device", style: Theme.of(context).textTheme.headline4),
                   trailing: const Icon(Icons.chevron_right, size: 24))),
             )
-          : const SizedBox(height: 0)
+          : const SizedBox(height: 0),
+      uiSettings.developerOptions! ? const Divider() : const SizedBox(height: 0),
+      uiSettings.developerOptions! ? ListTile(
+          contentPadding: const EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
+          leading: const Icon(Icons.local_offer_outlined, size: 30),
+          title: Text("Enrich Offers", style: Theme.of(context).textTheme.headline4),
+          trailing: Switch(
+              value: uiSettings.devOptionsEnrichOffers!,
+              onChanged: (bool value) {
+                uiSettings.devOptionsEnrichOffers = value;
+                UiSettingsDao.instance.insertUiSettings(uiSettings);
+                setState(() {});
+              })) : const SizedBox(height: 0),
     ]);
   }
 
