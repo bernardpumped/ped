@@ -17,7 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:pumped_end_device/data/local/dao/mock_location_dao.dart';
+import 'package:pumped_end_device/data/local/dao2/mock_location_dao.dart';
 import 'package:pumped_end_device/data/local/model/mock_location.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/data/local/places.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
@@ -81,8 +81,8 @@ class _PinLocationWidgetState extends State<PinLocationWidget> {
     return OutlinedButton(
         onPressed: () async {
           if (_selectedMockLocation != null) {
-            dynamic result = await MockLocationDao.instance.insertPinnedMockLocation(_selectedMockLocation!);
-            LogUtil.debug(_tag, 'Insert result for Pinned Mock Location. Result : $result');
+            await MockLocationDao.instance.insertPinnedMockLocation(_selectedMockLocation!);
+            LogUtil.debug(_tag, 'Insert result for Pinned Mock Location.');
             if (mounted) {
               WidgetUtils.showToastMessage(context, 'Successfully pinned the mock location');
             }

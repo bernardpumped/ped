@@ -19,7 +19,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:pumped_end_device/data/local/dao/user_configuration_dao.dart';
+import 'package:pumped_end_device/data/local/dao2/user_configuration_dao.dart';
 import 'package:pumped_end_device/data/local/model/user_configuration.dart';
 import 'package:pumped_end_device/user-interface/settings/screen/settings_screen.dart';
 import 'package:pumped_end_device/user-interface/settings/service/settings_service.dart';

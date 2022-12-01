@@ -106,7 +106,7 @@ class FirebaseService {
       }
       if (platformSupport.contains(twitterIdProvider)) {
         _twitterLogin = TwitterLogin(
-            apiKey: "", apiSecretKey: "", redirectURI: "twittersdk://");
+            apiKey: "xxLd8ZjPi0pMNiRJBoQSbAvmu", apiSecretKey: "92sJytaR9p3XidD6qBh0DjXkGIocJ6hf1ULYnjrrKXr3Ew7964", redirectURI: "twittersdk://");
       }
     } else {
       LogUtil.debug(_tag, 'Platform does not yet support firebase');

@@ -16,7 +16,8 @@
  *     along with Pumped End Device  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'package:localstore/localstore.dart';
+import 'dart:convert' as convert;
+import 'package:pumped_end_device/data/local/dao2/secure_storage.dart';
 import 'package:pumped_end_device/data/local/model/market_region_zone_config.dart';
 import 'package:pumped_end_device/models/pumped/fuel_category.dart';
 import 'package:pumped_end_device/models/pumped/market_region_config.dart';
@@ -26,7 +27,7 @@ import 'package:pumped_end_device/util/log_util.dart';
 class MarketRegionZoneConfigDao {
   static const _tag = 'MarketRegionZoneConfigDao';
 
-  static const _collectionMarketRegionConfig = 'ped_market_region_config';
+  static const _collectionMarketRegionConfig = 'pumped_market_region_config';
   static const _marketRegionDocId = 'market_region';
   static const _collectionZoneConfig = "pumped_zone_config";
   static const _zoneDocId = 'zone';
@@ -34,21 +35,24 @@ class MarketRegionZoneConfigDao {
   static const _versionId = 'version-id';
 
   static final MarketRegionZoneConfigDao instance = MarketRegionZoneConfigDao._();
+
   MarketRegionZoneConfigDao._();
 
   Future<MarketRegionZoneConfiguration?> getMarketRegionZoneConfiguration() async {
-    final db = Localstore.instance;
-    final Map<String, dynamic>? versionIdMap = await db.collection(_collectionVersion).doc(_versionId).get();
+    final SecureStorage db = SecureStorage.instance;
+    final String? versionIdData = await db.readData(_collectionVersion, _versionId);
+    final Map<String, dynamic>? versionIdMap = versionIdData != null ? convert.jsonDecode(versionIdData) : null;
     if (versionIdMap != null && versionIdMap.isNotEmpty) {
       final String versionId = versionIdMap[_versionId];
       LogUtil.debug(_tag, 'versionId $versionId found from db.');
       LogUtil.debug(_tag, 'MarketRegionConfigId key - ${_getMarketRegionConfigDocId(versionId)}');
-      final Map<String, dynamic>? mktRegionDataAsMap =
-          await db.collection(_collectionMarketRegionConfig).doc(_getMarketRegionConfigDocId(versionId)).get();
+      final String? mktRegionData =
+          await db.readData(_collectionMarketRegionConfig, _getMarketRegionConfigDocId(versionId));
+      final Map<String, dynamic>? mktRegionDataAsMap = mktRegionData != null ? convert.jsonDecode(mktRegionData) : null;
 
       LogUtil.debug(_tag, 'ZoneConfigId key - ${_getZoneConfigDocId(versionId)}');
-      final Map<String, dynamic>? zoneDataAsMap =
-          await db.collection(_collectionZoneConfig).doc(_getZoneConfigDocId(versionId)).get();
+      final String? zoneData = await db.readData(_collectionZoneConfig, _getZoneConfigDocId(versionId));
+      final Map<String, dynamic>? zoneDataAsMap = zoneData != null ? convert.jsonDecode(zoneData) : null;
 
       if (mktRegionDataAsMap != null &&
           mktRegionDataAsMap.isNotEmpty &&
@@ -69,30 +73,30 @@ class MarketRegionZoneConfigDao {
   }
 
   insertMarketRegionZoneConfiguration(final MarketRegionZoneConfiguration configuration) async {
-    final db = Localstore.instance;
+    final SecureStorage db = SecureStorage.instance;
     LogUtil.debug(
         _tag, 'Inserting MarketRegionConfigDoc using key ${_getMarketRegionConfigDocId(configuration.version)}');
-    db
-        .collection(_collectionMarketRegionConfig)
-        .doc(_getMarketRegionConfigDocId(configuration.version))
-        .set(configuration.marketRegionConfig.toMap());
+    await db.writeData(StorageItem(_collectionMarketRegionConfig, _getMarketRegionConfigDocId(configuration.version),
+        convert.jsonEncode(configuration.marketRegionConfig)));
+
     LogUtil.debug(_tag, 'Inserting ZoneConfigDoc using key ${_getZoneConfigDocId(configuration.version)}');
-    db
-        .collection(_collectionZoneConfig)
-        .doc(_getZoneConfigDocId(configuration.version))
-        .set(configuration.zoneConfig.toMap());
+    await db.writeData(StorageItem(_collectionZoneConfig, _getZoneConfigDocId(configuration.version),
+        convert.jsonEncode(configuration.zoneConfig)));
     LogUtil.debug(_tag, 'Inserting versionId doc using key $_versionId');
-    db.collection(_collectionVersion).doc(_versionId).set({_versionId: configuration.version});
+    await db.writeData(
+        StorageItem(_collectionVersion, _versionId, convert.jsonEncode({_versionId: configuration.version})));
   }
 
   Future<Set<FuelCategory>?> getFuelCategoriesFromMarketRegionZoneConfig() async {
-    final db = Localstore.instance;
-    final Map<String, dynamic>? versionIdMap = await db.collection(_collectionVersion).doc(_versionId).get();
+    final SecureStorage db = SecureStorage.instance;
+    final String? versionIdData = await db.readData(_collectionVersion, _versionId);
+    final Map<String, dynamic>? versionIdMap = versionIdData != null ? convert.jsonDecode(versionIdData) : null;
     if (versionIdMap != null && versionIdMap.isNotEmpty) {
       final String versionId = versionIdMap[_versionId];
       LogUtil.debug(_tag, 'VersionId read from database $versionId');
-      final Map<String, dynamic>? mktRegionDataAsMap =
-          await db.collection(_collectionMarketRegionConfig).doc(_getMarketRegionConfigDocId(versionId)).get();
+      final String? mktRegionData =
+          await db.readData(_collectionMarketRegionConfig, _getMarketRegionConfigDocId(versionId));
+      final Map<String, dynamic>? mktRegionDataAsMap = mktRegionData != null ? convert.jsonDecode(mktRegionData) : null;
       LogUtil.debug(_tag, 'MktRegionDataAsMap size ${mktRegionDataAsMap != null ? mktRegionDataAsMap.length : 0}');
       if (mktRegionDataAsMap != null && mktRegionDataAsMap.isNotEmpty) {
         final MarketRegionConfig mktRegionConfig = MarketRegionConfig.fromMap(mktRegionDataAsMap);

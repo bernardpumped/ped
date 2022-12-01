@@ -15,7 +15,9 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Pumped End Device.  If not, see <https://www.gnu.org/licenses/>.
  */
-import 'package:localstore/localstore.dart';
+
+import 'dart:convert' as convert;
+import 'package:pumped_end_device/data/local/dao2/secure_storage.dart';
 import 'package:pumped_end_device/data/local/model/ui_settings.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
@@ -29,18 +31,16 @@ class UiSettingsDao {
   UiSettingsDao._();
 
   Future<dynamic> insertUiSettings(final UiSettings uiSettings) async {
-    final db = Localstore.instance;
-    LogUtil.debug(_tag, 'inserting UiSettings');
-    db.collection(_collectionUiSettings).doc(_uiSettingsInstance).set(uiSettings.toMap(), SetOptions(merge: true));
+    final SecureStorage db = SecureStorage.instance;
+    db.writeData(StorageItem(_collectionUiSettings, _uiSettingsInstance, convert.jsonEncode(uiSettings)));
   }
 
   Future<UiSettings> getUiSettings() async {
-    final db = Localstore.instance;
-    LogUtil.debug(_tag, 'retrieving instance of UiSettings');
-    final Map<String, dynamic>? uiSettingsMap =
-        await db.collection(_collectionUiSettings).doc(_uiSettingsInstance).get();
-    if (uiSettingsMap != null && uiSettingsMap.isNotEmpty) {
-      return UiSettings.fromMap(uiSettingsMap);
+    final SecureStorage db = SecureStorage.instance;
+    LogUtil.debug(_tag, 'Retrieving instance of UiSettings');
+    final String? data = await db.readData(_collectionUiSettings, _uiSettingsInstance);
+    if (data != null) {
+      return UiSettings.fromJson(convert.jsonDecode(data));
     }
     return UiSettings();
   }

@@ -16,8 +16,8 @@
  *     along with Pumped End Device.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'package:pumped_end_device/data/local/dao/fuel_authority_price_metadata_dao.dart';
-import 'package:pumped_end_device/data/local/dao/market_region_zone_config_dao.dart';
+import 'package:pumped_end_device/data/local/dao2/fuel_authority_price_metadata_dao.dart';
+import 'package:pumped_end_device/data/local/dao2/market_region_zone_config_dao.dart';
 import 'package:pumped_end_device/data/local/market_region_zone_config_utils.dart';
 import 'package:pumped_end_device/data/local/model/fuel_authority_price_metadata.dart';
 import 'package:pumped_end_device/data/local/model/market_region_zone_config.dart';

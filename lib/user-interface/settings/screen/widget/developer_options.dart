@@ -17,7 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:pumped_end_device/data/local/dao/ui_settings_dao.dart';
+import 'package:pumped_end_device/data/local/dao2/ui_settings_dao.dart';
 import 'package:pumped_end_device/data/local/model/ui_settings.dart';
 import 'package:pumped_end_device/user-interface/settings/screen/widget/mock_location_settings_screen.dart';
 import 'package:pumped_end_device/util/log_util.dart';
@@ -40,8 +40,9 @@ class _DeveloperOptionsState extends State<DeveloperOptions> {
             builder: (context, snapShot) {
               if (snapShot.hasData) {
                 UiSettings? uiSettings = snapShot.data as UiSettings?;
-                uiSettings ??= UiSettings(developerOptions: false);
+                uiSettings ??= UiSettings(developerOptions: false, devOptionsEnrichOffers: false);
                 uiSettings.developerOptions ??= false;
+                uiSettings.devOptionsEnrichOffers ??= false;
                 return _getTileForDeveloperOptions(uiSettings);
               } else if (snapShot.hasError) {
                 LogUtil.debug(_tag, 'Error found while loading UiSettings ${snapShot.error}');
@@ -73,10 +74,22 @@ class _DeveloperOptionsState extends State<DeveloperOptions> {
               child: (ListTile(
                   contentPadding: const EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
                   leading: const Icon(Icons.push_pin_outlined, size: 30),
-                  title: Text("Mock Location of Device", style: Theme.of(context).textTheme.subtitle1),
+                  title: Text("Device Location mocking", style: Theme.of(context).textTheme.subtitle1),
                   trailing: const Icon(Icons.chevron_right, size: 24))),
             )
-          : const SizedBox(height: 0)
+          : const SizedBox(height: 0),
+      uiSettings.developerOptions! ? const Divider() : const SizedBox(height: 0),
+      uiSettings.developerOptions! ? ListTile(
+          contentPadding: const EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
+          leading: const Icon(Icons.local_offer_outlined, size: 30),
+          title: Text("B2B Demo Offers", style: Theme.of(context).textTheme.subtitle1),
+          trailing: Switch(
+              value: uiSettings.devOptionsEnrichOffers!,
+              onChanged: (bool value) {
+                uiSettings.devOptionsEnrichOffers = value;
+                UiSettingsDao.instance.insertUiSettings(uiSettings);
+                setState(() {});
+              })) : const SizedBox(height: 0),
     ]);
   }
 

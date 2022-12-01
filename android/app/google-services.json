@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "YOUR_project_number",
+    "project_id": "YOUR_project_id",
+    "storage_bucket": "YOUR_storage_bucket"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "YOUR_mobilesdk_app_id",
+        "android_client_info": {
+          "package_name": "YOUR_package_name"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "YOUR_client_id.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "YOUR_package_name",
+            "certificate_hash": "YOUR_certificate_hash"
+          }
+        },
+        {
+          "client_id": "YOUR_client_id.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "YOUR_current_key"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "YOUR_client_id.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id":"YOUR_client_id.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "YOUR_bundle_id"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -70,6 +70,9 @@ class ExpandedHeaderWidget extends StatelessWidget {
     } else {
       fsName = fuelStation.fuelStationName;
     }
+    if (fuelStation.isFaStation && 'unmatched' == fuelStation.fuelAuthMatchStatus) {
+      fsName = '$fsName**';
+    }
     fsName = fsName.toTitleCase();
     return Text(fsName, style: Theme.of(context).textTheme.subtitle1, overflow: TextOverflow.ellipsis, maxLines: 2);
   }

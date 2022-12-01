@@ -17,7 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:pumped_end_device/data/local/dao/update_history_dao.dart';
+import 'package:pumped_end_device/data/local/dao2/update_history_dao.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station_feature.dart';
 import 'package:pumped_end_device/models/update_history.dart';
@@ -263,7 +263,7 @@ class _EditFeaturesWidgetState extends State<EditFeaturesWidget> {
     if (!response.successfulUpdate) {
       if (response.responseCode == 'CALL-EXCEPTION') {
         return {
-          _responseMsg: 'Transient issue happened while updating Features for fuel station. Retry',
+          _responseMsg: 'Transient issue occurred while updating Features and Facilities, please retry',
           _isSuccess: false
         };
       }

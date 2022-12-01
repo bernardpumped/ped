@@ -30,8 +30,9 @@ import '../model/response/get_fuel_station_details_batch_response.dart';
 class GetFuelStationDetailsBatchResponseParser extends ResponseParser<GetFuelStationDetailsBatchResponse> {
   static const _tag = 'GetFuelStationDetailsBatchResponseParser';
   final String? authorityId;
+  final bool enrichOffers;
 
-  GetFuelStationDetailsBatchResponseParser(this.authorityId);
+  GetFuelStationDetailsBatchResponseParser(this.authorityId, this.enrichOffers);
 
   @override
   GetFuelStationDetailsBatchResponse parseResponse(final String response) {
@@ -47,7 +48,7 @@ class GetFuelStationDetailsBatchResponseParser extends ResponseParser<GetFuelSta
     final Map<String, List<FuelQuote>> stationIdFuelQuotes =
         FuelStationDetailsResponseParseUtils.getStationIdFuelQuotesMap(responseJson, authorityId);
     final Map<String, FuelStation> stationIdStationMap =
-        FuelStationDetailsResponseParseUtils.getStationIdStationMap(responseJson, stationIdFuelQuotes);
+        FuelStationDetailsResponseParseUtils.getStationIdStationMap(responseJson, stationIdFuelQuotes, enrichOffers);
     LogUtil.debug(_tag, 'stationIdStationMap ${stationIdStationMap.length}');
     return GetFuelStationDetailsBatchResponse(
         responseCode, responseDetails, invalidArguments, responseEpoch, stationIdStationMap.values.toList());
