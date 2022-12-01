@@ -22,8 +22,8 @@ import 'package:pumped_end_device/util/log_util.dart';
 
 class HiddenResultDao {
   static const _tag = 'HiddenResultDao';
-  static const _hiddenResultsCollectionG = 'hidden_results-G';
-  static const _hiddenResultsCollectionF = 'hidden_results-F';
+  static const _hiddenResultsCollectionG = 'ped_hidden_results-G';
+  static const _hiddenResultsCollectionF = 'ped_hidden_results-F';
 
   static final HiddenResultDao instance = HiddenResultDao._();
 

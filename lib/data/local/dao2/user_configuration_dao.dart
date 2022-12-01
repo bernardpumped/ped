@@ -16,7 +16,8 @@
  *     along with Pumped End Device If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'package:localstore/localstore.dart';
+import 'dart:convert' as convert;
+import 'package:pumped_end_device/data/local/dao2/secure_storage.dart';
 import 'package:pumped_end_device/data/local/model/user_configuration.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
@@ -30,31 +31,35 @@ class UserConfigurationDao {
   UserConfigurationDao._();
 
   Future<UserConfiguration?> getUserConfiguration(final String userConfigId) async {
-    final db = Localstore.instance;
-    final Map<String, dynamic>? userConfig = await db.collection(_collectionUserConfig).doc(userConfigId).get();
-    if (userConfig != null && userConfig.isNotEmpty) {
-      return UserConfiguration.fromMap(userConfig);
+    final SecureStorage db = SecureStorage.instance;
+    final String? data = await db.readData(_collectionUserConfig, userConfigId);
+    LogUtil.debug(_tag, 'Reading userConfiguration with id $userConfigId');
+    if (data != null) {
+      final Map<String, dynamic> dataAsMap = convert.jsonDecode(data);
+      if (dataAsMap.isNotEmpty) {
+        return UserConfiguration.fromMap(convert.jsonDecode(data));
+      }
     }
     return null;
   }
 
-  Future<dynamic> insertUserConfiguration(final UserConfiguration userConfiguration) async {
-    final db = Localstore.instance;
+  Future<void> insertUserConfiguration(final UserConfiguration userConfiguration) async {
+    final SecureStorage db = SecureStorage.instance;
     LogUtil.debug(_tag, 'Persisting userConfiguration with id ${userConfiguration.id}');
-    db.collection(_collectionUserConfig).doc(userConfiguration.id).set(userConfiguration.toMap());
+    db.writeData(StorageItem(_collectionUserConfig, userConfiguration.id, convert.jsonEncode(userConfiguration)));
   }
 
-  Future<dynamic> deleteUserConfiguration(final String userConfigId) async {
-    final db = Localstore.instance;
+  Future<void> deleteUserConfiguration(final String userConfigId) async {
+    final SecureStorage db = SecureStorage.instance;
     LogUtil.debug(_tag, 'Deleting user-config with id $userConfigId');
-    db.collection(_collectionUserConfig).doc(userConfigId).delete();
+    db.deleteData(_collectionUserConfig, userConfigId);
   }
 
   Future<int> getUserConfigurationVersion(final String userConfigId) async {
-    final db = Localstore.instance;
-    final Map<String, dynamic>? userConfig = await db.collection(_collectionUserConfig).doc(userConfigId).get();
-    if (userConfig != null && userConfig.isNotEmpty) {
-      return UserConfiguration.fromMap(userConfig).version;
+    LogUtil.debug(_tag, 'Reading userConfiguration.version with id $userConfigId');
+    UserConfiguration? configuration = await getUserConfiguration(userConfigId);
+    if (configuration != null) {
+      return configuration.version;
     }
     return defaultUserConfigVersion;
   }

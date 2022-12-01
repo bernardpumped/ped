@@ -16,7 +16,7 @@
  *     along with Pumped End Device.  If not, see <https://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
-import 'package:pumped_end_device/data/local/dao/update_history_dao.dart';
+import 'package:pumped_end_device/data/local/dao2/update_history_dao.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station_address.dart';
 import 'package:pumped_end_device/models/update_history.dart';
@@ -284,7 +284,7 @@ class _EditContactWidgetState extends State<EditContactWidget> {
     }
     if (!response.successfulUpdate) {
       if (response.responseCode == 'CALL-EXCEPTION') {
-        return {_responseMsg: 'Transient issue happened while updating Contact Details. Retry', _isSuccess: false};
+        return {_responseMsg: 'Transient issue occurred while updating Contact Details, please retry', _isSuccess: false};
       }
       return {_responseMsg: 'Request to update contact details failed', _isSuccess: false};
     } else {

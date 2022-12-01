@@ -17,10 +17,10 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:pumped_end_device/data/local/dao/favorite_fuel_stations_dao.dart';
-import 'package:pumped_end_device/data/local/dao/hidden_result_dao.dart';
-import 'package:pumped_end_device/data/local/dao/update_history_dao.dart';
-import 'package:pumped_end_device/data/local/dao/user_configuration_dao.dart';
+import 'package:pumped_end_device/data/local/dao2/favorite_fuel_stations_dao.dart';
+import 'package:pumped_end_device/data/local/dao2/hidden_result_dao.dart';
+import 'package:pumped_end_device/data/local/dao2/update_history_dao.dart';
+import 'package:pumped_end_device/data/local/dao2/user_configuration_dao.dart';
 import 'package:pumped_end_device/data/local/model/user_configuration.dart';
 import 'package:pumped_end_device/user-interface/settings/screen/settings_screen.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
@@ -184,8 +184,8 @@ class _CleanupLocalCacheScreenState extends State<CleanupLocalCacheScreen> {
 
   Future<bool> _cleanUpUpdateHistory() async {
     try {
-      int result = await UpdateHistoryDao.instance.deleteUpdateHistory();
-      LogUtil.debug(_tag, '$result Update History records successfully deleted');
+      await UpdateHistoryDao.instance.deleteUpdateHistory();
+      LogUtil.debug(_tag, 'Update History records successfully deleted');
       await Future.delayed(const Duration(milliseconds: 300));
     } catch (error, s) {
       LogUtil.debug(_tag, 'Error deleting Update History $s');

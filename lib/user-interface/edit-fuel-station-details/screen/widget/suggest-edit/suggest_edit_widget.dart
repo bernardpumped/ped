@@ -17,7 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:pumped_end_device/data/local/dao/update_history_dao.dart';
+import 'package:pumped_end_device/data/local/dao2/update_history_dao.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station.dart';
 import 'package:pumped_end_device/models/update_history.dart';
 import 'package:pumped_end_device/models/update_type.dart';
@@ -138,7 +138,7 @@ class _SuggestEditWidgetState extends State<SuggestEditWidget> {
       }
     } else {
       LogUtil.debug(_tag, 'Error persisting suggestion ${response.responseCode}');
-      WidgetUtils.showToastMessage(context, 'Error notifying pumped team', isErrorToast: true);
+      WidgetUtils.showToastMessage(context, 'Transient issue occurred while posting suggested edit', isErrorToast: true);
     }
     Navigator.pop(context, _getUpdateResponse(request, response));
   }

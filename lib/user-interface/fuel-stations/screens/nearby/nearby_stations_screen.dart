@@ -19,7 +19,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:pumped_end_device/data/local/dao/market_region_zone_config_dao.dart';
+import 'package:pumped_end_device/data/local/dao2/market_region_zone_config_dao.dart';
 import 'package:pumped_end_device/data/local/location/geo_location_wrapper.dart';
 import 'package:pumped_end_device/data/local/location/location_data_source.dart';
 import 'package:pumped_end_device/data/local/location/location_service_subscription.dart';
@@ -45,6 +45,8 @@ import 'package:pumped_end_device/user-interface/utils/under_maintenance_service
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/user-interface/widgets/pumped_app_bar.dart';
 import 'package:pumped_end_device/util/log_util.dart';
+import 'package:rate_my_app/rate_my_app.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class NearbyStationsScreen extends StatefulWidget {
   static const routeName = '/ped/fuel-stations/nearby';
@@ -105,6 +107,83 @@ class _NearbyStationsScreenState extends State<NearbyStationsScreen> {
       WidgetUtils.showPumpedUnavailabilityMessage(event, context);
       LogUtil.debug(_tag, '${event.data}');
     });
+    _initializeRateMyApp();
+  }
+
+  void _initializeRateMyApp() async {
+    if (!initializeRateMyApp) {
+      //This is to prevent multiple initialization when the
+      // nearby stations screen is opened navigated multiple times in
+      // the one launch of app.
+      return;
+    }
+    rateMyApp.init().then((_) {
+      initializeRateMyApp = false;
+      if (rateMyApp.shouldOpenDialog) {
+        rateMyApp.showStarRateDialog(context,
+            title: 'Enjoying Pumped End Device?',
+            message: 'Please leave a rating!',
+            dialogStyle: DialogStyle(
+                titleStyle: Theme.of(context).textTheme.headline4,
+                titleAlign: TextAlign.center,
+                messageStyle: Theme.of(context).textTheme.subtitle1,
+                messageAlign: TextAlign.center,
+                messagePadding: const EdgeInsets.only(bottom: 20)),
+            starRatingOptions: const StarRatingOptions(),
+            actionsBuilder: (context, stars) {
+              return [
+                TextButton(
+                    child: const Text('Later'),
+                    onPressed: () async {
+                      await rateMyApp.callEvent(RateMyAppEventType.laterButtonPressed);
+                      if (mounted) {
+                        Navigator.pop<RateMyAppDialogButton>(context, RateMyAppDialogButton.rate);
+                      }
+                    }),
+                TextButton(
+                    child: const Text('OK'),
+                    onPressed: () async {
+                      LogUtil.debug(_tag, 'Thanks for the ${stars == null ? '0' : stars.round().toString()} star(s) !');
+                      if (stars != null && stars > 0) {
+                        if (stars < 4) {
+                          _sendEmail(stars);
+                        } else {
+                          await rateMyApp.callEvent(RateMyAppEventType.rateButtonPressed);
+                          rateMyApp.launchStore();
+                        }
+                      } else {
+                        WidgetUtils.showToastMessage(
+                            context, 'Please select stars and then click Ok, or you can choose later');
+                      }
+                      if (mounted) {
+                        Navigator.pop<RateMyAppDialogButton>(context, RateMyAppDialogButton.rate);
+                      }
+                    })
+              ];
+            },
+            onDismissed: () => rateMyApp.callEvent(RateMyAppEventType.laterButtonPressed));
+      }
+    });
+  }
+
+  void _sendEmail(final double? stars) async {
+    final emailSubject = 'Pumped End Device Rating : ${stars ?? 0}';
+    final emailBody = 'Hi - thanks for taking the time to rate us,\n\n '
+        'We would very much like to understand, how we can improve your experience '
+        'so that we can get better than ${stars ?? 0} rating\n\n'
+        ' >  ';
+    final Uri emailUri = Uri.parse("mailto:bernard@pumpedfuel.com?subject=$emailSubject&body=$emailBody");
+    try {
+      if (await canLaunchUrl(emailUri)) {
+        await launchUrl(emailUri);
+      } else {
+        LogUtil.debug(_tag, 'Cannot send email $emailUri');
+        WidgetUtils.showToastMessage(context, 'Cannot send email');
+      }
+    } on Exception catch (e) {
+      LogUtil.debug(_tag, 'Exception invoking emailUrl $emailUri $e');
+      WidgetUtils.showToastMessage(context, 'Cannot send email');
+    }
   }
 
   @override

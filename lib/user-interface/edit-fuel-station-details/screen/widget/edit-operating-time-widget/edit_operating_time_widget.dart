@@ -19,7 +19,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:pumped_end_device/data/local/dao/update_history_dao.dart';
+import 'package:pumped_end_device/data/local/dao2/update_history_dao.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station_operating_hrs.dart';
 import 'package:pumped_end_device/models/pumped/operating_hours.dart';
@@ -200,7 +200,7 @@ class _EditOperatingTimeWidgetState extends State<EditOperatingTimeWidget> {
     }
     if (!response.successfulUpdate) {
       if (response.responseCode == 'CALL-EXCEPTION') {
-        return {_responseMsg: 'Transient issue happened while updating Operating Hours. Retry', _isSuccess: false};
+        return {_responseMsg: 'Transient issue occurred while updating Operating Hours, please retry', _isSuccess: false};
       }
       return {_responseMsg: 'Request to update operating hours failed', _isSuccess: false};
     } else {

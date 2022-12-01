@@ -116,7 +116,7 @@ class AppTheme {
               foregroundColor: _bgColorLgTh,
               shadowColor: _primaryColorLgTh,
               side: const BorderSide(color: _primaryColorLgTh, width: 0))),
-      popupMenuTheme: const PopupMenuThemeData(color: _bgColorLgTh, elevation: 2),
+      popupMenuTheme: PopupMenuThemeData(color: _bgColorLgTh.withOpacity(1), elevation: 2),
       progressIndicatorTheme: const ProgressIndicatorThemeData(
           circularTrackColor: _bgColorLgTh,
           color: _bgColorLgTh,
@@ -220,7 +220,7 @@ class AppTheme {
                 foregroundColor: _bgColorDkTh,
                 shadowColor: _primaryColorDkTh,
                 side: const BorderSide(color: _primaryColorDkTh, width: 0))),
-        popupMenuTheme: const PopupMenuThemeData(color: _bgColorDkTh, elevation: 2),
+        popupMenuTheme: PopupMenuThemeData(color: _bgColorDkTh.withOpacity(1), elevation: 2),
         progressIndicatorTheme: const ProgressIndicatorThemeData(
             circularTrackColor: _bgColorDkTh,
             color: _bgColorDkTh,

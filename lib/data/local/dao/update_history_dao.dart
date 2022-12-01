@@ -22,7 +22,7 @@ import 'package:pumped_end_device/util/log_util.dart';
 
 class UpdateHistoryDao {
   static const _tag = 'UpdateHistoryDao';
-  static const _collectionUpdateHistory = 'pumped_update_history';
+  static const _collectionUpdateHistory = 'ped_update_history';
 
   static final UpdateHistoryDao instance = UpdateHistoryDao._();
   UpdateHistoryDao._();

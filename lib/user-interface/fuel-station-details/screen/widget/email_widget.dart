@@ -65,11 +65,11 @@ class EmailNotificationWidget extends StatelessWidget {
   }
 
   static const _faToEmailAddressMap = {
-    'nsw': ['support@nsw-email.com'],
-    'qld': ['support@qld-email.com'],
-    'sa':  ['support@sa-email.com'],
-    'fwa': ['support@fwa-email.com'],
-    'tas': ['support@tas-email.com'],
-    'nt':  ['support@nt-email.com']
+    'nsw': ['support@onegov.nsw.gov.au', 'fuelchecknews@customerservice.nsw.gov.au'],
+    'qld': ['fuelprices@dnrme.qld.gov.au', 'support@fuelpricesqld.com.au'],
+    'sa': ['fuelpricingscheme@sa.gov.au', 'support@safuelpricinginformation.com.au'],
+    'fwa': ['fuelwatch@dmirs.wa.gov.au', 'fuelwatch@commerce.wa.gov.au'],
+    'tas': ['support@onegov.nsw.gov.au', 'fuelchecknews@customerservice.nsw.gov.au'],
+    'nt': ['consumer@nt.gov.au']
   };
 }

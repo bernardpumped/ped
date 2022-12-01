@@ -17,7 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:pumped_end_device/data/local/dao/update_history_dao.dart';
+import 'package:pumped_end_device/data/local/dao2/update_history_dao.dart';
 import 'package:pumped_end_device/data/local/model/fuel_authority_price_metadata.dart';
 import 'package:pumped_end_device/user-interface/edit-fuel-station-details/data/remote/model/dto/fuel_quote_vo.dart';
 import 'package:pumped_end_device/user-interface/edit-fuel-station-details/data/remote/model/request/alter_fuel_quotes_request.dart';
@@ -351,20 +351,20 @@ class _EditFuelPriceWidgetState extends State<EditFuelPriceWidget> {
 
   Map<String, dynamic> _isUpdateSuccessful(final AlterFuelQuotesResponse response) {
     if (response.exceptionCodes != null && response.exceptionCodes!.isNotEmpty) {
-      return {_responseMsg: 'Issue happened while executing request', _isSuccess: false};
+      return {_responseMsg: 'Issue occurred while executing request', _isSuccess: false};
     }
     if (!response.successfulUpdate) {
       if (response.responseCode == 'CALL-EXCEPTION') {
-        return {_responseMsg: 'Transient issue happened while updating. Retry', _isSuccess: false};
+        return {_responseMsg: 'Transient issue occurred while updating fuel prices, please retry', _isSuccess: false};
       }
-      return {_responseMsg: 'Issue happened while calling Pumped to update.', _isSuccess: false};
+      return {_responseMsg: 'Issue occurred while calling Pumped to update.', _isSuccess: false};
     } else {
       bool exceptionDetected = false;
       response.updateResult?.forEach((fuelType, updateExceptions) {
         exceptionDetected = exceptionDetected || (updateExceptions as List).isNotEmpty;
       });
       if (exceptionDetected) {
-        return {_responseMsg: 'Issues happened while updating a few fuel quotes', _isSuccess: false};
+        return {_responseMsg: 'Issues occurred while updating a few fuel quotes', _isSuccess: false};
       }
       bool invalidArgsException = false;
       response.invalidArguments?.forEach((key, value) {

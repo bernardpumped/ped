@@ -21,8 +21,8 @@ import 'package:pumped_end_device/data/local/model/favorite_fuel_station.dart';
 
 class FavoriteFuelStationsDao {
 
-  static const _collectionFavoriteFuelStationsG = 'pumped_favorite_stations-G';
-  static const _collectionFavoriteFuelStationsF = 'pumped_favorite_stations-F';
+  static const _collectionFavoriteFuelStationsG = 'ped_favorite_stations-G';
+  static const _collectionFavoriteFuelStationsF = 'ped_favorite_stations-F';
   static const _ffsAttribFuelStationId = 'fuel_station_id';
   static const _ffsAttribFuelStationSource = 'fuel_station_source';
 

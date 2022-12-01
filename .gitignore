@@ -25,7 +25,6 @@ hs_err_pid*
 .idea
 !android
 android/*
-!android/app
 android/app/*
 !android/app/src
 android/app/src/*
@@ -39,6 +38,7 @@ android/app/src/main/*
 android/app/src/profile/*
 !android/app/src/profile/AndroidManifest.xml
 !android/AndroidManifest.xml
+!android/app/google-services.json
 build
 !ios/
 ios/*

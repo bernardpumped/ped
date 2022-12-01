@@ -20,7 +20,7 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
-import 'package:pumped_end_device/data/local/dao/ui_settings_dao.dart';
+import 'package:pumped_end_device/data/local/dao2/ui_settings_dao.dart';
 import 'package:pumped_end_device/data/local/location/location_data_source.dart';
 import 'package:pumped_end_device/data/local/model/ui_settings.dart';
 import 'package:pumped_end_device/user-interface/about/screen/about_screen.dart';
@@ -44,24 +44,32 @@ import 'package:pumped_end_device/util/log_util.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:pumped_end_device/util/theme_notifier.dart';
 import 'package:pumped_end_device/util/ui_themes.dart';
+import 'package:rate_my_app/rate_my_app.dart';
 
 import 'data/local/location/geo_location_wrapper.dart';
 import 'firebase_options.dart';
 
 GetIt getIt = GetIt.instance;
-// Set this variable to false when in release mode.
-bool enrichOffers = true;
-const appVersion = "32";
+bool initializeRateMyApp = true;
+const appVersion = "33.4";
 const getLocationWrapperInstanceName = 'geoLocationWrapper';
 const platformWrapperInstanceName = 'platformWrapper';
 const locationDataSourceInstanceName = 'locationDataSource';
 const underMaintenanceServiceName = 'underMaintenanceService';
 const firebaseServiceInstanceName = 'firebaseService';
+final RateMyApp rateMyApp = RateMyApp(
+    preferencesPrefix: 'pedRateMyApp_',
+    minDays: 0,
+    minLaunches: 8,
+    remindDays: 0,
+    remindLaunches: 4,
+    appStoreIdentifier: '',
+    googlePlayIdentifier: 'com.voyagertech.pumped');
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // if (Firebase.apps.isEmpty) {
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform, name: 'PED Mobile');
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform, name: 'PED-Mobile');
   // } else {
   //   Firebase.app();
   // }

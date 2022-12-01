@@ -19,7 +19,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:pumped_end_device/data/local/dao/update_history_dao.dart';
+import 'package:pumped_end_device/data/local/dao2/update_history_dao.dart';
 import 'package:pumped_end_device/main.dart';
 import 'package:pumped_end_device/models/update_type.dart';
 import 'package:pumped_end_device/user-interface/nav-drawer/nav_drawer_widget.dart';
