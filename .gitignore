@@ -28,6 +28,7 @@ android/.gitignore
 android/gradle.properties
 android/gradlew
 android/gradlew.bat
+android/app/src/main/java/
 !android/app/src/debug/
 !android/app/src/main/
 !android/app/src/profile/
