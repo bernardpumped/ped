@@ -17,10 +17,9 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:pumped_end_device/data/local/dao/favorite_fuel_stations_dao.dart';
-import 'package:pumped_end_device/data/local/dao/hidden_result_dao.dart';
-import 'package:pumped_end_device/data/local/dao/update_history_dao.dart';
-import 'package:pumped_end_device/data/local/dao/user_configuration_dao.dart';
+import 'package:pumped_end_device/data/local/dao2/favorite_fuel_stations_dao.dart';
+import 'package:pumped_end_device/data/local/dao2/hidden_result_dao.dart';
+import 'package:pumped_end_device/data/local/dao2/user_configuration_dao.dart';
 import 'package:pumped_end_device/data/local/model/user_configuration.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/util/log_util.dart';
@@ -58,16 +57,6 @@ class _CleanupLocalCacheScreenState extends State<CleanupLocalCacheScreen> {
               setState(() {
                 LogUtil.debug(_tag, 'build::Clear Search settings Click function');
                 _clearSearchSettings = value!;
-              });
-            }),
-            _buildListTile(
-                Icons.history,
-                "Update History",
-                "All your local data related to updates made to fuel prices and operating times will be erased",
-                _clearUpdateHistory, (value) {
-              setState(() {
-                LogUtil.debug(_tag, 'build::Clear Update History Click function');
-                _clearUpdateHistory = value!;
               });
             }),
             _buildListTile(Icons.favorite_border_outlined, "Favourite Stations",
@@ -133,7 +122,6 @@ class _CleanupLocalCacheScreenState extends State<CleanupLocalCacheScreen> {
       if (dialogContext != null) {
         setState(() {
           _clearSearchSettings = false;
-          _clearUpdateHistory = false;
           _clearFavouriteStations = false;
           _clearApplicationData = false;
           _clearHiddenFuelStations = false;
@@ -159,9 +147,6 @@ class _CleanupLocalCacheScreenState extends State<CleanupLocalCacheScreen> {
     if (_clearSearchSettings || _clearApplicationData) {
       searchSettingsDeleted = await _cleanUpSearchSettings();
     }
-    if (_clearUpdateHistory || _clearApplicationData) {
-      updateHistoryDeleted = await _cleanUpUpdateHistory();
-    }
     if (_clearFavouriteStations || _clearApplicationData) {
       favouriteStationsDeleted = await _cleanUpFavouriteStations();
     }
@@ -179,18 +164,6 @@ class _CleanupLocalCacheScreenState extends State<CleanupLocalCacheScreen> {
       await Future.delayed(const Duration(milliseconds: 300));
     } catch (error, s) {
       LogUtil.debug(_tag, 'Error deleting user configuration $s');
-      return false;
-    }
-    return true;
-  }
-
-  Future<bool> _cleanUpUpdateHistory() async {
-    try {
-      int result = await UpdateHistoryDao.instance.deleteUpdateHistory();
-      LogUtil.debug(_tag, '$result Update History records successfully deleted');
-      await Future.delayed(const Duration(milliseconds: 300));
-    } catch (error, s) {
-      LogUtil.debug(_tag, 'Error deleting Update History $s');
       return false;
     }
     return true;
@@ -221,7 +194,6 @@ class _CleanupLocalCacheScreenState extends State<CleanupLocalCacheScreen> {
   }
 
   bool _clearSearchSettings = false;
-  bool _clearUpdateHistory = false;
   bool _clearFavouriteStations = false;
   bool _clearApplicationData = false;
   bool _clearHiddenFuelStations = false;
@@ -246,9 +218,6 @@ class _CleanupLocalCacheScreenState extends State<CleanupLocalCacheScreen> {
       List<String> dataToClean = [];
       if (_clearFavouriteStations) {
         dataToClean.add(favFuelStations);
-      }
-      if (_clearUpdateHistory) {
-        dataToClean.add(updtHistory);
       }
       if (_clearSearchSettings) {
         dataToClean.add(srchSettings);
@@ -281,11 +250,6 @@ class _CleanupLocalCacheScreenState extends State<CleanupLocalCacheScreen> {
     if ((_clearApplicationData || _clearSearchSettings)) {
       if (!searchSettingsDeleted) {
         failed.add('Search Settings');
-      }
-    }
-    if ((_clearApplicationData || _clearUpdateHistory)) {
-      if (!updateHistoryDeleted) {
-        failed.add('Update History');
       }
     }
     if (failed.isNotEmpty) {

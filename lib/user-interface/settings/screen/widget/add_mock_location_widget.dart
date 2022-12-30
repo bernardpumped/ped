@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:pumped_end_device/data/local/dao/mock_location_dao.dart';
+import 'package:pumped_end_device/data/local/dao2/mock_location_dao.dart';
 import 'package:pumped_end_device/data/local/model/mock_location.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/util/data_utils.dart';
@@ -85,8 +85,7 @@ class _AddMockLocationWidgetState extends State<AddMockLocationWidget> {
                             country: country,
                             latitude: double.parse(latStr),
                             longitude: double.parse(lngStr));
-                        dynamic result = await MockLocationDao.instance.insertMockLocation(mockLocation);
-                        LogUtil.debug(_tag, 'Successfully inserted mock location. result $result');
+                        await MockLocationDao.instance.insertMockLocation(mockLocation);
                         _clearTextControllers(addressLineEditingController, stateEditingController,
                             countryEditingController, latitudeEditingController, longitudeEditingController);
                         widget.callback();

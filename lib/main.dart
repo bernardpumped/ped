@@ -19,7 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
-import 'package:pumped_end_device/data/local/dao/ui_settings_dao.dart';
+import 'package:pumped_end_device/data/local/dao2/ui_settings_dao.dart';
 import 'package:pumped_end_device/data/local/location/location_data_source.dart';
 import 'package:pumped_end_device/user-interface/ped_base_page_view.dart';
 import 'package:pumped_end_device/user-interface/splash/screen/splash_screen.dart';
@@ -35,7 +35,7 @@ import 'data/local/model/ui_settings.dart';
 GetIt getIt = GetIt.instance;
 // Set this variable to false when in release mode.
 bool enrichOffers = true;
-const appVersion = "32.3";
+const appVersion = "33.2";
 const getLocationWrapperInstanceName = 'geoLocationWrapper';
 const locationDataSourceInstanceName = 'locationDataSource';
 const underMaintenanceServiceName = 'underMaintenanceService';

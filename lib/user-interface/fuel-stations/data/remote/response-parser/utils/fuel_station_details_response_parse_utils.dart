@@ -29,8 +29,8 @@ import 'package:pumped_end_device/util/log_util.dart';
 
 class FuelStationDetailsResponseParseUtils {
   static const _tag = 'FuelStationDetailsResponseParseUtils';
-  static Map<String, FuelStation> getStationIdStationMap(
-      final Map<String, dynamic> responseJson, final Map<String, List<FuelQuote>> stationIdFuelQuotes) {
+  static Map<String, FuelStation> getStationIdStationMap(final Map<String, dynamic> responseJson,
+      final Map<String, List<FuelQuote>> stationIdFuelQuotes, final bool enrichOffers) {
     final Map<String, dynamic> stationIdStationJsonMap = responseJson['fuelStations'];
     final Map<String, FuelStation> stationIdStationMap = {};
     for (final MapEntry<String, dynamic> me in stationIdStationJsonMap.entries) {
@@ -72,11 +72,11 @@ class FuelStationDetailsResponseParseUtils {
       );
       stationIdStationMap.putIfAbsent(stationIdStr, () => fuelStation);
     }
-    if (!kReleaseMode && enrichOffers) {
+    if (enrichOffers) {
       LogUtil.debug(
           _tag,
           'Would attempt to enrich offers, as [kReleaseMode=$kReleaseMode] '
-          'and [enrichOffers=$enrichOffers]');
+              'and [enrichOffers=$enrichOffers]');
       _enrichOffers(stationIdStationMap);
     }
     return stationIdStationMap;
@@ -92,8 +92,7 @@ class FuelStationDetailsResponseParseUtils {
     }
     LogUtil.debug(_tag, 'None of the existing fuel-stations has promos / services. So enriching');
     LogUtil.debug(
-        _tag,
-        'Enrichment will happen only for stations which have no promos and no services but have fuel-quotes');
+        _tag, 'Enrichment will happen only for stations which have no promos and no services but have fuel-quotes');
     int max = 10;
     var random = Random();
     for (var station in stationIdStationMap.values) {
@@ -143,7 +142,7 @@ class FuelStationDetailsResponseParseUtils {
         addressLine1: fuelStationJsonVal['addressLine'],
         latitude: fuelStationJsonVal['latitude'],
         longitude: fuelStationJsonVal['longitude'],
-        contactName: stationName??fuelStationJsonVal['contactName'],
+        contactName: stationName ?? fuelStationJsonVal['contactName'],
         countryName: fuelStationJsonVal['country'],
         email: fuelStationJsonVal['email'],
         fax: fuelStationJsonVal['fax'],

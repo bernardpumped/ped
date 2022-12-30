@@ -10,9 +10,9 @@ homepage: https://www.pumpedfuel.com/
 repository: https://github.com/bernardpumped/ped/tree/agl
 issue_tracker: https://github.com/bernardpumped/ped/issues
 documentation: https://github.com/bernardpumped/ped/tree/agl#readme
-version: 1.0.0+32
+version: 1.0.0+332
 
-# AGL branch is landscape and specific to web and linux for Yocto/AGL
+# AGL branch is landscape and specific to web, linux and custom Yocto/AGL
 platforms:
   linux:
     web:
@@ -35,7 +35,9 @@ dependencies:
   http: ^0.13.3
   implicitly_animated_reorderable_list: ^0.4.1             # <- discontinued we have forked and will maintain as per ped requirements, and may push back to the community to be decided
   intl: ^0.17.0
-  localstore: ^1.2.0                                       # <- utilises internal dependency path_provider_linux, next release reviewing flutter_secure_storage
+  localstore: ^1.2.0                                       # <- zombie - transitioning to flutter_secure_storage, which is dependant upon path_provider_linux, and xdg_directories
+                                                           #             which failed to find "xdg-user-dir" in the search path whilst testing on AGL QEMU image - maybe missing
+  flutter_secure_storage: ^6.1.0
   sprintf: ^6.0.0
   uuid: ^3.0.4
   provider: 6.0.3
