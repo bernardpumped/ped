@@ -23,15 +23,21 @@
 hs_err_pid*
 .dart_tool
 .idea
-android/settings.gradle
-android/.gitignore
-android/gradle.properties
-android/gradlew
-android/gradlew.bat
-android/app/src/main/java/
+!android
+android/*
+!android/app
+android/app/*
+!android/app/src
+android/app/src/*
 !android/app/src/debug/
+android/app/src/debug/*
+!android/app/src/debug/AndroidManifest.xml
 !android/app/src/main/
+android/app/src/main/*
+!android/app/src/main/AndroidManifest.xml
 !android/app/src/profile/
+android/app/src/profile/*
+!android/app/src/profile/AndroidManifest.xml
 !android/AndroidManifest.xml
 !android/app/google-services.json
 

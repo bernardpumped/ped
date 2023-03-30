@@ -27,7 +27,6 @@ dependencies:
   fl_chart: ^0.55.0
   get_it: ^7.2.0
   http: ^0.13.5
-  implicitly_animated_reorderable_list: ^0.4.2             # <- discontinued need to find replacement
   intl: ^0.17.0
   localstore: ^1.2.0
   flutter_secure_storage: ^6.1.0

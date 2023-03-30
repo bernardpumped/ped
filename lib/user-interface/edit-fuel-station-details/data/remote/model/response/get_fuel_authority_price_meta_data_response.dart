@@ -23,6 +23,6 @@ class GetFuelAuthorityPriceMetaDataResponse extends Response {
   String authorityId;
   List<FuelAuthorityPriceMetadataVo> metadata;
   GetFuelAuthorityPriceMetaDataResponse(final String responseCode, final String? responseDetails,
-      final Map<String, dynamic> invalidArguments, final int responseEpoch, this.authorityId, this.metadata)
+      final Map<String, dynamic>? invalidArguments, final int responseEpoch, this.authorityId, this.metadata)
       : super(responseCode, responseDetails, invalidArguments, responseEpoch);
 }
