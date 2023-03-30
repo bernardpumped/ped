@@ -1,22 +1,22 @@
 # Pumped End Device (PED)
 ## Table Of Contents
-| Title
-|:-------------
-|<a href="#1-introduction">1. Introduction</a>
-|<a href="#2-investing">2. Investing</a>
-|<a href="#3-license">3. License</a>
-|<a href="#4-dev-env-setup-and-build-on-mac">4. Dev Env Setup and Build on Mac</a>
-|<a href="#5-prerequisite-for-running-ped">5. Prerequisite for running PED</a>
-|<a href="#6-running-on-android-emulator">6. Running on Android Emulator</a>
-|<a href="#7-running-on-ios-simulator">7. Running on iOS Simulator</a>
-|<a href="#8-running-on-local-web">8. Running on Local Web</a>
-|<a href="#9-running-on-linux-desktop">9. Running on Linux Desktop</a>
-|<a href="#10-running-on-meta-flutter">10. Running on Meta Flutter</a>
-|<a href="#11-running-on-toyota-ivi-homescreen">11. Running on Toyota IVI Homescreen</a>
-|<a href="#12-deploying-on-agl">12. Deploying on AGL</a>
-|<a href="#13-deploying-on-embedded">13. Deploying on Embedded</a>
-|<a href="#14-ped-testability">14. PED Testability</a>
-|<a href="#15-faq">15. FAQ</a>
+| Title                                                                                   |
+|:----------------------------------------------------------------------------------------|
+| <a href="#1-introduction">1. Introduction</a>                                           |
+| <a href="#2-investing">2. Investing</a>                                                 |
+| <a href="#3-license">3. License</a>                                                     |
+| <a href="#4-dev-env-setup-and-build-on-mac">4. Dev Env Setup and Build on Mac</a>       |
+| <a href="#5-prerequisite-for-running-ped">5. Prerequisite for running PED</a>           |
+| <a href="#6-running-on-android-emulator">6. Running on Android Emulator</a>             |
+| <a href="#7-running-on-ios-simulator">7. Running on iOS Simulator</a>                   |
+| <a href="#8-running-on-local-web">8. Running on Local Web</a>                           |
+| <a href="#9-running-on-linux-desktop">9. Running on Linux Desktop</a>                   |
+| <a href="#10-running-on-meta-flutter">10. Running on Meta Flutter</a>                   |
+| <a href="#11-running-on-toyota-ivi-homescreen">11. Running on Toyota IVI Homescreen</a> |
+| <a href="#12-deploying-on-agl">12. Deploying on AGL</a>                                 |
+| <a href="#13-deploying-on-embedded">13. Deploying on Embedded</a>                       |
+| <a href="#14-ped-testability">14. PED Testability</a>                                   |
+| <a href="#15-faq">15. FAQ</a>                                                           |
 
 ## 1. Introduction
 ### Background

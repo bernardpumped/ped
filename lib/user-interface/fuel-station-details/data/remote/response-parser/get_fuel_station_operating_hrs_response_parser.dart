@@ -34,7 +34,7 @@ class GetFuelStationOperatingHrsResponseParser extends ResponseParser<GetFuelSta
     final Map<String, dynamic> responseJson = convert.jsonDecode(response);
     final String responseCode = responseJson['responseCode'];
     LogUtil.debug(_tag, 'Response Code : $responseCode');
-    final Map<String, dynamic> invalidArguments = responseJson['invalidArguments'];
+    final Map<String, dynamic>? invalidArguments = responseJson['invalidArguments'];
     final int responseEpoch = responseJson['responseEpoch'];
     final String? responseDetails = responseJson['responseDetails'];
     return GetFuelStationOperatingHrsResponse(

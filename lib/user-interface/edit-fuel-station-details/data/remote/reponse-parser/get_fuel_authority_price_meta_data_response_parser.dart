@@ -32,7 +32,7 @@ class GetFuelAuthorityPriceMetaDataResponseParser extends ResponseParser<GetFuel
     final String responseCode = responseJson['responseCode'];
     LogUtil.debug(_tag, 'Response Code : $responseCode');
     final String? responseDetails = responseJson['responseDetails'];
-    final Map<String, dynamic> invalidArguments = responseJson['invalidArguments'];
+    final Map<String, dynamic>? invalidArguments = responseJson['invalidArguments'];
     final int responseEpoch = responseJson['responseEpoch'];
     return GetFuelAuthorityPriceMetaDataResponse(responseCode, responseDetails, invalidArguments, responseEpoch,
         _getAuthorityId(responseJson), _getMetadata(responseJson));

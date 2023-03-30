@@ -39,7 +39,7 @@ class GetFuelStationDetailsBatchResponseParser extends ResponseParser<GetFuelSta
     final Map<String, dynamic> responseJson = convert.jsonDecode(response);
     final String responseCode = responseJson['responseCode'];
     final String? responseDetails = responseJson['responseDetails'];
-    final Map<String, dynamic> invalidArguments = responseJson['invalidArguments'];
+    final Map<String, dynamic>? invalidArguments = responseJson['invalidArguments'];
     final int responseEpoch = responseJson['responseEpoch'];
     LogUtil.debug(_tag, 'Response Code : $responseCode');
     if (authorityId == null) {
