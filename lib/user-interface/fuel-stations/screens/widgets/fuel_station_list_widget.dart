@@ -17,12 +17,12 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:implicitly_animated_reorderable_list/implicitly_animated_reorderable_list.dart';
-import 'package:implicitly_animated_reorderable_list/transitions.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/screens/widgets/fuel_station_type.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/utils/fuel_stations_sorter.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station.dart';
 import 'package:pumped_end_device/models/pumped/fuel_type.dart';
+import 'package:pumped_end_device/user-interface/utils/animated-reorderable-list/implicitly_animated_list.dart';
+import 'package:pumped_end_device/user-interface/utils/animated-reorderable-list/size_fade_transition.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 import 'fuel_station_list_item_widget.dart';
 

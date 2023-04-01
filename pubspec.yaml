@@ -33,7 +33,7 @@ dependencies:
   fl_chart: ^0.55.0
   get_it: ^7.2.0
   http: ^0.13.3
-  implicitly_animated_reorderable_list: ^0.4.1             # <- discontinued we have forked and will maintain as per ped requirements, and may push back to the community to be decided
+#  implicitly_animated_reorderable_list: ^0.4.1             # <- discontinued we have forked and will self maintain as per ped requirement
   intl: ^0.17.0
   localstore: ^1.2.0                                       # <- zombie - transitioning to flutter_secure_storage, which is dependant upon path_provider_linux, and xdg_directories
                                                            #             which failed to find "xdg-user-dir" in the search path whilst testing on AGL QEMU image - maybe missing

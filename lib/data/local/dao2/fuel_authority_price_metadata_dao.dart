@@ -24,7 +24,6 @@ import 'package:uuid/uuid.dart';
 
 class FuelAuthorityPriceMetadataDao {
   static const _tag = 'FuelAuthorityPriceMetadataDao';
-  static const _uuid = Uuid();
 
   static const _collectionFuelAuthorityFuelType = 'ped_fuel_authority_fuel_type';
   static const _collectionFuelAuthorityPriceMetadata = 'ped_fuel_authority_metadata';
@@ -35,21 +34,19 @@ class FuelAuthorityPriceMetadataDao {
 
   Future<dynamic> insertFuelAuthorityPriceMetadata(final FuelAuthorityPriceMetadata metaData) async {
     final SecureStorage db = SecureStorage.instance;
-    final fapmId = _uuid.v1();
-    LogUtil.debug(_tag,
-        'Inserting metadata for fa - ${metaData.fuelAuthority} fuel-type ${metaData.fuelType} against id $fapmId');
+    final fapmId = const Uuid().v1();
+    LogUtil.debug(_tag, 'Inserting metadata for fa - ${metaData.fuelAuthority} fuel-type ${metaData.fuelType} against id $fapmId');
     await db.writeData(StorageItem(_collectionFuelAuthorityPriceMetadata, fapmId, convert.jsonEncode(metaData)));
     final String? data = await db.readData(_collectionFuelAuthorityFuelType, metaData.fuelAuthority);
-    final Map<String, dynamic>? fuelTypeIds = data != null ? convert.jsonDecode(data) : null;
-    LogUtil.debug(_tag,
-        'Found ${fuelTypeIds == null ? 0 : fuelTypeIds.length} existing Fuel-Type:Id mappings for ${metaData.fuelAuthority}');
+    final Map<String, dynamic> fuelTypeIds = data != null ? convert.jsonDecode(data) : {};
+    LogUtil.debug(_tag, 'Found ${fuelTypeIds.length} existing Fuel-Type:Id mappings for ${metaData.fuelAuthority}');
 
     dynamic oldFapmId;
-    if (fuelTypeIds == null || fuelTypeIds.isEmpty) {
+    if (fuelTypeIds.isEmpty) {
       LogUtil.debug(_tag,
-          'Inserted only mapping {Fuel-Type:Id} mapping between ${metaData.fuelType} : $fapmId for ${metaData.fuelAuthority}');
+          'Inserting only mapping {Fuel-Type:Id} mapping between ${metaData.fuelType} : $fapmId for ${metaData.fuelAuthority}');
       db.writeData(StorageItem(
-          _collectionFuelAuthorityFuelType, metaData.fuelAuthority, convert.jsonEncode({metaData.fuelType: fapmId})));
+          _collectionFuelAuthorityFuelType, metaData.fuelAuthority, convert.jsonEncode(fuelTypeIds)));
     } else {
       if (fuelTypeIds.containsKey(metaData.fuelType)) {
         oldFapmId = fuelTypeIds.remove(metaData.fuelType);
@@ -57,8 +54,10 @@ class FuelAuthorityPriceMetadataDao {
       }
       fuelTypeIds.putIfAbsent(metaData.fuelType, () => fapmId);
       LogUtil.debug(_tag, 'Persisted new Id {${metaData.fuelType} : $fapmId} mapping');
+      db.writeData(StorageItem(
+          _collectionFuelAuthorityFuelType, metaData.fuelAuthority, convert.jsonEncode(fuelTypeIds)));
     }
-    if (oldFapmId != fapmId) {
+    if (oldFapmId != null && oldFapmId != fapmId) {
       db.deleteData(_collectionFuelAuthorityPriceMetadata, oldFapmId);
       LogUtil.debug(_tag, 'Deleted old Id $oldFapmId data');
     }
