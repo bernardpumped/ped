@@ -19,7 +19,6 @@
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
-import 'package:pumped_end_device/main.dart';
 import 'package:pumped_end_device/models/pumped/fuel_quote.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station_address.dart';
@@ -51,7 +50,7 @@ class FuelStationDetailsResponseParseUtils {
       }
       final FuelStation fuelStation = FuelStation(
         stationId: fuelStationJsonVal['fuelStationId'],
-        fuelStationAddress: _getFuelStationAddress(fuelStationJsonVal, fuelStationJsonVal['stationName']),
+        fuelStationAddress: _getFuelStationAddress(fuelStationJsonVal['addressVo'], fuelStationJsonVal['stationName']),
         fuelStationName: fuelStationJsonVal['stationName'],
         distance: fuelStationJsonVal['distance'],
         distanceUnit: fuelStationJsonVal['distanceUnit'],
@@ -137,20 +136,20 @@ class FuelStationDetailsResponseParseUtils {
     return stationIdFuelQuotes;
   }
 
-  static FuelStationAddress _getFuelStationAddress(final Map<String, dynamic> fuelStationJsonVal, String? stationName) {
+  static FuelStationAddress _getFuelStationAddress(final Map<String, dynamic> addressJsonVal, String? stationName) {
     return FuelStationAddress(
-        addressLine1: fuelStationJsonVal['addressLine'],
-        latitude: fuelStationJsonVal['latitude'],
-        longitude: fuelStationJsonVal['longitude'],
-        contactName: stationName ?? fuelStationJsonVal['contactName'],
-        countryName: fuelStationJsonVal['country'],
-        email: fuelStationJsonVal['email'],
-        fax: fuelStationJsonVal['fax'],
-        locality: fuelStationJsonVal['locality'],
-        phone1: fuelStationJsonVal['phone1'],
-        phone2: fuelStationJsonVal['phone2'],
-        region: fuelStationJsonVal['region'],
-        state: fuelStationJsonVal['state'],
-        zip: fuelStationJsonVal['zip']);
+        addressLine1: addressJsonVal['addressLine'],
+        latitude: addressJsonVal['latitude'],
+        longitude: addressJsonVal['longitude'],
+        contactName: stationName ?? addressJsonVal['contactName'],
+        countryName: addressJsonVal['country'],
+        email: addressJsonVal['email'],
+        fax: addressJsonVal['fax'],
+        locality: addressJsonVal['locality'],
+        phone1: addressJsonVal['phone1'],
+        phone2: addressJsonVal['phone2'],
+        region: addressJsonVal['region'],
+        state: addressJsonVal['state'],
+        zip: addressJsonVal['zip']);
   }
 }

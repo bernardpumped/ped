@@ -23,7 +23,6 @@ import 'package:uuid/uuid.dart';
 
 class FuelAuthorityPriceMetadataDao {
   static const _tag = 'FuelAuthorityPriceMetadataDao';
-  static const _uuid = Uuid();
 
   static const _collectionFuelAuthorityFuelType = 'ped_fuel_authority_fuel_type';
   static const _collectionFuelAuthorityPriceMetadata = 'ped_fuel_authority_metadata';
@@ -34,7 +33,7 @@ class FuelAuthorityPriceMetadataDao {
 
   Future<dynamic> insertFuelAuthorityPriceMetadata(final FuelAuthorityPriceMetadata metaData) async {
     final db = Localstore.instance;
-    final fapmId = _uuid.v1();
+    final fapmId = const Uuid().v1();
 
     LogUtil.debug(_tag, 'Inserting metadata for fa - ${metaData.fuelAuthority} fuel-type ${metaData.fuelType} against id $fapmId');
     db.collection(_collectionFuelAuthorityPriceMetadata).doc(fapmId).set(metaData.toMap());
@@ -53,11 +52,14 @@ class FuelAuthorityPriceMetadataDao {
         LogUtil.debug(_tag, 'Removed old {${metaData.fuelType} : $oldFapmId} mapping');
       }
       fuelTypeIds.putIfAbsent(metaData.fuelType, () => fapmId);
+      db.collection(_collectionFuelAuthorityFuelType).doc(metaData.fuelAuthority).set(fuelTypeIds);
       LogUtil.debug(_tag, 'Persisted new Id {${metaData.fuelType} : $fapmId} mapping');
     }
     if (oldFapmId != fapmId) {
       db.collection(_collectionFuelAuthorityPriceMetadata).doc(oldFapmId).delete();
       LogUtil.debug(_tag, 'Deleted old Id $oldFapmId data');
+    } else {
+      LogUtil.debug(_tag, 'Returning from insertFuelAuthorityPriceMetadata');
     }
   }
 

@@ -1,28 +1,28 @@
 # Pumped End Device (PED)
 ## Table Of Contents
-| Title
-|:-------------
-|<a href="#1-introduction">1. Introduction</a>
-|<a href="#2-investing">2. Investing</a>
-|<a href="#3-license">3. License</a>
-|<a href="#4-dev-env-setup-and-build-on-mac">4. Dev Env Setup and Build on Mac</a>
-|<a href="#5-prerequisite-for-running-ped">5. Prerequisite for running PED</a>
-|<a href="#6-running-on-android-emulator">6. Running on Android Emulator</a>
-|<a href="#7-running-on-ios-simulator">7. Running on iOS Simulator</a>
-|<a href="#8-running-on-local-web">8. Running on Local Web</a>
-|<a href="#9-running-on-linux-desktop">9. Running on Linux Desktop</a>
-|<a href="#10-running-on-meta-flutter">10. Running on Meta Flutter</a>
-|<a href="#11-running-on-toyota-ivi-homescreen">11. Running on Toyota IVI Homescreen</a>
-|<a href="#12-deploying-on-agl">12. Deploying on AGL</a>
-|<a href="#13-deploying-on-embedded">13. Deploying on Embedded</a>
-|<a href="#14-ped-testability">14. PED Testability</a>
-|<a href="#15-faq">15. FAQ</a>
+| Title                                                                                   |
+|:----------------------------------------------------------------------------------------|
+| <a href="#1-introduction">1. Introduction</a>                                           |
+| <a href="#2-investing">2. Investing</a>                                                 |
+| <a href="#3-license">3. License</a>                                                     |
+| <a href="#4-dev-env-setup-and-build-on-mac">4. Dev Env Setup and Build on Mac</a>       |
+| <a href="#5-prerequisite-for-running-ped">5. Prerequisite for running PED</a>           |
+| <a href="#6-running-on-android-emulator">6. Running on Android Emulator</a>             |
+| <a href="#7-running-on-ios-simulator">7. Running on iOS Simulator</a>                   |
+| <a href="#8-running-on-local-web">8. Running on Local Web</a>                           |
+| <a href="#9-running-on-linux-desktop">9. Running on Linux Desktop</a>                   |
+| <a href="#10-running-on-meta-flutter">10. Running on Meta Flutter</a>                   |
+| <a href="#11-running-on-toyota-ivi-homescreen">11. Running on Toyota IVI Homescreen</a> |
+| <a href="#12-deploying-on-agl">12. Deploying on AGL</a>                                 |
+| <a href="#13-deploying-on-embedded">13. Deploying on Embedded</a>                       |
+| <a href="#14-ped-testability">14. PED Testability</a>                                   |
+| <a href="#15-faq">15. FAQ</a>                                                           |
 
 ## 1. Introduction
 ### Background
 Pumped is a combination of 3 core projects to connect vehicle drivers with retail merchants, initially starting with fuel stations. Our objective is to offer the best fuel prices, closest stations, friendliest service, cleanest restrooms, tastiest coffee and so much more, direct to vehicle drivers.
 
-Retailers, beat your competition! If you can't compete on fuel price alone, promote your offers and personalised services on Pumped platform and get it delivered directly to your target audience faster and cheaper than any other means possible via Pumped app and 'every other' smartphone fuel app registered as Pumped agents.
+Retailers, beat your competition! If you can't compete on fuel price alone, promote your offers and personalized services on Pumped platform and get it delivered directly to your target audience faster and cheaper than any other means possible via Pumped app and 'every other' smartphone fuel app registered as Pumped agents.
 
 ### Pumped Projects
 **Backend -** Enterprise grade globally scalable web app providing centralized integration for all external parties. Phase-1 Complete and in production. Currently sourcing near real time fuel prices and associated data for >75% of fuel stations throughout Australia. Please note, if you're interested in covering your location - country, state, province, emirate or continent, we’ll be happy to discuss options with you.
@@ -33,7 +33,7 @@ Retailers, beat your competition! If you can't compete on fuel price alone, prom
 You may be wondering if we cover EV's. The answer is not yet, we are of course very interested and happy to discuss options with you.
 
 ***PED Branches -***
-We have two branches main & agl and yes appreciate flutter is designed as a single code base which should suffice, but in reality mobile phones and automotive usecases are far too many differences to be shared
+We have two branch sets main & agl and yes appreciate flutter is designed as a single code base which should suffice, but in reality mobile phones and automotive IVI use cases have far too many differences to be shared
 * main - portrait mode handhelds for android and iOS scheduled for Google App store production release 2023 Q2.<br>
 * agl - landscape mode InVehicle Infotainment (IVI) web and linux for Automotive demo release scheduled 2023 Q2.
 
@@ -69,7 +69,7 @@ $ export PATH="$PATH:`pwd`/flutter/bin"
 ```bash
 $ export PATH="$PATH:~/development/flutter/bin"
 ```
-* And then execute source the rc file where you modified the PATH variable.
+* And then source the .bashrc file where you modified the PATH variable.
 ```bash
 $ source ~/.bashrc
 ```
@@ -82,26 +82,26 @@ $ which flutter dart
 
 ### 4.2. Android Studio Setup
 Internally we use Android Studio as our IDE for PED Flutter development, which provides many useful features including tools and plugins for executing code on both iOS and Android simulators in addition to physical devices. Other IDEs such as Visual Studio are also commonly used for flutter development.
-* Visit [Android Studio Website](https://developer.android.com/studio) to download Android Studio. By default, it shows platform specific build to download.
-* Drag and drop the downloaded executable in Applications folder as shown so that it easily comes under spotlight search. <img src="documentation/assets/Screenshot-1.png" width="450" />
+* Visit [Android Studio Website](https://developer.android.com/studio) to download Android Studio. By default, it shows your platform specific build to download.
+* Drag and drop the downloaded executable into the Applications folder as shown so that it easily comes under spotlight search. <img src="documentation/assets/Screenshot-1.png" width="450" />
 * 1st time launching Android Studio prompts for the installation of multiple dependencies.
 * Open SDK Manager [Menu > Preferences > Appearance and Behaviour > System Settings > Android SDK]. Refer to the images to validate and install missing SDK Platforms and SDK Tools <table><tr><td><img src="documentation/assets/Screenshot-2.png" width="500" /></td></tr><tr><td><img src="documentation/assets/Screenshot-3.png" width="500" /></td></tr></table>
 * Note - Android SDK Command-line is important and separately prompts you to accept android licenses. <img src="documentation/assets/Screenshot-7.png" width="450" />
-* Navigate to Menu > Preferences > Plugins. Install following Android Studio plugins. They provide necessary tools to enable compilation & execution of Flutter application. <img src="documentation/assets/Screenshot-4.png" width="450" />
+* Navigate to Menu > Preferences > Plugins. Install the following Android Studio plugins. They provide necessary tools to enable compilation & execution of Flutter applications. <img src="documentation/assets/Screenshot-4.png" width="450" />
 
 ### 4.3. XCode Setup
-XCode is only available for Mac and is mandatory when building Flutter apps for macOS and iOS. Therefore, if you're not building for apple, you can bypass this section. Xcode provides Simulator application which emulates iOS device.
-* Open App Store on Mac and search for XCode. Click on install if not already installed, and note download is large 10gb+ and can take several hours based upon your network bandwidth. If it is already installed it shows "Open" button <img src="documentation/assets/Screenshot-5.png" width="450" />
+XCode is only available for Mac and is mandatory when building Flutter apps for macOS and iOS. Therefore, if you're not building for Apple, you can bypass this section. Xcode provides a Simulator application which emulates iOS devices.
+* Open the App Store on Mac and search for XCode. Click on install if not already installed, and note download is large 10gb+ and can take several hours based upon your network bandwidth. If it is already installed it shows "Open" button <img src="documentation/assets/Screenshot-5.png" width="450" />
 * Configure the Xcode command-line tools to use the newly-installed version of Xcode by running the following from the command line:
 ```bash
 $ sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
 $ sudo xcodebuild -runFirstLaunch
 ``` 
 * Make sure the Xcode license agreement is signed by either opening Xcode once and confirming or running `sudo xcodebuild -license` from the command line.
-* Important - we will configure Apple developer account later which is another mandatory requirement when running app on physical iOS device. It is not required when running on iOS Simulator.
+* Important - we will configure Apple developer account later which is another mandatory requirement when running an app on a physical iOS device. It is not required when running on iOS Simulator.
 
 ### 4.4 Other Tools
-* Install Chrome, which will be used in development and testing of web. 
+* Install Chrome, which will be used in development and testing of the web. 
 * Execute command `flutter doctor` which validates your Mac dev host install and setup to ensure building and running Flutter application.
 * Output of the command on initial run will be <img src="documentation/assets/Screenshot-8.png" width="550" />
 * If it complains of unaccepted android licenses and missing Apple cocoapods accept licenses by executing command `$ flutter doctor --android-licenses`
@@ -120,7 +120,7 @@ $ flutter create .
 or 
 $ flutter create --org FLUTTER_APP .
 ```
-* Above command prepares workspace for building of iOS, Android and Web releases. It also pulls the relevant dependencies as mentioned in pubspec.yaml, with successful completion resulting in correct setup of Android Studio workspace. <img src="documentation/assets/Screenshot-14.png" width="800" />
+* Above command prepares workspace for building iOS, Android and Web releases. It also pulls the relevant dependencies as mentioned in pubspec.yaml, with successful completion resulting in correct setup of Android Studio workspace. <img src="documentation/assets/Screenshot-14.png" width="800" />
 
 #### 4.5.1 Android Build
 As stated above ped main branch portrait mode for handhelds android/iOS (in progress) is wired to firebase and social logins therefore if you wish to build main branch for android you must add your account details to the following for it to successfully build and run
@@ -247,7 +247,7 @@ playStore_storeFile=../'YOUR_playStore_storeFile'-play-upload.keystore
 * Execute `$ flutter build apk --debug` for Android builds. Successful execution will generate apk in path `build/app/outputs/flutter-apk/app-debug.apk`
 
 #### 4.5.2 iOS Build
-* Building for iOS requires connecting to Apple Developer account by signing in with Apple ID in Xcode and creating an iOS Development Certificate as well as a Provisioning Profile for project.
+* Building for iOS requires connecting to an Apple Developer account by signing in with Apple ID in Xcode and creating an iOS Development Certificate as well as a Provisioning Profile for the project.
 * Open the Flutter project's Xcode target with `open ios/Runner.xcworkspace`
 * Select the 'Runner' project in the navigator then the 'Runner' target in the project settings
 * Make sure a 'Development Team' is selected under Signing & Capabilities > Team. You may need to:
@@ -256,7 +256,7 @@ playStore_storeFile=../'YOUR_playStore_storeFile'-play-upload.keystore
   - Register your device with your Apple Developer Account
   - Let Xcode automatically provision a profile for your app
 * iOS Developer Account Configuration Yet to-be-defined
-* Execute `$ flutter build ios --debug` for iOS builds. It results into generation of `build/ios/iphoneos/Runner.app` file.
+* Execute `$ flutter build ios --debug` for iOS builds. It results in generation of `build/ios/iphoneos/Runner.app` file.
 * Note - In case of M1 Macs build failing with error message `incompatible architecture (have 'arm64', need 'x86_64')` . To fix this execute the command `$ sudo arch -x86_64 gem install ffi`
 
 #### 4.5.3 Web Build
@@ -264,23 +264,23 @@ playStore_storeFile=../'YOUR_playStore_storeFile'-play-upload.keystore
 
 ## 5. Prerequisite for running PED
 * Fuel Station details displayed on PED are served from the Pumped backend server. PED code base open sourced is configured to hit the pre-production server to get this data. Though we maintain high standards, there are sometimes situations when the pre-prod backend server is not up and running, due to activities like maintenance etc. In situations, when PED is launching on the device, but fails to show any fuel stations, there are couple of possibilities 
- - There are no fuel stations in 15km radius around the latitude longitude provided by the device to the pumped server.
- - Pumped pre-production backend server is down for maintenance purpose. Follow these steps to detect it.
+ - There are no fuel stations in 15 km radius around the latitude longitude provided by the device to the pumped server.
+ - Pumped pre-production backend server is down for maintenance purposes. Follow these steps to detect it.
   - Execute commands 
     ```bash
     $ ping tst.pumpedsvr.com
     ```
-    Successful ping indicates server is up and running.
+    Successful ping indicates the server is up and running.
     ```bash
     $ curl http://tst.pumpedsvr.com:17001/getBackendMetadata
     {"responseCode":"SUCCESS","responseDetails":null,"invalidArguments":{},"responseEpoch":1639741205223,"versionId":"1.0.0.b"}
     ```
-    SUCCESS responseCode with versionId indicates that Pumped server is up and running. 
+    SUCCESS responseCode with versionId indicates Pumped backend server is up and running. 
     ```bash
     $ curl "http://tst.pumpedsvr.com:17001/getFuelStationsInRange?lat=-33.865107&lng=151.205282&range=4.763266315977763&unit=kilometre&fuelType=ALL&numResults=20&sortOrder=CHEAPEST_CLOSEST"
     {"responseCode":"SUCCESS","responseDetails":null,"invalidArguments":{},"responseEpoch":1639743414826,"stationFuelQuoteMap":{"20609":[{"id":4843877,"fuelStationId":20609,"fuelType":"E10","fuelMeasure":"litre","quoteValue":189.9,....
     ```
-    This produces fairly large response. Here it is trimmed. The responseCode SUCCESS with stationFuelQuoteMap having data data available means that the latitude longitude are covered by Pumped.
+    This produces a fairly large response. Here it is trimmed. The responseCode SUCCESS with stationFuelQuoteMap having data data available means that the latitude longitudes are covered by Pumped.
 
 ## 6. Running on Android Emulator
 * Android Studio comes with AVD (Android Virtual Device) Manager which can be used to create Android Virtual Machines.
@@ -289,10 +289,10 @@ playStore_storeFile=../'YOUR_playStore_storeFile'-play-upload.keystore
 * Select Hardware > Choose a device definition > Category - Phone > Name - Pixel 5 > Next. ( or other hardware profile as you wish).
 * Select System Image > S (API Level 31) > Next. Note - we normally choose latest System Image
 * Verify Configuration > AVD Name (Pixel 5 API 31) > Click Show advanced setting, modify the internal storage to 4096 MB. Finish. Review other configurations.
-* When done, it presents a list of your Virtual Devices. Click on Action icon (green triangle) to start the virtual device. <img src="documentation/assets/Screenshot-13.png" width="450" />
+* When done, it presents a list of your Virtual Devices. Click on the Action icon (green triangle) to start the virtual device. <img src="documentation/assets/Screenshot-13.png" width="450" />
 * PED requires access location in order to search nearby. Clicking on the three dots (annotated as 1) will present with device settings, where the location can be set (annotated as 2). Click on the `Send` button (annotated as 3) to forward location to the emulator <img src="documentation/assets/Screenshot-12.png" width="700" />
-* As narrated within the [Introduction](#1-introduction) section, PED data is currently available throughout Australia only hence, please provide latitude and longitude of places within Australia, except the state of Victoria. Example (-33.865107, 151.205282) Sydney location. Once location has been set you can check emulator received it by opening google maps within the emulator, it should show Sydney Central Business District (CBD) Wynyard Station.
-* Once the Android Emulator is up and running, Android Studio automatically detects it. Click the Run button (green triangle) to run the application on emulator. <img src="documentation/assets/Screenshot-15.png" width="500" />
+* As narrated within the [Introduction](#1-introduction) section, PED data is currently available throughout Australia only hence, please provide latitude and longitude of places within Australia, except the state of Victoria. Example (-33.865107, 151.205282) Sydney location. Once location has been set you can check the emulator received it by opening google maps within the emulator, it should show Sydney Central Business District (CBD) Wynyard Station.
+* Once the Android Emulator is up and running, Android Studio automatically detects it. Click the Run button (green triangle) to run the application on the emulator. <img src="documentation/assets/Screenshot-15.png" width="500" />
 * On first start, application asks for access to location service, allow "While using the app" <table><tr><td><img src="documentation/assets/Screenshot-16.png" width="250" /></td><td><img src="documentation/assets/Screenshot-17.png" width="250" /></td><td><img src="documentation/assets/Screenshot-18.png" width="250" /></td></tr></table>
 
 ## 7. Running on iOS Simulator
@@ -301,8 +301,8 @@ playStore_storeFile=../'YOUR_playStore_storeFile'-play-upload.keystore
 * Simulator boots with the version of iOS supported by XCode. It can be flipped to other iOS/iPhone versions by navigating through Simulator > File Menu > Open Simulator > iOS > iPhoneXXXX <img src="documentation/assets/Screenshot-9.png" width ="600" />
 * PED requires access to location to be able to search nearby. In Simulator it can be done as Simulator Menu > Features > Location > Custom Location. <img src="documentation/assets/Screenshot-10.png" width ="600" />. 
 * It presents dialog box to enter relevant latitude and longitude <img src="documentation/assets/Screenshot-11.png" width ="200" />
-* As narrated within the [Introduction](#1-introduction) section, PED data is currently available throughout Australia only hence, plese provide latitude and longitudes of places within Australia, except the state of Victoria. Example (-33.865107, 151.205282) Sydney location. Once location has been set you can check simulator received it by opening Apple maps within the simulator, it should show Sydney CBD Wynyard Station.
-* Once the Simulator is up and running, Android Studio automatically detects it. Click the Run button (green triangle) to run the application on simulator. <img src="documentation/assets/Screenshot-19.png" width="500" />
+* As narrated within the [Introduction](#1-introduction) section, PED data is currently available throughout Australia only hence, please provide latitude and longitudes of places within Australia, except the state of Victoria. Example (-33.865107, 151.205282) Sydney location. Once location has been set you can check the simulator received it by opening Apple maps within the simulator, it should show Sydney CBD Wynyard Station.
+* Once the Simulator is up and running, Android Studio automatically detects it. Click the Run button (green triangle) to run the application on the simulator. <img src="documentation/assets/Screenshot-19.png" width="500" />
 * On first start, application asks for access to location service, allow "While Using the App" <table><tr><td><img src="documentation/assets/Screenshot-21.png" width="250" /></td><td><img src="documentation/assets/Screenshot-22.png" width="250" /></td></tr></table>
 
 ## 8. Running on Local Web
@@ -311,35 +311,35 @@ The command `flutter create .` executed as part of [Code Setup](#35-ped-code-set
 * Ensure Location Services under System Preferences > Security & Privacy is enabled on your Mac
 * Select the `Chrome (Web)` as the run target and Click the Run button (green triangle). <img src="documentation/assets/Screenshot-23.png" width="500" />
 * Chrome browser comes up and on start it asks for the location access. 
-* Note - Chrome, unlike the Emulator/Simulator, currently does not provide any mechanism to override location. Hence, until such time Google resolve, we've temporarily hard-coded Sydney location when it runs within a browser, and note it is still necessary to permit location service access for PED to function.
+* Note - Chrome, unlike the Emulator/Simulator, currently does not provide any mechanism to override location. Hence, until such time Google resolves, we've temporarily hard-coded Sydney location when it runs within a browser, and note it is still necessary to permit location service access for PED to function.
 * <table><tr><td><img src="documentation/assets/Screenshot-24.png" width="250" /></td><td><img src="documentation/assets/Screenshot-25.png" width="250" /></td><td><img src="documentation/assets/Screenshot-26.png" width="250" /></td></tr></table>
 
 ### 8.2 Hosting on a web server
-* The generated html/javascript files can also be hosted within a web-server eg ngnix. For brevity this Readme will not detail nginx server install.
+* The generated html/javascript files can also be hosted within a web-server eg nginx. For brevity this Readme will not detail nginx server install.
 * `$ flutter build web` command transpiles Flutter/dart to html/javascript into the build/web directory. Copy the contents to a separate directory eg ~/ped-web.
-* Adding a new document root to ngnix is done by modifying the ngnix.conf file, the location varies depending upon OS type and installation method. Example - on Mac if ngnix installed using Homebrew, then config file might be located in`/opt/homebrew/etc/nginx/nginx.conf`. On Linux, if installed using yum config might be located in `/etc/nginx/nginx.conf`
-* Modify the ngnix.conf file, add the ~/ped-web as additional unique location example
+* Adding a new document root to nginx is done by modifying the nginx.conf file, the location varies depending upon OS type and installation method. Example - on Mac if nginx installed using Homebrew, then the config file might be located in`/opt/homebrew/etc/nginx/nginx.conf`. On Linux, if installed using yum config might be located in `/etc/nginx/nginx.conf`
+* Modify the nginx.conf file, add the ~/ped-web as additional unique location example
 ```
 location /ped {
   root /home/<user>/ped-web/;
   autoindex on;
 } 
 ```
-* Also make sure that all users have read permissions on these files, otherwise ngnix will not serve them over web
+* Also make sure that all users have read permissions on these files, otherwise nginx will not serve them over web
 ```bash
 $ chmod a+rwx ~/ped-web
 $ cd ~/ped-web
 $ chmod a+rwx *
 ```
-* Restart ngnix. Depending on OS, the command varies. Example on Linux it is ```bash $ sudo nginx -s reload ``` on Mac it is 
+* Restart nginx. Depending on the OS, the command varies. Example on Linux it is ```bash $ sudo nginx -s reload ``` on Mac it is 
 ```bash
 $ sudo nginx -s stop
 $ sudo nginx 
 ``` 
-* Assuming, host is localhost and ngnix is running on 8080, visit http://localhost:8080/ped/index.html. PED Application works.
+* Assuming, host is localhost and nginx is running on 8080, visit http://localhost:8080/ped/index.html. PED Application works.
 * Important considerations
-  - On Linux, if there are permissions denied issues accessing above url, then check `/var/log/nginx/error.log`for errors. If there are errors related to permissions or SELinux related issues, then check corresponding chmod commands have been run.
-  - If the server is run on local machine at an HTTP endpoint, then there are no issues while accessing the location, to non-HTTPS urls. However, if the server is not a local machine, then for security reasons, browsers do not allow access to location. To circumvent, purchase an SSL certificate OR create a self signed certificate, and configure ngnix to use it. Firefox allows HTTPs URLs using self signed certificates to access location, whilst Chrome/Edge and Safari do not.  
+  - On Linux, if there are permissions denied issues accessing the above url, then check `/var/log/nginx/error.log`for errors. If there are errors related to permissions or SELinux related issues, then check corresponding chmod commands have been run.
+  - If the server is run on a local machine at an HTTP endpoint, then there are no issues while accessing the location, to non-HTTPS urls. However, if the server is not a local machine, then for security reasons, browsers do not allow access to location. To circumvent, purchase an SSL certificate OR create a self signed certificate, and configure nginx to use it. Firefox allows HTTPs URLs using self signed certificates to access location, whilst Chrome/Edge and Safari do not.  
 
 ## 9. Running on Linux Desktop
 The Linux distro we adopted is Ubuntu-20.04.x, which can be standalone or virtualized using Parallels / VirtualBox etc, and in our case using Macs we virtualized using Parallels.
@@ -358,8 +358,8 @@ The Linux distro we adopted is Ubuntu-20.04.x, which can be standalone or virtua
       ```
     - Flutter can be added permanently to the path by modifying the rc file of the default shell. 
   - Run `$ flutter doctor`. which may complain about missing Chrome browser, missing flutter IDE (we did not install Android Studio/VS Code) and no connected devices (we did not install Chrome, Emulator / Simulator). 
-  - Current intent is only to build and test Linux platform binary, that is Pumped team who develop on Mac can safely ignore these doctor complaints. This setup does not assume Linux to be development machine. 
-  - Building Flutter application on Linux would require additional tools. 
+  - Current intent is only to build and test Linux platform binary, that is Pumped team who develop on Mac can safely ignore these doctor complaints. This setup does not assume Linux to be a development machine. 
+  - Building a Flutter application on Linux would require additional tools. 
     ```bash 
     $ sudo apt-get install clang cmake ninja-build pkg-config libgtk-3-dev
     ```
@@ -370,7 +370,7 @@ The Linux distro we adopted is Ubuntu-20.04.x, which can be standalone or virtua
      $ flutter upgrade
      $ flutter devices
     ```
-    Flutter devices should show Linux Desktop as connected device.
+    Flutter devices should show Linux Desktop as the connected device.
  - Building PED on Linux
    - Get PED source code on Linux desktop from Github repository. Assume it is downloaded in ~/development/ped directory
    - Execute following commands
@@ -402,10 +402,10 @@ The Linux distro we adopted is Ubuntu-20.04.x, which can be standalone or virtua
 ### 11. Running on Toyota IVI Homescreen
 * TODO In the light of above step 10 this task now pending Meta Flutter refactoring - to be continued
 
-* This involves building and installing Toyota IVI Homescreen and then building and installing PED. Here we will be running it on desktop. Caveat when building using Mac 
+* This involves building and installing Toyota IVI Homescreen and then building and installing PED. Here we will be running it on the desktop. Caveat when building using Mac 
   This process only works on x86, in conjunction with others, we're investigating what and how to get this working on apple silicon the M1      
   - Build Toyota IVI Homescreen - Refer to [Toyota IVI Homescreen README](https://github.com/toyota-connected/ivi-homescreen/blob/main/README.md) notes
-    * Ubuntu-20.04.2 comes with a default installation of Wayland. While logging in, click on gear icon below username and choose *Ubuntu on Wayland* as login option.
+    * Ubuntu-20.04.2 comes with a default installation of Wayland. While logging in, click on gear icon below username and choose *Ubuntu on Wayland* as the login option.
     * Download the [Toyota IVI Homescreen code](https://github.com/toyota-connected/ivi-homescreen) . For reference purpose, assume it is in ~/development/ivi-homescreen/
     * Execute following commands, which adds a new update repository and installs set of libraries needed by Toyota IVI
     ```bash
@@ -478,7 +478,7 @@ The Linux distro we adopted is Ubuntu-20.04.x, which can be standalone or virtua
    ```bash
    $ flutter test test/data/local/location/geo_location_wrapper_test.dart
    ```
- * **Unit Tests with Mocking** - If the object being tested is dependent on another object, then mockito can be used to mock the dependency and fix dependency behaviour. This enables isolation and comprehensive validation of the object under test. In case, if object under test does not have dependency or there is no need to fix the dependency behaviour then Mockito is not required. To enable mocking, add [mockito](https://pub.dev/packages/mockito) dependency under dev_dependencies section of pubspec.yaml in addition to flutter_test. To use Mockito's generated mock classes, add a [build_runner](https://pub.dev/packages/build_runner) dependency under dev_dependencies section. Refer test/data/local/location/location_data_source_test.dart file as an example of how Mocks are declared. Annotate the main method with @GenerateMocks annotation and specify the list of classes whose mocks are needed to be generated. In general, these classes would be the dependencies of the class under test. Execute following command to generate the mocks
+ * **Unit Tests with Mocking** - If the object being tested is dependent on another object, then mockito can be used to mock the dependency and fix dependency behaviour. This enables isolation and comprehensive validation of the object under test. In case, if the object under test does not have dependency or there is no need to fix the dependency behaviour then Mockito is not required. To enable mocking, add [mockito](https://pub.dev/packages/mockito) dependency under dev_dependencies section of pubspec.yaml in addition to flutter_test. To use Mockito's generated mock classes, add a [build_runner](https://pub.dev/packages/build_runner) dependency under the dev_dependencies section. Refer test/data/local/location/location_data_source_test.dart file as an example of how Mocks are declared. Annotate the main method with @GenerateMocks annotation and specify the list of classes whose mocks are needed to be generated. In general, these classes would be the dependencies of the class under test. Execute following command to generate the mocks
    ```bash
    $ dart run build_runner build
    ```
@@ -486,22 +486,22 @@ The Linux distro we adopted is Ubuntu-20.04.x, which can be standalone or virtua
    ```bash
    $ flutter packages pub run build_runner build --delete-conflicting-outputs
    ```
-   It will generate mocks in a file whose name follows pattern <test_file>.mocks.dart. Referring the example - the file name will be location_data_source_test.mocks.dart. The generated mocks provide methods which can be used to fix the behaviour of mock in a particular scenario. Use these mocks to enable isolation of the logic under test. Refer the [pub.dev mockito page](https://pub.dev/packages/mockito) to understand various features provided by mockito.  Command for executing the test remains the same. 
+   It will generate mocks in a file whose name follows pattern <test_file>.mocks.dart. Referring to the example - the file name will be location_data_source_test.mocks.dart. The generated mocks provide methods which can be used to fix the behaviour of mock in a particular scenario. Use these mocks to enable isolation of the logic under test. Refer to the [pub.dev mockito page](https://pub.dev/packages/mockito) to understand various features provided by mockito.  Command for executing the test remains the same. 
    ```bash
    $ flutter test test/data/local/location/location_data_source_test.dart
    ```
-   *Code should follow certain design patterns so that dependencies could be easily mocked. Example - injecting the dependencies at the time of object creation, instead of creating them dynamically when needed. A dependency injection framework [GetIt](https://pub.dev/packages/get_it) is being introduced in PED to enable this, and the code is slowly refactored to use GetIt where ever applicable.*
+   *Code should follow certain design patterns so that dependencies could be easily mocked. Example - injecting the dependencies at the time of object creation, instead of creating them dynamically when needed. A dependency injection framework [GetIt](https://pub.dev/packages/get_it) is being introduced in PED to enable this, and the code is slowly refactored to use GetIt whereever applicable.*
 
- * **UI test cases** - The purpose of UI testing is to mimic the behaviour and experience of end user. It provides completeness to testing, as this covers testing scenarios which cannot be easily covered with the unit testing. It is an integration testing mechanism for the application. These test run in a separate process and can be done on real devices/simulators/emulators. To enable UI testing Flutter SDK package [flutter_driver](https://api.flutter.dev/flutter/flutter_driver/flutter_driver-library.html) as dependency in dev_dependencies section of pubspec.yaml. General strategy for UI testing is to a) initiate an instrumented version of the app b) run the unit test on the instrumented app c) validate the assertion d) teardown the instrumented app. For brevity, this README.md would not go in all the details of how this is done. In PED code base, the UI instrumented tests are present in test_driver folder. Command to execute the tests is 
+ * **UI test cases** - The purpose of UI testing is to mimic the behaviour and experience of the end user. It provides completeness to testing, as this covers testing scenarios which cannot be easily covered with the unit testing. It is an integration testing mechanism for the application. These tests run in a separate process and can be done on real devices/simulators/emulators. To enable UI testing Flutter SDK package [flutter_driver](https://api.flutter.dev/flutter/flutter_driver/flutter_driver-library.html) as dependency in dev_dependencies section of pubspec.yaml. General strategy for UI testing is to a) initiate an instrumented version of the app b) run the unit test on the instrumented app c) validate the assertion d) teardown the instrumented app. For brevity, this README.md would not go into all the details of how this is done. In the PED code base, the UI instrumented tests are present in the test_driver folder. Command to execute the tests is 
 ```bash
 $ flutter driver --target test_driver/main.dart
 ```
-This command needs a device to launch an instrumented version of app, so before executing this command, bring up either Simulator/Emulator or attach a physical device (compatible of running flutter app). Also, make sure that the location which is used by the device belongs to a place, supported by Pumped, else the application will fail fetching the fuel stations from backend.
+This command needs a device to launch an instrumented version of the app, so before executing this command, bring up either Simulator/Emulator or attach a physical device (compatible with running flutter app). Also, make sure that the location which is used by the device belongs to a place, supported by Pumped, else the application will fail fetching the fuel stations from backend.
 
 ## 15. FAQ
    
 **Q1: I live outside of Australia how do i set my location**
- As of release 0.32 we've introduced location mocking for those who reside outside of Australia, on initial installation ped opens with your location mocked to Sydney Australia CBD - Wynyard Station, and as stated above via app settings\ dev options\ mock locations you now have the abiity to set any location within Australia, including a dozen very popular pre-set locations
+ As of release 0.32 we've introduced location mocking for those who reside outside of Australia, on initial installation ped opens with your location mocked to Sydney Australia CBD - Wynyard Station, and as stated above via app settings\ dev options\ mock locations you now have the ability to set any location within Australia, including a dozen very popular pre-set locations
  
-Q2: Will flutter's pub.dev linx plugins work on AGL
+Q2: Will flutter's pub.dev linux plugins work on AGL
 1P Linux Plugins are only intended for the Linux GTK embedder and therefore will/may not work on other Linux distribution, this is by far the single biggest obstacle implementing ped on AGL, or any other Linux distribution as tracked here https://github.com/flutter/flutter/issues/103660
