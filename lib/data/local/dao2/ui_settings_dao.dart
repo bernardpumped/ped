@@ -37,7 +37,7 @@ class UiSettingsDao {
 
   Future<UiSettings> getUiSettings() async {
     final SecureStorage db = SecureStorage.instance;
-    LogUtil.debug(_tag, 'Retrieving instance of UiSettings');
+    LogUtil.debug(_tag, 'Retrieving SecureStorage instance of UiSettings');
     final String? data = await db.readData(_collectionUiSettings, _uiSettingsInstance);
     if (data != null) {
       return UiSettings.fromJson(convert.jsonDecode(data));

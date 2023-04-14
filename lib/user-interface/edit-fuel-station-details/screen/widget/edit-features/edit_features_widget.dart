@@ -30,6 +30,8 @@ import 'package:pumped_end_device/user-interface/edit-fuel-station-details/data/
 import 'package:pumped_end_device/user-interface/edit-fuel-station-details/model/update-results/update_feature_result.dart';
 import 'package:pumped_end_device/user-interface/edit-fuel-station-details/params/edit_fuel_station_details_params.dart';
 import 'package:pumped_end_device/user-interface/edit-fuel-station-details/screen/widget/edit_action_buttons_widget.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/util/data_utils.dart';
 import 'package:pumped_end_device/util/log_util.dart';
@@ -98,7 +100,8 @@ class _EditFeaturesWidgetState extends State<EditFeaturesWidget> {
         child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
           const Icon(Icons.flag_outlined, size: 30),
           const SizedBox(width: 10),
-          Text('Update Features', style: Theme.of(context).textTheme.headline4)
+          Text('Update Features', style: Theme.of(context).textTheme.headlineMedium,
+              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
         ]));
   }
 
@@ -122,7 +125,8 @@ class _EditFeaturesWidgetState extends State<EditFeaturesWidget> {
     return Card(
         child: ListTile(
             leading: Icon(feature.icon, size: 30),
-            title: Text(feature.featureName, style: Theme.of(context).textTheme.subtitle2),
+            title: Text(feature.featureName, style: Theme.of(context).textTheme.titleSmall,
+                textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
             trailing: featureCheckBox));
   }
 

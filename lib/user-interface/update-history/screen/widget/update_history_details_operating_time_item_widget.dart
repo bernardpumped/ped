@@ -22,6 +22,8 @@ import 'package:flutter/material.dart';
 import 'package:pumped_end_device/user-interface/edit-fuel-station-details/data/remote/model/dto/operating_time_update_exception_codes.dart';
 import 'package:pumped_end_device/user-interface/edit-fuel-station-details/model/operating_time_range.dart';
 import 'package:pumped_end_device/models/pumped/operating_hours.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 
 class UpdateHistoryDetailsOperatingTimeItemWidget extends StatelessWidget {
   final String valueType;
@@ -58,36 +60,46 @@ class UpdateHistoryDetailsOperatingTimeItemWidget extends StatelessWidget {
           Padding(
               padding: const EdgeInsets.only(top: 12, left: 20, right: 20),
               child: Row(children: <Widget>[
-                Expanded(flex: 1, child: Text('Day of Week', style: Theme.of(context).textTheme.bodyText1)),
-                Expanded(flex: 1, child: Text(dayOfWeek, style: Theme.of(context).textTheme.bodyText1))
+                Expanded(flex: 1, child: Text('Day of Week', style: Theme.of(context).textTheme.bodyLarge,
+                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
+                Expanded(flex: 1, child: Text(dayOfWeek, style: Theme.of(context).textTheme.bodyLarge,
+                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor))
               ])),
           Padding(
               padding: const EdgeInsets.only(top: 12, left: 20, right: 20),
               child: Row(children: <Widget>[
-                Expanded(flex: 1, child: Text('Old Range', style: Theme.of(context).textTheme.bodyText1)),
-                Expanded(flex: 1, child: Text(originalTimeRange, style: Theme.of(context).textTheme.bodyText1))
+                Expanded(flex: 1, child: Text('Old Range', style: Theme.of(context).textTheme.bodyLarge,
+                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
+                Expanded(flex: 1, child: Text(originalTimeRange, style: Theme.of(context).textTheme.bodyLarge,
+                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor))
               ])),
           Padding(
               padding: const EdgeInsets.only(top: 12, left: 20, right: 20),
               child: Row(children: <Widget>[
-                Expanded(flex: 1, child: Text('New Range', style: Theme.of(context).textTheme.bodyText1)),
-                Expanded(flex: 1, child: Text(updatedTimeRange, style: Theme.of(context).textTheme.bodyText1))
+                Expanded(flex: 1, child: Text('New Range', style: Theme.of(context).textTheme.bodyLarge,
+                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
+                Expanded(flex: 1, child: Text(updatedTimeRange, style: Theme.of(context).textTheme.bodyLarge,
+                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor))
               ])),
           Padding(
               padding: const EdgeInsets.only(top: 12, left: 20, right: 20),
               child: Row(children: <Widget>[
-                Expanded(flex: 1, child: Text('Status', style: Theme.of(context).textTheme.bodyText1)),
-                Expanded(flex: 1, child: Text(updateResult, maxLines: 3, style: Theme.of(context).textTheme.bodyText1))
+                Expanded(flex: 1, child: Text('Status', style: Theme.of(context).textTheme.bodyLarge,
+                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
+                Expanded(flex: 1, child: Text(updateResult, maxLines: 3, style: Theme.of(context).textTheme.bodyLarge,
+                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor))
               ])),
           _getUpdateResult() == 'Failed'
               ? Padding(
                   padding: const EdgeInsets.only(top: 12, left: 20, right: 20, bottom: 12),
                   child: Row(children: <Widget>[
-                    Expanded(flex: 1, child: Text('Status', style: Theme.of(context).textTheme.bodyText1)),
+                    Expanded(flex: 1, child: Text('Status', style: Theme.of(context).textTheme.bodyLarge,
+                        textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
                     Expanded(
                         flex: 1,
                         child: Text(_getTranslatedUpdateResult(),
-                            maxLines: 3, style: Theme.of(context).textTheme.bodyText1))
+                            maxLines: 3, style: Theme.of(context).textTheme.bodyLarge,
+                            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor))
                   ]))
               : const SizedBox(height: 12)
         ]));

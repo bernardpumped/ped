@@ -18,6 +18,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -38,7 +40,8 @@ class NotificationWidget extends StatelessWidget {
         },
         child: Padding(
             padding: const EdgeInsets.only(left: 15, right: 15),
-            child: Row(children: const [Icon(Icons.email_outlined, size: 24), SizedBox(width: 10), Text('Notify')])));
+            child: Row(children: [const Icon(Icons.email_outlined, size: 24), const SizedBox(width: 10),
+              Text('Notify', textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)])));
   }
 
   void _sendNotification(final Function function) async {

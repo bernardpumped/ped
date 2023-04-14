@@ -21,6 +21,8 @@ import 'package:intl/intl.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/screen/widget/email_widget.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station.dart';
 import 'package:pumped_end_device/models/pumped/operating_hours.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
 class OperatingHoursSourceCitation extends StatelessWidget {
@@ -56,17 +58,21 @@ class OperatingHoursSourceCitation extends StatelessWidget {
     }
     return Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
       Row(children: [
-        Text(weekDay, style: Theme.of(context).textTheme.headline4),
+        Text(weekDay, style: Theme.of(context).textTheme.headlineMedium,
+            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
         const SizedBox(width: 10),
-        Text(operatingTimeRange, style: Theme.of(context).textTheme.headline4)
+        Text(operatingTimeRange, style: Theme.of(context).textTheme.headlineMedium,
+            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
       ]),
       const SizedBox(height: 12),
       const Divider(height: 1),
       const SizedBox(height: 6),
-      Text(sourceMessage, style: Theme.of(context).textTheme.headline6),
+      Text(sourceMessage, style: Theme.of(context).textTheme.titleLarge,
+          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
       const SizedBox(height: 6),
       Text('Last Update Time ${_getPublishDateFormatted(_operatingHours.publishDate!)}',
-          style: Theme.of(context).textTheme.bodyText2),
+          style: Theme.of(context).textTheme.bodyMedium,
+          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
       const SizedBox(height: 6),
       const Divider(height: 1),
       const SizedBox(height: 6),
@@ -84,7 +90,8 @@ class OperatingHoursSourceCitation extends StatelessWidget {
   Text _getAdminContactMessage(final BuildContext context) {
     return Text(_pumpedMessage,
         textAlign: TextAlign.start,
-        style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Theme.of(context).errorColor));
+        style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: Theme.of(context).colorScheme.error),
+        textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
   }
 
   Row _getOkActionButton(final BuildContext context) {
@@ -96,7 +103,8 @@ class OperatingHoursSourceCitation extends StatelessWidget {
           child: Padding(
               padding: const EdgeInsets.only(left: 15, right: 15),
               child:
-                  Row(children: const [Icon(Icons.cancel_outlined, size: 24), SizedBox(width: 10), Text('Cancel')]))),
+                  Row(children: [const Icon(Icons.cancel_outlined, size: 24), const SizedBox(width: 10),
+                    Text('Cancel', textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)]))),
       const SizedBox(width: 10),
       _getNotificationWidget(),
     ]);

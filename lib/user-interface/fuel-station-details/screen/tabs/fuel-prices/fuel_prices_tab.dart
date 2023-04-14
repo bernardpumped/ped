@@ -24,6 +24,8 @@ import 'package:pumped_end_device/user-interface/fuel-station-details/screen/tab
 import 'package:pumped_end_device/user-interface/fuel-station-details/screen/tabs/fuel-prices/widget/no_fuel_prices_widget.dart';
 import 'package:pumped_end_device/models/pumped/fuel_quote.dart';
 import 'package:pumped_end_device/models/pumped/fuel_type.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/util/app_theme.dart';
 
@@ -54,7 +56,8 @@ class _FuelPricesTabWidgetState extends State<FuelPricesTabWidget> {
         future: _allowedFuelTypesFuture,
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return const Center(child: Text('Error loading fuelTypes'));
+            return Center(child: Text('Error loading fuelTypes',
+                textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor));
           } else if (snapshot.hasData) {
             final List<FuelType> allowedFuelTypes = snapshot.data as List<FuelType>;
             if (widget._param.fuelStation.hasFuelPrices()) {
@@ -63,7 +66,7 @@ class _FuelPricesTabWidgetState extends State<FuelPricesTabWidget> {
               return const NoFuelPricesWidget();
             }
           } else {
-            return const Center(child: Text('Loading'));
+            return Center(child: Text('Loading', textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor));
           }
         });
   }
@@ -110,7 +113,8 @@ class _FuelPricesTabWidgetState extends State<FuelPricesTabWidget> {
         margin: const EdgeInsets.only(left: 5, right: 5, top: 15),
         child: Padding(
             padding: const EdgeInsets.only(top: 10, bottom: 10, left: 20, right: 20),
-            child: Text('Station only sells these Fuel Types', style: Theme.of(context).textTheme.caption)));
+            child: Text('Station only sells these Fuel Types', style: Theme.of(context).textTheme.bodySmall,
+                textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)));
   }
 
   Widget _getFuelQuoteRowItem(final FuelQuote fuelQuote, final Map<String, FuelType> allowedFuelTypesMap) {
@@ -127,13 +131,16 @@ class _FuelPricesTabWidgetState extends State<FuelPricesTabWidget> {
                     Container(
                         margin: const EdgeInsets.only(left: 25),
                         child: Text(fuelTypeName!,
+                            overflow: TextOverflow.ellipsis,
                             style: isSelectedFuelType
-                                ? Theme.of(context).textTheme.headline6!.copyWith(fontWeight: FontWeight.w600)
-                                : Theme.of(context).textTheme.subtitle2)),
+                                ? Theme.of(context).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.w600)
+                                : Theme.of(context).textTheme.titleSmall,
+                            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
                     Container(
                         padding: const EdgeInsets.only(right: 10, top: 8, bottom: 10),
+                        margin: const EdgeInsets.only(left: 25),
                         child: Row(children: <Widget>[
-                          Container(margin: const EdgeInsets.only(left: 25), child: _getLastUpdateDateWidget(fuelQuote))
+                          Expanded(child: _getLastUpdateDateWidget(fuelQuote))
                         ]))
                   ]))),
           Expanded(
@@ -152,9 +159,11 @@ class _FuelPricesTabWidgetState extends State<FuelPricesTabWidget> {
     return fuelQuote.quoteValue != null
         ? Text('${fuelQuote.quoteValue}',
             style: isSelectedFuelType
-                ? Theme.of(context).textTheme.headline6!.copyWith(fontWeight: FontWeight.w600)
-                : Theme.of(context).textTheme.subtitle2)
-        : Text('---', style: Theme.of(context).textTheme.subtitle1);
+                ? Theme.of(context).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.w600)
+                : Theme.of(context).textTheme.titleSmall,
+            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
+        : Text('---', style: Theme.of(context).textTheme.titleMedium,
+            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
   }
 
   Widget _getFuelQuoteSourceIcon(final FuelQuote fuelQuote, final String fuelTypeName) {
@@ -169,7 +178,9 @@ class _FuelPricesTabWidgetState extends State<FuelPricesTabWidget> {
   Widget _getLastUpdateDateWidget(final FuelQuote fuelQuote) {
     return fuelQuote.publishDate != null
         ? Text('Last Update ${_getPublishDateFormatted(fuelQuote.publishDate!)}',
-            style: Theme.of(context).textTheme.overline)
+            style: Theme.of(context).textTheme.labelSmall,
+            overflow: TextOverflow.ellipsis,
+            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
         : const SizedBox(width: 0);
   }
 

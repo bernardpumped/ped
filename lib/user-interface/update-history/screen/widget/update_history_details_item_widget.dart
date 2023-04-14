@@ -25,6 +25,8 @@ import 'package:pumped_end_device/user-interface/update-history/screen/widget/up
 import 'package:pumped_end_device/user-interface/update-history/screen/widget/update_history_details_operating_time_item_widget.dart';
 import 'package:pumped_end_device/user-interface/update-history/screen/widget/update_history_details_price_item_widget.dart';
 import 'package:pumped_end_device/user-interface/update-history/screen/widget/update_history_details_suggest_edit_item_widget.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 
 class UpdateHistoryDetailsItemWidget extends StatefulWidget {
   final UpdateHistory updateHistory;
@@ -61,11 +63,13 @@ class _UpdateHistoryDetailsItemWidgetState extends State<UpdateHistoryDetailsIte
                         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
                           Padding(
                               padding: const EdgeInsets.only(left: 20, bottom: 8),
-                              child: Text(fuelStation, style: Theme.of(context).textTheme.subtitle2)),
+                              child: Text(fuelStation, style: Theme.of(context).textTheme.titleSmall,
+                                  textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
                           Padding(
                               padding: const EdgeInsets.only(left: 20, bottom: 5),
                               child: Text(updateDateFormatter.format(dateTime),
-                                  style: Theme.of(context).textTheme.bodyText1))
+                                  style: Theme.of(context).textTheme.bodyLarge,
+                                  textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor))
                         ])),
                     Expanded(flex: 2, child: updateStatusIconCode)
                   ]),

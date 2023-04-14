@@ -25,6 +25,8 @@ import 'package:pumped_end_device/user-interface/settings/screen/widget/text_loc
 import 'package:pumped_end_device/user-interface/settings/screen/widget/text_scaling_menu_item_widget.dart';
 import 'package:pumped_end_device/user-interface/settings/screen/widget/theme_menu_item_widget.dart';
 import 'package:pumped_end_device/user-interface/settings/screen/widget/server_version_widget.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/user-interface/utils/under_maintenance_service.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/user-interface/widgets/pumped_app_bar.dart';
@@ -100,7 +102,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
             child: ListTile(
                 contentPadding: const EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
                 leading: const Icon(Icons.settings_outlined, size: 30),
-                title: Text("Customize Search", style: Theme.of(context).textTheme.subtitle1),
+                title: Text("Customize Search", style: Theme.of(context).textTheme.titleMedium,
+                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
                 trailing: const Icon(Icons.chevron_right, size: 24))));
   }
 
@@ -111,7 +114,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
             child: ListTile(
                 contentPadding: const EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
                 leading: const Icon(Icons.delete_outline, size: 30),
-                title: Text("Clear local cache", style: Theme.of(context).textTheme.subtitle1),
+                title: Text("Clear local cache", style: Theme.of(context).textTheme.titleMedium,
+                  textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
                 trailing: const Icon(Icons.chevron_right, size: 24))));
   }
 
@@ -120,6 +124,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         padding: const EdgeInsets.only(top: 25),
         child: ListTile(
             title: Text("Pumped App Release - $appVersion",
-                style: Theme.of(context).textTheme.subtitle1, textAlign: TextAlign.center)));
+                style: Theme.of(context).textTheme.titleMedium, textAlign: TextAlign.center,
+                textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)));
   }
 }

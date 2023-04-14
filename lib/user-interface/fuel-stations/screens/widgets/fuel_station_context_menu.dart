@@ -25,6 +25,8 @@ import 'package:pumped_end_device/models/pumped/fuel_station.dart';
 import 'package:pumped_end_device/models/pumped/fuel_type.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/params/fuel_station_details_param.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/screen/fuel_station_details_screen.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
@@ -87,20 +89,23 @@ class _FuelStationContextMenuState extends State<FuelStationContextMenu> {
                   value: 'preview',
                   child: ListTile(
                       leading: const Icon(Icons.visibility),
-                      title: Text('Preview', style: Theme.of(context).textTheme.subtitle2))),
+                      title: Text('Preview', style: Theme.of(context).textTheme.titleSmall,
+                          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor))),
               PopupMenuItem<String>(
                   value: 'favourite',
                   child: ListTile(
                       leading: Icon(isFavourite ? Icons.heart_broken_outlined : Icons.favorite_border_outlined),
                       title: Text(isFavourite ? 'Unfavourite' : 'Favourite',
-                          style: Theme.of(context).textTheme.subtitle2))),
+                          style: Theme.of(context).textTheme.titleSmall,
+                          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor))),
               const PopupMenuDivider(),
               PopupMenuItem<String>(
                   value: 'hide',
                   child: ListTile(
-                      leading: Icon(Icons.hide_source_outlined, color: Theme.of(context).errorColor),
+                      leading: Icon(Icons.hide_source_outlined, color: Theme.of(context).colorScheme.error),
                       title: Text('Hide',
-                          style: Theme.of(context).textTheme.subtitle2!.copyWith(color: Theme.of(context).errorColor))))
+                          style: Theme.of(context).textTheme.titleSmall!.copyWith(color: Theme.of(context).colorScheme.error),
+                          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)))
             ]);
   }
 

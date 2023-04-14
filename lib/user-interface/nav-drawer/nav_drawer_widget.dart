@@ -26,6 +26,8 @@ import 'package:pumped_end_device/user-interface/help/screen/help_screen.dart';
 import 'package:pumped_end_device/user-interface/send-feedback/screens/send_feedback_screen.dart';
 import 'package:pumped_end_device/user-interface/settings/screen/settings_screen.dart';
 import 'package:pumped_end_device/user-interface/update-history/screen/update_history_screen.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/util/app_theme.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
@@ -143,7 +145,8 @@ class _NavDrawerWidgetState extends State<NavDrawerWidget> {
           Image(image: AssetImage(AppTheme.getPumpedLogo(context)), height: 65),
           Padding(
               padding: const EdgeInsets.only(left: 20),
-              child: Text('Fuel Finder', style: Theme.of(context).textTheme.headline3))
+              child: Text('Fuel Finder', style: Theme.of(context).textTheme.displaySmall,
+                  textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor))
         ]));
   }
 
@@ -162,10 +165,12 @@ class _NavDrawerWidgetState extends State<NavDrawerWidget> {
           Padding(
               padding: const EdgeInsets.only(left: 15),
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text(userDisplayName, style: Theme.of(context).textTheme.subtitle1),
+                Text(userDisplayName, style: Theme.of(context).textTheme.titleMedium,
+                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
                 const SizedBox(height: 15),
                 userEmail != null
-                    ? Text(userEmail, style: Theme.of(context).textTheme.overline)
+                    ? Text(userEmail, style: Theme.of(context).textTheme.labelSmall,
+                        textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
                     : const SizedBox(height: 0)
               ]))
         ]));

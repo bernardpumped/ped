@@ -29,7 +29,7 @@ import 'package:pumped_end_device/util/data_utils.dart';
 class ActionBar extends StatelessWidget {
   final FuelStation fuelStation;
   final Function onFavouriteStatusChange;
-  ActionBar({Key? key, required this.fuelStation, required this.onFavouriteStatusChange}) : super(key: key);
+  const ActionBar({Key? key, required this.fuelStation, required this.onFavouriteStatusChange}) : super(key: key);
 
   @override
   Widget build(final BuildContext context) {

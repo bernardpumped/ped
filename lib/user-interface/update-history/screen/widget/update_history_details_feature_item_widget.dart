@@ -17,6 +17,8 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 
 class UpdateHistoryDetailsFeatureItemWidget extends StatelessWidget {
   final String valueType;
@@ -49,14 +51,18 @@ class UpdateHistoryDetailsFeatureItemWidget extends StatelessWidget {
                 Expanded(
                     flex: 3,
                     child: Text(featureType,
-                        overflow: TextOverflow.ellipsis, maxLines: 1, style: Theme.of(context).textTheme.bodyText1)),
-                Expanded(flex: 2, child: Text(addRemove, style: Theme.of(context).textTheme.bodyText1))
+                        overflow: TextOverflow.ellipsis, maxLines: 1, style: Theme.of(context).textTheme.bodyLarge,
+                        textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
+                Expanded(flex: 2, child: Text(addRemove, style: Theme.of(context).textTheme.bodyLarge,
+                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor))
               ])),
           Padding(
               padding: const EdgeInsets.only(top: 12, left: 20, right: 20, bottom: 12),
               child: Row(children: <Widget>[
-                Expanded(flex: 3, child: Text('Status', style: Theme.of(context).textTheme.bodyText1)),
-                Expanded(flex: 2, child: Text(updateStatus, style: Theme.of(context).textTheme.bodyText1))
+                Expanded(flex: 3, child: Text('Status', style: Theme.of(context).textTheme.bodyLarge,
+                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
+                Expanded(flex: 2, child: Text(updateStatus, style: Theme.of(context).textTheme.bodyLarge,
+                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor))
               ]))
         ]));
   }

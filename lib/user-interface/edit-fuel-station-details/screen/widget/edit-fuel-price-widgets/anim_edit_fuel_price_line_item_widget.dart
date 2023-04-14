@@ -20,6 +20,8 @@ import 'package:basic_utils/basic_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pumped_end_device/data/local/model/fuel_authority_price_metadata.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/models/pumped/fuel_quote.dart';
 import 'package:pumped_end_device/util/data_utils.dart';
@@ -132,29 +134,33 @@ class _AnimEditFuelPriceLineItemWidgetState extends State<AnimEditFuelPriceLineI
                 _getFuelTypeQuoteValRow(fuelQuoteTextField),
                 AnimatedContainer(
                     padding: EdgeInsets.only(top: _hintHeight != _noFocusHintHeight ? 10 : 0),
-                    height: _hintHeight,
+                    height: _hintHeight * (TextScaler.of<TextScalingFactor>(context)!.scaleFactor),
                     duration: Duration(milliseconds: _durationMills),
                     child: Text(hintMessage,
                         style: _isItError
-                            ? Theme.of(context).textTheme.caption!.copyWith(color: Theme.of(context).errorColor)
-                            : Theme.of(context).textTheme.caption,
-                        textAlign: TextAlign.center))
+                            ? Theme.of(context).textTheme.bodySmall!.copyWith(color: Theme.of(context).colorScheme.error)
+                            : Theme.of(context).textTheme.bodySmall,
+                        textAlign: TextAlign.center, textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor))
               ])));
     }
   }
 
   Widget _getFuelTypeQuoteValRow(final Widget fuelQuoteWidget) {
-    return Row(children: <Widget>[
-      Expanded(
-          flex: 9,
-          child: Padding(
-              padding: const EdgeInsets.only(right: 5),
-              child: Text(widget.fuelName, style: Theme.of(context).textTheme.subtitle2, maxLines: 2))),
-      Expanded(flex: 5, child: fuelQuoteWidget),
-      Expanded(
-          flex: 2,
-          child: Padding(padding: const EdgeInsets.only(left: 15), child: _getFuelQuoteSourceIcon(widget.fuelQuote)))
-    ]);
+    return Expanded(
+      child: Row(children: <Widget>[
+        Expanded(
+            flex: 9,
+            child: Padding(
+                padding: const EdgeInsets.only(right: 5),
+                child: Text(widget.fuelName, style: Theme.of(context).textTheme.titleSmall,
+                    overflow: TextOverflow.ellipsis,
+                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),)),
+        Expanded(flex: 5, child: fuelQuoteWidget),
+        Expanded(
+            flex: 2,
+            child: Padding(padding: const EdgeInsets.only(left: 15), child: _getFuelQuoteSourceIcon(widget.fuelQuote)))
+      ])
+    );
   }
 
   Widget _getFuelQuoteSourceIcon(final FuelQuote fuelQuote) {
@@ -189,10 +195,10 @@ class _AnimEditFuelPriceLineItemWidgetState extends State<AnimEditFuelPriceLineI
         decoration: InputDecoration(
             border: InputBorder.none,
             hintText: 'Tap to update',
-            hintStyle: Theme.of(context).textTheme.caption!.copyWith(color: Theme.of(context).hintColor)),
+            hintStyle: Theme.of(context).textTheme.bodySmall!.copyWith(color: Theme.of(context).hintColor)),
         focusNode: _focus,
         controller: textEditingController,
-        style: Theme.of(context).textTheme.subtitle2,
+        style: Theme.of(context).textTheme.titleSmall,
         keyboardType: TextInputType.number,
         maxLengthEnforcement: MaxLengthEnforcement.enforced,
         inputFormatters: [
@@ -267,7 +273,8 @@ class _AnimEditFuelPriceLineItemWidgetState extends State<AnimEditFuelPriceLineI
 
   Text _buildTextField(final FuelQuote fuelQuote) {
     return Text(fuelQuote.quoteValue != null ? fuelQuote.quoteValue.toString() : 'N/A',
-        style: Theme.of(context).textTheme.subtitle2);
+        style: Theme.of(context).textTheme.titleSmall,
+        textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
   }
 }
 

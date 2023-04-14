@@ -221,11 +221,11 @@ class SliverImplicitlyAnimatedList<E extends Object>
   );
 
   @override
-  _SliverImplicitlyAnimatedListState<E> createState() =>
-      _SliverImplicitlyAnimatedListState<E>();
+  SliverImplicitlyAnimatedListState<E> createState() =>
+      SliverImplicitlyAnimatedListState<E>();
 }
 
-class _SliverImplicitlyAnimatedListState<E extends Object>
+class SliverImplicitlyAnimatedListState<E extends Object>
     extends ImplicitlyAnimatedListBaseState<Widget,
         SliverImplicitlyAnimatedList<E>, E> {
   @override

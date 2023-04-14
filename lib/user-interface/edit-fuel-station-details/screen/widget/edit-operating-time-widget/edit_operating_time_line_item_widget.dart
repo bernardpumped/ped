@@ -20,6 +20,8 @@ import 'package:flutter/material.dart';
 import 'package:pumped_end_device/models/pumped/operating_hours.dart';
 import 'package:pumped_end_device/models/status.dart';
 import 'package:pumped_end_device/user-interface/edit-fuel-station-details/model/operating_time_range.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/util/date_time_utils.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
@@ -126,7 +128,8 @@ class _EditOperatingTimeLineItemWidgetStateNew extends State<EditOperatingTimeLi
             child: Column(children: [
               Row(children: <Widget>[
                 Expanded(
-                    flex: 3, child: Text(widget.operatingHour.dayOfWeek, style: Theme.of(context).textTheme.subtitle2)),
+                    flex: 3, child: Text(widget.operatingHour.dayOfWeek, style: Theme.of(context).textTheme.titleSmall,
+                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
                 Expanded(
                     flex: 12,
                     child: Column(
@@ -148,8 +151,8 @@ class _EditOperatingTimeLineItemWidgetStateNew extends State<EditOperatingTimeLi
                       children: [
                         Text(_errorMessage,
                             textAlign: TextAlign.center,
-                            style:
-                                Theme.of(context).textTheme.subtitle2!.copyWith(color: Theme.of(context).errorColor)),
+                            style: Theme.of(context).textTheme.titleSmall!.copyWith(color: Theme.of(context).colorScheme.error),
+                              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
                         const SizedBox(width: 30),
                         _getUndoButton()
                       ]))
@@ -170,14 +173,16 @@ class _EditOperatingTimeLineItemWidgetStateNew extends State<EditOperatingTimeLi
             },
             child: Padding(
                 padding: const EdgeInsets.only(left: 15, right: 15),
-                child: Row(children: const [Icon(Icons.history, size: 24), SizedBox(width: 10), Text('Undo')])))
+                child: Row(children: [const Icon(Icons.history, size: 24), const SizedBox(width: 10), Text('Undo',
+                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)])))
         : const SizedBox(width: 0);
   }
 
   Row _getOpenCloseOperatingTimeWidget() {
     return Row(mainAxisAlignment: MainAxisAlignment.start, mainAxisSize: MainAxisSize.max, children: [
       const SizedBox(width: 12),
-      Text('Opens : ', style: Theme.of(context).textTheme.subtitle2),
+      Text('Opens : ', style: Theme.of(context).textTheme.titleSmall,
+          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
       OperatingTimeWidget(
           _editable,
           widget.operatingHour.openingHrs,
@@ -191,7 +196,8 @@ class _EditOperatingTimeLineItemWidgetStateNew extends State<EditOperatingTimeLi
           updatedHrs: widget.updatedOperatingHrs?.openingHrs,
           updatedMins: widget.updatedOperatingHrs?.openingMins),
       const SizedBox(width: 15),
-      Text('Closes : ', style: Theme.of(context).textTheme.subtitle2),
+      Text('Closes : ', style: Theme.of(context).textTheme.titleSmall,
+          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
       OperatingTimeWidget(
           _editable,
           widget.operatingHour.closingHrs,
@@ -216,7 +222,8 @@ class _EditOperatingTimeLineItemWidgetStateNew extends State<EditOperatingTimeLi
             Expanded(
                 flex: 2,
                 child: Text(DateTimeUtils.weekDayShortToLongName[widget.operatingHour.dayOfWeek]!,
-                    style: Theme.of(context).textTheme.bodyText1)),
+                    style: Theme.of(context).textTheme.bodyLarge,
+                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
             Expanded(
                 flex: 2,
                 child: OperatingTimeWidget(
@@ -294,13 +301,15 @@ class _EditOperatingTimeLineItemWidgetStateNew extends State<EditOperatingTimeLi
               groupValue: _selectedValue,
               onChanged: _handleRadioValueChange,
             ),
-            Text('Open 24 hrs', style: Theme.of(context).textTheme.subtitle2)
+            Text('Open 24 hrs', style: Theme.of(context).textTheme.titleSmall,
+                textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
           ])),
       SizedBox(
           height: 35,
           child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
             Radio(value: _closed, groupValue: _selectedValue, onChanged: _handleRadioValueChange),
-            Text('Closed', style: Theme.of(context).textTheme.subtitle2)
+            Text('Closed', style: Theme.of(context).textTheme.titleSmall,
+                textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
           ]))
     ]);
   }

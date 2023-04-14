@@ -19,6 +19,8 @@
 import 'package:flutter/material.dart';
 import 'package:pumped_end_device/data/local/dao2/favorite_fuel_stations_dao.dart';
 import 'package:pumped_end_device/data/local/model/favorite_fuel_station.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station.dart';
 import 'package:pumped_end_device/util/log_util.dart';
@@ -60,9 +62,9 @@ class _FavouriteFuelStationBookmarkState extends State<FavouriteFuelStationBookm
                       widget._onFavouriteStatusChange(); // This is to enable refresh of the home screen.
                     });
             } else if (snapshot.hasError) {
-              return const Text('Error Loading');
+              return Text('Error Loading', textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
             } else {
-              return const Text('Loading');
+              return Text('Loading', textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
             }
           })
     ]);
@@ -77,9 +79,10 @@ class _FavouriteFuelStationBookmarkState extends State<FavouriteFuelStationBookm
           onPressed: callback,
           child: Padding(
               padding: const EdgeInsets.only(top: 15.0, bottom: 15.0, left: 0, right: 0),
-              child: Icon(icon, color: Theme.of(context).backgroundColor))),
+              child: Icon(icon, color: Theme.of(context).colorScheme.background))),
       const SizedBox(height: 5),
-      Text(text, style: Theme.of(context).textTheme.bodyText2)
+      Text(text, style: Theme.of(context).textTheme.bodyMedium,
+          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
     ]);
   }
 

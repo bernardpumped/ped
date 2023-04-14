@@ -21,6 +21,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station_address.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/screen/tabs/contact/widget/feature_support.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -40,7 +42,7 @@ class RateWidget extends StatelessWidget {
           style: ElevatedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0))),
           child: Padding(
               padding: const EdgeInsets.only(top: 15.0, bottom: 15.0, left: 0, right: 0),
-              child: Icon(Icons.star_rate_outlined, color: Theme.of(context).backgroundColor)),
+              child: Icon(Icons.star_rate_outlined, color: Theme.of(context).colorScheme.background)),
           onPressed: () async {
             if (!FeatureSupport.rating.contains(Platform.operatingSystem)) {
               LogUtil.debug(_tag, '${Platform.operatingSystem} does not yet support ${FeatureSupport.ratingFeature}');
@@ -52,7 +54,8 @@ class RateWidget extends StatelessWidget {
             }
           }),
       const SizedBox(height: 5),
-      Text('Rate', style: Theme.of(context).textTheme.bodyText2)
+      Text('Rate', style: Theme.of(context).textTheme.bodyMedium,
+          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
     ]);
   }
 

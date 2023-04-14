@@ -20,10 +20,12 @@ import 'dart:convert' as convert;
 
 import 'package:pumped_end_device/data/remote/response-parser/response_parser.dart';
 import 'package:pumped_end_device/user-interface/edit-fuel-station-details/data/remote/model/response/alter_fuel_quotes_response.dart';
+import 'package:pumped_end_device/util/log_util.dart';
 
 class AlterFuelQuotesResponseParser extends ResponseParser<AlterFuelQuotesResponse> {
   @override
   AlterFuelQuotesResponse parseResponse(final String response) {
+    LogUtil.debug("AlterFuelQuotesResponseParser", response);
     return AlterFuelQuotesResponse.fromJson(convert.jsonDecode(response));
   }
 }

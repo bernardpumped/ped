@@ -18,6 +18,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:pumped_end_device/user-interface/nav-drawer/nav_drawer_widget.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/user-interface/widgets/pumped_app_bar.dart';
 
 class AboutScreen extends StatelessWidget {
@@ -72,6 +74,7 @@ class AboutScreen extends StatelessWidget {
   Padding _buildPara(final BuildContext context, final String text) {
     return Padding(
         padding: const EdgeInsets.only(top: 10),
-        child: Text(text, style: Theme.of(context).textTheme.bodyText1, textAlign: TextAlign.left));
+        child: Text(text, style: Theme.of(context).textTheme.bodyLarge, textAlign: TextAlign.left,
+          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor));
   }
 }

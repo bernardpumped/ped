@@ -17,6 +17,8 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 
 class NoNearByStationsWidget extends StatelessWidget {
   const NoNearByStationsWidget({Key? key}) : super(key: key);
@@ -27,22 +29,24 @@ class NoNearByStationsWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Text('No Nearby Stations', style: Theme.of(context).textTheme.headline2, textAlign: TextAlign.center),
+          Text('No Nearby Stations', style: Theme.of(context).textTheme.displayMedium, textAlign: TextAlign.center,
+              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
           const SizedBox(height: 20),
           Padding(
             padding: const EdgeInsets.only(left: 12, right: 12),
             child: RichText(
                 textAlign: TextAlign.center,
+                textScaleFactor: TextScaler.of<TextScalingFactor>(context)!.scaleFactor,
                 text: TextSpan(children: [
                   TextSpan(
                       text: "Sorry your neighbourhood not yet covered by Pumped. We have informed Pumped admin.\n",
-                      style: Theme.of(context).textTheme.bodyText1),
+                      style: Theme.of(context).textTheme.bodyLarge),
                   TextSpan(
                       text: "\nYou can refine your Search Options. Tap on Settings ",
-                      style: Theme.of(context).textTheme.bodyText1),
+                      style: Theme.of(context).textTheme.bodyLarge),
                   const WidgetSpan(child: Icon(Icons.settings, size: 24)),
                   TextSpan(
-                      text: " icon in the navigation bar, to customize search.", style: Theme.of(context).textTheme.bodyText1)
+                      text: " icon in the navigation bar, to customize search.", style: Theme.of(context).textTheme.bodyLarge)
                 ])),
           )
         ]);

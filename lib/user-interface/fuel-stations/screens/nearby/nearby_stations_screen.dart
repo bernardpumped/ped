@@ -41,6 +41,8 @@ import 'package:pumped_end_device/user-interface/fuel-stations/params/fuel_type_
 import 'package:pumped_end_device/user-interface/fuel-stations/service/near_by_fuel_stations_service.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/screens/widgets/no_near_by_stations_widget.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/service/fuel_type_switcher_service.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/user-interface/utils/under_maintenance_service.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/user-interface/widgets/pumped_app_bar.dart';
@@ -124,16 +126,16 @@ class _NearbyStationsScreenState extends State<NearbyStationsScreen> {
             title: 'Enjoying Pumped End Device?',
             message: 'Please leave a rating!',
             dialogStyle: DialogStyle(
-                titleStyle: Theme.of(context).textTheme.headline4,
+                titleStyle: Theme.of(context).textTheme.headlineMedium,
                 titleAlign: TextAlign.center,
-                messageStyle: Theme.of(context).textTheme.subtitle1,
+                messageStyle: Theme.of(context).textTheme.titleMedium,
                 messageAlign: TextAlign.center,
                 messagePadding: const EdgeInsets.only(bottom: 20)),
             starRatingOptions: const StarRatingOptions(),
             actionsBuilder: (context, stars) {
               return [
                 TextButton(
-                    child: const Text('Later'),
+                    child: Text('Later', textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
                     onPressed: () async {
                       await rateMyApp.callEvent(RateMyAppEventType.laterButtonPressed);
                       if (mounted) {
@@ -141,7 +143,7 @@ class _NearbyStationsScreenState extends State<NearbyStationsScreen> {
                       }
                     }),
                 TextButton(
-                    child: const Text('OK'),
+                    child: Text('OK', textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
                     onPressed: () async {
                       LogUtil.debug(_tag, 'Thanks for the ${stars == null ? '0' : stars.round().toString()} star(s) !');
                       if (stars != null && stars > 0) {
@@ -330,7 +332,7 @@ class _NearbyStationsScreenState extends State<NearbyStationsScreen> {
     _userSettingsVersion = data.userSettingsVersion ?? 0;
     if (!data.locationSearchSuccessful) {
       final String locationErrorReason = data.locationErrorReason ?? 'Unknown Location Error Reason';
-      return Center(child: Text(locationErrorReason));
+      return Center(child: Text(locationErrorReason, textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor));
     } else {
       _nearByFuelStations = data.fuelStations ?? [];
       LogUtil.debug(_tag, 'Setting _nearByFuelStations variable');

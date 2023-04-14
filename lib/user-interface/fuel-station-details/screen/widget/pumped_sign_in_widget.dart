@@ -22,6 +22,8 @@ import 'package:flutter_signin_button/button_list.dart';
 import 'package:flutter_signin_button/button_view.dart';
 import 'package:pumped_end_device/main.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/utils/firebase_service.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/util/app_theme.dart';
 import 'package:pumped_end_device/util/log_util.dart';
@@ -77,7 +79,7 @@ class _PumpedSignInWidgetState extends State<PumpedSignInWidget> {
           }),
           const SizedBox(height: 6),
           ElevatedButton(
-              child: const Text('Cancel'),
+              child: Text('Cancel', textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
               onPressed: () {
                 if (!signInProgress) {
                   widget.cancelButtonAction();

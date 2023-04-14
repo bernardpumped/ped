@@ -17,6 +17,8 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 
 class NoFuelPricesWidget extends StatelessWidget {
   const NoFuelPricesWidget({Key? key}) : super(key: key);
@@ -30,11 +32,14 @@ class NoFuelPricesWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Text('No Fuel Prices', style: Theme.of(context).textTheme.headline2, textAlign: TextAlign.center),
+              Text('No Fuel Prices', style: Theme.of(context).textTheme.displayMedium, textAlign: TextAlign.center,
+                  textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
               Text("\n Click here if you'd appreciate this station providing accurate prices we'll let them know",
-                  style: Theme.of(context).textTheme.subtitle1, textAlign: TextAlign.center),
+                  style: Theme.of(context).textTheme.titleMedium, textAlign: TextAlign.center,
+                  textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
               Text('\n Come back again soon.',
-                  style: Theme.of(context).textTheme.subtitle2, textAlign: TextAlign.center)
+                  style: Theme.of(context).textTheme.titleSmall, textAlign: TextAlign.center,
+                  textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
             ]));
   }
 }

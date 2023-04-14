@@ -16,21 +16,21 @@
  *     along with Pumped End Device.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'package:flutter/material.dart';
-import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
-import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
+class TextScalingFactor {
+  const TextScalingFactor({
+    this.scaleFactor = 1.0,
+  });
 
-class OffersWidget extends StatefulWidget {
-  const OffersWidget ( {Key? key} ) : super( key: key );
+  final double scaleFactor;
 
   @override
-  State<OffersWidget> createState ( ) => _OffersWidgetState ( );
-}
-
-class _OffersWidgetState extends State<OffersWidget> {
-  @override
-  Widget build (final BuildContext context) {
-    return Center(child: Text("Offers",
-        textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor));
+  bool operator == (Object other) {
+    if (identical(this, other)) return true;
+    if (other.runtimeType != runtimeType) return false;
+    final TextScalingFactor otherModel = other as TextScalingFactor;
+    return otherModel.scaleFactor == scaleFactor;
   }
+
+  @override
+  int get hashCode => scaleFactor.hashCode;
 }

@@ -43,7 +43,7 @@ class HorizontalScrollListWidget extends StatelessWidget {
                 shape: BoxShape.rectangle,
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(color: Theme.of(context).primaryColor),
-                color: Theme.of(context).backgroundColor),
+                color: Theme.of(context).colorScheme.background),
             width: 170.0));
   }
 }

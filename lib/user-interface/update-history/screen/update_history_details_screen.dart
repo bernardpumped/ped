@@ -20,6 +20,8 @@ import 'package:flutter/material.dart';
 import 'package:pumped_end_device/models/update_type.dart';
 import 'package:pumped_end_device/user-interface/update-history/model/update_tile_data.dart';
 import 'package:pumped_end_device/user-interface/update-history/screen/widget/update_history_details_item_widget.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/user-interface/widgets/pumped_app_bar.dart';
 
 class UpdateHistoryDetailsScreen extends StatelessWidget {
@@ -56,7 +58,8 @@ class UpdateHistoryDetailsScreen extends StatelessWidget {
       _getIcon(params),
       const SizedBox(width: 10),
       Text('${params.updateType.updateTypeReadableName} Updates',
-          style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.center)
+          style: Theme.of(context).textTheme.titleLarge, textAlign: TextAlign.center,
+          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
     ]);
   }
 

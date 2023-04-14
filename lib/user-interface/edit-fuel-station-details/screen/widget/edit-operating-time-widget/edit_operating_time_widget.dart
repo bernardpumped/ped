@@ -35,6 +35,8 @@ import 'package:pumped_end_device/user-interface/edit-fuel-station-details/model
 import 'package:pumped_end_device/user-interface/edit-fuel-station-details/params/edit_fuel_station_details_params.dart';
 import 'package:pumped_end_device/user-interface/edit-fuel-station-details/screen/widget/edit-operating-time-widget/edit_operating_time_line_item_widget.dart';
 import 'package:pumped_end_device/user-interface/edit-fuel-station-details/screen/widget/edit_action_buttons_widget.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/util/data_utils.dart';
 import 'package:pumped_end_device/util/date_time_utils.dart';
@@ -93,7 +95,8 @@ class _EditOperatingTimeWidgetState extends State<EditOperatingTimeWidget> {
         child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
           const Icon(Icons.access_time_rounded, size: 30),
           const SizedBox(width: 10),
-          Text('Update Operating Times', style: Theme.of(context).textTheme.headline4)
+          Text('Update Operating Times', style: Theme.of(context).textTheme.headlineMedium,
+              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
         ]));
   }
 

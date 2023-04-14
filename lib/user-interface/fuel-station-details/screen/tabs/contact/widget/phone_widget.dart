@@ -18,9 +18,10 @@
 
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/screen/tabs/contact/widget/feature_support.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -39,14 +40,15 @@ class PhoneWidget extends StatelessWidget {
           style: ElevatedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0))),
           child: Padding(
               padding: const EdgeInsets.only(top: 15.0, bottom: 15.0, left: 0, right: 0),
-              child: Icon(Icons.phone_outlined, color: Theme.of(context).backgroundColor)),
+              child: Icon(Icons.phone_outlined, color: Theme.of(context).colorScheme.background)),
           onPressed: () async {
             _launchCaller(_phone, () {
               WidgetUtils.showToastMessage(context, 'Cannot call phone');
             });
           }),
       const SizedBox(height: 5),
-      Text('Call', style: Theme.of(context).textTheme.bodyText2)
+      Text('Call', style: Theme.of(context).textTheme.bodyMedium,
+          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
     ]);
   }
 
@@ -55,16 +57,17 @@ class PhoneWidget extends StatelessWidget {
       LogUtil.debug(_tag, '${Platform.operatingSystem} does not yet support ${FeatureSupport.callFeature}');
       return;
     }
-    final String phoneUrl = Uri.encodeFull("tel:$phone");
+    // final String phoneUrl = Uri.encodeFull("tel:$phone");
+    final Uri telephoneUri = Uri(scheme: 'tel', path: phone);
     try {
-      if (await canLaunch(phoneUrl)) {
-        await launch(phoneUrl);
+      if (await canLaunchUrl(telephoneUri)) {
+        await launchUrl(telephoneUri);
       } else {
-        LogUtil.debug(_tag, 'Could not launch $phoneUrl');
+        LogUtil.debug(_tag, 'Could not launch $telephoneUri');
         function.call();
       }
     } on Exception catch (e) {
-      LogUtil.debug(_tag, 'Exception invoking phoneUrl $phoneUrl $e');
+      LogUtil.debug(_tag, 'Exception invoking phoneUrl $telephoneUri $e');
       function.call();
     }
   }

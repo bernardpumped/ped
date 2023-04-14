@@ -17,6 +17,8 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 
 class Indicator extends StatelessWidget {
   final Color color;
@@ -35,7 +37,8 @@ class Indicator extends StatelessWidget {
           height: size,
           decoration: BoxDecoration(shape: isSquare ? BoxShape.rectangle : BoxShape.circle, color: color)),
       const SizedBox(width: 4),
-      Text(text, style: Theme.of(context).textTheme.bodyText2)
+      Text(text, style: Theme.of(context).textTheme.bodyMedium,
+          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
     ]);
   }
 }

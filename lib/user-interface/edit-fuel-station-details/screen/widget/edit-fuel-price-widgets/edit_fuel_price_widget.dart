@@ -30,6 +30,8 @@ import 'package:pumped_end_device/user-interface/edit-fuel-station-details/scree
 import 'package:pumped_end_device/user-interface/edit-fuel-station-details/screen/widget/edit_action_buttons_widget.dart';
 import 'package:pumped_end_device/models/update_type.dart';
 import 'package:pumped_end_device/user-interface/edit-fuel-station-details/screen/widget/edit-fuel-price-widgets/utils/edit_fuel_price_utils.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/models/pumped/fuel_quote.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station.dart';
@@ -59,7 +61,6 @@ class _EditFuelPriceWidgetState extends State<EditFuelPriceWidget> {
   final Map<String, FuelQuote> _fuelTypeFuelQuote = {};
   bool _onValueChanged = false;
   bool _fabVisible = false;
-  bool _backendUpdateInProgress = false;
   late FuelStation _fuelStation;
 
   @override
@@ -104,7 +105,8 @@ class _EditFuelPriceWidgetState extends State<EditFuelPriceWidget> {
         child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
           const Icon(Icons.monetization_on_outlined, size: 30),
           const SizedBox(width: 10),
-          Text('Update Fuel Prices', style: Theme.of(context).textTheme.headline4)
+          Text('Update Fuel Prices', style: Theme.of(context).textTheme.headlineMedium,
+              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
         ]));
   }
 
@@ -114,11 +116,13 @@ class _EditFuelPriceWidgetState extends State<EditFuelPriceWidget> {
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             LogUtil.debug(_tag, 'Error loading EditFuelPriceWidgetData ${snapshot.error}');
-            return Center(child: Text('Error Loading fuel-types', style: Theme.of(context).textTheme.subtitle2));
+            return Center(child: Text('Error Loading fuel-types', style: Theme.of(context).textTheme.titleSmall,
+                textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor));
           } else if (snapshot.hasData) {
             return Column(children: _editFuelTypePriceWidget(snapshot.data!));
           } else {
-            return Center(child: Text('Loading', style: Theme.of(context).textTheme.subtitle2));
+            return Center(child: Text('Loading', style: Theme.of(context).textTheme.titleSmall,
+                textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor));
           }
         });
   }
@@ -311,13 +315,11 @@ class _EditFuelPriceWidgetState extends State<EditFuelPriceWidget> {
 
   void _lockInputs() {
     setState(() {
-      _backendUpdateInProgress = true;
     });
   }
 
   void _unlockInputs() {
     setState(() {
-      _backendUpdateInProgress = false;
     });
   }
 

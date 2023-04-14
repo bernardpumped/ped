@@ -17,6 +17,8 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 
 class TextLocaleMenuItemWidget extends StatefulWidget {
   const TextLocaleMenuItemWidget({Key? key}) : super(key: key);
@@ -52,7 +54,8 @@ class _TextLocaleMenuItemWidgetState extends State<TextLocaleMenuItemWidget> {
   Widget build(final BuildContext context) {
     return Card(
         child: ExpansionTile(
-      title: Text("Locale - ${_locales[selectedLocale]}", style: Theme.of(context).textTheme.subtitle1),
+      title: Text("Locale - ${_locales[selectedLocale]}", style: Theme.of(context).textTheme.titleMedium,
+          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
       leading: const Icon(Icons.language, size: 30),
       children: [
         _getMenuItem(_systemLocale),
@@ -76,6 +79,7 @@ class _TextLocaleMenuItemWidgetState extends State<TextLocaleMenuItemWidget> {
             selectedLocale = newVal!;
           });
         },
-        title: Text(_locales[value]!, style: Theme.of(context).textTheme.subtitle2));
+        title: Text(_locales[value]!, style: Theme.of(context).textTheme.titleSmall,
+            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor));
   }
 }

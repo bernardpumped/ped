@@ -18,6 +18,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:pumped_end_device/user-interface/edit-fuel-station-details/data/remote/model/dto/fuel_quote_update_exception_codes.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 
 class UpdateHistoryDetailsPriceItemWidget extends StatelessWidget {
   final String valueType;
@@ -46,35 +48,45 @@ class UpdateHistoryDetailsPriceItemWidget extends StatelessWidget {
           Padding(
               padding: const EdgeInsets.only(top: 12, left: 20, right: 20),
               child: Row(children: <Widget>[
-                Expanded(flex: 1, child: Text('Fuel Type', style: Theme.of(context).textTheme.bodyText1)),
-                Expanded(flex: 1, child: Text(fuelType, style: Theme.of(context).textTheme.bodyText1))
+                Expanded(flex: 1, child: Text('Fuel Type', style: Theme.of(context).textTheme.bodyLarge,
+                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
+                Expanded(flex: 1, child: Text(fuelType, style: Theme.of(context).textTheme.bodyLarge,
+                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor))
               ])),
           Padding(
               padding: const EdgeInsets.only(top: 12, left: 20, right: 20),
               child: Row(children: <Widget>[
-                Expanded(flex: 1, child: Text('Old Price', style: Theme.of(context).textTheme.bodyText1)),
-                Expanded(flex: 1, child: Text(originalFuelQuoteValue, style: Theme.of(context).textTheme.bodyText1))
+                Expanded(flex: 1, child: Text('Old Price', style: Theme.of(context).textTheme.bodyLarge,
+                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
+                Expanded(flex: 1, child: Text(originalFuelQuoteValue, style: Theme.of(context).textTheme.bodyLarge,
+                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor))
               ])),
           Padding(
               padding: const EdgeInsets.only(top: 12, left: 20, right: 20),
               child: Row(children: <Widget>[
-                Expanded(flex: 1, child: Text('New Price', style: Theme.of(context).textTheme.bodyText1)),
-                Expanded(flex: 1, child: Text('$updatedFuelQuoteValue', style: Theme.of(context).textTheme.bodyText1))
+                Expanded(flex: 1, child: Text('New Price', style: Theme.of(context).textTheme.bodyLarge,
+                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
+                Expanded(flex: 1, child: Text('$updatedFuelQuoteValue', style: Theme.of(context).textTheme.bodyLarge,
+                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor))
               ])),
           Padding(
               padding: const EdgeInsets.only(top: 12, left: 20, right: 20),
               child: Row(children: <Widget>[
-                Expanded(flex: 1, child: Text('Status', style: Theme.of(context).textTheme.bodyText1)),
-                Expanded(flex: 1, child: Text(updateStatus, style: Theme.of(context).textTheme.bodyText1))
+                Expanded(flex: 1, child: Text('Status', style: Theme.of(context).textTheme.bodyLarge,
+                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
+                Expanded(flex: 1, child: Text(updateStatus, style: Theme.of(context).textTheme.bodyLarge,
+                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor))
               ])),
           _getUpdateResult() == 'Failed'
               ? Padding(
                   padding: const EdgeInsets.only(top: 12, left: 20, right: 20, bottom: 12),
                   child: Row(children: <Widget>[
-                    Expanded(flex: 1, child: Text('Details', style: Theme.of(context).textTheme.bodyText1)),
+                    Expanded(flex: 1, child: Text('Details', style: Theme.of(context).textTheme.bodyLarge,
+                        textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
                     Expanded(
                         flex: 1,
-                        child: Text(_getTranslatedUpdateResult(), style: Theme.of(context).textTheme.bodyText1))
+                        child: Text(_getTranslatedUpdateResult(), style: Theme.of(context).textTheme.bodyLarge,
+                            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor))
                   ]))
               : const SizedBox(height: 12)
         ]));

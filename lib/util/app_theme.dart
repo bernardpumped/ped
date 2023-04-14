@@ -7,35 +7,25 @@ class AppTheme {
   static const pumpedImageBlackText = 'assets/images/ic_pumped_black_text.png';
   static const oldBackgroundColor = Color(0xFFF0EDFF);
 
-  static const _headline1TxtStyle = TextStyle(fontSize: 28.0, fontWeight: FontWeight.w500);
-  static const _headline2TxtStyle = TextStyle(fontSize: 26.0, fontWeight: FontWeight.w500);
-  static const _headline3TxtStyle = TextStyle(fontSize: 24.0, fontWeight: FontWeight.normal);
-  static const _headline4TxtStyle = TextStyle(fontSize: 22.0, fontWeight: FontWeight.w500);
-  static const _headline5TxtStyle = TextStyle(fontSize: 22.0, fontWeight: FontWeight.normal);
   static const _headline6TxtStyle = TextStyle(fontSize: 20.0, fontWeight: FontWeight.normal);
-  static const _subtitle1TxtStyle = TextStyle(fontSize: 18.0, fontWeight: FontWeight.w500);
-  static const _subtitle2TxtStyle = TextStyle(fontSize: 18.0, fontWeight: FontWeight.normal);
-  static const _bodyText1TxtStyle = TextStyle(fontSize: 16.0, fontWeight: FontWeight.normal);
-  static const _bodyText2TxtStyle = TextStyle(fontSize: 14.0, fontWeight: FontWeight.normal);
+  static const _titleSmallTxtStyle = TextStyle(fontSize: 18.0, fontWeight: FontWeight.normal);
   static const _buttonTxtStyle = TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500);
-  static const _captionTxtStyle = TextStyle(fontSize: 16.0, fontWeight: FontWeight.normal);
-  static const _overLineTxtStyle = TextStyle(fontSize: 13.0, fontWeight: FontWeight.normal);
 
   //https://api.flutter.dev/flutter/material/TextTheme-class.html
   static const textTheme = TextTheme(
-      headline1: _headline1TxtStyle,
-      headline2: _headline2TxtStyle,
-      headline3: _headline3TxtStyle,
-      headline4: _headline4TxtStyle,
-      headline5: _headline5TxtStyle,
-      headline6: _headline6TxtStyle,
-      subtitle1: _subtitle1TxtStyle,
-      subtitle2: _subtitle2TxtStyle,
-      bodyText1: _bodyText1TxtStyle,
-      bodyText2: _bodyText2TxtStyle,
-      button: _buttonTxtStyle,
-      caption: _captionTxtStyle,
-      overline: _overLineTxtStyle);
+      displayLarge: TextStyle(fontSize: 28.0, fontWeight: FontWeight.w500),
+      displayMedium: TextStyle(fontSize: 26.0, fontWeight: FontWeight.w500),
+      displaySmall: TextStyle(fontSize: 24.0, fontWeight: FontWeight.normal),
+      headlineMedium: TextStyle(fontSize: 22.0, fontWeight: FontWeight.w500),
+      headlineSmall: TextStyle(fontSize: 22.0, fontWeight: FontWeight.normal),
+      titleLarge: _headline6TxtStyle,
+      titleMedium: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w500),
+      titleSmall: _titleSmallTxtStyle,
+      bodyLarge: TextStyle(fontSize: 16.0, fontWeight: FontWeight.normal),
+      bodyMedium: TextStyle(fontSize: 14.0, fontWeight: FontWeight.normal),
+      labelLarge: _buttonTxtStyle,
+      bodySmall: TextStyle(fontSize: 16.0, fontWeight: FontWeight.normal),
+      labelSmall: TextStyle(fontSize: 13.0, fontWeight: FontWeight.normal));
 
   static getPumpedLogo(final BuildContext context) {
     return Theme.of(context).brightness == Brightness.light ? AppTheme.pumpedImageBlackText : AppTheme.pumpedImage;
@@ -43,7 +33,7 @@ class AppTheme {
 
   static modalBottomSheetBg(final BuildContext context) {
     return Theme.of(context).brightness == Brightness.light
-        ? Theme.of(context).backgroundColor
+        ? Theme.of(context).colorScheme.background
         : Theme.of(context).primaryColor;
   }
 
@@ -62,7 +52,7 @@ class AppTheme {
           iconTheme: IconThemeData(color: _highLightColorForLgTh),
           surfaceTintColor: _bgColorLgTh,
           titleTextStyle: TextStyle(fontSize: 26, color: _highLightColorForLgTh)),
-      backgroundColor: _bgColorLgTh,
+      // backgroundColor: _bgColorLgTh,
       brightness: Brightness.light,
       canvasColor: _bgColorLgTh,
       cardTheme: const CardTheme(
@@ -81,7 +71,7 @@ class AppTheme {
           elevation: 2,
           iconTheme: IconThemeData(color: _bgColorLgTh),
           labelStyle: TextStyle(color: _bgColorLgTh)),
-      colorScheme: ColorScheme.fromSeed(seedColor: _primaryColorLgTh, brightness: Brightness.light),
+      colorScheme: ColorScheme.fromSeed(seedColor: _primaryColorLgTh, brightness: Brightness.light, background: _bgColorLgTh, error: Colors.red),
       dividerColor: _primaryColorLgTh.withOpacity(0.3),
       drawerTheme: const DrawerThemeData(backgroundColor: _bgColorLgTh, elevation: 2),
       elevatedButtonTheme: ElevatedButtonThemeData(
@@ -100,14 +90,14 @@ class AppTheme {
           collapsedBackgroundColor: _bgColorLgTh,
           iconColor: _highLightColorForLgTh,
           textColor: _primaryColorLgTh),
-      errorColor: Colors.red,
+      // errorColor: Colors.red,
       highlightColor: _highLightColorForLgTh,
       hintColor: _primaryColorLgTh.shade200,
       iconTheme: const IconThemeData(color: _primaryColorLgTh),
       inputDecorationTheme: InputDecorationTheme(
           focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(color: _primaryColorLgTh)),
           focusColor: _primaryColorLgTh,
-          hintStyle: _subtitle2TxtStyle.copyWith(color: _primaryColorLgTh)),
+          hintStyle: _titleSmallTxtStyle.copyWith(color: _primaryColorLgTh)),
       listTileTheme: const ListTileThemeData(iconColor: _highLightColorForLgTh, textColor: _primaryColorLgTh),
       outlinedButtonTheme: OutlinedButtonThemeData(
           style: OutlinedButton.styleFrom(
@@ -166,7 +156,7 @@ class AppTheme {
             iconTheme: IconThemeData(color: _highLightColorForDkTh),
             surfaceTintColor: _bgColorDkTh,
             titleTextStyle: TextStyle(fontSize: 26, color: _highLightColorForDkTh)),
-        backgroundColor: _bgColorDkTh,
+        // backgroundColor: _bgColorDkTh,
         brightness: Brightness.dark,
         canvasColor: _bgColorDkTh,
         cardTheme: const CardTheme(
@@ -186,7 +176,7 @@ class AppTheme {
             elevation: 2,
             iconTheme: IconThemeData(color: _bgColorDkTh),
             labelStyle: TextStyle(color: _bgColorDkTh)),
-        colorScheme: ColorScheme.fromSeed(seedColor: _primaryColorDkTh, brightness: Brightness.dark),
+        colorScheme: ColorScheme.fromSeed(seedColor: _primaryColorDkTh, brightness: Brightness.dark, background: _bgColorDkTh, error: Colors.red),
         dividerColor: _primaryColorDkTh.withOpacity(0.3),
         drawerTheme: DrawerThemeData(backgroundColor: _bgColorDkTh.withOpacity(1), elevation: 2),
         elevatedButtonTheme: ElevatedButtonThemeData(
@@ -204,14 +194,14 @@ class AppTheme {
             collapsedTextColor: _primaryColorDkTh,
             iconColor: _highLightColorForDkTh,
             textColor: _primaryColorDkTh),
-        errorColor: Colors.red,
+        // errorColor: Colors.red,
         highlightColor: _highLightColorForDkTh,
         hintColor: _primaryColorDkTh,
         iconTheme: const IconThemeData(color: _primaryColorDkTh),
         inputDecorationTheme: InputDecorationTheme(
             focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(color: _primaryColorDkTh)),
             focusColor: _primaryColorDkTh,
-            hintStyle: _subtitle2TxtStyle.copyWith(color: _primaryColorDkTh)),
+            hintStyle: _titleSmallTxtStyle.copyWith(color: _primaryColorDkTh)),
         listTileTheme: const ListTileThemeData(iconColor: _highLightColorForDkTh, textColor: _primaryColorDkTh),
         outlinedButtonTheme: OutlinedButtonThemeData(
             style: OutlinedButton.styleFrom(

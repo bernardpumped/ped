@@ -18,6 +18,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:pumped_end_device/user-interface/edit-fuel-station-details/model/operating_time_range.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/models/status.dart';
 import 'package:pumped_end_device/util/log_util.dart';
@@ -84,7 +86,8 @@ class _OperatingTimeWidgetState extends State<OperatingTimeWidget> {
             height: 35,
             child: Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
               const SizedBox(width: 5),
-              Text(selectedTime!, style: Theme.of(context).textTheme.bodyText1)
+              Text(selectedTime!, style: Theme.of(context).textTheme.bodyLarge,
+                  textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
             ])));
   }
 

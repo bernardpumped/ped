@@ -16,8 +16,6 @@
  *     along with Pumped End Device.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:pumped_end_device/main.dart';
 import 'package:pumped_end_device/user-interface/utils/under_maintenance_service.dart';
@@ -46,7 +44,6 @@ class _HelpScreenState extends State<HelpScreen> {
   void initState() {
     super.initState();
     // Enable virtual display.
-    if (Platform.isAndroid) WebView.platform = AndroidWebView();
     _underMaintenanceService.registerSubscription(_tag, context, (event, context) {
       if (!mounted) return;
       WidgetUtils.showPumpedUnavailabilityMessage(event, context);
@@ -62,10 +59,26 @@ class _HelpScreenState extends State<HelpScreen> {
 
   @override
   Widget build(final BuildContext context) {
-    /*
-      Current implementation is an interim implementation to show the pumpefuel.com website in Help screen.
-      This would get replaced with a proper implementation for send feedback implementation
-     */
-    return const WebView(initialUrl: 'https://pumpedfuel.com', javascriptMode: JavascriptMode.unrestricted);
+    final WebViewController controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setBackgroundColor(const Color(0x00000000))
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onProgress: (int progress) {
+            // Update loading bar.
+          },
+          onPageStarted: (String url) {},
+          onPageFinished: (String url) {},
+          onWebResourceError: (WebResourceError error) {},
+          onNavigationRequest: (NavigationRequest request) {
+            if (request.url.startsWith('https://www.youtube.com/')) {
+              return NavigationDecision.prevent;
+            }
+            return NavigationDecision.navigate;
+          },
+        ),
+      )
+      ..loadRequest(Uri.parse('https://pumpedfuel.com'));
+    return WebViewWidget(controller: controller);
   }
 }

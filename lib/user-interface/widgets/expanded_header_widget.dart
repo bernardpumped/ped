@@ -22,6 +22,8 @@ import 'package:pumped_end_device/user-interface/fuel-station-details/screen/wid
 import 'package:pumped_end_device/user-interface/fuel-stations/screens/widgets/fuel_station_logo_widget.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/screen/widget/qld_fuel_station_source_citation.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/util/app_theme.dart';
 import 'package:pumped_end_device/util/data_utils.dart';
 
@@ -34,33 +36,31 @@ class ExpandedHeaderWidget extends StatelessWidget {
   Widget build(final BuildContext context) {
     return Container(
         padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-          Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                FuelStationLogoWidget(width: 85, height: 85, image: NetworkImage(fuelStation.merchantLogoUrl)),
-                Expanded(
-                    child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                      Padding(
-                          padding: const EdgeInsets.only(bottom: 5, left: 6),
-                          child: _getFuelStationName(context, fuelStation)),
-                      Padding(
-                          padding: const EdgeInsets.only(bottom: 5, left: 6),
-                          child: _getDistanceWidget(context, fuelStation)),
-                      showPriceSource
-                          ? Padding(
-                              padding: const EdgeInsets.only(bottom: 5, left: 6),
-                              child: _getFuelAuthorityQuotePublisher(fuelStation, context))
-                          : const SizedBox(width: 0),
-                      _getRatingWidget(context, fuelStation)
-                    ]))
-              ])
-        ]));
+        child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              FuelStationLogoWidget(width: 85, height: 85, image: NetworkImage(fuelStation.merchantLogoUrl)),
+              Expanded(
+                  child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                    Padding(
+                        padding: const EdgeInsets.only(bottom: 5, left: 6),
+                        child: _getFuelStationName(context, fuelStation)),
+                    Padding(
+                        padding: const EdgeInsets.only(bottom: 5, left: 6),
+                        child: _getDistanceWidget(context, fuelStation)),
+                    showPriceSource
+                        ? Padding(
+                            padding: const EdgeInsets.only(bottom: 5, left: 6),
+                            child: _getFuelAuthorityQuotePublisher(fuelStation, context))
+                        : const SizedBox(width: 0),
+                    _getRatingWidget(context, fuelStation)
+                  ]))
+            ]));
   }
 
   Widget _getFuelStationName(final BuildContext context, final FuelStation fuelStation) {
@@ -74,7 +74,10 @@ class ExpandedHeaderWidget extends StatelessWidget {
       fsName = '$fsName**';
     }
     fsName = fsName.toTitleCase();
-    return Text(fsName, style: Theme.of(context).textTheme.subtitle1, overflow: TextOverflow.ellipsis, maxLines: 2);
+    return Expanded(
+      child: Text(fsName, style: Theme.of(context).textTheme.titleMedium, overflow: TextOverflow.ellipsis, maxLines: 1,
+          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+    );
   }
 
   Widget _getFuelAuthorityQuotePublisher(final FuelStation fuelStation, final BuildContext context) {
@@ -86,8 +89,9 @@ class ExpandedHeaderWidget extends StatelessWidget {
           .toList();
       if (publishers.isNotEmpty) {
         return Row(children: [
-          Text('Fuel Price Source ${publishers[0]} ', style: Theme.of(context).textTheme.bodyText1),
-          _getFuelStationSourceCitationIcon(publishers, context, fuelStation)
+          Text('Fuel Price Source ${publishers[0]} ', style: Theme.of(context).textTheme.bodyLarge,
+              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+          _getFuelStationSourceCitationIcon(publishers, context, fuelStation),
         ]);
       }
     }
@@ -125,10 +129,12 @@ class ExpandedHeaderWidget extends StatelessWidget {
 
   Widget _getDistanceWidget(final BuildContext context, final FuelStation fuelStation) {
     return Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
-      Text('Petrol Station', style: Theme.of(context).textTheme.bodyText1),
+      Text('Petrol Station', style: Theme.of(context).textTheme.bodyLarge,
+          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
       const SizedBox(width: 10),
       const Icon(Icons.drive_eta, size: 20), // drive_eta icon
-      Text(' ${DataUtils.toPrecision(fuelStation.distance, 2)} km', style: Theme.of(context).textTheme.bodyText1)
+      Text(' ${DataUtils.toPrecision(fuelStation.distance, 2)} km', style: Theme.of(context).textTheme.bodyLarge,
+          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
     ]);
   }
 
@@ -137,7 +143,8 @@ class ExpandedHeaderWidget extends StatelessWidget {
         ? Padding(
             padding: const EdgeInsets.only(bottom: 3, left: 5),
             child: Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
-              Text(' ${fuelStation.rating}', style: Theme.of(context).textTheme.bodyText2),
+              Text(' ${fuelStation.rating}', style: Theme.of(context).textTheme.bodyMedium,
+                  textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
               const SizedBox(width: 3),
               RatingBarIndicator(
                   rating: fuelStation.rating!,

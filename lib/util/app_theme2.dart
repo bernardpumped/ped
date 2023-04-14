@@ -22,19 +22,19 @@ class AppTheme2 {
 
   //https://api.flutter.dev/flutter/material/TextTheme-class.html
   static const textTheme = TextTheme(
-      headline1: TextStyle(fontSize: 28.0, fontWeight: FontWeight.w500, fontFamily: font),
-      headline2: TextStyle(fontSize: 26.0, fontWeight: FontWeight.w500, fontFamily: font),
-      headline3: TextStyle(fontSize: 24.0, fontWeight: FontWeight.normal, fontFamily: font),
-      headline4: TextStyle(fontSize: 22.0, fontWeight: FontWeight.w500, fontFamily: font),
-      headline5: TextStyle(fontSize: 22.0, fontWeight: FontWeight.normal, fontFamily: font),
-      headline6: TextStyle(fontSize: 20.0, fontWeight: FontWeight.normal, fontFamily: font),
-      subtitle1: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w500, fontFamily: font),
-      subtitle2: TextStyle(fontSize: 18.0, fontWeight: FontWeight.normal, fontFamily: font),
-      bodyText1: TextStyle(fontSize: 16.0, fontWeight: FontWeight.normal, fontFamily: font),
-      bodyText2: TextStyle(fontSize: 14.0, fontWeight: FontWeight.normal, fontFamily: font),
-      button: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500, fontFamily: font),
-      caption: TextStyle(fontSize: 16.0, fontWeight: FontWeight.normal, fontFamily: font),
-      overline: TextStyle(fontSize: 13.0, fontWeight: FontWeight.normal, fontFamily: font));
+      displayLarge: TextStyle(fontSize: 28.0, fontWeight: FontWeight.w500, fontFamily: font), //displayLarge
+      displayMedium: TextStyle(fontSize: 26.0, fontWeight: FontWeight.w500, fontFamily: font), //displayMedium
+      displaySmall: TextStyle(fontSize: 24.0, fontWeight: FontWeight.normal, fontFamily: font), //displaySmall
+      headlineMedium: TextStyle(fontSize: 22.0, fontWeight: FontWeight.w500, fontFamily: font), //headlineMedium
+      headlineSmall: TextStyle(fontSize: 22.0, fontWeight: FontWeight.normal, fontFamily: font), //headlineSmall
+      titleLarge: TextStyle(fontSize: 20.0, fontWeight: FontWeight.normal, fontFamily: font), //titleLarge
+      titleMedium: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w500, fontFamily: font), //titleMedium
+      titleSmall: TextStyle(fontSize: 18.0, fontWeight: FontWeight.normal, fontFamily: font), //titleSmall
+      bodyLarge: TextStyle(fontSize: 16.0, fontWeight: FontWeight.normal, fontFamily: font), //bodyLarge
+      bodyMedium: TextStyle(fontSize: 14.0, fontWeight: FontWeight.normal, fontFamily: font), //bodyMedium
+      labelLarge: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500, fontFamily: font), //labelLarge
+      bodySmall: TextStyle(fontSize: 16.0, fontWeight: FontWeight.normal, fontFamily: font), //bodySmall
+      labelSmall: TextStyle(fontSize: 13.0, fontWeight: FontWeight.normal, fontFamily: font)); //labelSmall
 
   static getPumpedLogo(final BuildContext context) {
     return Theme.of(context).brightness == Brightness.light ? AppTheme2.pumpedImageBlackText : AppTheme2.pumpedImage;
@@ -42,7 +42,7 @@ class AppTheme2 {
 
   static modalBottomSheetBg(final BuildContext context) {
     return Theme.of(context).brightness == Brightness.light
-        ? Theme.of(context).backgroundColor
+        ? Theme.of(context).colorScheme.background
         : Theme.of(context).primaryColor;
   }
 

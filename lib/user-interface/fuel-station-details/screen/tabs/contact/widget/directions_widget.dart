@@ -18,12 +18,13 @@
 
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pumped_end_device/data/local/location/geo_location_data.dart';
 import 'package:pumped_end_device/data/local/location/get_location_result.dart';
 import 'package:pumped_end_device/data/local/location/location_access_result_code.dart';
 import 'package:pumped_end_device/data/local/location/location_data_source.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -51,7 +52,7 @@ class _DirectionsWidgetState extends State<DirectionsWidget> {
           style: ElevatedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0))),
           child: Padding(
               padding: const EdgeInsets.only(top: 15.0, bottom: 15.0, left: 0, right: 0),
-              child: Icon(Icons.directions_outlined, color: Theme.of(context).backgroundColor)),
+              child: Icon(Icons.directions_outlined, color: Theme.of(context).colorScheme.background)),
           onPressed: () async {
             if (!FeatureSupport.directions.contains(Platform.operatingSystem)) {
               LogUtil.debug(DirectionsWidget._tag,
@@ -92,7 +93,8 @@ class _DirectionsWidgetState extends State<DirectionsWidget> {
             }
           }),
       const SizedBox(height: 5),
-      Text('Directions', style: Theme.of(context).textTheme.bodyText2)
+      Text('Directions', style: Theme.of(context).textTheme.bodyMedium,
+          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
     ]);
   }
 
