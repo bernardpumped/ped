@@ -38,10 +38,13 @@ import 'package:pumped_end_device/user-interface/settings/screen/widget/mock_loc
 import 'package:pumped_end_device/user-interface/splash/screen/splash_screen.dart';
 import 'package:pumped_end_device/user-interface/update-history/screen/update_history_details_screen.dart';
 import 'package:pumped_end_device/user-interface/update-history/screen/update_history_screen.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/user-interface/utils/under_maintenance_service.dart';
 import 'package:pumped_end_device/util/app_theme.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:pumped_end_device/util/text_scale.dart';
 import 'package:pumped_end_device/util/theme_notifier.dart';
 import 'package:pumped_end_device/util/ui_themes.dart';
 import 'package:rate_my_app/rate_my_app.dart';
@@ -51,7 +54,7 @@ import 'firebase_options.dart';
 
 GetIt getIt = GetIt.instance;
 bool initializeRateMyApp = true;
-const appVersion = "33.BCUI_OZ";
+const appVersion = "34.BCUI_OZ";
 const getLocationWrapperInstanceName = 'geoLocationWrapper';
 const platformWrapperInstanceName = 'platformWrapper';
 const locationDataSourceInstanceName = 'locationDataSource';
@@ -74,15 +77,23 @@ void main() async {
   //   Firebase.app();
   // }
   UiSettings? uiSettings = await UiSettingsDao.instance.getUiSettings();
+
   ThemeMode themeMode;
-  if (uiSettings != null && uiSettings.uiTheme != null) {
+  if (uiSettings.uiTheme != null) {
     themeMode = UiThemes.getThemeMode(uiSettings.uiTheme!);
   } else {
     themeMode = ThemeMode.light;
   }
+
+  double textScaleValue;
+  if (uiSettings.textScale != null) {
+    textScaleValue = TextScale.getTextScaleValue(uiSettings.textScale!) as double;
+  } else {
+    textScaleValue = TextScale.systemTextScaleValue;
+  }
   runApp(ChangeNotifierProvider<ThemeNotifier>(
       create: (BuildContext context) {
-        return ThemeNotifier(themeMode);
+        return ThemeNotifier(themeMode, textScaleValue);
       },
       child: const PumpedApp()));
 }
@@ -96,33 +107,36 @@ class PumpedApp extends StatelessWidget {
     final themeNotifier = Provider.of<ThemeNotifier>(context);
     _deviceInfo();
     _registerBeansWithGetIt();
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: AppTheme().lightTheme,
-        darkTheme: AppTheme().darkTheme,
-        themeMode: themeNotifier.getThemeMode(),
-        home: const SplashScreen(),
-        routes: {
-          NearbyStationsScreen.routeName: (context) => const NearbyStationsScreen(),
-          FavouriteStationsScreen.routeName: (context) => const FavouriteStationsScreen(),
-          AboutScreen.routeName: (context) => const AboutScreen(),
-          SettingsScreen.routeName: (context) => const SettingsScreen(),
-          FuelStationDetailsScreen.routeName: (context) => const FuelStationDetailsScreen(),
-          CustomizeSearchSettingsScreen.routeName: (context) => const CustomizeSearchSettingsScreen(),
-          MockLocationSettingsScreen.routeName: (context) => const MockLocationSettingsScreen(),
-          CleanupLocalCacheScreen.routeName: (context) => const CleanupLocalCacheScreen(),
-          EditFuelStationDetailsScreen.routeName: (context) => const EditFuelStationDetailsScreen(),
-          UpdateHistoryScreen.routeName: (context) => const UpdateHistoryScreen(),
-          UpdateHistoryDetailsScreen.routeName: (context) => const UpdateHistoryDetailsScreen(),
-          SendFeedbackScreen.routeName: (context) => const SendFeedbackScreen(),
-          HelpScreen.routeName: (context) => const HelpScreen()
-        });
+    LogUtil.debug("main", "Value of textScale found as ${themeNotifier.getTextScale()}");
+    return TextScaler(
+        initialScaleFactor: TextScalingFactor(scaleFactor: themeNotifier.getTextScale()),
+        child: MaterialApp(
+            debugShowCheckedModeBanner: false,
+            theme: AppTheme().lightTheme,
+            darkTheme: AppTheme().darkTheme,
+            themeMode: themeNotifier.getThemeMode(),
+            home: const SplashScreen(),
+            routes: {
+              NearbyStationsScreen.routeName: (context) => const NearbyStationsScreen(),
+              FavouriteStationsScreen.routeName: (context) => const FavouriteStationsScreen(),
+              AboutScreen.routeName: (context) => const AboutScreen(),
+              SettingsScreen.routeName: (context) => const SettingsScreen(),
+              FuelStationDetailsScreen.routeName: (context) => const FuelStationDetailsScreen(),
+              CustomizeSearchSettingsScreen.routeName: (context) => const CustomizeSearchSettingsScreen(),
+              MockLocationSettingsScreen.routeName: (context) => const MockLocationSettingsScreen(),
+              CleanupLocalCacheScreen.routeName: (context) => const CleanupLocalCacheScreen(),
+              EditFuelStationDetailsScreen.routeName: (context) => const EditFuelStationDetailsScreen(),
+              UpdateHistoryScreen.routeName: (context) => const UpdateHistoryScreen(),
+              UpdateHistoryDetailsScreen.routeName: (context) => const UpdateHistoryDetailsScreen(),
+              SendFeedbackScreen.routeName: (context) => const SendFeedbackScreen(),
+              HelpScreen.routeName: (context) => const HelpScreen()
+            }));
   }
 
   void _deviceInfo() async {
     final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
     final deviceInfo = await deviceInfoPlugin.deviceInfo;
-    final map = deviceInfo.toMap();
+    final map = deviceInfo.data;
     LogUtil.debug(_tag, map.toString());
     /*
       OUTPUT OF ABOVE IS

@@ -24,6 +24,8 @@ import 'package:pumped_end_device/user-interface/edit-fuel-station-details/scree
 import 'package:pumped_end_device/user-interface/edit-fuel-station-details/screen/widget/edit-fuel-price-widgets/edit_fuel_price_widget.dart';
 import 'package:pumped_end_device/user-interface/edit-fuel-station-details/screen/widget/edit-operating-time-widget/edit_operating_time_widget.dart';
 import 'package:pumped_end_device/user-interface/edit-fuel-station-details/screen/widget/suggest-edit/suggest_edit_widget.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/user-interface/widgets/expanded_header_widget.dart';
 import 'package:pumped_end_device/user-interface/widgets/pumped_app_bar.dart';
 
@@ -67,7 +69,7 @@ class _EditFuelStationDetailsScreenState extends State<EditFuelStationDetailsScr
     } else if (params.suggestEdit) {
       return SuggestEditWidget(params, 250);
     }
-    return const Text('Some Error Happened');
+    return Text('Some Error Happened', textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
   }
 
   undoFunction() {

@@ -26,6 +26,8 @@ import 'package:pumped_end_device/data/local/location/location_access_result_cod
 import 'package:pumped_end_device/data/local/location/location_data_source.dart';
 import 'package:pumped_end_device/main.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/screens/nearby/nearby_stations_screen.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/user-interface/utils/under_maintenance_service.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/util/log_util.dart';
@@ -74,7 +76,8 @@ class _SplashScreenState extends State<SplashScreen> {
                   Center(
                       child: Text('Your friendly \n neighbourhood fuel finder',
                           textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.headline2!.copyWith(color: Colors.white))),
+                          style: Theme.of(context).textTheme.displayMedium!.copyWith(color: Colors.white),
+                          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
                   Container(
                       width: 120,
                       margin: const EdgeInsets.only(top: 40),
@@ -90,9 +93,10 @@ class _SplashScreenState extends State<SplashScreen> {
                     AnimatedOpacity(
                         opacity: _locationDetectionTriggered ? 1.0 : 0.0,
                         duration: const Duration(milliseconds: 500),
-                        child: const SizedBox(
+                        child: SizedBox(
                             width: 200,
-                            child: Text('Detecting Location', style: TextStyle(fontSize: 16, color: Colors.white)))),
+                            child: Text('Detecting Location', style: const TextStyle(fontSize: 16, color: Colors.white),
+                                textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor))),
                     AnimatedOpacity(
                         opacity: _detectingLocationIconVisible ? 1.0 : 0.0,
                         duration: const Duration(milliseconds: 500),
@@ -109,10 +113,11 @@ class _SplashScreenState extends State<SplashScreen> {
                     AnimatedOpacity(
                         opacity: _checkingPumpedAvailabilityIconVisible ? 1.0 : 0.0,
                         duration: const Duration(milliseconds: 500),
-                        child: const SizedBox(
+                        child: SizedBox(
                             width: 200,
                             child:
-                                Text('Fetching Fuel Stations', style: TextStyle(fontSize: 16, color: Colors.white)))),
+                                Text('Fetching Fuel Stations', style: const TextStyle(fontSize: 16, color: Colors.white),
+                                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor))),
                     AnimatedOpacity(
                         opacity: _checkingPumpedAvailabilityTextVisible ? 1.0 : 0.0,
                         duration: const Duration(milliseconds: 500),

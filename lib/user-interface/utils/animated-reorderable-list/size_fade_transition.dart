@@ -50,10 +50,10 @@ class SizeFadeTransition extends StatefulWidget {
         super(key: key);
 
   @override
-  _SizeFadeTransitionState createState() => _SizeFadeTransitionState();
+  SizeFadeTransitionState createState() => SizeFadeTransitionState();
 }
 
-class _SizeFadeTransitionState extends State<SizeFadeTransition> {
+class SizeFadeTransitionState extends State<SizeFadeTransition> {
   late Animation size;
   late Animation opacity;
 

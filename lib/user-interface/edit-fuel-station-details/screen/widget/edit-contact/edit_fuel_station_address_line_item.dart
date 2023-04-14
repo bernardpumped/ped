@@ -18,6 +18,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/util/data_utils.dart';
 
@@ -79,7 +81,8 @@ class _EditFuelStationAddressLineItemState extends State<EditFuelStationAddressL
                 padding: const EdgeInsets.only(left: 30, right: 30, bottom: 15),
                 child: Row(children: <Widget>[
                   Expanded(
-                      flex: 1, child: Text(widget._addressComponentName, style: Theme.of(context).textTheme.subtitle2)),
+                      flex: 1, child: Text(widget._addressComponentName, style: Theme.of(context).textTheme.titleSmall,
+                      textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
                   Expanded(
                       flex: 3,
                       child: Column(
@@ -91,7 +94,7 @@ class _EditFuelStationAddressLineItemState extends State<EditFuelStationAddressL
   TextField _buildTextField() {
     return TextField(
         controller: widget._addressComponentEditingController, // Add this
-        style: Theme.of(context).textTheme.subtitle2,
+        style: Theme.of(context).textTheme.titleSmall,
         maxLengthEnforcement: MaxLengthEnforcement.enforced,
         enabled: _addressComponentEnabled && !widget._backendUpdateInProgress,
         decoration: InputDecoration(
@@ -127,7 +130,8 @@ class _EditFuelStationAddressLineItemState extends State<EditFuelStationAddressL
         curve: Curves.fastOutSlowIn,
         duration: Duration(milliseconds: _errorMsgHeightChangeTime),
         child: Text(_errorMessage,
-            style: Theme.of(context).textTheme.caption!.copyWith(color: Theme.of(context).errorColor)));
+            style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Theme.of(context).colorScheme.error),
+            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor));
   }
 
   Widget _getAddressComponentField(final TextField addressComponentTextField) {

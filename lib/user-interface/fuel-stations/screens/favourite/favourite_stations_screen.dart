@@ -36,6 +36,8 @@ import 'package:pumped_end_device/user-interface/fuel-stations/params/fuel_type_
 import 'package:pumped_end_device/user-interface/fuel-stations/service/favorite_fuel_stations_service.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/screens/widgets/no_favourite_stations_widget.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/service/fuel_type_switcher_service.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/user-interface/utils/under_maintenance_service.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/user-interface/widgets/pumped_app_bar.dart';
@@ -192,7 +194,7 @@ class _FavouriteStationsScreenState extends State<FavouriteStationsScreen> {
   Widget _favoriteFuelStationWidget(final FavoriteFuelStations data) {
     if (!data.locationSearchSuccessful) {
       final String locationErrorReason = data.locationErrorReason ?? 'Unknown Location Error Reason';
-      return Center(child: Text(locationErrorReason));
+      return Center(child: Text(locationErrorReason, textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor));
     } else {
       _favouriteStations = data.fuelStations ?? [];
       if (_favouriteStations.isNotEmpty) {

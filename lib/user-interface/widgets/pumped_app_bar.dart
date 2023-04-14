@@ -18,6 +18,8 @@
 
 import 'package:basic_utils/basic_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 
 class PumpedAppBar extends StatefulWidget implements PreferredSizeWidget {
   final String title;
@@ -42,10 +44,12 @@ class _PumpedAppBarState extends State<PumpedAppBar> {
       titleWidget = Row(children: [
         Icon(widget.icon, size: 30),
         const SizedBox(width: 10),
-        Expanded(child: Text(title, style: Theme.of(context).textTheme.headline2, overflow: TextOverflow.ellipsis))
+        Expanded(child: Text(title, style: Theme.of(context).textTheme.displayMedium, overflow: TextOverflow.ellipsis,
+            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor))
       ]);
     } else {
-      titleWidget = Text(title, style: Theme.of(context).textTheme.headline1);
+      titleWidget = Text(title, style: Theme.of(context).textTheme.displayLarge,
+          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
     }
     return AppBar(automaticallyImplyLeading: true, title: titleWidget);
   }

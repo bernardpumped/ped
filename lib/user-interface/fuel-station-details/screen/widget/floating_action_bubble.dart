@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 
 class FloatingActionBubble extends AnimatedWidget {
   const FloatingActionBubble(
@@ -50,8 +52,8 @@ class FloatingActionBubble extends AnimatedWidget {
           backgroundColor: Theme.of(context).highlightColor,
           onPressed: onPress,
           child: iconData == null
-              ? AnimatedIcon(icon: animatedIconData!, progress: _animation, color: Theme.of(context).backgroundColor)
-              : Icon(iconData, color: Theme.of(context).backgroundColor))
+              ? AnimatedIcon(icon: animatedIconData!, progress: _animation, color: Theme.of(context).colorScheme.background)
+              : Icon(iconData, color: Theme.of(context).colorScheme.background))
     ]);
   }
 }
@@ -79,9 +81,9 @@ class BubbleMenu extends StatelessWidget {
         child: Padding(
             padding: const EdgeInsets.all(12.0),
             child: Row(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.end, children: [
-              Icon(item._icon, color: Theme.of(context).backgroundColor),
+              Icon(item._icon, color: Theme.of(context).colorScheme.background),
               const SizedBox(width: 10),
-              Text(item._title)
+              Text(item._title, textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
             ])));
   }
 }

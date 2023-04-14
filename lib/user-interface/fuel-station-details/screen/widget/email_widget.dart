@@ -17,6 +17,8 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -42,7 +44,8 @@ class EmailNotificationWidget extends StatelessWidget {
         child: Padding(
             padding: const EdgeInsets.only(left: 15, right: 15),
             child:
-            Row(children: const [Icon(Icons.email_outlined, size: 24), SizedBox(width: 10), Text('Email')])));
+            Row(children: [const Icon(Icons.email_outlined, size: 24), const SizedBox(width: 10),
+              Text('Email', textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)])));
   }
 
   void _sendEmail(final Function function) async {

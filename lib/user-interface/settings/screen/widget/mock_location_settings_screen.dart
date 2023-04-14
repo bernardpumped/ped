@@ -21,6 +21,8 @@ import 'package:pumped_end_device/user-interface/settings/screen/settings_screen
 import 'package:pumped_end_device/user-interface/settings/screen/widget/add_mock_location_widget.dart';
 import 'package:pumped_end_device/user-interface/settings/screen/widget/delete_mock_location.dart';
 import 'package:pumped_end_device/user-interface/settings/screen/widget/pin_location_widget.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/user-interface/widgets/pumped_app_bar.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
@@ -48,8 +50,12 @@ class _MockLocationSettingsScreenState extends State<MockLocationSettingsScreen>
                       child: Row(children: [
                         const Icon(Icons.push_pin_outlined, size: 30),
                         const SizedBox(width: 10),
-                        Text('Mock Location of Device',
-                            style: Theme.of(context).textTheme.headline3, textAlign: TextAlign.center)
+                        Expanded(
+                          child: Text('Mock Location of Device',
+                              style: Theme.of(context).textTheme.displaySmall, textAlign: TextAlign.center,
+                              overflow: TextOverflow.ellipsis,
+                              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
+                        )
                       ])),
                   Card(
                       child: Padding(

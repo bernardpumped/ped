@@ -29,6 +29,8 @@ import 'package:pumped_end_device/user-interface/edit-fuel-station-details/model
 import 'package:pumped_end_device/user-interface/edit-fuel-station-details/params/edit_fuel_station_details_params.dart';
 import 'package:pumped_end_device/user-interface/edit-fuel-station-details/screen/widget/edit_action_buttons_widget.dart';
 import 'package:pumped_end_device/user-interface/update-history/screen/widget/update_type_attributes.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/util/data_utils.dart';
 import 'package:pumped_end_device/util/log_util.dart';
@@ -85,7 +87,8 @@ class _SuggestEditWidgetState extends State<SuggestEditWidget> {
         child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
           const Icon(Icons.comment, size: 30),
           const SizedBox(width: 10),
-          Text('Suggest Edit', style: Theme.of(context).textTheme.headline4)
+          Text('Suggest Edit', style: Theme.of(context).textTheme.headlineMedium,
+              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
         ]));
   }
 

@@ -27,6 +27,8 @@ import 'package:pumped_end_device/user-interface/fuel-station-details/data/remot
 import 'package:pumped_end_device/user-interface/fuel-station-details/screen/tabs/contact/widget/horizontal_scroll_list_widget.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station_address.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/util/data_utils.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 import 'package:uuid/uuid.dart';
@@ -116,7 +118,8 @@ class _ContactTabWidgetState extends State<ContactTabWidget> {
     return Text(address,
         maxLines: 2,
         overflow: TextOverflow.ellipsis,
-        style: Theme.of(context).textTheme.subtitle2!.copyWith(height: 1.5));
+        style: Theme.of(context).textTheme.titleSmall!.copyWith(height: 1.5),
+        textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
   }
 
   Widget _getPhone(final FuelStationAddress fuelStationAddress) {
@@ -132,7 +135,8 @@ class _ContactTabWidgetState extends State<ContactTabWidget> {
       phoneN = fuelStationAddress.phone2;
     }
     if (DataUtils.isNotBlank(phoneN)) {
-      return Text(phoneN!, style: Theme.of(context).textTheme.subtitle2);
+      return Text(phoneN!, style: Theme.of(context).textTheme.titleSmall,
+          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
     } else {
       return const SizedBox(width: 0);
     }

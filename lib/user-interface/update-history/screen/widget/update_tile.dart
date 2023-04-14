@@ -20,6 +20,8 @@ import 'package:flutter/material.dart';
 import 'package:pumped_end_device/models/update_type.dart';
 import 'package:pumped_end_device/user-interface/update-history/model/update_tile_data.dart';
 import 'package:pumped_end_device/user-interface/update-history/screen/update_history_details_screen.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
 class UpdateTile extends StatelessWidget {
@@ -29,7 +31,7 @@ class UpdateTile extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    final bgColor = Theme.of(context).backgroundColor;
+    final bgColor = Theme.of(context).colorScheme.background;
     return GestureDetector(
         onTap: () {
           Navigator.pushNamed(context, UpdateHistoryDetailsScreen.routeName, arguments: _updateTileData);
@@ -41,7 +43,8 @@ class UpdateTile extends StatelessWidget {
               padding: const EdgeInsets.only(left: 25.0, top: 8, right: 25),
               child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                 Text('${_updateTileData.updateType.updateTypeReadableName} updates',
-                    style: Theme.of(context).textTheme.subtitle2),
+                    style: Theme.of(context).textTheme.titleSmall,
+                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
                 const Icon(Icons.more_horiz)
               ])),
           Padding(
@@ -54,18 +57,22 @@ class UpdateTile extends StatelessWidget {
                         padding: const EdgeInsets.all(12),
                         child: Column(children: [
                           Text('${_updateTileData.success}',
-                              style: Theme.of(context).textTheme.headline3!.copyWith(color: bgColor)),
-                          Text('Success', style: Theme.of(context).textTheme.bodyText2!.copyWith(color: bgColor))
+                              style: Theme.of(context).textTheme.displaySmall!.copyWith(color: bgColor),
+                              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+                          Text('Success', style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: bgColor),
+                              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
                         ]))),
                 Card(
                     elevation: 2,
-                    color: Theme.of(context).errorColor,
+                    color: Theme.of(context).colorScheme.error,
                     child: Container(
                         padding: const EdgeInsets.all(12),
                         child: Column(children: [
                           Text('${_updateTileData.failure}',
-                              style: Theme.of(context).textTheme.headline3!.copyWith(color: bgColor)),
-                          Text(' Failed  ', style: Theme.of(context).textTheme.bodyText2!.copyWith(color: bgColor))
+                              style: Theme.of(context).textTheme.displaySmall!.copyWith(color: bgColor),
+                              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+                          Text(' Failed  ', style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: bgColor),
+                              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
                         ]))),
                 Card(
                     elevation: 2,
@@ -74,8 +81,10 @@ class UpdateTile extends StatelessWidget {
                         padding: const EdgeInsets.all(12),
                         child: Column(children: [
                           Text('${_updateTileData.pending}',
-                              style: Theme.of(context).textTheme.headline3!.copyWith(color: bgColor)),
-                          Text('Pending', style: Theme.of(context).textTheme.bodyText2!.copyWith(color: bgColor))
+                              style: Theme.of(context).textTheme.displaySmall!.copyWith(color: bgColor),
+                              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+                          Text('Pending', style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: bgColor),
+                              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
                         ])))
               ]))
         ])));

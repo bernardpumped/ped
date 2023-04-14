@@ -19,6 +19,8 @@
 import 'package:flutter/material.dart';
 import 'package:pumped_end_device/data/local/dao2/mock_location_dao.dart';
 import 'package:pumped_end_device/data/local/model/mock_location.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
@@ -59,7 +61,7 @@ class _DeleteMockLocationState extends State<DeleteMockLocation> {
                     LogUtil.debug(_tag, 'No mock Location selected for delete');
                   }
                 },
-                child: const Text('Delete Mock Location'))
+                child: Text('Delete Mock Location', textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor))
           ]))
     ]);
   }
@@ -76,22 +78,32 @@ class _DeleteMockLocationState extends State<DeleteMockLocation> {
             final List<MockLocation> allMockLocations = snapshot.data!;
             if (allMockLocations.isNotEmpty) {
               return ExpansionTile(
-                  title: Text(titleTxt, style: Theme.of(context).textTheme.subtitle1),
+                  title: Expanded(
+                    child: Text(titleTxt, style: Theme.of(context).textTheme.titleMedium,
+                        overflow: TextOverflow.ellipsis,
+                        textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+                  ),
                   leading: const Icon(Icons.edit_location_outlined, size: 30),
                   children: _getLocationWidgets(allMockLocations));
             } else {
               return ListTile(
                   leading: const Icon(Icons.edit_location_outlined, size: 30),
-                  title: Text('No custom mock locations present', style: Theme.of(context).textTheme.subtitle1));
+                  title: Expanded(
+                    child: Text('No custom mock locations present', style: Theme.of(context).textTheme.titleMedium,
+                        overflow: TextOverflow.ellipsis,
+                        textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+                  ));
             }
           } else if (snapshot.hasError) {
             return ListTile(
                 leading: const Icon(Icons.edit_location_outlined, size: 30),
-                title: Text('Error Loading mock Locations', style: Theme.of(context).textTheme.subtitle1));
+                title: Text('Error Loading mock Locations', style: Theme.of(context).textTheme.titleMedium,
+                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor));
           } else {
             return ListTile(
                 leading: const Icon(Icons.edit_location_outlined, size: 30),
-                title: Text('Loading mock Locations', style: Theme.of(context).textTheme.subtitle1));
+                title: Text('Loading mock Locations', style: Theme.of(context).textTheme.titleMedium,
+                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor));
           }
         });
   }
@@ -118,9 +130,9 @@ class _DeleteMockLocationState extends State<DeleteMockLocation> {
           });
         },
         title: Text('${mockLocation.addressLine}, ${mockLocation.state}, ${mockLocation.country}',
-            style: Theme.of(context).textTheme.bodyText1),
+            style: Theme.of(context).textTheme.bodyLarge, textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
         subtitle: Text(
             'lat : ${mockLocation.latitude.toStringAsFixed(5)}, long : ${mockLocation.longitude.toStringAsFixed(5)}',
-            style: Theme.of(context).textTheme.bodyText2));
+            style: Theme.of(context).textTheme.bodyMedium, textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor));
   }
 }

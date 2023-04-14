@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:pumped_end_device/user-interface/utils/animated-reorderable-list/implicity_animated_reorderable_list.dart';
 
@@ -119,8 +117,8 @@ class ReorderableState extends State<Reorderable>
     }();
 
     return AnimatedBuilder(
-      child: child,
       animation: _translation ?? const AlwaysStoppedAnimation(0.0),
+      child: child,
       builder: (context, child) {
         final offset = _translation?.value ?? 0.0;
 

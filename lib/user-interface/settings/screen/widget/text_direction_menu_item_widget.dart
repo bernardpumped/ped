@@ -17,6 +17,8 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 
 class TextDirectionMenuItemWidget extends StatefulWidget {
   const TextDirectionMenuItemWidget({Key? key}) : super(key: key);
@@ -39,7 +41,7 @@ class _TextDirectionMenuItemWidgetState extends State<TextDirectionMenuItemWidge
     return Card(
         child: ExpansionTile(
             title: Text("Text Direction - ${_textDirection[selectedTextDirection]}",
-                style: Theme.of(context).textTheme.subtitle1),
+                style: Theme.of(context).textTheme.titleMedium, textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
             leading: const Icon(Icons.align_horizontal_left, size: 30),
             children: [_getMenuItem(_basedOnLocale), _getMenuItem(_ltrDirection), _getMenuItem(_rtlDirection)]));
   }
@@ -53,6 +55,7 @@ class _TextDirectionMenuItemWidgetState extends State<TextDirectionMenuItemWidge
             selectedTextDirection = newVal!;
           });
         },
-        title: Text(_textDirection[value]!, style: Theme.of(context).textTheme.subtitle2));
+        title: Text(_textDirection[value]!, style: Theme.of(context).textTheme.titleSmall,
+            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor));
   }
 }

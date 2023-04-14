@@ -24,6 +24,8 @@ import 'package:pumped_end_device/user-interface/fuel-station-details/screen/wid
 import 'package:pumped_end_device/user-interface/fuel-station-details/screen/tabs/fuel-prices/widget/notification_widget.dart';
 import 'package:pumped_end_device/models/pumped/fuel_quote.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -58,17 +60,21 @@ class FuelPriceSourceCitationWidget extends StatelessWidget {
   Column _getFuelAuthorityMessage(final BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: <Widget>[
       Row(children: [
-        Text(fuelTypeName, style: Theme.of(context).textTheme.headline4),
+        Text(fuelTypeName, style: Theme.of(context).textTheme.headlineMedium,
+            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
         const SizedBox(width: 10),
-        Text(fuelQuote.quoteValue.toString(), style: Theme.of(context).textTheme.headline4)
+        Text(fuelQuote.quoteValue.toString(), style: Theme.of(context).textTheme.headlineMedium,
+            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
       ]),
       const SizedBox(height: 12),
       const Divider(height: 1),
       const SizedBox(height: 6),
-      Text('Price Source ${_getFuelAuthorityQuotePublisher()}', style: Theme.of(context).textTheme.headline6),
+      Text('Price Source ${_getFuelAuthorityQuotePublisher()}', style: Theme.of(context).textTheme.titleLarge,
+          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
       const SizedBox(height: 6),
       Text('Price updated near realtime ${_getPublishDateFormatted(fuelQuote.publishDate!)}',
-          style: Theme.of(context).textTheme.bodyText2),
+          style: Theme.of(context).textTheme.bodyMedium,
+          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
       const SizedBox(height: 6),
       const Divider(height: 1),
       const SizedBox(height: 6),
@@ -81,17 +87,21 @@ class FuelPriceSourceCitationWidget extends StatelessWidget {
   Column _getCrowdSourceMessage(final BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: <Widget>[
       Row(children: [
-        Text(fuelTypeName, style: Theme.of(context).textTheme.headline4),
+        Text(fuelTypeName, style: Theme.of(context).textTheme.headlineMedium,
+            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
         const SizedBox(width: 10),
-        Text(fuelQuote.quoteValue.toString(), style: Theme.of(context).textTheme.headline4)
+        Text(fuelQuote.quoteValue.toString(), style: Theme.of(context).textTheme.headlineMedium,
+            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
       ]),
       const SizedBox(height: 12),
       const Divider(height: 1),
       const SizedBox(height: 6),
-      Text('Fuel Price Crowd Sourced', style: Theme.of(context).textTheme.headline6),
+      Text('Fuel Price Crowd Sourced', style: Theme.of(context).textTheme.titleLarge,
+          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
       const SizedBox(height: 6),
       Text('Price updated ${_getPublishDateFormatted(fuelQuote.publishDate!)}',
-          style: Theme.of(context).textTheme.bodyText2),
+          style: Theme.of(context).textTheme.bodyMedium,
+          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
       const SizedBox(height: 6),
       const Divider(height: 1),
       const SizedBox(height: 6),
@@ -110,7 +120,8 @@ class FuelPriceSourceCitationWidget extends StatelessWidget {
           child: Padding(
               padding: const EdgeInsets.only(left: 15, right: 15),
               child:
-                  Row(children: const [Icon(Icons.cancel_outlined, size: 24), SizedBox(width: 10), Text('Cancel')]))),
+                  Row(children: [const Icon(Icons.cancel_outlined, size: 24), const SizedBox(width: 10),
+                    Text('Cancel', textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)]))),
       const SizedBox(width: 10),
       _getNotificationWidget()
     ]);
@@ -139,19 +150,20 @@ class FuelPriceSourceCitationWidget extends StatelessWidget {
   Text _getTextForOtherFa(final BuildContext context) {
     return Text('If fuel price is incorrect please let us know',
         textAlign: TextAlign.start,
-        style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Theme.of(context).errorColor));
+        style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: Theme.of(context).colorScheme.error),
+        textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
   }
 
   Text _getTextForSa(final BuildContext context) {
     return Text.rich(TextSpan(
-        style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Theme.of(context).errorColor),
+        style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: Theme.of(context).colorScheme.error),
         children: [
           const TextSpan(text: "If fuel price is incorrect please let us know by either raising a ticket with "),
           TextSpan(
               style: Theme.of(context)
                   .textTheme
-                  .bodyText2!
-                  .copyWith(color: Theme.of(context).errorColor, decoration: TextDecoration.underline),
+                  .bodyMedium!
+                  .copyWith(color: Theme.of(context).colorScheme.error, decoration: TextDecoration.underline),
               text: "SA Fuel Pricing - Complaint Site",
               recognizer: TapGestureRecognizer()
                 ..onTap = () async {
@@ -165,7 +177,7 @@ class FuelPriceSourceCitationWidget extends StatelessWidget {
                 }),
           TextSpan(
               text: " or email us and we'll follow it up",
-              style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Theme.of(context).errorColor)),
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: Theme.of(context).colorScheme.error)),
         ]));
   }
 

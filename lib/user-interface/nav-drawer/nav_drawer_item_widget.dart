@@ -17,6 +17,8 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
 class NavDrawerItemWidget extends StatelessWidget {
@@ -41,7 +43,7 @@ class NavDrawerItemWidget extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    final backgroundColor = selected ? Theme.of(context).secondaryHeaderColor : Theme.of(context).backgroundColor;
+    final backgroundColor = selected ? Theme.of(context).secondaryHeaderColor : Theme.of(context).colorScheme.background;
     final color = selected ? Theme.of(context).highlightColor : Theme.of(context).iconTheme.color;
     return GestureDetector(
         onTap: () {
@@ -58,9 +60,13 @@ class NavDrawerItemWidget extends StatelessWidget {
             child: Row(children: [
               Padding(
                   padding: const EdgeInsets.only(left: 20), child: Icon(selected ? selectedStateIcon : icon, size: 25, color: color)),
-              Padding(
-                  padding: const EdgeInsets.only(left: 20),
-                  child: Text(label, style: Theme.of(context).textTheme.subtitle2!.copyWith(color: color)))
+              Flexible(
+                child: Padding(
+                    padding: const EdgeInsets.only(left: 20),
+                    child: Text(label, style: Theme.of(context).textTheme.titleSmall!.copyWith(color: color),
+                        textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor,
+                    overflow: TextOverflow.ellipsis)),
+              )
             ])));
   }
 }

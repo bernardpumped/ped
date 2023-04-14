@@ -27,6 +27,8 @@ import 'package:pumped_end_device/user-interface/update-history/model/update_til
 import 'package:pumped_end_device/user-interface/update-history/screen/widget/update_distribution_pie_chart.dart';
 import 'package:pumped_end_device/models/update_history.dart';
 import 'package:pumped_end_device/user-interface/update-history/screen/widget/update_tile.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/user-interface/utils/under_maintenance_service.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/user-interface/widgets/pumped_app_bar.dart';
@@ -103,7 +105,8 @@ class _UpdateHistoryScreenState extends State<UpdateHistoryScreen> {
           } else if (snapshot.hasError) {
             return Center(
                 child: Text('Error Loading',
-                    style: Theme.of(context).textTheme.subtitle2!.copyWith(color: Theme.of(context).errorColor)));
+                    style: Theme.of(context).textTheme.titleSmall!.copyWith(color: Theme.of(context).colorScheme.error),
+                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor));
           } else {
             return const Center(child: CircularProgressIndicator());
           }

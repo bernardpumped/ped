@@ -19,6 +19,8 @@
 import 'package:flutter/material.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/screens/widgets/fuel_station_logo_widget.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/util/data_utils.dart';
 
 class CollapsedHeaderWidget extends StatelessWidget {
@@ -43,8 +45,9 @@ class CollapsedHeaderWidget extends StatelessWidget {
               child: Padding(
                   padding: const EdgeInsets.only(left: 8.0),
                   child: Text(headerText,
-                      style: Theme.of(context).textTheme.headline6!.copyWith(fontWeight: FontWeight.w500),
-                      overflow: TextOverflow.ellipsis)))
+                      style: Theme.of(context).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.w500),
+                      overflow: TextOverflow.ellipsis,
+                      textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)))
         ]));
   }
 }

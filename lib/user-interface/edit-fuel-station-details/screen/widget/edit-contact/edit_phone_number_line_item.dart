@@ -18,6 +18,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/util/data_utils.dart';
 
@@ -100,7 +102,8 @@ class _EditPhoneNumberLineItemState extends State<EditPhoneNumberLineItem> {
             child: Padding(
                 padding: const EdgeInsets.only(left: 30, right: 30, bottom: 15),
                 child: Row(children: <Widget>[
-                  Expanded(flex: 1, child: Text(widget._phoneNumberName, style: Theme.of(context).textTheme.subtitle2)),
+                  Expanded(flex: 1, child: Text(widget._phoneNumberName, style: Theme.of(context).textTheme.titleSmall,
+                      textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
                   Expanded(
                       flex: 3,
                       child: Column(
@@ -116,7 +119,8 @@ class _EditPhoneNumberLineItemState extends State<EditPhoneNumberLineItem> {
         curve: Curves.fastOutSlowIn,
         duration: Duration(milliseconds: _errorMsgHeightChangeTime),
         child: Text(_errorMessage,
-            style: Theme.of(context).textTheme.caption!.copyWith(color: Theme.of(context).errorColor)));
+            style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Theme.of(context).colorScheme.error),
+            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor));
   }
 
   Widget _getPhoneField(final TextField phoneTextField) {
@@ -133,7 +137,7 @@ class _EditPhoneNumberLineItemState extends State<EditPhoneNumberLineItem> {
   TextField _buildTextField() {
     return TextField(
         controller: widget._phoneEditingController, // Add this
-        style: Theme.of(context).textTheme.subtitle2,
+        style: Theme.of(context).textTheme.titleSmall,
         keyboardType: TextInputType.phone,
         maxLengthEnforcement: MaxLengthEnforcement.enforced,
         enabled: _phoneEnabled && !widget._backendUpdateInProgress,

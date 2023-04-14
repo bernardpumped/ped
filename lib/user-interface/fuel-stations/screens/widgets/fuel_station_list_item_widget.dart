@@ -17,7 +17,6 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:pumped_end_device/models/pumped/fuel_quote.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station.dart';
@@ -27,6 +26,8 @@ import 'package:pumped_end_device/user-interface/fuel-stations/screens/widgets/f
 import 'package:pumped_end_device/user-interface/fuel-stations/screens/widgets/fuel_station_logo_widget.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/params/fuel_station_details_param.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/screen/fuel_station_details_screen.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/util/app_theme.dart';
 import 'package:pumped_end_device/util/data_utils.dart';
 import 'package:pumped_end_device/util/log_util.dart';
@@ -88,7 +89,7 @@ class FuelStationListItemWidget extends StatelessWidget {
 
   Widget _getOpenCloseRatingDistanceWidget(final BuildContext context) {
     return Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-      _getOpenCloseWidget(context),
+      Flexible(child: _getOpenCloseWidget(context)),
       const SizedBox(width: 5),
       _getRatingWidget(context),
       const SizedBox(width: 5),
@@ -100,17 +101,19 @@ class FuelStationListItemWidget extends StatelessWidget {
   Widget _getStationAddressWidget(final BuildContext context) {
     return Text(
         '${fuelStation.fuelStationAddress.addressLine1}, ${fuelStation.fuelStationAddress.locality}'.toTitleCase(),
-        style: Theme.of(context).textTheme.bodyText1!.copyWith(overflow: TextOverflow.ellipsis),
-        maxLines: 1);
+        style: Theme.of(context).textTheme.bodyLarge!.copyWith(overflow: TextOverflow.ellipsis),
+        maxLines: 1, textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
   }
 
   Widget _getStationNameWidget(final BuildContext context) => Text(fuelStation.fuelStationName.toTitleCase(),
-      style: Theme.of(context).textTheme.subtitle1!.copyWith(overflow: TextOverflow.ellipsis));
+      style: Theme.of(context).textTheme.titleMedium!.copyWith(overflow: TextOverflow.ellipsis),
+      textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
 
   Widget _getRatingWidget(final BuildContext context) {
     if (fuelStation.rating != null) {
       final Widget childWidget = Row(children: [
-        Text(fuelStation.rating.toString(), style: Theme.of(context).textTheme.bodyText2),
+        Text(fuelStation.rating.toString(), style: Theme.of(context).textTheme.bodyMedium,
+            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
         const SizedBox(width: 2),
         const Icon(Icons.star, size: 15)
       ]);
@@ -129,7 +132,8 @@ class FuelStationListItemWidget extends StatelessWidget {
     } else {
       distance = "$distanced km";
     }
-    final child1 = Text(distance, style: Theme.of(context).textTheme.bodyText2);
+    final child1 = Text(distance, style: Theme.of(context).textTheme.bodyMedium,
+        textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
     return _getElevatedBoxSingleChild(context, child1);
   }
 
@@ -139,7 +143,9 @@ class FuelStationListItemWidget extends StatelessWidget {
       final Color widgetChipColor = (fuelStation.status == Status.open || fuelStation.status == Status.open24Hrs)
           ? AppTheme.stationOpenColor
           : AppTheme.stationCloseColor;
-      final childWidget = Text(status, style: Theme.of(context).textTheme.bodyText2!.copyWith(color: widgetChipColor));
+      final childWidget = Text(status, style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: widgetChipColor),
+          overflow: TextOverflow.ellipsis,
+          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
       return _getElevatedBoxSingleChild(context, childWidget);
     }
     return const SizedBox(width: 0);
@@ -147,13 +153,15 @@ class FuelStationListItemWidget extends StatelessWidget {
 
   Widget _getOffersWidget(final BuildContext context) {
     if (fuelStation.offers > 0 || fuelStation.services > 0) {
-      final Widget child1 = Text('Offers', style: Theme.of(context).textTheme.overline);
+      final Widget child1 = Text('Offers', style: Theme.of(context).textTheme.labelSmall,
+          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
       Widget? child2;
       if (fuelStation.offers > 0) {
         child2 = Row(children: [
           const Icon(Icons.shopping_cart, size: 20),
           const SizedBox(width: 5),
-          Text(fuelStation.offers.toString(), style: Theme.of(context).textTheme.bodyText1)
+          Text(fuelStation.offers.toString(), style: Theme.of(context).textTheme.bodyLarge,
+              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
         ]);
       }
       const offersIcon = Icon(Icons.car_repair, size: 20);
@@ -162,7 +170,8 @@ class FuelStationListItemWidget extends StatelessWidget {
         child3 = Row(children: [
           offersIcon,
           const SizedBox(width: 5),
-          Text(fuelStation.services.toString(), style: Theme.of(context).textTheme.bodyText1)
+          Text(fuelStation.services.toString(), style: Theme.of(context).textTheme.bodyLarge,
+              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
         ]);
       }
       Widget rowOfChildren;
@@ -194,10 +203,13 @@ class FuelStationListItemWidget extends StatelessWidget {
 
   Widget _getPriceWithDetailsWidget(final BuildContext context, final FuelQuote? selectedFuelQuote) {
     if (selectedFuelQuote != null && selectedFuelQuote.quoteValue != null) {
-      final Widget child1 = Text('Price', style: Theme.of(context).textTheme.overline);
+      final Widget child1 = Text('Price', style: Theme.of(context).textTheme.labelSmall,
+          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
       final Widget child2 = Row(children: <Widget>[
-        Text("${selectedFuelQuote.quoteValue}", style: Theme.of(context).textTheme.bodyText1),
-        Text("￠", style: Theme.of(context).textTheme.overline)
+        Text("${selectedFuelQuote.quoteValue}", style: Theme.of(context).textTheme.bodyLarge,
+            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+        Text("￠", style: Theme.of(context).textTheme.labelSmall,
+            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
       ]);
       final Column priceColumn = Column(children: [child1, const SizedBox(height: 8), child2]);
 
@@ -210,8 +222,10 @@ class FuelStationListItemWidget extends StatelessWidget {
         publishDateString = DateFormat('dd-MMM HH:mm').format(publishDate);
       }
 
-      Widget child3 = Text('Last Update', style: Theme.of(context).textTheme.overline);
-      Widget child4 = Text(publishDateString, style: Theme.of(context).textTheme.bodyText1);
+      Widget child3 = Text('Last Update', style: Theme.of(context).textTheme.labelSmall,
+          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
+      Widget child4 = Text(publishDateString, style: Theme.of(context).textTheme.bodyLarge,
+          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
       final Column pubDateColumn = Column(children: [child3, const SizedBox(height: 8), child4]);
       return Material(
           elevation: 1,

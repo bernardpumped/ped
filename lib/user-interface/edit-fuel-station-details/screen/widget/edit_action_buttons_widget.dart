@@ -17,6 +17,8 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
 class EditActionButton extends StatelessWidget {
@@ -40,7 +42,8 @@ class EditActionButton extends StatelessWidget {
               },
               child: Padding(
                   padding: const EdgeInsets.only(left: 15, right: 15),
-                  child: Row(children: const [Icon(Icons.history, size: 24), SizedBox(width: 10), Text('Undo')])))),
+                  child: Row(children: [const Icon(Icons.history, size: 24), const SizedBox(width: 10),
+                    Text('Undo', textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)])))),
       const SizedBox(width: 20),
       AnimatedContainer(
           duration: const Duration(milliseconds: 200),
@@ -52,7 +55,8 @@ class EditActionButton extends StatelessWidget {
               },
               child: Padding(
                   padding: const EdgeInsets.only(left: 15, right: 15),
-                  child: Row(children: const [Icon(Icons.sync, size: 24), SizedBox(width: 10), Text('Save')]))))
+                  child: Row(children: [const Icon(Icons.sync, size: 24), const SizedBox(width: 10),
+                    Text('Save', textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)]))))
     ]);
   }
 }

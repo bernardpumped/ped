@@ -17,6 +17,8 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 
 class UpdateHistoryDetailsSuggestEditItemWidget extends StatelessWidget {
   final String valueType;
@@ -42,19 +44,23 @@ class UpdateHistoryDetailsSuggestEditItemWidget extends StatelessWidget {
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
           Padding(
               padding: const EdgeInsets.only(top: 12, left: 20, right: 20),
-              child: Text('Suggestion', style: Theme.of(context).textTheme.bodyText1)),
+              child: Text('Suggestion', style: Theme.of(context).textTheme.bodyLarge,
+                  textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
           Padding(
               padding: const EdgeInsets.only(top: 12, left: 20, right: 20),
               child: Text(updateValue,
-                  style: Theme.of(context).textTheme.bodyText1,
+                  style: Theme.of(context).textTheme.bodyLarge,
                   softWrap: true,
                   maxLines: 4,
-                  overflow: TextOverflow.ellipsis)),
+                  overflow: TextOverflow.ellipsis,
+                  textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
           Padding(
               padding: const EdgeInsets.only(top: 12, left: 20, right: 20, bottom: 12),
               child: Row(children: <Widget>[
-                Expanded(flex: 1, child: Text('Status', style: Theme.of(context).textTheme.bodyText1)),
-                Expanded(flex: 1, child: Text(updateStatus, style: Theme.of(context).textTheme.bodyText1))
+                Expanded(flex: 1, child: Text('Status', style: Theme.of(context).textTheme.bodyLarge,
+                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
+                Expanded(flex: 1, child: Text(updateStatus, style: Theme.of(context).textTheme.bodyLarge,
+                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor))
               ]))
         ]));
   }

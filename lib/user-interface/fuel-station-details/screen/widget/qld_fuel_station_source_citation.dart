@@ -19,6 +19,8 @@
 import 'package:flutter/material.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/screen/tabs/fuel-prices/widget/notification_widget.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 
 class QldFuelStationSourceCitation extends StatelessWidget {
   static const _subTitle = 'QLD - Fuel Price Data License Obligation';
@@ -47,20 +49,23 @@ class QldFuelStationSourceCitation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(padding: const EdgeInsets.all(15), child: _getQldFuelAuthorityMessage(context));
+    return SingleChildScrollView(padding: const EdgeInsets.all(15), child: _getQldFuelAuthorityMessage(context));
   }
 
   Widget _getQldFuelAuthorityMessage(final BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: <Widget>[
       Padding(
           padding: const EdgeInsets.only(top: 10, bottom: 10),
-          child: Text(_subTitle, textAlign: TextAlign.center, style: Theme.of(context).textTheme.headline6)),
+          child: Text(_subTitle, textAlign: TextAlign.center, style: Theme.of(context).textTheme.titleLarge,
+              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
       Padding(
           padding: const EdgeInsets.only(bottom: 10),
-          child: Text(_qldLicensePara1, textAlign: TextAlign.start, style: Theme.of(context).textTheme.bodyText2)),
+          child: Text(_qldLicensePara1, textAlign: TextAlign.start, style: Theme.of(context).textTheme.bodyMedium,
+              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
       Padding(
           padding: const EdgeInsets.only(bottom: 10),
-          child: Text(_qldLicensePara2, textAlign: TextAlign.start, style: Theme.of(context).textTheme.bodyText2)),
+          child: Text(_qldLicensePara2, textAlign: TextAlign.start, style: Theme.of(context).textTheme.bodyMedium,
+              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
       Padding(padding: const EdgeInsets.only(bottom: 6), child: _getAdminContactMessage(context)),
       const Divider(height: 1),
       const SizedBox(height: 6),
@@ -71,7 +76,8 @@ class QldFuelStationSourceCitation extends StatelessWidget {
   Text _getAdminContactMessage(final BuildContext context) {
     return Text(_pumpedMessage,
         textAlign: TextAlign.start,
-        style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Theme.of(context).errorColor));
+        style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: Theme.of(context).colorScheme.error),
+        textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
   }
 
   Row _getOkActionButton(final BuildContext context) {
@@ -83,7 +89,8 @@ class QldFuelStationSourceCitation extends StatelessWidget {
           child: Padding(
               padding: const EdgeInsets.only(left: 15, right: 15),
               child:
-                  Row(children: const [Icon(Icons.cancel_outlined, size: 24), SizedBox(width: 10), Text('Cancel')]))),
+                  Row(children: [const Icon(Icons.cancel_outlined, size: 24), const SizedBox(width: 10),
+                    Text('Cancel', textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)]))),
       const SizedBox(width: 10),
       _getNotificationWidget(),
     ]);

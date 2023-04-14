@@ -22,6 +22,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/util/app_theme.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
@@ -32,12 +34,13 @@ class WidgetUtils {
     final FToast fToast = FToast();
     fToast.init(context);
     final Color color = AppTheme.modalBottomSheetBg(context);
-    final textColor = isErrorToast ? Theme.of(context).errorColor : Theme.of(context).colorScheme.secondary;
+    final textColor = isErrorToast ? Theme.of(context).colorScheme.error : Theme.of(context).colorScheme.secondary;
     final Widget toast = Container(
         padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
         decoration: BoxDecoration(borderRadius: BorderRadius.circular(15.0), color: color),
         child: Text(message,
-            style: Theme.of(context).textTheme.subtitle2!.copyWith(color: textColor), textAlign: TextAlign.center));
+            style: Theme.of(context).textTheme.titleSmall!.copyWith(color: textColor), textAlign: TextAlign.center,
+            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor));
     fToast.removeQueuedCustomToasts();
     fToast.showToast(child: toast, gravity: ToastGravity.BOTTOM, toastDuration: const Duration(seconds: 3));
   }
@@ -45,12 +48,13 @@ class WidgetUtils {
   static SnackBar buildSnackBar(final BuildContext context, final String text, final int durationToFadeIn,
       final String actionLabel, final Function() onPressedFunction,
       {final bool isError = false}) {
-    final textColor = isError ? Theme.of(context).errorColor : Theme.of(context).colorScheme.secondary;
-    final actionColor = isError ? Theme.of(context).errorColor : Theme.of(context).colorScheme.primary;
+    final textColor = isError ? Theme.of(context).colorScheme.error : Theme.of(context).colorScheme.secondary;
+    final actionColor = isError ? Theme.of(context).colorScheme.error : Theme.of(context).colorScheme.primary;
     var snackBar = SnackBar(
         elevation: 2,
         backgroundColor: AppTheme.modalBottomSheetBg(context),
-        content: Text(text, style: Theme.of(context).textTheme.subtitle2!.copyWith(color: textColor)),
+        content: Text(text, style: Theme.of(context).textTheme.titleSmall!.copyWith(color: textColor),
+            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
         duration: Duration(seconds: durationToFadeIn),
         behavior: SnackBarBehavior.fixed,
         action: SnackBarAction(label: actionLabel, onPressed: onPressedFunction, textColor: actionColor));

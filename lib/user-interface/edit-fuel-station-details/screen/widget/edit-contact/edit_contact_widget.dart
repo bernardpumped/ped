@@ -31,6 +31,8 @@ import 'package:pumped_end_device/user-interface/edit-fuel-station-details/scree
 import 'package:pumped_end_device/user-interface/edit-fuel-station-details/screen/widget/edit-contact/edit_phone_number_line_item.dart';
 import 'package:pumped_end_device/user-interface/edit-fuel-station-details/screen/widget/edit_action_buttons_widget.dart';
 import 'package:pumped_end_device/models/update_type.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/util/data_utils.dart';
 import 'package:pumped_end_device/util/log_util.dart';
@@ -113,7 +115,8 @@ class _EditContactWidgetState extends State<EditContactWidget> {
         child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
           const Icon(Icons.location_city, size: 30),
           const SizedBox(width: 10),
-          Text('Update Contact Details', style: Theme.of(context).textTheme.headline4)
+          Text('Update Contact Details', style: Theme.of(context).textTheme.headlineMedium,
+              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
         ]));
   }
 

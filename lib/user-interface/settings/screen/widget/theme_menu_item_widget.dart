@@ -20,6 +20,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:pumped_end_device/data/local/dao2/ui_settings_dao.dart';
 import 'package:pumped_end_device/data/local/model/ui_settings.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 import 'package:pumped_end_device/util/theme_notifier.dart';
 import 'package:pumped_end_device/util/ui_themes.dart';
@@ -63,16 +65,19 @@ class _ThemeMenuItemWidgetState extends State<ThemeMenuItemWidget> {
               } else if (snapShot.hasError) {
                 LogUtil.debug(_tag, 'Error found while loading UiSettings ${snapShot.error}');
                 return Text('Error Loading',
-                    style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Theme.of(context).errorColor));
+                    style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Theme.of(context).colorScheme.error),
+                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
               } else {
-                return Text('Loading', style: Theme.of(context).textTheme.subtitle1);
+                return Text('Loading', style: Theme.of(context).textTheme.titleMedium,
+                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
               }
             }));
   }
 
   _getExpansionTile(final UiSettings uiSettings) {
     return ExpansionTile(
-        title: Text("Theme - ${UiThemes.themes[uiSettings.uiTheme]}", style: Theme.of(context).textTheme.subtitle1),
+        title: Text("Theme - ${UiThemes.themes[uiSettings.uiTheme]}", style: Theme.of(context).textTheme.titleMedium,
+            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
         leading: const Icon(Icons.compare_outlined, size: 30),
         children: [
           _getMenuItem(UiThemes.lightTheme, uiSettings),
@@ -99,7 +104,8 @@ class _ThemeMenuItemWidgetState extends State<ThemeMenuItemWidget> {
             }
           });
         },
-        title: Text(UiThemes.themes[themeValue]!, style: Theme.of(context).textTheme.subtitle2));
+        title: Text(UiThemes.themes[themeValue]!, style: Theme.of(context).textTheme.titleSmall,
+            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor));
   }
 
   Future<UiSettings?>? _getUiSettings() {

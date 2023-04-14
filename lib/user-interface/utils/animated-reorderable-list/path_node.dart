@@ -25,9 +25,9 @@ abstract class PathNode {
     while (node != null) {
       buffer
         ..write('(')
-        ..write('${node.originIndex.toString()}')
+        ..write(node.originIndex.toString())
         ..write(',')
-        ..write('${node.revisedIndex.toString()}')
+        ..write(node.revisedIndex.toString())
         ..write(')');
 
       node = node.previousNode;
