@@ -18,20 +18,23 @@
 
 class UiSettings {
   String? uiTheme;
+  String? textScale;
   bool? developerOptions;
   bool? devOptionsEnrichOffers;
 
-  UiSettings({this.uiTheme, this.developerOptions = true, this.devOptionsEnrichOffers = true});
+  UiSettings({this.uiTheme, this.textScale, this.developerOptions = true, this.devOptionsEnrichOffers = true});
+
 
   Map<String, dynamic> toMap() =>
-      {'uiTheme': uiTheme, 'developerOptions': developerOptions, 'devOptionsEnrichOffers': devOptionsEnrichOffers};
+      {'uiTheme': uiTheme, 'textScale':textScale, 'developerOptions': developerOptions, 'devOptionsEnrichOffers': devOptionsEnrichOffers};
 
   Map<String, dynamic> toJson() =>
-      {'uiTheme': uiTheme, 'developerOptions': developerOptions, 'devOptionsEnrichOffers': devOptionsEnrichOffers};
+      {'uiTheme': uiTheme, 'textScale':textScale, 'developerOptions': developerOptions, 'devOptionsEnrichOffers': devOptionsEnrichOffers};
 
   factory UiSettings.fromJson(final Map<String, dynamic> data) {
     return UiSettings(
         uiTheme: data['uiTheme'],
+        textScale: data['textScale'],
         developerOptions: data['developerOptions'],
         devOptionsEnrichOffers: data['devOptionsEnrichOffers']);
   }

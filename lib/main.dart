@@ -23,9 +23,12 @@ import 'package:pumped_end_device/data/local/dao2/ui_settings_dao.dart';
 import 'package:pumped_end_device/data/local/location/location_data_source.dart';
 import 'package:pumped_end_device/user-interface/ped_base_page_view.dart';
 import 'package:pumped_end_device/user-interface/splash/screen/splash_screen.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/user-interface/utils/under_maintenance_service.dart';
 import 'package:pumped_end_device/util/app_theme.dart';
 import 'package:pumped_end_device/util/log_util.dart';
+import 'package:pumped_end_device/util/text_scale.dart';
 import 'package:pumped_end_device/util/theme_notifier.dart';
 import 'package:pumped_end_device/util/ui_themes.dart';
 
@@ -35,7 +38,7 @@ import 'data/local/model/ui_settings.dart';
 GetIt getIt = GetIt.instance;
 // Set this variable to false when in release mode.
 bool enrichOffers = true;
-const appVersion = "33.IVI_OZ";
+const appVersion = "34.IVI_OZ";
 const getLocationWrapperInstanceName = 'geoLocationWrapper';
 const locationDataSourceInstanceName = 'locationDataSource';
 const underMaintenanceServiceName = 'underMaintenanceService';
@@ -46,15 +49,22 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   UiSettings? uiSettings = await UiSettingsDao.instance.getUiSettings();
   ThemeMode themeMode;
-  if (uiSettings != null && uiSettings.uiTheme != null) {
+  if (uiSettings.uiTheme != null) {
     themeMode = UiThemes.getThemeMode(uiSettings.uiTheme!);
   } else {
     themeMode = ThemeMode.light;
   }
+
+  double textScaleValue;
+  if (uiSettings.textScale != null) {
+    textScaleValue = TextScale.getTextScaleValue(uiSettings.textScale!) as double;
+  } else {
+    textScaleValue = TextScale.systemTextScaleValue;
+  }
   runApp(
     ChangeNotifierProvider<ThemeNotifier>(
         create: (BuildContext context) {
-          return ThemeNotifier(themeMode);
+          return ThemeNotifier(themeMode, textScaleValue);
         },
         child: const PumpedApp()),
   );
@@ -68,13 +78,17 @@ class PumpedApp extends StatelessWidget {
   Widget build(final BuildContext context) {
     final themeNotifier = Provider.of<ThemeNotifier>(context);
     _registerBeansWithGetIt();
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: AppTheme().lightTheme,
-        darkTheme: AppTheme().darkTheme,
-        themeMode: themeNotifier.getThemeMode(),
-        home: const SplashScreen(),
-        routes: {PedBasePageView.routeName: (context) => const PedBasePageView()});
+    LogUtil.debug("main", "Value of textScale found as ${themeNotifier.getTextScale()}");
+    return TextScaler(
+      initialScaleFactor: TextScalingFactor(scaleFactor: themeNotifier.getTextScale()),
+      child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: AppTheme().lightTheme,
+          darkTheme: AppTheme().darkTheme,
+          themeMode: themeNotifier.getThemeMode(),
+          home: const SplashScreen(),
+          routes: {PedBasePageView.routeName: (context) => const PedBasePageView()}),
+    );
   }
 
   void _registerBeansWithGetIt() {

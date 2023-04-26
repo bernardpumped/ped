@@ -75,3 +75,5 @@ pubspec.lock
 pumped_end_device.iml
 desktop.ini
 test/widget_test.dart
+macos/
+tmpfiles/

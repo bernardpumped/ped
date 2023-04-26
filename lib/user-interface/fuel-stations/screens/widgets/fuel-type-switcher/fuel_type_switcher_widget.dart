@@ -4,6 +4,8 @@ import 'package:pumped_end_device/models/pumped/fuel_type.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/params/fuel_type_switcher_response_params.dart';
 import 'package:pumped_end_device/user-interface/settings/model/dropdown_values.dart';
 import 'package:pumped_end_device/user-interface/settings/service/settings_service.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
@@ -48,7 +50,8 @@ class _FuelTypeSwitcherWidgetState extends State<FuelTypeSwitcherWidget> {
     return ListView(padding: const EdgeInsets.all(15), children: [
       ListTile(
           leading: const Icon(Icons.workspaces_outline, size: 34),
-          title: Text('Change Fuel Type', style: Theme.of(context).textTheme.headline2)),
+          title: Text('Change Fuel Type', style: Theme.of(context).textTheme.displayMedium,
+              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
       Card(child: _getFuelCategoriesExpansionTile()),
       Card(child: _getFuelTypesExpansionTile()),
       const SizedBox(height: 20),
@@ -78,21 +81,25 @@ class _FuelTypeSwitcherWidgetState extends State<FuelTypeSwitcherWidget> {
           if (snapshot.hasError) {
             LogUtil.debug(_tag, 'Error loading ${snapshot.error}');
             return Text('Error loading Fuel Categories',
-                style: Theme.of(context).textTheme.headline5!.copyWith(color: Theme.of(context).errorColor));
+                textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor,
+                style: Theme.of(context).textTheme.headlineSmall!.copyWith(color: Theme.of(context).colorScheme.error));
           } else if (snapshot.hasData) {
             final DropDownValues<FuelCategory> dropDownValues = snapshot.data!;
             _fuelCategorySelectedValue ??= dropDownValues.values[dropDownValues.selectedIndex];
             return ExpansionTile(
-                title: Text('Fuel Category', style: Theme.of(context).textTheme.headline5),
+                title: Text('Fuel Category', style: Theme.of(context).textTheme.headlineSmall,
+                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
                 subtitle: _fuelCategorySelectedValue != null
-                    ? Text(_fuelCategorySelectedValue!.categoryName, style: Theme.of(context).textTheme.caption)
+                    ? Text(_fuelCategorySelectedValue!.categoryName, style: Theme.of(context).textTheme.bodySmall,
+                      textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
                     : const SizedBox(width: 0),
                 leading: const Icon(Icons.category_outlined, size: 35),
                 children: dropDownValues.values.map<RadioListTile<FuelCategory>>((FuelCategory category) {
                   return RadioListTile<FuelCategory>(
                       selected: category.categoryId == _fuelCategorySelectedValue?.categoryId,
                       value: category,
-                      title: Text(category.categoryName, style: Theme.of(context).textTheme.headline6),
+                      title: Text(category.categoryName, style: Theme.of(context).textTheme.titleLarge,
+                          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
                       groupValue: _fuelCategorySelectedValue,
                       onChanged: (changedCat) {
                         setState(() {
@@ -104,7 +111,8 @@ class _FuelTypeSwitcherWidgetState extends State<FuelTypeSwitcherWidget> {
                       });
                 }).toList());
           } else {
-            return Text('Loading...', style: Theme.of(context).textTheme.headline5);
+            return Text('Loading...', style: Theme.of(context).textTheme.headlineSmall,
+                textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
           }
         });
   }
@@ -116,25 +124,30 @@ class _FuelTypeSwitcherWidgetState extends State<FuelTypeSwitcherWidget> {
           if (snapshot.hasError) {
             LogUtil.debug(_tag, 'Error loading ${snapshot.error}');
             return Text('Error loading',
-                style: Theme.of(context).textTheme.headline5!.copyWith(color: Theme.of(context).errorColor));
+                textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor,
+                style: Theme.of(context).textTheme.headlineSmall!.copyWith(color: Theme.of(context).colorScheme.error));
           } else if (snapshot.hasData) {
             final DropDownValues<FuelType> dropDownValues = snapshot.data!;
             if (dropDownValues.noDataFound) {
               return Text('No data found',
-                  style: Theme.of(context).textTheme.headline5!.copyWith(color: Theme.of(context).errorColor));
+                  textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor,
+                  style: Theme.of(context).textTheme.headlineSmall!.copyWith(color: Theme.of(context).colorScheme.error));
             } else {
               _fuelTypeSelectedValue ??= __fuelTypeSelectedValue(dropDownValues);
               return ExpansionTile(
-                  title: Text('Fuel Type', style: Theme.of(context).textTheme.headline5),
+                  title: Text('Fuel Type', style: Theme.of(context).textTheme.headlineSmall,
+                      textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
                   subtitle: _fuelTypeSelectedValue != null
-                      ? Text(_fuelTypeSelectedValue!.fuelName, style: Theme.of(context).textTheme.caption)
+                      ? Text(_fuelTypeSelectedValue!.fuelName, style: Theme.of(context).textTheme.bodySmall,
+                        textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
                       : const SizedBox(width: 0),
                   leading: const Icon(Icons.class_outlined, size: 35),
                   children: dropDownValues.values.map<RadioListTile<FuelType>>((FuelType fuelType) {
                     return RadioListTile<FuelType>(
                         selected: fuelType.fuelType == _fuelTypeSelectedValue?.fuelType,
                         value: fuelType,
-                        title: Text(fuelType.fuelName, style: Theme.of(context).textTheme.headline6),
+                        title: Text(fuelType.fuelName, style: Theme.of(context).textTheme.titleLarge,
+                              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
                         groupValue: _fuelTypeSelectedValue,
                         onChanged: (changedFuelType) {
                           setState(() {
@@ -144,7 +157,8 @@ class _FuelTypeSwitcherWidgetState extends State<FuelTypeSwitcherWidget> {
                   }).toList());
             }
           } else {
-            return Text('Loading...', style: Theme.of(context).textTheme.headline5);
+            return Text('Loading...', style: Theme.of(context).textTheme.headlineSmall,
+                  textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
           }
         });
   }

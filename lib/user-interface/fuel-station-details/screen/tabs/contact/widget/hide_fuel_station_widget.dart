@@ -4,6 +4,8 @@ import 'package:pumped_end_device/data/local/dao2/hidden_result_dao.dart';
 import 'package:pumped_end_device/data/local/model/favorite_fuel_station.dart';
 import 'package:pumped_end_device/data/local/model/hidden_result.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
@@ -35,9 +37,9 @@ class _HideFuelStationWidgetState extends State<HideFuelStationWidget> {
               final bool isFavoriteFuelStation = snapshot.data!;
               return isFavoriteFuelStation ? _inEligibleStation() : _eligibleStation(context);
             } else if (snapshot.hasError) {
-              return const Text('Error Loading');
+              return Text('Error Loading', textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
             } else {
-              return const Text('Loading');
+              return Text('Loading', textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
             }
           })
     ]);
@@ -74,9 +76,9 @@ class _HideFuelStationWidgetState extends State<HideFuelStationWidget> {
                   });
             }
           } else if (snapshot.hasError) {
-            return const Text('Error Loading');
+            return Text('Error Loading', textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
           } else {
-            return const Text('Loading');
+            return Text('Loading', textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
           }
         });
   }

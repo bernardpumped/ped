@@ -18,18 +18,21 @@
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 
 class WidgetUtils {
   static void showToastMessageWithGravity(final BuildContext context, final String message, final ToastGravity gravity,
       {final bool isErrorToast = false}) {
     final FToast fToast = FToast();
     fToast.init(context);
-    final textColor = isErrorToast ? Theme.of(context).errorColor : Theme.of(context).colorScheme.secondary;
+    final textColor = isErrorToast ? Theme.of(context).colorScheme.error : Theme.of(context).colorScheme.secondary;
     final Widget toast = Container(
         padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
         decoration: BoxDecoration(borderRadius: BorderRadius.circular(25.0), color: Theme.of(context).primaryColor),
         child: Text(message,
-            style: Theme.of(context).textTheme.subtitle2!.copyWith(color: textColor), textAlign: TextAlign.center));
+            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor,
+            style: Theme.of(context).textTheme.titleSmall!.copyWith(color: textColor), textAlign: TextAlign.center));
     fToast.removeQueuedCustomToasts();
     fToast.showToast(child: toast, gravity: gravity, toastDuration: const Duration(seconds: 3));
   }
@@ -37,12 +40,13 @@ class WidgetUtils {
   static void showToastMessage(final BuildContext context, final String message, {final bool isErrorToast = false}) {
     final FToast fToast = FToast();
     fToast.init(context);
-    final textColor = isErrorToast ? Theme.of(context).errorColor : Theme.of(context).colorScheme.secondary;
+    final textColor = isErrorToast ? Theme.of(context).colorScheme.error : Theme.of(context).colorScheme.secondary;
     final Widget toast = Container(
         padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
         decoration: BoxDecoration(borderRadius: BorderRadius.circular(25.0), color: Theme.of(context).primaryColor),
         child: Text(message,
-            style: Theme.of(context).textTheme.subtitle2!.copyWith(color: textColor), textAlign: TextAlign.center));
+            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor,
+            style: Theme.of(context).textTheme.titleSmall!.copyWith(color: textColor), textAlign: TextAlign.center));
     fToast.removeQueuedCustomToasts();
     fToast.showToast(child: toast, gravity: ToastGravity.CENTER, toastDuration: const Duration(seconds: 3));
   }
@@ -50,11 +54,12 @@ class WidgetUtils {
   static SnackBar buildSnackBar(final BuildContext context, final String text, final int durationToFadeIn,
       final String actionLabel, final Function() onPressedFunction,
       {final bool isError = false}) {
-    final textColor = isError ? Theme.of(context).errorColor : Theme.of(context).colorScheme.secondary;
-    final actionColor = isError ? Theme.of(context).errorColor : Theme.of(context).colorScheme.primary;
+    final textColor = isError ? Theme.of(context).colorScheme.error : Theme.of(context).colorScheme.secondary;
+    final actionColor = isError ? Theme.of(context).colorScheme.error : Theme.of(context).colorScheme.primary;
     var snackBar = SnackBar(
         backgroundColor: Theme.of(context).dialogBackgroundColor,
-        content: Text(text, style: Theme.of(context).textTheme.subtitle2!.copyWith(color: textColor)),
+        content: Text(text, style: Theme.of(context).textTheme.titleSmall!.copyWith(color: textColor),
+            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
         duration: Duration(seconds: durationToFadeIn),
         behavior: SnackBarBehavior.floating,
         action: SnackBarAction(label: actionLabel, onPressed: onPressedFunction, textColor: actionColor));
@@ -80,7 +85,8 @@ class WidgetUtils {
             child: Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Row(children: [
-                  Text(buttonText, style: Theme.of(context).textTheme.button!.copyWith(color: highLightColor)),
+                  Text(buttonText, style: Theme.of(context).textTheme.labelLarge!.copyWith(color: highLightColor),
+                      textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
                   const SizedBox(width: 8),
                   iconData != null ? Icon(iconData, size: 24, color: highLightColor) : const SizedBox(width: 0)
                 ]))));

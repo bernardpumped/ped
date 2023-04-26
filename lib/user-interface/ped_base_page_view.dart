@@ -19,7 +19,6 @@ class PedBasePageView extends StatefulWidget {
 
 class _PedBasePageViewState extends State<PedBasePageView> {
   final PageController _pageController = PageController(initialPage: 0);
-  int _page = 0;
 
   @override
   void dispose() {
@@ -29,7 +28,6 @@ class _PedBasePageViewState extends State<PedBasePageView> {
 
   void onPageChanged(int page) {
     setState(() {
-      _page = page;
     });
   }
 

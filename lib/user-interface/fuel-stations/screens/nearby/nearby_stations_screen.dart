@@ -42,6 +42,8 @@ import 'package:pumped_end_device/user-interface/fuel-stations/service/near_by_f
 import 'package:pumped_end_device/user-interface/fuel-stations/screens/widgets/no_near_by_stations_widget.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/service/fuel_type_switcher_service.dart';
 import 'package:pumped_end_device/user-interface/ped_base_page_view.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/user-interface/utils/under_maintenance_service.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/util/log_util.dart';
@@ -267,13 +269,14 @@ class _NearbyStationsScreenState extends State<NearbyStationsScreen> {
 
   Card _selectStationMessage() {
     Widget child = Container(
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: Theme.of(context).backgroundColor));
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: Theme.of(context).colorScheme.background));
     if (_nearByFuelStationsData != null &&
         _nearByFuelStationsData!.fuelStations != null &&
         _nearByFuelStationsData!.fuelStations!.isNotEmpty) {
       child = Container(
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: Theme.of(context).backgroundColor),
-          child: Center(child: Text('Select a Fuel Station', style: Theme.of(context).textTheme.headline2)));
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: Theme.of(context).colorScheme.background),
+          child: Center(child: Text('Select a Fuel Station', style: Theme.of(context).textTheme.displayMedium,
+              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)));
     }
     return Card(margin: const EdgeInsets.all(8), child: child);
   }
@@ -282,7 +285,8 @@ class _NearbyStationsScreenState extends State<NearbyStationsScreen> {
     _userSettingsVersion = data.userSettingsVersion ?? 0;
     if (!data.locationSearchSuccessful) {
       final String locationErrorReason = data.locationErrorReason ?? 'Unknown Location Error Reason';
-      return Center(child: Text(locationErrorReason));
+      return Center(child: Text(locationErrorReason,
+          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor));
     } else {
       _nearByFuelStations = data.fuelStations ?? [];
       LogUtil.debug(_tag, 'Setting _nearByFuelStations variable');

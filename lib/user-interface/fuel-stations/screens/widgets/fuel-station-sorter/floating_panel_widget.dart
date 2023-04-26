@@ -17,6 +17,8 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 
 enum PanelState { open, closed }
 
@@ -187,7 +189,7 @@ class _FloatButton extends StatelessWidget {
   Widget build(final BuildContext context) {
     if (expansionDirection == ExpansionDirection.horizontal) {
       return Container(
-          color: Theme.of(context).backgroundColor.withOpacity(0.0),
+          color: Theme.of(context).colorScheme.background.withOpacity(0.0),
           width: size * 1.7,
           height: size,
           child: Row(
@@ -196,15 +198,16 @@ class _FloatButton extends StatelessWidget {
               const SizedBox(width: 3),
               Expanded(
                   child: Text(label,
+                      textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor,
                       style: Theme.of(context)
                           .textTheme
-                          .button!
-                          .copyWith(overflow: TextOverflow.ellipsis, color: Theme.of(context).backgroundColor)))
+                          .labelLarge!
+                          .copyWith(overflow: TextOverflow.ellipsis, color: Theme.of(context).colorScheme.background)))
             ],
           ));
     }
     return Container(
-        color: Theme.of(context).backgroundColor.withOpacity(0.0),
+        color: Theme.of(context).colorScheme.background.withOpacity(0.0),
         width: size,
         height: size,
         child: Icon(icon, color: color, size: iconSize));

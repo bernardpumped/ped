@@ -17,6 +17,8 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 
 class PromotionsWidget extends StatefulWidget {
   const PromotionsWidget ( {Key? key} ) : super( key: key );
@@ -28,6 +30,7 @@ class PromotionsWidget extends StatefulWidget {
 class _PromotionsWidgetState extends State<PromotionsWidget> {
   @override
   Widget build ( BuildContext context ) {
-    return const Center(child: Text("Promotions"),);
+    return Center(child: Text("Promotions",
+        textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),);
   }
 }

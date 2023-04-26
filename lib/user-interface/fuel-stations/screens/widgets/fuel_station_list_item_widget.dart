@@ -23,6 +23,8 @@ import 'package:pumped_end_device/models/pumped/fuel_station.dart';
 import 'package:pumped_end_device/models/pumped/fuel_type.dart';
 import 'package:pumped_end_device/models/status.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/screens/widgets/fuel_station_logo_widget.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/util/app_theme.dart';
 import 'package:pumped_end_device/util/data_utils.dart';
 import 'package:pumped_end_device/util/log_util.dart';
@@ -93,17 +95,20 @@ class FuelStationListItemWidget extends StatelessWidget {
   Widget _getStationAddressWidget(final BuildContext context) {
     return Text(
         '${fuelStation.fuelStationAddress.addressLine1}, ${fuelStation.fuelStationAddress.locality}'.toTitleCase(),
-        style: Theme.of(context).textTheme.subtitle1!.copyWith(overflow: TextOverflow.ellipsis),
+        style: Theme.of(context).textTheme.titleMedium!.copyWith(overflow: TextOverflow.ellipsis),
+        textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor,
         maxLines: 1);
   }
 
   Widget _getStationNameWidget(final BuildContext context) => Text(fuelStation.fuelStationName.toTitleCase(),
-      style: Theme.of(context).textTheme.headline4!.copyWith(overflow: TextOverflow.ellipsis));
+      textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor,
+      style: Theme.of(context).textTheme.headlineMedium!.copyWith(overflow: TextOverflow.ellipsis));
 
   Widget _getRatingWidget(final BuildContext context) {
     if (fuelStation.rating != null) {
       final Widget childWidget = Row(children: [
-        Text(fuelStation.rating.toString(), style: Theme.of(context).textTheme.caption),
+        Text(fuelStation.rating.toString(), style: Theme.of(context).textTheme.bodySmall,
+            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
         const SizedBox(width: 2),
         const Icon(Icons.star, size: 20)
       ]);
@@ -122,7 +127,8 @@ class FuelStationListItemWidget extends StatelessWidget {
     } else {
       distance = "$distanced km";
     }
-    final child1 = Text(distance, style: Theme.of(context).textTheme.caption);
+    final child1 = Text(distance, style: Theme.of(context).textTheme.bodySmall,
+        textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
     return _getElevatedBoxSingleChild(child1, context);
   }
 
@@ -132,7 +138,8 @@ class FuelStationListItemWidget extends StatelessWidget {
       final Color color = (fuelStation.status == Status.open || fuelStation.status == Status.open24Hrs)
           ? AppTheme.stationOpenColor
           : AppTheme.stationCloseColor;
-      final childWidget = Text(status, style: Theme.of(context).textTheme.caption!.copyWith(color: color));
+      final childWidget = Text(status, style: Theme.of(context).textTheme.bodySmall!.copyWith(color: color),
+          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
       return _getElevatedBoxSingleChild(childWidget, context);
     }
     return const SizedBox(width: 0);
@@ -140,13 +147,15 @@ class FuelStationListItemWidget extends StatelessWidget {
 
   Widget _getOffersWidget(final BuildContext context) {
     if (fuelStation.promos > 0 || fuelStation.services > 0) {
-      Widget child1 = Text('Offers', style: Theme.of(context).textTheme.caption);
+      Widget child1 = Text('Offers', style: Theme.of(context).textTheme.bodySmall,
+          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
       Widget? child2;
       if (fuelStation.promos > 0) {
         child2 = Row(children: [
           const Icon(Icons.shopping_cart, size: 24),
           const SizedBox(width: 10),
-          Text(fuelStation.promos.toString(), style: Theme.of(context).textTheme.subtitle1)
+          Text(fuelStation.promos.toString(), style: Theme.of(context).textTheme.titleMedium,
+              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
         ]);
       }
       Widget? child3;
@@ -156,7 +165,8 @@ class FuelStationListItemWidget extends StatelessWidget {
           // SvgPicture.asset('assets/images/ic_car_service.svg',
           //     width: 24, height: 24, fit: BoxFit.fill, color: Theme.of(context).primaryColor),
           const SizedBox(width: 10),
-          Text(fuelStation.services.toString(), style: Theme.of(context).textTheme.subtitle1)
+          Text(fuelStation.services.toString(), style: Theme.of(context).textTheme.titleMedium,
+              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
         ]);
       }
       Widget rowOfChildren;
@@ -182,7 +192,7 @@ class FuelStationListItemWidget extends StatelessWidget {
           child: Container(
               padding: const EdgeInsets.all(8),
               decoration:
-                  BoxDecoration(borderRadius: BorderRadius.circular(10), color: Theme.of(context).backgroundColor),
+                  BoxDecoration(borderRadius: BorderRadius.circular(10), color: Theme.of(context).colorScheme.background),
               child: Column(children: [child1, const SizedBox(height: 7), rowOfChildren])));
     }
     return const SizedBox(width: 0);
@@ -190,10 +200,13 @@ class FuelStationListItemWidget extends StatelessWidget {
 
   Widget _getPriceWithDetailsWidget(final FuelQuote? selectedFuelQuote, final BuildContext context) {
     if (selectedFuelQuote != null && selectedFuelQuote.quoteValue != null) {
-      Widget child1 = Text('Price', style: Theme.of(context).textTheme.caption);
+      Widget child1 = Text('Price', style: Theme.of(context).textTheme.bodySmall,
+          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
       final Widget child2 = Row(children: <Widget>[
-        Text("${selectedFuelQuote.quoteValue}", style: Theme.of(context).textTheme.subtitle1),
-        Text("￠", style: Theme.of(context).textTheme.overline)
+        Text("${selectedFuelQuote.quoteValue}", style: Theme.of(context).textTheme.titleMedium,
+            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+        Text("￠", style: Theme.of(context).textTheme.labelSmall,
+            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
       ]);
       final Column priceColumn = Column(children: [child1, const SizedBox(height: 8), child2]);
 
@@ -206,8 +219,10 @@ class FuelStationListItemWidget extends StatelessWidget {
         publishDateString = DateFormat('dd-MMM HH:mm').format(publishDate);
       }
 
-      Widget child3 = Text('Last Update', style: Theme.of(context).textTheme.caption);
-      Widget child4 = Text(publishDateString, style: Theme.of(context).textTheme.subtitle1);
+      Widget child3 = Text('Last Update', style: Theme.of(context).textTheme.bodySmall,
+          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
+      Widget child4 = Text(publishDateString, style: Theme.of(context).textTheme.titleMedium,
+          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
       final Column pubDateColumn = Column(children: [child3, const SizedBox(height: 8), child4]);
       return Material(
           elevation: .5,
@@ -216,7 +231,7 @@ class FuelStationListItemWidget extends StatelessWidget {
           child: Container(
               padding: const EdgeInsets.all(8),
               decoration:
-                  BoxDecoration(borderRadius: BorderRadius.circular(10), color: Theme.of(context).backgroundColor),
+                  BoxDecoration(borderRadius: BorderRadius.circular(10), color: Theme.of(context).colorScheme.background),
               child: Row(children: [
                 priceColumn,
                 const SizedBox(width: 10),
@@ -236,7 +251,7 @@ class FuelStationListItemWidget extends StatelessWidget {
         child: Container(
             padding: const EdgeInsets.all(5),
             decoration:
-                BoxDecoration(borderRadius: BorderRadius.circular(10), color: Theme.of(context).backgroundColor),
+                BoxDecoration(borderRadius: BorderRadius.circular(10), color: Theme.of(context).colorScheme.background),
             child: child1));
   }
 }

@@ -17,6 +17,8 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 
 class SaFuelStationSourceCitation extends StatelessWidget {
@@ -41,7 +43,7 @@ class SaFuelStationSourceCitation extends StatelessWidget {
     return Container(
         padding: const EdgeInsets.all(25),
         decoration: BoxDecoration(
-            color: Theme.of(context).backgroundColor,
+            color: Theme.of(context).colorScheme.background,
             shape: BoxShape.rectangle,
             borderRadius: BorderRadius.circular(10),
             border: Border.all(color: Theme.of(context).primaryColor),
@@ -53,13 +55,16 @@ class SaFuelStationSourceCitation extends StatelessWidget {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: <Widget>[
       Padding(
           padding: const EdgeInsets.only(bottom: 15),
-          child: Text(_subTitle, textAlign: TextAlign.center, style: Theme.of(context).textTheme.headline4)),
+          child: Text(_subTitle, textAlign: TextAlign.center, style: Theme.of(context).textTheme.headlineMedium,
+              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
       Padding(
           padding: const EdgeInsets.only(bottom: 10),
-          child: Text(_saLicensePara1, textAlign: TextAlign.start, style: Theme.of(context).textTheme.subtitle2)),
+          child: Text(_saLicensePara1, textAlign: TextAlign.start, style: Theme.of(context).textTheme.titleSmall,
+              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
       Padding(
           padding: const EdgeInsets.only(bottom: 10),
-          child: Text(_saLicensePara2, textAlign: TextAlign.start, style: Theme.of(context).textTheme.subtitle2)),
+          child: Text(_saLicensePara2, textAlign: TextAlign.start, style: Theme.of(context).textTheme.titleSmall,
+              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
       Padding(padding: const EdgeInsets.only(bottom: 10), child: _getAdminContactMessage(context)),
       const Divider(height: 1),
       const SizedBox(height: 10),
@@ -70,7 +75,8 @@ class SaFuelStationSourceCitation extends StatelessWidget {
   Text _getAdminContactMessage(final BuildContext context) {
     return Text(_pumpedMessage,
         textAlign: TextAlign.start,
-        style: Theme.of(context).textTheme.subtitle2!.copyWith(color: Theme.of(context).errorColor));
+        textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor,
+        style: Theme.of(context).textTheme.titleSmall!.copyWith(color: Theme.of(context).colorScheme.error));
   }
 
   Widget _getOkActionButton(final BuildContext context) {

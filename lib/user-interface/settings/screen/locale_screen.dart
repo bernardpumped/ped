@@ -17,6 +17,8 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 
 class LocaleScreen extends StatefulWidget {
@@ -60,7 +62,8 @@ class _LocaleScreenState extends State<LocaleScreen> {
               child: Row(children: [
                 const Icon(Icons.language, size: 35),
                 const SizedBox(width: 10),
-                Text('Locale ', style: Theme.of(context).textTheme.headline2, textAlign: TextAlign.center)
+                Text('Locale ', style: Theme.of(context).textTheme.displayMedium, textAlign: TextAlign.center,
+                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
               ])),
           Card(
               child: Column(children: [
@@ -90,6 +93,7 @@ class _LocaleScreenState extends State<LocaleScreen> {
             selectedLocale = newVal!;
           });
         },
-        title: Text(_locales[value]!, style: Theme.of(context).textTheme.headline6));
+        title: Text(_locales[value]!, style: Theme.of(context).textTheme.titleLarge,
+            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor));
   }
 }

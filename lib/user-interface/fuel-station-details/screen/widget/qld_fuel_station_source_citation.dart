@@ -18,6 +18,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/screen/tabs/fuel-prices/widget/notification_widget.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station.dart';
 
@@ -51,7 +53,7 @@ class QldFuelStationSourceCitation extends StatelessWidget {
     return Container(
         padding: const EdgeInsets.all(25),
         decoration: BoxDecoration(
-            color: Theme.of(context).backgroundColor,
+            color: Theme.of(context).colorScheme.background,
             shape: BoxShape.rectangle,
             borderRadius: BorderRadius.circular(10),
             border: Border.all(color: Theme.of(context).primaryColor),
@@ -64,15 +66,18 @@ class QldFuelStationSourceCitation extends StatelessWidget {
       Padding(
           padding: const EdgeInsets.only(bottom: 15),
           child: Text(_subTitle,
-              textAlign: TextAlign.center, style: Theme.of(context).textTheme.headline4)),
+              textAlign: TextAlign.center, style: Theme.of(context).textTheme.headlineMedium,
+              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
       Padding(
           padding: const EdgeInsets.only(bottom: 10),
           child: Text(_qldLicensePara1,
-              textAlign: TextAlign.start, style: Theme.of(context).textTheme.subtitle2)),
+              textAlign: TextAlign.start, style: Theme.of(context).textTheme.titleSmall,
+              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
       Padding(
           padding: const EdgeInsets.only(bottom: 10),
           child: Text(_qldLicensePara2,
-              textAlign: TextAlign.start, style: Theme.of(context).textTheme.subtitle2)),
+              textAlign: TextAlign.start, style: Theme.of(context).textTheme.titleSmall,
+              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
       Padding(padding: const EdgeInsets.only(bottom: 10), child: _getAdminContactMessage(context)),
       const Divider(height: 1),
       const SizedBox(height: 10),
@@ -82,7 +87,9 @@ class QldFuelStationSourceCitation extends StatelessWidget {
 
   Text _getAdminContactMessage(final BuildContext context) {
     return Text(_pumpedMessage,
-        textAlign: TextAlign.start, style: Theme.of(context).textTheme.subtitle2!.copyWith(color: Theme.of(context).errorColor));
+        textAlign: TextAlign.start,
+        style: Theme.of(context).textTheme.titleSmall!.copyWith(color: Theme.of(context).colorScheme.error),
+        textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
   }
 
   Row _getOkActionButton(final BuildContext context) {

@@ -17,6 +17,8 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 
 class FuelTypeSwitcherButton extends StatelessWidget {
   final String _txtToDisplay;
@@ -37,12 +39,13 @@ class FuelTypeSwitcherButton extends StatelessWidget {
             child: Padding(
                 padding: const EdgeInsets.only(left: 14.0, right: 14, top: 12, bottom: 12),
                 child: Row(children: [
-                  Icon(Icons.workspaces_outline, color: Theme.of(context).backgroundColor, size: 25),
+                  Icon(Icons.workspaces_outline, color: Theme.of(context).colorScheme.background, size: 25),
                   const SizedBox(width: 8),
                   Text(_txtToDisplay,
-                      style: Theme.of(context).textTheme.headline6!.copyWith(color: Theme.of(context).backgroundColor)),
+                      textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor,
+                      style: Theme.of(context).textTheme.titleLarge!.copyWith(color: Theme.of(context).colorScheme.background)),
                   const SizedBox(width: 8),
-                  Icon(Icons.chevron_right, color: Theme.of(context).backgroundColor, size: 25)
+                  Icon(Icons.chevron_right, color: Theme.of(context).colorScheme.background, size: 25)
                 ]))));
   }
 }

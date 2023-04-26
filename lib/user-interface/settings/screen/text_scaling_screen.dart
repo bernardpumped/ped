@@ -17,7 +17,13 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:pumped_end_device/data/local/dao2/ui_settings_dao.dart';
+import 'package:pumped_end_device/data/local/model/ui_settings.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
+import 'package:pumped_end_device/util/log_util.dart';
+import 'package:pumped_end_device/util/text_scale.dart';
 
 class TextScalingScreen extends StatefulWidget {
   const TextScalingScreen({Key? key}) : super(key: key);
@@ -27,21 +33,7 @@ class TextScalingScreen extends StatefulWidget {
 }
 
 class _TextScalingScreenState extends State<TextScalingScreen> {
-  static const _systemTextScale = 'SYSTEM_TEXT_SCALE';
-  static const _smallTextScale = 'SMALL_TEXT_SCALE';
-  static const _mediumTextScale = 'MEDIUM_TEXT_SCALE';
-  static const _largeTextScale = 'LARGE_TEXT_SCALE';
-  static const _hugeTextScale = 'HUGE_TEXT_SCALE';
-
-  static const _textScales = {
-    _systemTextScale: 'System',
-    _smallTextScale: 'Small',
-    _mediumTextScale: 'Medium',
-    _largeTextScale: 'Large',
-    _hugeTextScale: 'Huge'
-  };
-
-  String selectedTextScale = _systemTextScale;
+  static const _tag = 'TextScalingScreen';
 
   @override
   Widget build(final BuildContext context) {
@@ -54,16 +46,10 @@ class _TextScalingScreenState extends State<TextScalingScreen> {
               child: Row(children: [
                 const Icon(Icons.linear_scale_rounded, size: 35),
                 const SizedBox(width: 10),
-                Text('Text Scaling', style: Theme.of(context).textTheme.headline2, textAlign: TextAlign.center)
+                Text('Text Scaling', style: Theme.of(context).textTheme.displayMedium, textAlign: TextAlign.center,
+                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
               ])),
-          Card(
-              child: Column(children: [
-            _getMenuItem(_systemTextScale),
-            _getMenuItem(_smallTextScale),
-            _getMenuItem(_mediumTextScale),
-            _getMenuItem(_largeTextScale),
-            _getMenuItem(_hugeTextScale)
-          ])),
+          _childWidget(),
           Padding(
             padding: const EdgeInsets.only(top: 20, right: 20),
             child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
@@ -77,15 +63,63 @@ class _TextScalingScreenState extends State<TextScalingScreen> {
         ]));
   }
 
-  RadioListTile<String> _getMenuItem(final String value) {
+  Widget _childWidget() {
+    return FutureBuilder(
+        future: _getUiSettings(),
+        builder: (context, snapShot) {
+          if (snapShot.hasData) {
+            UiSettings? uiSettings = snapShot.data as UiSettings?;
+            if (uiSettings != null) {
+              LogUtil.debug(_tag, 'Read UiSettings.textScale : ${uiSettings.textScale}');
+              uiSettings.textScale ??= TextScale.systemTextScale;
+            } else {
+              uiSettings = UiSettings(textScale: TextScale.systemTextScale);
+            }
+            return Card(
+                child: Column(children: [
+                  _getMenuItem(TextScale.systemTextScale, uiSettings),
+                  _getMenuItem(TextScale.smallTextScale, uiSettings),
+                  _getMenuItem(TextScale.mediumTextScale, uiSettings),
+                  _getMenuItem(TextScale.largeTextScale, uiSettings),
+                  _getMenuItem(TextScale.hugeTextScale, uiSettings)
+                ]));
+          } else if (snapShot.hasError) {
+            LogUtil.debug(_tag, 'Error found while loading UiSettings ${snapShot.error}');
+            return Text('Error Loading',
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Theme.of(context).colorScheme.error),
+                textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
+          } else {
+            return Text('Loading', style: Theme.of(context).textTheme.titleMedium,
+                textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
+          }
+        }
+    );
+  }
+
+  Future<UiSettings?>? _getUiSettings() {
+    return UiSettingsDao.instance.getUiSettings();
+  }
+
+  RadioListTile<String> _getMenuItem(final String textScale, final UiSettings uiSettings) {
     return RadioListTile<String>(
-        value: value,
-        groupValue: selectedTextScale,
-        onChanged: (newVal) {
-          setState(() {
-            selectedTextScale = newVal!;
+        value: textScale,
+        selected: textScale == uiSettings.textScale,
+        groupValue:  uiSettings.textScale,
+        onChanged: (newTextScale) {
+          LogUtil.debug(_tag, 'Selected TextScale $newTextScale');
+          uiSettings.textScale = newTextScale!;
+          double textScaleValue = TextScale.getTextScaleValue(newTextScale) as double;
+          UiSettingsDao.instance.insertUiSettings(uiSettings).whenComplete(() {
+            TextScaler.update(context, TextScalingFactor(scaleFactor: textScaleValue));
+            LogUtil.debug(_tag, 'Inserted instance $newTextScale');
+            if (mounted) {
+              LogUtil.debug(_tag, 'Still mounted, calling setState');
+              setState(() {});
+            }
           });
+          TextScaler.update(context, TextScalingFactor(scaleFactor: textScaleValue));
         },
-        title: Text(_textScales[value]!, style: Theme.of(context).textTheme.headline6));
+        title: Text(TextScale.getTextScale(textScale), style: Theme.of(context).textTheme.titleLarge,
+            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor));
   }
 }

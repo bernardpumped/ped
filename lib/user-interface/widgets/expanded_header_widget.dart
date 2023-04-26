@@ -23,6 +23,8 @@ import 'package:pumped_end_device/user-interface/fuel-station-details/screen/wid
 import 'package:pumped_end_device/user-interface/fuel-stations/screens/widgets/fuel_station_logo_widget.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/screen/widget/qld_fuel_station_source_citation.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/util/data_utils.dart';
 
 class ExpandedHeaderWidget extends StatelessWidget {
@@ -75,7 +77,8 @@ class ExpandedHeaderWidget extends StatelessWidget {
     if (fuelStation.isFaStation && 'unmatched' == fuelStation.fuelAuthMatchStatus) {
       fsName = '$fsName**';
     }
-    return Text(fsName, style: Theme.of(context).textTheme.headline2, overflow: TextOverflow.ellipsis, maxLines: 2);
+    return Text(fsName, style: Theme.of(context).textTheme.displayMedium, overflow: TextOverflow.ellipsis, maxLines: 2,
+        textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
   }
 
   Widget _getFuelAuthorityQuotePublisher(final FuelStation fuelStation, final BuildContext context) {
@@ -83,7 +86,8 @@ class ExpandedHeaderWidget extends StatelessWidget {
       final List<String?> publishers = fuelStation.getPublishers();
       if (publishers.isNotEmpty) {
         return Row(children: [
-          Text('Fuel Price Source ${publishers[0]} ', style: Theme.of(context).textTheme.headline6),
+          Text('Fuel Price Source ${publishers[0]} ', style: Theme.of(context).textTheme.titleLarge,
+              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
           _getFuelStationSourceCitationIcon(publishers, context, fuelStation)
         ]);
       }
@@ -118,10 +122,12 @@ class ExpandedHeaderWidget extends StatelessWidget {
 
   Widget _getDistanceWidget(final BuildContext context, final FuelStation fuelStation) {
     return Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
-      Text('Petrol Station', style: Theme.of(context).textTheme.headline6),
+      Text('Petrol Station', style: Theme.of(context).textTheme.titleLarge,
+          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
       const SizedBox(width: 10),
       const Icon(Icons.drive_eta, size: 20), // drive_eta icon
-      Text(' ${DataUtils.toPrecision(fuelStation.distance, 2)} km', style: Theme.of(context).textTheme.headline6)
+      Text(' ${DataUtils.toPrecision(fuelStation.distance, 2)} km', style: Theme.of(context).textTheme.titleLarge,
+          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
     ]);
   }
 
@@ -130,7 +136,8 @@ class ExpandedHeaderWidget extends StatelessWidget {
         ? Padding(
             padding: const EdgeInsets.only(bottom: 3, left: 8),
             child: Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
-              Text(' ${fuelStation.rating}', style: Theme.of(context).textTheme.headline6),
+              Text(' ${fuelStation.rating}', style: Theme.of(context).textTheme.titleLarge,
+                  textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
               const SizedBox(width: 3),
               RatingBarIndicator(
                   rating: fuelStation.rating!,

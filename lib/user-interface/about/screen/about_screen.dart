@@ -17,6 +17,8 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/util/app_theme.dart';
 
 class AboutScreen extends StatelessWidget {
@@ -30,7 +32,8 @@ class AboutScreen extends StatelessWidget {
   Padding _buildPara(final BuildContext context, final String text) {
     return Padding(
         padding: const EdgeInsets.only(top: 10),
-        child: Text(text, style: Theme.of(context).textTheme.headline5, textAlign: TextAlign.left));
+        child: Text(text, style: Theme.of(context).textTheme.headlineSmall, textAlign: TextAlign.left,
+            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor));
   }
 
   Widget _aboutContent(final BuildContext context) {
@@ -44,7 +47,8 @@ class AboutScreen extends StatelessWidget {
                   child: Image(image: AssetImage(AppTheme.getPumpedLogo(context)), height: 120, fit: BoxFit.fill)),
               Padding(
                   padding: const EdgeInsets.only(bottom: 5),
-                  child: Text('About', style: Theme.of(context).textTheme.headline1, textAlign: TextAlign.center)),
+                  child: Text('About', style: Theme.of(context).textTheme.displayLarge, textAlign: TextAlign.center,
+                      textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
               Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
