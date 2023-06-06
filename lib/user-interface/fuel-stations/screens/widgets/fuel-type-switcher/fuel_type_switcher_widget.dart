@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:pumped_end_device/data/local/dao2/user_configuration_dao.dart';
+import 'package:pumped_end_device/data/local/model/user_configuration.dart';
 import 'package:pumped_end_device/models/pumped/fuel_category.dart';
 import 'package:pumped_end_device/models/pumped/fuel_type.dart';
+import 'package:pumped_end_device/models/pumped_exception.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/params/fuel_type_switcher_response_params.dart';
 import 'package:pumped_end_device/user-interface/settings/model/dropdown_values.dart';
 import 'package:pumped_end_device/user-interface/settings/service/settings_service.dart';
@@ -29,7 +32,6 @@ class FuelTypeSwitcherWidget extends StatefulWidget {
 
 class _FuelTypeSwitcherWidgetState extends State<FuelTypeSwitcherWidget> {
   static const _tag = 'FuelStationFuelTypeWidget';
-  final SettingsService _settingsDataSource = SettingsService();
 
   FuelType? _fuelTypeSelectedValue;
   FuelCategory? _fuelCategorySelectedValue;
@@ -41,8 +43,8 @@ class _FuelTypeSwitcherWidgetState extends State<FuelTypeSwitcherWidget> {
     super.initState();
     _fuelTypeSelectedValue = widget.selectedFuelType;
     _fuelCategorySelectedValue = widget.selectedFuelCategory;
-    _fuelCategoryDropdownValues = _settingsDataSource.fuelCategoryDropdownValues();
-    _fuelTypeDropdownValues = _settingsDataSource.fuelTypeDropdownValues(widget.selectedFuelCategory);
+    _fuelCategoryDropdownValues = SettingsService.instance.fuelCategoryDropdownValues();
+    _fuelTypeDropdownValues = SettingsService.instance.fuelTypeDropdownValues(widget.selectedFuelCategory);
   }
 
   @override
@@ -66,7 +68,16 @@ class _FuelTypeSwitcherWidgetState extends State<FuelTypeSwitcherWidget> {
             context: context,
             buttonText: 'Apply',
             iconData: Icons.save_alt,
-            onTapFunction: () {
+            onTapFunction: () async {
+              final UserConfiguration? userConfig = await UserConfigurationDao.instance.getUserConfiguration(UserConfiguration.defaultUserConfigId);
+              if (userConfig == null) {
+                throw PumpedException("UserConfiguration cannot be null");
+              }
+              UserConfiguration userConfigUpdated = UserConfiguration(id: userConfig.id, numSearchResults: userConfig.numSearchResults,
+                  defaultFuelType: _fuelTypeSelectedValue!, defaultFuelCategory: _fuelCategorySelectedValue!,
+                  searchRadius: userConfig.searchRadius, searchCriteria: userConfig.searchCriteria, version: userConfig.version + 1);
+              await UserConfigurationDao.instance.insertUserConfiguration(userConfigUpdated);
+              LogUtil.debug(_tag, 'Finished persisting ${_fuelTypeSelectedValue!.fuelName} and ${_fuelCategorySelectedValue!.categoryName} to db');
               widget.onChangeCallback(FuelTypeSwitcherResponseParams(
                   fuelType: _fuelTypeSelectedValue!, fuelCategory: _fuelCategorySelectedValue!));
             })
@@ -106,7 +117,7 @@ class _FuelTypeSwitcherWidgetState extends State<FuelTypeSwitcherWidget> {
                           LogUtil.debug(_tag, '_fuelCategorySelectedValue::mystate $changedCat');
                           _fuelTypeSelectedValue = changedCat!.defaultFuelType;
                           _fuelCategorySelectedValue = changedCat;
-                          _fuelTypeDropdownValues = _settingsDataSource.fuelTypeDropdownValues(changedCat);
+                          _fuelTypeDropdownValues = SettingsService.instance.fuelTypeDropdownValues(changedCat);
                         });
                       });
                 }).toList());

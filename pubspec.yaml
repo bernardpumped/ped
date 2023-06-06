@@ -10,7 +10,7 @@ homepage: https://www.pumpedfuel.com/
 repository: https://github.com/bernardpumped/ped/tree/agl
 issue_tracker: https://github.com/bernardpumped/ped/issues
 documentation: https://github.com/bernardpumped/ped/tree/agl#readme
-version: 1.0.0+341
+version: 1.0.0+35
 
 # AGL branch is landscape and specific to web, linux and custom Yocto/AGL
 platforms:
@@ -18,7 +18,7 @@ platforms:
     web:
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.12.0 <3.10.3"
 
 dependencies:
   flutter:

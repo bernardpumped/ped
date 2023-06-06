@@ -43,7 +43,7 @@ class WidgetUtils {
     final textColor = isErrorToast ? Theme.of(context).colorScheme.error : Theme.of(context).colorScheme.secondary;
     final Widget toast = Container(
         padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(25.0), color: Theme.of(context).primaryColor),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(25.0), color: Theme.of(context).primaryColorLight),
         child: Text(message,
             textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor,
             style: Theme.of(context).textTheme.titleSmall!.copyWith(color: textColor), textAlign: TextAlign.center));

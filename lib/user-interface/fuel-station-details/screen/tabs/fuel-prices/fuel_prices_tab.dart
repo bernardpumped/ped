@@ -135,9 +135,12 @@ class _FuelPricesTabWidgetState extends State<FuelPricesTabWidget> {
                                 : Theme.of(context).textTheme.displaySmall)),
                     Container(
                         padding: const EdgeInsets.only(right: 10, top: 10, bottom: 10),
-                        child: Row(children: <Widget>[
-                          Container(margin: const EdgeInsets.only(left: 25), child: _getLastUpdateDateWidget(fuelQuote))
-                        ]))
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(children: <Widget>[
+                            Container(margin: const EdgeInsets.only(left: 25), child: _getLastUpdateDateWidget(fuelQuote))
+                          ]),
+                        ))
                   ]))),
           Expanded(
               flex: 4,

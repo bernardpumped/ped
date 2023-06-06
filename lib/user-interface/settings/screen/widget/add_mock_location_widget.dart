@@ -37,9 +37,9 @@ class _AddMockLocationWidgetState extends State<AddMockLocationWidget> {
           Row(children: [
             const Icon(Icons.add_location_alt_outlined, size: 30),
             const SizedBox(width: 20),
-            Text('Add a Mock Location', style: Theme.of(context).textTheme.titleMedium,
-                textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
-          ]),
+            Expanded(
+              child: Text('Add a Mock Location', style: Theme.of(context).textTheme.titleMedium,
+                  textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor))]),
           const SizedBox(height: 8),
           Row(children: [
             Expanded(flex: 1, child: Text('Address Line', style: Theme.of(context).textTheme.bodyLarge,
@@ -74,33 +74,36 @@ class _AddMockLocationWidgetState extends State<AddMockLocationWidget> {
           ]),
           Padding(
               padding: const EdgeInsets.only(top: 8.0, right: 8.0),
-              child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                WidgetUtils.getRoundedButton(
-                    context: context,
-                    buttonText: 'Add Mock Location',
-                    onTapFunction: () async {
-                      final String addressLine = addressLineEditingController.text;
-                      final String city = cityEditingController.text;
-                      final String state = stateEditingController.text;
-                      final String country = countryEditingController.text;
-                      final String latStr = latitudeEditingController.text;
-                      final String lngStr = longitudeEditingController.text;
-                      if (validParams(context, addressLine, state, country, latStr, lngStr)) {
-                        final MockLocation mockLocation = MockLocation(
-                            id: const Uuid().v1(),
-                            addressLine: addressLine,
-                            city: city,
-                            state: state,
-                            country: country,
-                            latitude: double.parse(latStr),
-                            longitude: double.parse(lngStr));
-                        await MockLocationDao.instance.insertMockLocation(mockLocation);
-                        _clearTextControllers(addressLineEditingController, stateEditingController,
-                            countryEditingController, latitudeEditingController, longitudeEditingController);
-                        widget.callback();
-                      }
-                    })
-              ]))
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                  WidgetUtils.getRoundedButton(
+                      context: context,
+                      buttonText: 'Add Mock Location',
+                      onTapFunction: () async {
+                        final String addressLine = addressLineEditingController.text;
+                        final String city = cityEditingController.text;
+                        final String state = stateEditingController.text;
+                        final String country = countryEditingController.text;
+                        final String latStr = latitudeEditingController.text;
+                        final String lngStr = longitudeEditingController.text;
+                        if (validParams(context, addressLine, state, country, latStr, lngStr)) {
+                          final MockLocation mockLocation = MockLocation(
+                              id: const Uuid().v1(),
+                              addressLine: addressLine,
+                              city: city,
+                              state: state,
+                              country: country,
+                              latitude: double.parse(latStr),
+                              longitude: double.parse(lngStr));
+                          await MockLocationDao.instance.insertMockLocation(mockLocation);
+                          _clearTextControllers(addressLineEditingController, stateEditingController,
+                              countryEditingController, latitudeEditingController, longitudeEditingController);
+                          widget.callback();
+                        }
+                      })
+                ]),
+              ))
         ]);
   }
 
