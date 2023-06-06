@@ -20,6 +20,7 @@ import 'package:pumped_end_device/data/local/dao2/market_region_zone_config_dao.
 import 'package:pumped_end_device/data/local/dao2/user_configuration_dao.dart';
 import 'package:pumped_end_device/data/local/model/market_region_zone_config.dart';
 import 'package:pumped_end_device/data/local/model/user_configuration.dart';
+import 'package:pumped_end_device/models/pumped_exception.dart';
 import 'package:pumped_end_device/user-interface/settings/model/dropdown_values.dart';
 import 'package:pumped_end_device/models/pumped/fuel_category.dart';
 import 'package:pumped_end_device/models/pumped/fuel_type.dart';
@@ -28,6 +29,10 @@ import 'package:pumped_end_device/util/log_util.dart';
 
 class SettingsService {
   static const _tag = 'SettingsService';
+
+  static final SettingsService instance = SettingsService._();
+
+  SettingsService._();
 
   Future<dynamic> insertSettings(final num searchRadius, final num numSearchResults, final FuelCategory defaultFuelCategory,
       final FuelType defaultFuelType, final String defaultSearchCriteria, int version) {
@@ -42,6 +47,22 @@ class SettingsService {
 
     final UserConfigurationDao userConfigurationDao = UserConfigurationDao.instance;
     return userConfigurationDao.insertUserConfiguration(userConfiguration);
+  }
+
+  Future<UserConfiguration> getInitialDefaultUserConfiguration() async {
+    final MarketRegionZoneConfiguration? marketRegionZoneConfig =
+    await MarketRegionZoneConfigDao.instance.getMarketRegionZoneConfiguration();
+    if (marketRegionZoneConfig == null) {
+      throw PumpedException("MarketRegionZoneConfig is null. Un-recoverable scenario");
+    }
+    return UserConfiguration(
+        id: UserConfiguration.defaultUserConfigId,
+        numSearchResults: _maxSearchResults,
+        defaultFuelType: marketRegionZoneConfig.marketRegionConfig.defaultFuelCategory.defaultFuelType,
+        defaultFuelCategory: marketRegionZoneConfig.marketRegionConfig.defaultFuelCategory,
+        searchRadius: _maxSearchRadius,
+        searchCriteria: _defaultSortOrder,
+        version: UserConfigurationDao.defaultUserConfigVersion);
   }
 
   Future<DropDownValues<FuelCategory>> fuelCategoryDropdownValues() async {

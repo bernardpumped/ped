@@ -49,8 +49,6 @@ class _CustomizeSearchSettingsScreenState extends State<CustomizeSearchSettingsS
   static const _unselectedValInt = -1;
   static const _unselectedValDouble = -1.0;
 
-  final SettingsService _settingsDataSource = SettingsService();
-
   num _searchRadiusSelectedValue = _unselectedValDouble;
   num _searchResultsCountSelectedValue = _unselectedValInt;
   FuelCategory? _fuelCategorySelectedValue;
@@ -68,13 +66,13 @@ class _CustomizeSearchSettingsScreenState extends State<CustomizeSearchSettingsS
   @override
   void initState() {
     super.initState();
-    _fuelCategoryDropdownValues = _settingsDataSource.fuelCategoryDropdownValues();
-    _fuelTypeDropdownValues = _settingsDataSource.fuelTypeDropdownValues(_fuelCategorySelectedValue);
-    _sortOrderDropdownValues = _settingsDataSource.sortOrderDropdownValues();
+    _fuelCategoryDropdownValues = SettingsService.instance.fuelCategoryDropdownValues();
+    _fuelTypeDropdownValues = SettingsService.instance.fuelTypeDropdownValues(_fuelCategorySelectedValue);
+    _sortOrderDropdownValues = SettingsService.instance.sortOrderDropdownValues();
     _userSettingsVersionFuture =
         UserConfigurationDao.instance.getUserConfigurationVersion(UserConfiguration.defaultUserConfigId);
-    _numSearchResultsDropdownValues = _settingsDataSource.searchFuelStationDropDownValues(5);
-    _searchRadiusDropdownValues = _settingsDataSource.searchRadiusDropDownValues(5);
+    _numSearchResultsDropdownValues = SettingsService.instance.searchFuelStationDropDownValues(5);
+    _searchRadiusDropdownValues = SettingsService.instance.searchRadiusDropDownValues(5);
   }
 
   @override
@@ -195,7 +193,7 @@ class _CustomizeSearchSettingsScreenState extends State<CustomizeSearchSettingsS
                             if (changedFuelType != null) {
                               _fuelTypeSelectedValue = null;
                               _fuelCategorySelectedValue = changedFuelType;
-                              _fuelTypeDropdownValues = _settingsDataSource.fuelTypeDropdownValues(changedFuelType);
+                              _fuelTypeDropdownValues = SettingsService.instance.fuelTypeDropdownValues(changedFuelType);
                             } else {
                               LogUtil.debug(_tag, '_fuelCategoryDropdown::newValue in dropdown is null');
                             }
@@ -370,7 +368,7 @@ class _CustomizeSearchSettingsScreenState extends State<CustomizeSearchSettingsS
                       _fuelTypeSelectedValue != null &&
                       _sortOrderSelectedVal != null) {
                     _userSettingsVersion = _userSettingsVersion! + 1;
-                    _settingsDataSource
+                    SettingsService.instance
                         .insertSettings(
                             _searchRadiusSelectedValue,
                             _searchResultsCountSelectedValue,
