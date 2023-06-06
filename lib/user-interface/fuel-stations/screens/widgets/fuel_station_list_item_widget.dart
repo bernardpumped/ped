@@ -74,22 +74,28 @@ class FuelStationListItemWidget extends StatelessWidget {
                         ]))
                   ]),
                   const SizedBox(height: 10),
-                  Row(mainAxisAlignment: MainAxisAlignment.end, crossAxisAlignment: CrossAxisAlignment.end, children: [
-                    IntrinsicHeight(child: _getOffersWidget(context)),
-                    const SizedBox(width: 15),
-                    IntrinsicHeight(child: _getPriceWithDetailsWidget(selectedFuelQuote, context))
-                  ])
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(mainAxisAlignment: MainAxisAlignment.end, crossAxisAlignment: CrossAxisAlignment.end, children: [
+                      IntrinsicHeight(child: _getOffersWidget(context)),
+                      const SizedBox(width: 15),
+                      IntrinsicHeight(child: _getPriceWithDetailsWidget(selectedFuelQuote, context))
+                    ]),
+                  )
                 ]))));
   }
 
   Widget _getOpenCloseRatingDistanceWidget(final BuildContext context) {
-    return Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-      _getOpenCloseWidget(context),
-      const SizedBox(width: 10),
-      _getRatingWidget(context),
-      const SizedBox(width: 10),
-      _getDistanceWidget(context)
-    ]);
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+        _getOpenCloseWidget(context),
+        const SizedBox(width: 10),
+        _getRatingWidget(context),
+        const SizedBox(width: 10),
+        _getDistanceWidget(context)
+      ]),
+    );
   }
 
   Widget _getStationAddressWidget(final BuildContext context) {

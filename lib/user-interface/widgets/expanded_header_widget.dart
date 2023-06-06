@@ -53,7 +53,7 @@ class ExpandedHeaderWidget extends StatelessWidget {
                           child: _getFuelStationName(context, fuelStation)),
                       Padding(
                           padding: const EdgeInsets.only(bottom: 8, left: 8),
-                          child: _getDistanceWidget(context, fuelStation)),
+                          child: SingleChildScrollView(scrollDirection: Axis.horizontal, child: _getDistanceWidget(context, fuelStation))),
                       showPriceSource
                           ? Padding(
                               padding: const EdgeInsets.only(bottom: 8, left: 8),
@@ -77,7 +77,7 @@ class ExpandedHeaderWidget extends StatelessWidget {
     if (fuelStation.isFaStation && 'unmatched' == fuelStation.fuelAuthMatchStatus) {
       fsName = '$fsName**';
     }
-    return Text(fsName, style: Theme.of(context).textTheme.displayMedium, overflow: TextOverflow.ellipsis, maxLines: 2,
+    return Text(fsName, style: Theme.of(context).textTheme.displayMedium, overflow: TextOverflow.ellipsis, maxLines: 1,
         textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
   }
 
@@ -86,8 +86,11 @@ class ExpandedHeaderWidget extends StatelessWidget {
       final List<String?> publishers = fuelStation.getPublishers();
       if (publishers.isNotEmpty) {
         return Row(children: [
-          Text('Fuel Price Source ${publishers[0]} ', style: Theme.of(context).textTheme.titleLarge,
-              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+          Expanded(
+            child: Text('Fuel Price Source ${publishers[0]} ', style: Theme.of(context).textTheme.titleLarge,
+                overflow: TextOverflow.ellipsis,
+                textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+          ),
           _getFuelStationSourceCitationIcon(publishers, context, fuelStation)
         ]);
       }
@@ -139,12 +142,14 @@ class ExpandedHeaderWidget extends StatelessWidget {
               Text(' ${fuelStation.rating}', style: Theme.of(context).textTheme.titleLarge,
                   textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
               const SizedBox(width: 3),
-              RatingBarIndicator(
-                  rating: fuelStation.rating!,
-                  itemBuilder: (context, index) => Icon(Icons.star, color: Theme.of(context).highlightColor),
-                  itemCount: 5,
-                  itemSize: 22,
-                  direction: Axis.horizontal) //22 comes from titleLarge
+              Expanded(
+                child: RatingBarIndicator(
+                    rating: fuelStation.rating!,
+                    itemBuilder: (context, index) => Icon(Icons.star, color: Theme.of(context).highlightColor),
+                    itemCount: 5,
+                    itemSize: 22,
+                    direction: Axis.horizontal),
+              ) //22 comes from titleLarge
             ]))
         : const SizedBox(width: 0);
   }

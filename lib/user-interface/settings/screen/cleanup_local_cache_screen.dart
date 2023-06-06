@@ -50,8 +50,10 @@ class _CleanupLocalCacheScreenState extends State<CleanupLocalCacheScreen> {
               child: Row(children: [
                 const Icon(Icons.delete_outline, size: 35),
                 const SizedBox(width: 10),
-                Text('Clear Local Cache', style: Theme.of(context).textTheme.displaySmall, textAlign: TextAlign.center,
-                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
+                Expanded(
+                  child: Text('Clear Local Cache', style: Theme.of(context).textTheme.displaySmall, textAlign: TextAlign.left,
+                      overflow: TextOverflow.ellipsis, textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+                )
               ])),
           Expanded(
               child: ListView(children: <Widget>[

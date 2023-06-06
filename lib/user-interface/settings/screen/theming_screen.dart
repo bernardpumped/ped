@@ -50,8 +50,10 @@ class _ThemingScreenState extends State<ThemingScreen> {
               child: Row(children: [
                 const Icon(Icons.compare_outlined, size: 35),
                 const SizedBox(width: 10),
-                Text('Theme ', style: Theme.of(context).textTheme.displayMedium, textAlign: TextAlign.center,
-                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
+                Expanded(
+                  child: Text('Theme ', style: Theme.of(context).textTheme.displayMedium, textAlign: TextAlign.left,
+                      textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+                )
               ])),
           _getCard(),
           Padding(

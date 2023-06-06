@@ -57,7 +57,9 @@ class FuelPriceSourceCitationWidget extends StatelessWidget {
             shape: BoxShape.rectangle,
             borderRadius: BorderRadius.circular(10.0),
             boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 10.0, offset: Offset(0.0, 10.0))]),
-        child: child);
+        child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+            child: child));
   }
 
   String _getPublishDateFormatted(final int publishDateSeconds) {

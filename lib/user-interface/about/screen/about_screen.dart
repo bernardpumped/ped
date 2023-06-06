@@ -37,44 +37,46 @@ class AboutScreen extends StatelessWidget {
   }
 
   Widget _aboutContent(final BuildContext context) {
-    return SingleChildScrollView(
-        child: Container(
-            height: MediaQuery.of(context).size.height,
-            padding: const EdgeInsets.only(left: 50, right: 50),
-            child: Column(children: [
-              Padding(
-                  padding: const EdgeInsets.only(top: 50),
-                  child: Image(image: AssetImage(AppTheme.getPumpedLogo(context)), height: 120, fit: BoxFit.fill)),
-              Padding(
-                  padding: const EdgeInsets.only(bottom: 5),
-                  child: Text('About', style: Theme.of(context).textTheme.displayLarge, textAlign: TextAlign.center,
-                      textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
-              Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    _buildPara(context,
-                        'Pumped Your Friendly Neighbourhood Fuel finder designed and written with user first in mind.'),
-                    _buildPara(
-                        context,
-                        'Your neighbourhood friendly fuel finder, not only locates your cheapest, closest fuel, '
-                        'friendliest service, cleanest restrooms, tastiest coffee but much more. Upcoming release will advise '
-                        'when your local station has promotions, both in-store products and Garage services including '
-                        'tuneup, wheel alignment, oil change and soo much more!'),
-                    _buildPara(
-                        context,
-                        'Many large retailers and oil companies develop their own fuel finder apps, however they '
-                        'only list their own stations, and therefore have limited appeal to the general public, who want prices '
-                        'for all the neighbourhood stations.'),
-                    _buildPara(
-                        context,
-                        'What’s required is an app designed with user first in mind that not only lists all fuel station '
-                        'prices within your neighbourhood, but also advertise any and all promotions “products and services” within '
-                        'the fuel station. Thereby providing real value to the users whilst also providing retailers a targeted '
-                        'audience for advertising and impulse buying.'),
-                    _buildPara(context,
-                        'This is our goal with Pumped user first, together with direct and powerful retailer incentive.')
-                  ])
-            ])));
+    return Container(
+        height: MediaQuery.of(context).size.height,
+        padding: const EdgeInsets.only(left: 50, right: 50),
+        child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Column(children: [
+            Padding(
+                padding: const EdgeInsets.only(top: 50),
+                child: Image(image: AssetImage(AppTheme.getPumpedLogo(context)), height: 120, fit: BoxFit.fill)),
+            Padding(
+                padding: const EdgeInsets.only(bottom: 5),
+                child: Text('About', style: Theme.of(context).textTheme.displayLarge, textAlign: TextAlign.center,
+                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
+            Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  _buildPara(context,
+                      'Pumped Your Friendly Neighbourhood Fuel finder designed and written with user first in mind.'),
+                  _buildPara(
+                      context,
+                      'Your neighbourhood friendly fuel finder, not only locates your cheapest, closest fuel, '
+                      'friendliest service, cleanest restrooms, tastiest coffee but much more. Upcoming release will advise '
+                      'when your local station has promotions, both in-store products and Garage services including '
+                      'tuneup, wheel alignment, oil change and soo much more!'),
+                  _buildPara(
+                      context,
+                      'Many large retailers and oil companies develop their own fuel finder apps, however they '
+                      'only list their own stations, and therefore have limited appeal to the general public, who want prices '
+                      'for all the neighbourhood stations.'),
+                  _buildPara(
+                      context,
+                      'What’s required is an app designed with user first in mind that not only lists all fuel station '
+                      'prices within your neighbourhood, but also advertise any and all promotions “products and services” within '
+                      'the fuel station. Thereby providing real value to the users whilst also providing retailers a targeted '
+                      'audience for advertising and impulse buying.'),
+                  _buildPara(context,
+                      'This is our goal with Pumped user first, together with direct and powerful retailer incentive.')
+                ])
+          ]),
+        ));
   }
 }

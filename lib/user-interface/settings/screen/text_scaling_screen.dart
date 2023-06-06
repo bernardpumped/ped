@@ -40,27 +40,33 @@ class _TextScalingScreenState extends State<TextScalingScreen> {
     return Container(
         padding: const EdgeInsets.only(right: 10, bottom: 15, left: 10),
         height: MediaQuery.of(context).size.height,
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-          Padding(
-              padding: const EdgeInsets.only(top: 10, bottom: 10, left: 10),
-              child: Row(children: [
-                const Icon(Icons.linear_scale_rounded, size: 35),
-                const SizedBox(width: 10),
-                Text('Text Scaling', style: Theme.of(context).textTheme.displayMedium, textAlign: TextAlign.center,
-                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
-              ])),
-          _childWidget(),
-          Padding(
-            padding: const EdgeInsets.only(top: 20, right: 20),
-            child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-              WidgetUtils.getRoundedButton(
-                  context: context,
-                  buttonText: 'Scale Text',
-                  iconData: Icons.linear_scale_rounded,
-                  onTapFunction: () {})
-            ]),
-          )
-        ]));
+        child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
+            Padding(
+                padding: const EdgeInsets.only(top: 10, bottom: 10, left: 10),
+                child: Row(children: [
+                  const Icon(Icons.linear_scale_rounded, size: 35),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text('Text Scaling', style: Theme.of(context).textTheme.displayMedium, textAlign: TextAlign.left,
+                        textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+                  )
+                ])),
+            _childWidget(),
+            Padding(
+              padding: const EdgeInsets.only(top: 20, right: 20),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                  WidgetUtils.getRoundedButton(
+                      context: context,
+                      buttonText: 'Scale Text',
+                      iconData: Icons.linear_scale_rounded,
+                      onTapFunction: () {})
+                ])))
+          ]),
+        ));
   }
 
   Widget _childWidget() {

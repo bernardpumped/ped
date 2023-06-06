@@ -45,9 +45,11 @@ class _MockLocationSettingsScreenState extends State<MockLocationSettingsScreen>
                   child: Row(children: [
                     const Icon(Icons.push_pin_outlined, size: 30),
                     const SizedBox(width: 10),
-                    Text('Mock Location of Device',
-                        textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor,
-                        style: Theme.of(context).textTheme.displaySmall, textAlign: TextAlign.center)
+                    Expanded(
+                      child: Text('Mock Location of Device',
+                          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor,
+                          style: Theme.of(context).textTheme.displaySmall, textAlign: TextAlign.left)
+                    )
                   ])),
               Card(
                   child:

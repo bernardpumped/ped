@@ -58,7 +58,7 @@ class QldFuelStationSourceCitation extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
             border: Border.all(color: Theme.of(context).primaryColor),
             boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 10.0, offset: Offset(0.0, 10.0))]),
-        child: _getQldFuelAuthorityMessage(context));
+        child: SingleChildScrollView(child: _getQldFuelAuthorityMessage(context)));
   }
 
   Widget _getQldFuelAuthorityMessage(final BuildContext context) {
@@ -66,16 +66,19 @@ class QldFuelStationSourceCitation extends StatelessWidget {
       Padding(
           padding: const EdgeInsets.only(bottom: 15),
           child: Text(_subTitle,
+              maxLines: 2,
               textAlign: TextAlign.center, style: Theme.of(context).textTheme.headlineMedium,
               textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
       Padding(
           padding: const EdgeInsets.only(bottom: 10),
           child: Text(_qldLicensePara1,
+              maxLines: 8,
               textAlign: TextAlign.start, style: Theme.of(context).textTheme.titleSmall,
               textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
       Padding(
           padding: const EdgeInsets.only(bottom: 10),
           child: Text(_qldLicensePara2,
+              maxLines: 8,
               textAlign: TextAlign.start, style: Theme.of(context).textTheme.titleSmall,
               textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
       Padding(padding: const EdgeInsets.only(bottom: 10), child: _getAdminContactMessage(context)),

@@ -48,8 +48,10 @@ class _TextDirectionScreenState extends State<TextDirectionScreen> {
               child: Row(children: [
                 const Icon(Icons.align_horizontal_left, size: 35),
                 const SizedBox(width: 10),
-                Text('Text Direction', style: Theme.of(context).textTheme.displayMedium, textAlign: TextAlign.center,
-                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
+                Expanded(
+                  child: Text('Text Direction', style: Theme.of(context).textTheme.displayMedium, textAlign: TextAlign.left,
+                      textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+                )
               ])),
           Card(
               child: Column(

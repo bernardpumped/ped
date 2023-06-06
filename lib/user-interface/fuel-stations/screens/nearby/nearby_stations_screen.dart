@@ -281,21 +281,21 @@ class _NearbyStationsScreenState extends State<NearbyStationsScreen> {
     return Card(margin: const EdgeInsets.all(8), child: child);
   }
 
-  Widget _nearbyFuelStationsWidget(final NearByFuelStations data) {
-    _userSettingsVersion = data.userSettingsVersion ?? 0;
-    if (!data.locationSearchSuccessful) {
-      final String locationErrorReason = data.locationErrorReason ?? 'Unknown Location Error Reason';
+  Widget _nearbyFuelStationsWidget(final NearByFuelStations nearbyStations) {
+    _userSettingsVersion = nearbyStations.userSettingsVersion ?? 0;
+    if (!nearbyStations.locationSearchSuccessful) {
+      final String locationErrorReason = nearbyStations.locationErrorReason ?? 'Unknown Location Error Reason';
       return Center(child: Text(locationErrorReason,
           textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor));
     } else {
-      _nearByFuelStations = data.fuelStations ?? [];
+      _nearByFuelStations = nearbyStations.fuelStations ?? [];
       LogUtil.debug(_tag, 'Setting _nearByFuelStations variable');
       if (_nearByFuelStations.isEmpty) {
         return const NoNearByStationsWidget();
       } else {
-        if (data.defaultFuelType != null) {
+        if (nearbyStations.defaultFuelType != null) {
           _fuelTypeSwitcherDataSource.addFuelTypeSwitcherDataToStream(_fuelTypeSwitcherDataStreamController);
-          _selectedFuelType = data.defaultFuelType;
+          _selectedFuelType = nearbyStations.defaultFuelType;
         }
         return FuelStationListWidget(_scrollController, _nearByFuelStations, _selectedFuelType!, sortOrder,
             FuelStationType.nearby, _setSelectedFuelStation);
