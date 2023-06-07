@@ -42,7 +42,7 @@ class _NavDrawerWidgetState extends State<NavDrawerWidget> {
     LogUtil.debug(_tag, 'Building NavigationDrawer drawer : selected = $selectedIndex');
     return Container(
         width: widget.width,
-        color: Theme.of(context).backgroundColor,
+        color: Theme.of(context).colorScheme.background,
         child: Card(
             child: ListView(children: [
               const Divider(),

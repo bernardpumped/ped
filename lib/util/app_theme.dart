@@ -28,19 +28,19 @@ class AppTheme {
 
   //https://api.flutter.dev/flutter/material/TextTheme-class.html
   static const textTheme = TextTheme(
-      headline1: _headline1TxtStyle,
-      headline2: _headline2TxtStyle,
-      headline3: _headline3TxtStyle,
-      headline4: _headline4TxtStyle,
-      headline5: _headline5TxtStyle,
-      headline6: _headline6TxtStyle,
-      subtitle1: _subtitle1TxtStyle,
-      subtitle2: _subtitle2TxtStyle,
-      bodyText1: _bodyText1TxtStyle,
-      bodyText2: _bodyText2TxtStyle,
-      button: _buttonTxtStyle,
-      caption: _captionTxtStyle,
-      overline: _overLineTxtStyle);
+      displayLarge: _headline1TxtStyle,
+      displayMedium: _headline2TxtStyle,
+      displaySmall: _headline3TxtStyle,
+      headlineMedium: _headline4TxtStyle,
+      headlineSmall: _headline5TxtStyle,
+      titleLarge: _headline6TxtStyle,
+      titleMedium: _subtitle1TxtStyle,
+      titleSmall: _subtitle2TxtStyle,
+      bodyLarge: _bodyText1TxtStyle,
+      bodyMedium: _bodyText2TxtStyle,
+      labelLarge: _buttonTxtStyle,
+      bodySmall: _captionTxtStyle,
+      labelSmall: _overLineTxtStyle);
 
   static const _primaryColorLgTh = Colors.indigo;
   static const _bgColorLgTh = Colors.white;
@@ -49,7 +49,6 @@ class AppTheme {
 
   get lightTheme => ThemeData(
       appBarTheme: const AppBarTheme(backgroundColor: _bgColorLgTh, surfaceTintColor: _bgColorLgTh),
-      backgroundColor: _bgColorLgTh,
       brightness: Brightness.light,
       canvasColor: _bgColorLgTh,
       cardTheme: const CardTheme(
@@ -68,7 +67,6 @@ class AppTheme {
           elevation: 2,
           iconTheme: IconThemeData(color: _bgColorLgTh),
           labelStyle: TextStyle(color: _bgColorLgTh)),
-      colorScheme: ColorScheme.fromSeed(seedColor: _primaryColorLgTh, brightness: Brightness.light),
       dividerColor: _primaryColorLgTh.withOpacity(0.3),
       expansionTileTheme: const ExpansionTileThemeData(
           backgroundColor: _bgColorLgTh,
@@ -77,7 +75,6 @@ class AppTheme {
           collapsedBackgroundColor: _bgColorLgTh,
           iconColor: _highLightColorForLgTh,
           textColor: _primaryColorLgTh),
-      errorColor: Colors.red,
       highlightColor: _highLightColorForLgTh,
       hintColor: _primaryColorLgTh.shade200,
       iconTheme: const IconThemeData(color: _primaryColorLgTh),
@@ -103,7 +100,7 @@ class AppTheme {
           displayColor: _primaryColorLgTh,
           fontFamily: _fontFamily),
       unselectedWidgetColor: _primaryColorLgTh,
-      useMaterial3: true);
+      useMaterial3: true, colorScheme: ColorScheme.fromSeed(seedColor: _primaryColorLgTh, brightness: Brightness.light).copyWith(background: _bgColorLgTh).copyWith(error: Colors.red));
 
   static const _paleBlue = Color(0xFFA4C2F4);
   static const _highLightColorForDkTh = _paleBlue;
@@ -112,7 +109,6 @@ class AppTheme {
 
   get darkTheme => ThemeData(
       appBarTheme: const AppBarTheme(backgroundColor: _bgColorDkTh, surfaceTintColor: _bgColorDkTh),
-      backgroundColor: _bgColorDkTh,
       brightness: Brightness.dark,
       canvasColor: _bgColorDkTh,
       cardTheme: const CardTheme(
@@ -131,7 +127,6 @@ class AppTheme {
           elevation: 2,
           iconTheme: IconThemeData(color: _bgColorDkTh),
           labelStyle: TextStyle(color: _bgColorDkTh)),
-      colorScheme: ColorScheme.fromSeed(seedColor: _primaryColorDkTh, brightness: Brightness.dark),
       dividerColor: _primaryColorDkTh.withOpacity(0.3),
       expansionTileTheme: const ExpansionTileThemeData(
           backgroundColor: _bgColorDkTh,
@@ -139,7 +134,6 @@ class AppTheme {
           collapsedTextColor: _primaryColorDkTh,
           iconColor: _highLightColorForDkTh,
           textColor: _primaryColorDkTh),
-      errorColor: Colors.red,
       highlightColor: _highLightColorForDkTh,
       hintColor: _primaryColorDkTh,
       iconTheme: const IconThemeData(color: _primaryColorDkTh),
@@ -165,5 +159,5 @@ class AppTheme {
           displayColor: _primaryColorDkTh,
           fontFamily: _fontFamily),
       useMaterial3: true,
-      unselectedWidgetColor: _primaryColorDkTh);
+      unselectedWidgetColor: _primaryColorDkTh, colorScheme: ColorScheme.fromSeed(seedColor: _primaryColorDkTh, brightness: Brightness.dark).copyWith(background: _bgColorDkTh).copyWith(error: Colors.red));
 }

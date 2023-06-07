@@ -20,6 +20,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:pumped_end_device/data/local/dao2/ui_settings_dao.dart';
 import 'package:pumped_end_device/data/local/model/ui_settings.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 import 'package:pumped_end_device/util/theme_notifier.dart';
@@ -48,7 +50,10 @@ class _ThemingScreenState extends State<ThemingScreen> {
               child: Row(children: [
                 const Icon(Icons.compare_outlined, size: 35),
                 const SizedBox(width: 10),
-                Text('Theme ', style: Theme.of(context).textTheme.headline2, textAlign: TextAlign.center)
+                Expanded(
+                  child: Text('Theme ', style: Theme.of(context).textTheme.displayMedium, textAlign: TextAlign.left,
+                      textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+                )
               ])),
           _getCard(),
           Padding(
@@ -117,9 +122,11 @@ class _ThemingScreenState extends State<ThemingScreen> {
               } else if (snapShot.hasError) {
                 LogUtil.debug(_tag, 'Error found while loading UiSettings ${snapShot.error}');
                 return Text('Error Loading',
-                    style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Theme.of(context).errorColor));
+                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor,
+                    style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Theme.of(context).colorScheme.error));
               } else {
-                return Text('Loading', style: Theme.of(context).textTheme.subtitle1);
+                return Text('Loading', style: Theme.of(context).textTheme.titleMedium,
+                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
               }
             }));
   }
@@ -136,7 +143,8 @@ class _ThemingScreenState extends State<ThemingScreen> {
             selectedTheme = newVal;
           });
         },
-        title: Text(UiThemes.themes[themeValue]!, style: Theme.of(context).textTheme.subtitle2));
+        title: Text(UiThemes.themes[themeValue]!, style: Theme.of(context).textTheme.titleSmall,
+            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor));
   }
 
   Future<UiSettings?>? getUiSettings() {

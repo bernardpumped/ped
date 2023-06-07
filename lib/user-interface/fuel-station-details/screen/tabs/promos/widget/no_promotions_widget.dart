@@ -17,6 +17,8 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 
 class NoPromotionsWidget extends StatelessWidget {
   const NoPromotionsWidget({Key? key}) : super(key: key);
@@ -30,13 +32,15 @@ class NoPromotionsWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Text('No Current Offers', style: Theme.of(context).textTheme.headline2, textAlign: TextAlign.center),
+              Text('No Current Offers', style: Theme.of(context).textTheme.displayMedium, textAlign: TextAlign.center,
+                  textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
               Text(
                   "\n Click here if you'd appreciate this station providing more and better offers and we'll let them know",
-                  style: Theme.of(context).textTheme.headline5,
-                  textAlign: TextAlign.center),
+                  style: Theme.of(context).textTheme.headlineSmall,
+                  textAlign: TextAlign.center, textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
               Text('\n Come back again soon.',
-                  style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.center)
+                  style: Theme.of(context).textTheme.titleLarge, textAlign: TextAlign.center,
+                  textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
             ]));
   }
 }

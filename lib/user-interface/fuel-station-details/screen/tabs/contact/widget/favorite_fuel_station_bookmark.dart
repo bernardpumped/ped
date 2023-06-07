@@ -20,6 +20,8 @@ import 'package:flutter/material.dart';
 import 'package:pumped_end_device/data/local/dao2/favorite_fuel_stations_dao.dart';
 import 'package:pumped_end_device/data/local/dao2/hidden_result_dao.dart';
 import 'package:pumped_end_device/data/local/model/favorite_fuel_station.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/models/pumped/fuel_station.dart';
 import 'package:pumped_end_device/util/log_util.dart';
@@ -49,9 +51,9 @@ class _FavoriteFuelStationBookmarkState extends State<FavoriteFuelStationBookmar
             bool hidden = snapshot.data!;
             return hidden ? _inEligibleStation() : _eligibleStation();
           } else if (snapshot.hasError) {
-            return const Text('Error Loading');
+            return Text('Error Loading', textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
           } else {
-            return const Text('Loading');
+            return Text('Loading', textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
           }
         });
   }
@@ -130,9 +132,9 @@ class _FavoriteFuelStationBookmarkState extends State<FavoriteFuelStationBookmar
                         widget._onFavouriteStatusChange(); // This is to enable refresh of the home screen.
                       });
             } else if (snapshot.hasError) {
-              return const Text('Error Loading');
+              return Text('Error Loading', textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
             } else {
-              return const Text('Loading');
+              return Text('Loading', textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
             }
           })
     ]);

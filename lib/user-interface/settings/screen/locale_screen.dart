@@ -17,6 +17,8 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 
 class LocaleScreen extends StatefulWidget {
@@ -54,31 +56,37 @@ class _LocaleScreenState extends State<LocaleScreen> {
     return Container(
         padding: const EdgeInsets.only(right: 10, bottom: 15, left: 10),
         height: MediaQuery.of(context).size.height,
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-          Padding(
-              padding: const EdgeInsets.only(top: 10, bottom: 10, left: 10),
-              child: Row(children: [
-                const Icon(Icons.language, size: 35),
-                const SizedBox(width: 10),
-                Text('Locale ', style: Theme.of(context).textTheme.headline2, textAlign: TextAlign.center)
-              ])),
-          Card(
-              child: Column(children: [
-            _getMenuItem(_systemLocale),
-            _getMenuItem(_deutschLocale),
-            _getMenuItem(_englishLocale),
-            _getMenuItem(_englishAusLocale),
-            _getMenuItem(_englishUkLocale),
-            _getMenuItem(_spanishLocale),
-            _getMenuItem(_frenchLocale),
-            _getMenuItem(_hindiLocale)
-          ])),
-          Padding(
-              padding: const EdgeInsets.only(top: 20, right: 20),
-              child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                WidgetUtils.getRoundedButton(context: context, buttonText: 'Set App Locale', iconData: Icons.language, onTapFunction: () {})
-              ]))
-        ]));
+        child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
+            Padding(
+                padding: const EdgeInsets.only(top: 10, bottom: 10, left: 10),
+                child: Row(children: [
+                  const Icon(Icons.language, size: 35),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text('Locale ', style: Theme.of(context).textTheme.displayMedium, textAlign: TextAlign.left,
+                        textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+                  )
+                ])),
+            Card(
+                child: Column(children: [
+              _getMenuItem(_systemLocale),
+              _getMenuItem(_deutschLocale),
+              _getMenuItem(_englishLocale),
+              _getMenuItem(_englishAusLocale),
+              _getMenuItem(_englishUkLocale),
+              _getMenuItem(_spanishLocale),
+              _getMenuItem(_frenchLocale),
+              _getMenuItem(_hindiLocale)
+            ])),
+            Padding(
+                padding: const EdgeInsets.only(top: 20, right: 20),
+                child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                  WidgetUtils.getRoundedButton(context: context, buttonText: 'Set App Locale', iconData: Icons.language, onTapFunction: () {})
+                ]))
+          ]),
+        ));
   }
 
   RadioListTile<String> _getMenuItem(final String value) {
@@ -90,6 +98,7 @@ class _LocaleScreenState extends State<LocaleScreen> {
             selectedLocale = newVal!;
           });
         },
-        title: Text(_locales[value]!, style: Theme.of(context).textTheme.headline6));
+        title: Text(_locales[value]!, style: Theme.of(context).textTheme.titleLarge,
+            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor));
   }
 }

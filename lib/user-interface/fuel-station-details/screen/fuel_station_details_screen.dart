@@ -21,6 +21,8 @@ import 'package:pumped_end_device/main.dart';
 import 'package:pumped_end_device/models/pumped/fuel_type.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/screen/tabs/contact/contact_tab.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/screen/tabs/fuel-prices/fuel_prices_tab.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/user-interface/utils/under_maintenance_service.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/user-interface/fuel-station-details/screen/tabs/promos/widget/no_promotions_widget.dart';
@@ -85,6 +87,8 @@ class _FuelStationDetailsScreenState extends State<FuelStationDetailsScreen> {
   }
 
   DefaultTabController _fuelStationDetailsView(final FuelStation fuelStation) {
+    double scaleFactorToUse = TextScaler.of<TextScalingFactor>(context)?.scaleFactor ?? 1;
+    scaleFactorToUse = scaleFactorToUse > 1 ? scaleFactorToUse * 1.1 : scaleFactorToUse;
     return DefaultTabController(
         length: _tabs.length,
         child: NestedScrollView(
@@ -92,10 +96,11 @@ class _FuelStationDetailsScreenState extends State<FuelStationDetailsScreen> {
               return <Widget>[
                 SliverAppBar(
                     pinned: true,
-                    expandedHeight: 240,
+                    stretch: true,
+                    expandedHeight: 240 * scaleFactorToUse,
                     automaticallyImplyLeading: false,
                     centerTitle: false,
-                    collapsedHeight: 240,
+                    collapsedHeight: 240 * scaleFactorToUse,
                     flexibleSpace: FlexibleSpaceBar(background: ExpandedHeaderWidget(fuelStation: fuelStation))),
                 SliverPersistentHeader(
                     pinned: true,
@@ -108,7 +113,7 @@ class _FuelStationDetailsScreenState extends State<FuelStationDetailsScreen> {
                         labelPadding: const EdgeInsets.only(left: 5, right: 5),
                         padding: const EdgeInsets.only(left: 8, right: 8, top: 8),
                         tabs: _tabs.map((tabName) {
-                          return Tab(text: tabName);
+                          return Tab(child: Expanded(child: Text(tabName, textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor, overflow: TextOverflow.ellipsis,)));
                         }).toList())))
               ];
             },
@@ -146,7 +151,7 @@ class _SliverTabBarDelegate extends SliverPersistentHeaderDelegate {
 
   @override
   Widget build(final BuildContext context, final double shrinkOffset, final bool overlapsContent) {
-    return Container(color: Theme.of(context).backgroundColor, child: _tabBar);
+    return Container(color: Theme.of(context).colorScheme.background, child: _tabBar);
   }
 
   @override

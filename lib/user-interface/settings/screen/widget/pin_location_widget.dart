@@ -20,6 +20,8 @@ import 'package:flutter/material.dart';
 import 'package:pumped_end_device/data/local/dao2/mock_location_dao.dart';
 import 'package:pumped_end_device/data/local/model/mock_location.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/data/local/places.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
@@ -62,9 +64,11 @@ class _PinLocationWidgetState extends State<PinLocationWidget> {
                   ]))
             ]);
           } else if (snapshot.hasError) {
-            return Text('Error Loading mock Locations', style: Theme.of(context).textTheme.subtitle1);
+            return Text('Error Loading mock Locations', style: Theme.of(context).textTheme.titleMedium,
+                textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
           } else {
-            return Text('Loading mock Locations', style: Theme.of(context).textTheme.subtitle1);
+            return Text('Loading mock Locations', style: Theme.of(context).textTheme.titleMedium,
+                textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
           }
         });
   }
@@ -74,7 +78,8 @@ class _PinLocationWidgetState extends State<PinLocationWidget> {
         leading: const Icon(Icons.location_on_outlined, size: 30),
         title: Text(
             'Pinned : ${pinnedMockLocation.addressLine}, ${pinnedMockLocation.state}, ${pinnedMockLocation.country}',
-            style: Theme.of(context).textTheme.subtitle1));
+            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor,
+            style: Theme.of(context).textTheme.titleMedium));
   }
 
   Widget _getPinningButton(final BuildContext context) {
@@ -122,7 +127,8 @@ class _PinLocationWidgetState extends State<PinLocationWidget> {
         ? 'Pin : ${_selectedMockLocation!.addressLine}, ${_selectedMockLocation!.state}, ${_selectedMockLocation!.country}'
         : 'Pin a Location';
     return ExpansionTile(
-        title: Text(titleTxt, style: Theme.of(context).textTheme.subtitle1),
+        title: Text(titleTxt, style: Theme.of(context).textTheme.titleMedium,
+            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
         leading: const Icon(Icons.location_on_outlined, size: 30),
         children: _getLocationRadioTiles(mockLocations));
   }
@@ -158,10 +164,12 @@ class _PinLocationWidgetState extends State<PinLocationWidget> {
           });
         },
         title: Text('${mockLocation.addressLine}, ${mockLocation.state}, ${mockLocation.country}',
-            style: Theme.of(context).textTheme.bodyText1),
+            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor,
+            style: Theme.of(context).textTheme.bodyLarge),
         subtitle: Text(
             'lat : ${mockLocation.latitude.toStringAsFixed(5)}, long : ${mockLocation.longitude.toStringAsFixed(5)}',
-            style: Theme.of(context).textTheme.bodyText2));
+            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor,
+            style: Theme.of(context).textTheme.bodyMedium));
   }
 }
 

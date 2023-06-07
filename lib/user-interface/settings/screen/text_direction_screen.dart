@@ -17,6 +17,8 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 
 class TextDirectionScreen extends StatefulWidget {
@@ -46,7 +48,10 @@ class _TextDirectionScreenState extends State<TextDirectionScreen> {
               child: Row(children: [
                 const Icon(Icons.align_horizontal_left, size: 35),
                 const SizedBox(width: 10),
-                Text('Text Direction', style: Theme.of(context).textTheme.headline2, textAlign: TextAlign.center)
+                Expanded(
+                  child: Text('Text Direction', style: Theme.of(context).textTheme.displayMedium, textAlign: TextAlign.left,
+                      textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+                )
               ])),
           Card(
               child: Column(
@@ -72,6 +77,7 @@ class _TextDirectionScreenState extends State<TextDirectionScreen> {
             selectedTextDirection = newVal!;
           });
         },
-        title: Text(_textDirection[value]!, style: Theme.of(context).textTheme.headline6));
+        title: Text(_textDirection[value]!, style: Theme.of(context).textTheme.titleLarge,
+            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor));
   }
 }

@@ -23,6 +23,8 @@ import 'package:pumped_end_device/user-interface/settings/data/remote/get_backen
 import 'package:pumped_end_device/user-interface/settings/data/remote/model/request/get_backend_metadata_request.dart';
 import 'package:pumped_end_device/user-interface/settings/data/remote/model/response/get_backend_metadata_response.dart';
 import 'package:pumped_end_device/user-interface/settings/data/remote/response-parser/get_backend_metadata_response_parser.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 import 'package:uuid/uuid.dart';
 
@@ -62,7 +64,8 @@ class _ServerVersionWidgetState extends State<ServerVersionWidget> {
             displayText = 'Loading...';
           }
           return ListTile(
-              title: Text(displayText, style: Theme.of(context).textTheme.bodyText1, textAlign: TextAlign.center));
+              title: Text(displayText, style: Theme.of(context).textTheme.bodyLarge, textAlign: TextAlign.center,
+                  textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor));
         });
   }
 

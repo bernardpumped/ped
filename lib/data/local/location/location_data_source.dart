@@ -42,21 +42,17 @@ class LocationDataSource {
 
   Future<GetLocationResult> getLocationData({thread = 'default'}) async {
     UiSettings? uiSettings = await UiSettingsDao.instance.getUiSettings();
-    if (uiSettings != null) {
-      if (uiSettings.developerOptions != null && uiSettings.developerOptions!) {
-        final MockLocation? pinnedLocation = await MockLocationDao.instance.getPinnedMockLocation();
-        if (pinnedLocation != null) {
-          LogUtil.debug(_tag, 'Pinned Mock Location found as : ${pinnedLocation.toString()}');
-          return Future.value(GetLocationResult(LocationInitResultCode.success,
-              Future.value(GeoLocationData(latitude: pinnedLocation.latitude, longitude: pinnedLocation.longitude))));
-        } else {
-          LogUtil.debug(_tag, 'No pinned location found');
-        }
+    if (uiSettings.developerOptions != null && uiSettings.developerOptions!) {
+      final MockLocation? pinnedLocation = await MockLocationDao.instance.getPinnedMockLocation();
+      if (pinnedLocation != null) {
+        LogUtil.debug(_tag, 'Pinned Mock Location found as : ${pinnedLocation.toString()}');
+        return Future.value(GetLocationResult(LocationInitResultCode.success,
+            Future.value(GeoLocationData(latitude: pinnedLocation.latitude, longitude: pinnedLocation.longitude))));
       } else {
-        LogUtil.debug(_tag, 'Developer Options not turned on');
+        LogUtil.debug(_tag, 'No pinned location found');
       }
     } else {
-      LogUtil.debug(_tag, 'No UiSettings found configured');
+      LogUtil.debug(_tag, 'Developer Options not turned on');
     }
     return _getDeviceLocation({});
   }

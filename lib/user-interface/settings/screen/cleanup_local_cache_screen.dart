@@ -21,6 +21,8 @@ import 'package:pumped_end_device/data/local/dao2/favorite_fuel_stations_dao.dar
 import 'package:pumped_end_device/data/local/dao2/hidden_result_dao.dart';
 import 'package:pumped_end_device/data/local/dao2/user_configuration_dao.dart';
 import 'package:pumped_end_device/data/local/model/user_configuration.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
@@ -48,7 +50,10 @@ class _CleanupLocalCacheScreenState extends State<CleanupLocalCacheScreen> {
               child: Row(children: [
                 const Icon(Icons.delete_outline, size: 35),
                 const SizedBox(width: 10),
-                Text('Clear Local Cache', style: Theme.of(context).textTheme.headline3, textAlign: TextAlign.center)
+                Expanded(
+                  child: Text('Clear Local Cache', style: Theme.of(context).textTheme.displaySmall, textAlign: TextAlign.left,
+                      overflow: TextOverflow.ellipsis, textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+                )
               ])),
           Expanded(
               child: ListView(children: <Widget>[
@@ -112,9 +117,10 @@ class _CleanupLocalCacheScreenState extends State<CleanupLocalCacheScreen> {
             return AlertDialog(
                 shape:
                     RoundedRectangleBorder(borderRadius: BorderRadius.circular(10), side: const BorderSide(width: 0.2)),
-                title: const Text("Cleaning data"),
+                title: Text("Cleaning data", textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
                 content: Row(children: [
-                  Expanded(child: Text(msg, style: Theme.of(context).textTheme.headline6)),
+                  Expanded(child: Text(msg, style: Theme.of(context).textTheme.titleLarge,
+                      textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
                   const RefreshProgressIndicator()
                 ]));
           });
@@ -204,10 +210,12 @@ class _CleanupLocalCacheScreenState extends State<CleanupLocalCacheScreen> {
         child: ListTile(
             contentPadding: const EdgeInsets.all(10),
             leading: Icon(icon, size: 34),
-            title: Text(title, style: Theme.of(context).textTheme.headline5),
+            title: Text(title, style: Theme.of(context).textTheme.headlineSmall,
+                textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
             subtitle: Padding(
                 padding: const EdgeInsets.only(top: 5.0),
-                child: Text(subTitle, style: Theme.of(context).textTheme.caption)),
+                child: Text(subTitle, style: Theme.of(context).textTheme.bodySmall,
+                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
             trailing: Checkbox(value: checkBoxValue, onChanged: onChangeFunction)));
   }
 

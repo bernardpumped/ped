@@ -38,6 +38,7 @@ import 'package:pumped_end_device/models/pumped/fuel_type.dart';
 import 'package:pumped_end_device/models/pumped/market_region_config.dart';
 import 'package:pumped_end_device/models/pumped/zone_config.dart';
 import 'package:pumped_end_device/models/quote_sort_order.dart';
+import 'package:pumped_end_device/user-interface/settings/service/settings_service.dart';
 import 'package:pumped_end_device/util/date_time_utils.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
@@ -81,6 +82,11 @@ class NearByFuelStationsService {
               nearByFuelStations.defaultFuelType = await _getDefaultFuelType();
             }
             LogUtil.debug(_tag, 'Number of fuelStations fetched : ${nearByFuelStations.fuelStations?.length}');
+            UserConfiguration? userConfiguration = await UserConfigurationDao.instance.getUserConfiguration(UserConfiguration.defaultUserConfigId);
+            if (userConfiguration == null) {
+              UserConfiguration defaultUserConfiguration = await SettingsService.instance.getInitialDefaultUserConfiguration();
+              await UserConfigurationDao.instance.insertUserConfiguration(defaultUserConfiguration);
+            }
             nearByFuelStations.userSettingsVersion =
                 await UserConfigurationDao.instance.getUserConfigurationVersion(UserConfiguration.defaultUserConfigId);
             LogUtil.debug(_tag, 'User settings version is : ${nearByFuelStations.userSettingsVersion}');

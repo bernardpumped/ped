@@ -227,7 +227,7 @@ class ImplicitlyAnimatedReorderableListState<E extends Object>
   ScrollController? _controller;
   ScrollController? get scrollController => _controller;
 
-  _Item? dragItem;
+  Item? dragItem;
   Widget? _dragWidget;
   VoidCallback? _onDragEnd;
 
@@ -270,7 +270,7 @@ class ImplicitlyAnimatedReorderableListState<E extends Object>
   final Map<Key?, GlobalKey> _keys = {};
   final Map<Key?, ReorderableState> _items = {};
   final Map<Key?, AnimationController> _itemTranslations = {};
-  final Map<Key?, _Item> _itemBoxes = {};
+  final Map<Key?, Item> _itemBoxes = {};
 
   @override
   void initState() {
@@ -525,8 +525,8 @@ class ImplicitlyAnimatedReorderableListState<E extends Object>
     setState(() => _inDrag = false);
   }
 
-  _Item? findDropTargetItem() {
-    _Item? target = dragItem;
+  Item? findDropTargetItem() {
+    Item? target = dragItem;
 
     // Boxes are in the order in which they are build, not
     // necessarily index based.
@@ -552,7 +552,7 @@ class ImplicitlyAnimatedReorderableListState<E extends Object>
     return target;
   }
 
-  void avoidConflictingMoves(_Item? target) {
+  void avoidConflictingMoves(Item? target) {
     _itemTranslations.forEach((key, controller) {
       final item = _itemBoxes[key];
 
@@ -651,7 +651,7 @@ class ImplicitlyAnimatedReorderableListState<E extends Object>
 
     if (box != null && offset != null) {
       final i = index ?? _itemBoxes[key]?.index;
-      _itemBoxes[key] = _Item(key, box, i, offset, isVertical);
+      _itemBoxes[key] = Item(key, box, i, offset, isVertical);
     }
   }
 
@@ -839,13 +839,13 @@ class ImplicitlyAnimatedReorderableListState<E extends Object>
 }
 
 // A class that holds meta information about items in the list such as position and size.
-class _Item extends Rect implements Comparable<_Item> {
+class Item extends Rect implements Comparable<Item> {
   final RenderBox box;
   final Key? key;
   final int? index;
   final Offset offset;
   final bool _isVertical;
-  _Item(
+  Item(
       this.key,
       this.box,
       this.index,
@@ -866,7 +866,7 @@ class _Item extends Rect implements Comparable<_Item> {
   double? distance;
 
   @override
-  int compareTo(_Item other) => distance != null && other.distance != null
+  int compareTo(Item other) => distance != null && other.distance != null
       ? distance!.compareTo(other.distance!)
       : -1;
 
@@ -874,10 +874,10 @@ class _Item extends Rect implements Comparable<_Item> {
   String toString() => '_Item key: $key, index: $index';
 
   @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
 
-    return o is _Item && o.key == key;
+    return other is Item && other.key == key;
   }
 
   @override

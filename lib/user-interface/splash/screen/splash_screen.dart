@@ -23,6 +23,8 @@ import 'package:pumped_end_device/data/local/location/location_access_result_cod
 import 'package:pumped_end_device/data/local/location/location_data_source.dart';
 import 'package:pumped_end_device/main.dart';
 import 'package:pumped_end_device/user-interface/ped_base_page_view.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/user-interface/utils/under_maintenance_service.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/util/app_theme.dart';
@@ -63,58 +65,64 @@ class _SplashScreenState extends State<SplashScreen> {
             decoration: const BoxDecoration(
                 image: DecorationImage(image: AssetImage("assets/images/Wave-2-landscape.png"), fit: BoxFit.cover)),
             alignment: Alignment.center,
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  const Image(image: AssetImage(AppTheme.pumpedImage), width: 153, height: 133, fit: BoxFit.fill),
-                  const SizedBox(height: 30),
-                  Center(
-                      child: Text('Your friendly \n neighbourhood fuel finder',
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.headline2!.copyWith(color: Colors.white))),
-                  Container(width: 120, margin: const EdgeInsets.only(top: 40), child: const LinearProgressIndicator()),
-                  const SizedBox(height: 100),
-                  Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
-                    AnimatedOpacity(
-                        opacity: _locationDetectionTriggered ? 1.0 : 0.0,
-                        duration: const Duration(milliseconds: 500),
-                        child: Padding(
-                            padding: EdgeInsets.only(left: widthOfScaffold / 2 - 135, right: 5),
-                            child: const Icon(Icons.my_location, color: Colors.white))),
-                    AnimatedOpacity(
-                        opacity: _locationDetectionTriggered ? 1.0 : 0.0,
-                        duration: const Duration(milliseconds: 500),
-                        child: SizedBox(
-                            width: 300,
-                            child: Text('Detecting Location',
-                                style: Theme.of(context).textTheme.headline5!.copyWith(color: Colors.white)))),
-                    AnimatedOpacity(
-                        opacity: _detectingLocationIconVisible ? 1.0 : 0.0,
-                        duration: const Duration(milliseconds: 500),
-                        child: const Icon(Icons.done, color: Colors.white))
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    const Image(image: AssetImage(AppTheme.pumpedImage), width: 153, height: 133, fit: BoxFit.fill),
+                    const SizedBox(height: 30),
+                    Center(
+                        child: Text('Your friendly \n neighbourhood fuel finder',
+                            textAlign: TextAlign.center,
+                            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor,
+                            style: Theme.of(context).textTheme.displayMedium!.copyWith(color: Colors.white))),
+                    Container(width: 120, margin: const EdgeInsets.only(top: 40), child: const LinearProgressIndicator()),
+                    const SizedBox(height: 100),
+                    Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
+                      AnimatedOpacity(
+                          opacity: _locationDetectionTriggered ? 1.0 : 0.0,
+                          duration: const Duration(milliseconds: 500),
+                          child: Padding(
+                              padding: EdgeInsets.only(left: widthOfScaffold / 2 - 135, right: 5),
+                              child: const Icon(Icons.my_location, color: Colors.white))),
+                      AnimatedOpacity(
+                          opacity: _locationDetectionTriggered ? 1.0 : 0.0,
+                          duration: const Duration(milliseconds: 500),
+                          child: SizedBox(
+                              width: 300,
+                              child: Text('Detecting Location',
+                                  textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor,
+                                  style: Theme.of(context).textTheme.headlineSmall!.copyWith(color: Colors.white)))),
+                      AnimatedOpacity(
+                          opacity: _detectingLocationIconVisible ? 1.0 : 0.0,
+                          duration: const Duration(milliseconds: 500),
+                          child: const Icon(Icons.done, color: Colors.white))
+                    ]),
+                    const SizedBox(height: 20),
+                    Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
+                      AnimatedOpacity(
+                          opacity: _checkingPumpedAvailabilityIconVisible ? 1.0 : 0.0,
+                          duration: const Duration(milliseconds: 500),
+                          child: Padding(
+                              padding: EdgeInsets.only(left: widthOfScaffold / 2 - 135, right: 7),
+                              child: const Icon(Icons.local_gas_station, color: Colors.white))),
+                      AnimatedOpacity(
+                          opacity: _checkingPumpedAvailabilityIconVisible ? 1.0 : 0.0,
+                          duration: const Duration(milliseconds: 500),
+                          child: SizedBox(
+                              width: 300,
+                              child: Text('Fetching Fuel Stations',
+                                  textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor,
+                                  style: Theme.of(context).textTheme.headlineSmall!.copyWith(color: Colors.white)))),
+                      AnimatedOpacity(
+                          opacity: _checkingPumpedAvailabilityTextVisible ? 1.0 : 0.0,
+                          duration: const Duration(milliseconds: 500),
+                          child: const Icon(Icons.done, color: Colors.white))
+                    ])
                   ]),
-                  const SizedBox(height: 20),
-                  Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
-                    AnimatedOpacity(
-                        opacity: _checkingPumpedAvailabilityIconVisible ? 1.0 : 0.0,
-                        duration: const Duration(milliseconds: 500),
-                        child: Padding(
-                            padding: EdgeInsets.only(left: widthOfScaffold / 2 - 135, right: 7),
-                            child: const Icon(Icons.local_gas_station, color: Colors.white))),
-                    AnimatedOpacity(
-                        opacity: _checkingPumpedAvailabilityIconVisible ? 1.0 : 0.0,
-                        duration: const Duration(milliseconds: 500),
-                        child: SizedBox(
-                            width: 300,
-                            child: Text('Fetching Fuel Stations',
-                                style: Theme.of(context).textTheme.headline5!.copyWith(color: Colors.white)))),
-                    AnimatedOpacity(
-                        opacity: _checkingPumpedAvailabilityTextVisible ? 1.0 : 0.0,
-                        duration: const Duration(milliseconds: 500),
-                        child: const Icon(Icons.done, color: Colors.white))
-                  ])
-                ])));
+            )));
   }
 
   void _getLocation() {

@@ -312,7 +312,7 @@ The command `flutter create .` executed as part of [Code Setup](#35-ped-code-set
 * Select the `Chrome (Web)` as the run target and Click the Run button (green triangle). <img src="documentation/assets/Screenshot-23.png" width="500" />
 * Chrome browser comes up and on start it asks for the location access. 
 * Note - Chrome, unlike the Emulator/Simulator, currently does not provide any mechanism to override location. Hence, until such time Google resolves, we've temporarily hard-coded Sydney location when it runs within a browser, and note it is still necessary to permit location service access for PED to function.
-* <table><tr><td><img src="documentation/assets/Screenshot-24.png" width="250" /></td><td><img src="documentation/assets/Screenshot-25.png" width="250" /></td><td><img src="documentation/assets/Screenshot-26.png" width="250" /></td></tr></table>
+* <table><tr><td><img src="documentation/assets/Screenshot-24.png" width="250" /></td><td><img src="documentation/assets/Screenshot-25.png" width="250" /></td><td><img src="documentation/assets/Screenshot-26.png" width="250" /></td></tr>
 
 ### 8.2 Hosting on a web server
 * The generated html/javascript files can also be hosted within a web-server eg nginx. For brevity this Readme will not detail nginx server install.

@@ -45,7 +45,7 @@ class FuelStationLogoWidget extends StatelessWidget {
                 decoration: BoxDecoration(
                     shape: BoxShape.rectangle,
                     borderRadius: BorderRadius.circular(5),
-                    color: Theme.of(context).backgroundColor,
+                    color: Theme.of(context).colorScheme.background,
                     image: DecorationImage(fit: BoxFit.scaleDown, image: image)))));
   }
 }

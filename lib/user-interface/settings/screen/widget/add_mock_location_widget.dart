@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pumped_end_device/data/local/dao2/mock_location_dao.dart';
 import 'package:pumped_end_device/data/local/model/mock_location.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
+import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/util/data_utils.dart';
 import 'package:pumped_end_device/util/log_util.dart';
@@ -35,63 +37,73 @@ class _AddMockLocationWidgetState extends State<AddMockLocationWidget> {
           Row(children: [
             const Icon(Icons.add_location_alt_outlined, size: 30),
             const SizedBox(width: 20),
-            Text('Add a Mock Location', style: Theme.of(context).textTheme.subtitle1)
-          ]),
+            Expanded(
+              child: Text('Add a Mock Location', style: Theme.of(context).textTheme.titleMedium,
+                  textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor))]),
           const SizedBox(height: 8),
           Row(children: [
-            Expanded(flex: 1, child: Text('Address Line', style: Theme.of(context).textTheme.bodyText1)),
+            Expanded(flex: 1, child: Text('Address Line', style: Theme.of(context).textTheme.bodyLarge,
+                textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
             Expanded(
                 flex: 1, child: _buildTextField(addressLineEditingController, 'Enter address line', 'add-address-line'))
           ]),
           Row(children: [
-            Expanded(flex: 1, child: Text('City', style: Theme.of(context).textTheme.bodyText1)),
+            Expanded(flex: 1, child: Text('City', style: Theme.of(context).textTheme.bodyLarge,
+                textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
             Expanded(flex: 1, child: _buildTextField(cityEditingController, 'Enter city', 'add-city'))
           ]),
           Row(children: [
-            Expanded(flex: 1, child: Text('State', style: Theme.of(context).textTheme.bodyText1)),
+            Expanded(flex: 1, child: Text('State', style: Theme.of(context).textTheme.bodyLarge,
+                textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
             Expanded(flex: 1, child: _buildTextField(stateEditingController, 'Enter state', 'add-state'))
           ]),
           Row(children: [
-            Expanded(flex: 1, child: Text('Country', style: Theme.of(context).textTheme.bodyText1)),
+            Expanded(flex: 1, child: Text('Country', style: Theme.of(context).textTheme.bodyLarge,
+                textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
             Expanded(flex: 1, child: _buildTextField(countryEditingController, 'Enter Country', 'add-country'))
           ]),
           Row(children: [
-            Expanded(flex: 1, child: Text('Latitude', style: Theme.of(context).textTheme.bodyText1)),
+            Expanded(flex: 1, child: Text('Latitude', style: Theme.of(context).textTheme.bodyLarge,
+                textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
             Expanded(flex: 1, child: _buildTextField(latitudeEditingController, 'Enter Latitude', 'add-latitude'))
           ]),
           Row(children: [
-            Expanded(flex: 1, child: Text('Longitude', style: Theme.of(context).textTheme.bodyText1)),
+            Expanded(flex: 1, child: Text('Longitude', style: Theme.of(context).textTheme.bodyLarge,
+                textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
             Expanded(flex: 1, child: _buildTextField(longitudeEditingController, 'Enter Longitude', 'add-longitude'))
           ]),
           Padding(
               padding: const EdgeInsets.only(top: 8.0, right: 8.0),
-              child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                WidgetUtils.getRoundedButton(
-                    context: context,
-                    buttonText: 'Add Mock Location',
-                    onTapFunction: () async {
-                      final String addressLine = addressLineEditingController.text;
-                      final String city = cityEditingController.text;
-                      final String state = stateEditingController.text;
-                      final String country = countryEditingController.text;
-                      final String latStr = latitudeEditingController.text;
-                      final String lngStr = longitudeEditingController.text;
-                      if (validParams(context, addressLine, state, country, latStr, lngStr)) {
-                        final MockLocation mockLocation = MockLocation(
-                            id: const Uuid().v1(),
-                            addressLine: addressLine,
-                            city: city,
-                            state: state,
-                            country: country,
-                            latitude: double.parse(latStr),
-                            longitude: double.parse(lngStr));
-                        await MockLocationDao.instance.insertMockLocation(mockLocation);
-                        _clearTextControllers(addressLineEditingController, stateEditingController,
-                            countryEditingController, latitudeEditingController, longitudeEditingController);
-                        widget.callback();
-                      }
-                    })
-              ]))
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                  WidgetUtils.getRoundedButton(
+                      context: context,
+                      buttonText: 'Add Mock Location',
+                      onTapFunction: () async {
+                        final String addressLine = addressLineEditingController.text;
+                        final String city = cityEditingController.text;
+                        final String state = stateEditingController.text;
+                        final String country = countryEditingController.text;
+                        final String latStr = latitudeEditingController.text;
+                        final String lngStr = longitudeEditingController.text;
+                        if (validParams(context, addressLine, state, country, latStr, lngStr)) {
+                          final MockLocation mockLocation = MockLocation(
+                              id: const Uuid().v1(),
+                              addressLine: addressLine,
+                              city: city,
+                              state: state,
+                              country: country,
+                              latitude: double.parse(latStr),
+                              longitude: double.parse(lngStr));
+                          await MockLocationDao.instance.insertMockLocation(mockLocation);
+                          _clearTextControllers(addressLineEditingController, stateEditingController,
+                              countryEditingController, latitudeEditingController, longitudeEditingController);
+                          widget.callback();
+                        }
+                      })
+                ]),
+              ))
         ]);
   }
 
@@ -111,10 +123,10 @@ class _AddMockLocationWidgetState extends State<AddMockLocationWidget> {
   TextField _buildTextField(final textEditingController, final hintString, final pageStorageKey) {
     return TextField(
         controller: textEditingController, // Add this
-        style: Theme.of(context).textTheme.bodyText1,
+        style: Theme.of(context).textTheme.bodyLarge,
         maxLengthEnforcement: MaxLengthEnforcement.enforced,
         enabled: true,
-        decoration: InputDecoration(hintText: hintString, hintStyle: Theme.of(context).textTheme.bodyText1),
+        decoration: InputDecoration(hintText: hintString, hintStyle: Theme.of(context).textTheme.bodyLarge),
         key: PageStorageKey(pageStorageKey),
         onChanged: (v) {
           // _onValueChange();
