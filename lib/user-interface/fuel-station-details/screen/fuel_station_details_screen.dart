@@ -88,7 +88,7 @@ class _FuelStationDetailsScreenState extends State<FuelStationDetailsScreen> {
 
   DefaultTabController _fuelStationDetailsView(final FuelStation fuelStation) {
     double scaleFactorToUse = TextScaler.of<TextScalingFactor>(context)?.scaleFactor ?? 1;
-    scaleFactorToUse = scaleFactorToUse > 1 ? scaleFactorToUse * 1.1 : scaleFactorToUse;
+    // scaleFactorToUse = scaleFactorToUse > 1 ? scaleFactorToUse * 1.05 : scaleFactorToUse;
     return DefaultTabController(
         length: _tabs.length,
         child: NestedScrollView(
@@ -97,10 +97,10 @@ class _FuelStationDetailsScreenState extends State<FuelStationDetailsScreen> {
                 SliverAppBar(
                     pinned: true,
                     stretch: true,
-                    expandedHeight: 240 * scaleFactorToUse,
+                    expandedHeight: 240 * (scaleFactorToUse >= 1? scaleFactorToUse : 1),
                     automaticallyImplyLeading: false,
                     centerTitle: false,
-                    collapsedHeight: 240 * scaleFactorToUse,
+                    collapsedHeight: 240 * (scaleFactorToUse >= 1? scaleFactorToUse : 1),
                     flexibleSpace: FlexibleSpaceBar(background: ExpandedHeaderWidget(fuelStation: fuelStation))),
                 SliverPersistentHeader(
                     pinned: true,
