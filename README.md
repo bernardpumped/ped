@@ -27,15 +27,15 @@ Retailers, beat your competition! If you can't compete on fuel price alone, prom
 ### Pumped Projects
 **Backend -** Enterprise grade globally scalable web app providing centralized integration for all external parties. Phase-1 Complete and in production. Currently sourcing near real time fuel prices and associated data for >75% of fuel stations throughout Australia. Please note, if you're interested in covering your location - country, state, province, emirate or continent, we’ll be happy to discuss options with you.
 
-**Merchant -** B2B SaaS, fully integrated retailer driven reactive web app to maintain station details, brand, fuel prices, products, offers and services directly to their target consumer audience. Pumped Merchant will also be open sourced with phase-1 65% complete and due for Merchant client demos 2022 Q3.
+**Merchant -** B2B SaaS, fully integrated retailer driven reactive web app to maintain station details, brand, fuel prices, products, offers and services directly to their target consumer audience.
 
 **End Device (PED) -**  Flutter apps, representing the user end device of the above projects, fetches fuel station data from the pumped backend based upon the user's current location (true or mocked). Data currently includes fuel prices, contact details, features/facilities, ratings, reviews and photos. And, with the integration of Merchant B2B Phase-2 in-store products and garage service promotions.
 You may be wondering if we cover EV's. The answer is not yet, we are of course very interested and happy to discuss options with you.
 
 ***PED Branches -***
 We have two branch sets main & agl and yes appreciate flutter is designed as a single code base which should suffice, but in reality mobile phones and automotive IVI use cases have far too many differences to be shared
-* main - portrait mode handhelds for android and iOS scheduled for Google App store production release 2023 Q2.<br>
-* agl - landscape mode InVehicle Infotainment (IVI) web and linux for Automotive demo release scheduled 2023 Q2.
+* main - portrait mode handhelds for android and iphone uses Google Services
+* agl - landscape mode InVehicle Infotainment (IVI) web and linux for Automotive demo release.
 
 ### Audience
 Within the following steps you’ll see we’ve gone into considerable detail on the what and how to set up, deploy and run PED upon multiple platforms in an attempt to reach as wide an audience as possible who may be interested in PED but not necessarily app developers. We are specifically interested in the embedded space as it is our long-term goal to connect PED within vehicles as part of IVI, thus realigning vehicle manufacturers and retail industry domains.
