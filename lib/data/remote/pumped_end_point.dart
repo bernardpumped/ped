@@ -22,5 +22,5 @@ class PumpedEndPoint {
   // ignore: unused_field
   static const _pumpedBaseUrlOzServer = 'http://tst.pumpedsvr.com:17001';
   static const _pumperBaseUrlPrd = 'https://backend.pumpedfuel.com';
-  static const pumperBaseUrl = _pumpedBaseUrlOzServer;
+  static const pumperBaseUrl = _pumperBaseUrlPrd;
 }
