@@ -37,29 +37,32 @@ class ActionBar extends StatelessWidget {
         ? fuelStation.fuelStationAddress.phone1
         : fuelStation.fuelStationAddress.phone2;
     return Card(
-      child: Container(
-          padding: const EdgeInsets.only(top: 10, bottom: 10),
-          margin: const EdgeInsets.only(left: 5, right: 5),
-          child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Padding(
-                    padding: const EdgeInsets.only(left: 15, right: 12),
-                    child: DirectionsWidget(
-                        fuelStation.fuelStationAddress.latitude,
-                        fuelStation.fuelStationAddress.longitude,
-                        getIt.get<LocationDataSource>(instanceName: locationDataSourceInstanceName))),
-                (phone != null)
-                    ? Padding(padding: const EdgeInsets.only(left: 12, right: 12), child: PhoneWidget(phone))
-                    : const SizedBox(width: 0),
-                Padding(
-                    padding: const EdgeInsets.only(left: 12, right: 12),
-                    child: RateWidget(fuelStation.fuelStationAddress)),
-                Padding(
-                    padding: const EdgeInsets.only(left: 12, right: 15),
-                    child: FavouriteFuelStationBookmark(fuelStation, onFavouriteStatusChange))
-              ])),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Container(
+            padding: const EdgeInsets.only(top: 10, bottom: 10),
+            margin: const EdgeInsets.only(left: 5, right: 5),
+            child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Padding(
+                      padding: const EdgeInsets.only(left: 15, right: 12),
+                      child: DirectionsWidget(
+                          fuelStation.fuelStationAddress.latitude,
+                          fuelStation.fuelStationAddress.longitude,
+                          getIt.get<LocationDataSource>(instanceName: locationDataSourceInstanceName))),
+                  (phone != null)
+                      ? Padding(padding: const EdgeInsets.only(left: 12, right: 12), child: PhoneWidget(phone))
+                      : const SizedBox(width: 0),
+                  Padding(
+                      padding: const EdgeInsets.only(left: 12, right: 12),
+                      child: RateWidget(fuelStation.fuelStationAddress)),
+                  Padding(
+                      padding: const EdgeInsets.only(left: 12, right: 15),
+                      child: FavouriteFuelStationBookmark(fuelStation, onFavouriteStatusChange))
+                ])),
+      ),
     );
   }
 }

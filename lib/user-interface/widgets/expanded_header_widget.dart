@@ -38,18 +38,16 @@ class ExpandedHeaderWidget extends StatelessWidget {
         padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
         child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               FuelStationLogoWidget(width: 85, height: 85, image: NetworkImage(fuelStation.merchantLogoUrl)),
               Expanded(
                   child: Column(
                       mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                    Padding(
-                        padding: const EdgeInsets.only(bottom: 5, left: 6),
-                        child: _getFuelStationName(context, fuelStation)),
+                    _getFuelStationName(context, fuelStation),
                     Padding(
                         padding: const EdgeInsets.only(bottom: 5, left: 6),
                         child: _getDistanceWidget(context, fuelStation)),
@@ -74,10 +72,8 @@ class ExpandedHeaderWidget extends StatelessWidget {
       fsName = '$fsName**';
     }
     fsName = fsName.toTitleCase();
-    return Expanded(
-      child: Text(fsName, style: Theme.of(context).textTheme.titleMedium, overflow: TextOverflow.ellipsis, maxLines: 1,
-          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
-    );
+    return Text(fsName, style: Theme.of(context).textTheme.titleMedium, overflow: TextOverflow.ellipsis, maxLines: 1,
+        textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
   }
 
   Widget _getFuelAuthorityQuotePublisher(final FuelStation fuelStation, final BuildContext context) {

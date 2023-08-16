@@ -47,7 +47,7 @@ class _PumpedSignInWidgetState extends State<PumpedSignInWidget> {
 
   Widget _dialogContent(final BuildContext context) {
     return Container(
-        padding: const EdgeInsets.only(top: 20, bottom: 50),
+        padding: const EdgeInsets.only(top: 20, bottom: 25, left: 25, right: 25),
         child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
           Image(
               image: AssetImage(AppTheme.getPumpedLogo(context)), width: 100, height: 86, fit: BoxFit.fill),

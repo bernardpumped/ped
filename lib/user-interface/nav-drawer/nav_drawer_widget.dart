@@ -162,17 +162,23 @@ class _NavDrawerWidgetState extends State<NavDrawerWidget> {
           photoURL != null
               ? Image(image: NetworkImage(photoURL), height: 60)
               : const Image(image: AssetImage(NavDrawerWidget._userImage), height: 60),
-          Padding(
-              padding: const EdgeInsets.only(left: 15),
-              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text(userDisplayName, style: Theme.of(context).textTheme.titleMedium,
-                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
-                const SizedBox(height: 15),
-                userEmail != null
-                    ? Text(userEmail, style: Theme.of(context).textTheme.labelSmall,
-                        textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
-                    : const SizedBox(height: 0)
-              ]))
+          Expanded(
+            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 15.0),
+                child: Text(userDisplayName, style: Theme.of(context).textTheme.titleMedium,
+                    overflow: TextOverflow.ellipsis,
+                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
+              const SizedBox(height: 10),
+              userEmail != null
+                  ? Padding(
+                    padding: const EdgeInsets.only(left: 15.0),
+                    child: Text(userEmail, style: Theme.of(context).textTheme.labelSmall,
+                        overflow: TextOverflow.ellipsis,
+                        textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor))
+                  : const SizedBox(height: 0)
+            ]),
+          )
         ]));
   }
 
