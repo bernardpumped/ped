@@ -88,11 +88,9 @@ class _DeleteMockLocationState extends State<DeleteMockLocation> {
             } else {
               return ListTile(
                   leading: const Icon(Icons.edit_location_outlined, size: 30),
-                  title: Expanded(
-                    child: Text('No custom mock locations present', style: Theme.of(context).textTheme.titleMedium,
-                        overflow: TextOverflow.ellipsis,
-                        textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
-                  ));
+                  title: Text('No custom mock locations present', style: Theme.of(context).textTheme.titleMedium,
+                      overflow: TextOverflow.ellipsis,
+                      textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor));
             }
           } else if (snapshot.hasError) {
             return ListTile(

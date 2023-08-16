@@ -146,21 +146,19 @@ class _AnimEditFuelPriceLineItemWidgetState extends State<AnimEditFuelPriceLineI
   }
 
   Widget _getFuelTypeQuoteValRow(final Widget fuelQuoteWidget) {
-    return Expanded(
-      child: Row(children: <Widget>[
-        Expanded(
-            flex: 9,
-            child: Padding(
-                padding: const EdgeInsets.only(right: 5),
-                child: Text(widget.fuelName, style: Theme.of(context).textTheme.titleSmall,
-                    overflow: TextOverflow.ellipsis,
-                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),)),
-        Expanded(flex: 5, child: fuelQuoteWidget),
-        Expanded(
-            flex: 2,
-            child: Padding(padding: const EdgeInsets.only(left: 15), child: _getFuelQuoteSourceIcon(widget.fuelQuote)))
-      ])
-    );
+    return Row(children: <Widget>[
+      Expanded(
+          flex: 9,
+          child: Padding(
+              padding: const EdgeInsets.only(right: 5),
+              child: Text(widget.fuelName, style: Theme.of(context).textTheme.titleSmall,
+                  overflow: TextOverflow.ellipsis,
+                  textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),)),
+      Expanded(flex: 5, child: fuelQuoteWidget),
+      Expanded(
+          flex: 2,
+          child: Padding(padding: const EdgeInsets.only(left: 15), child: _getFuelQuoteSourceIcon(widget.fuelQuote)))
+    ]);
   }
 
   Widget _getFuelQuoteSourceIcon(final FuelQuote fuelQuote) {
