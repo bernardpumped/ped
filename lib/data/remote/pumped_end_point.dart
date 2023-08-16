@@ -21,5 +21,5 @@ class PumpedEndPoint {
   static const _pumpedBaseUrlLocal = 'http://192.168.0.231:17001';
   static const _pumpedBaseUrlOzServer = 'http://tst.pumpedsvr.com:17001';
   static const _pumperBaseUrlPrd = 'https://backend.pumpedfuel.com';
-  static const pumperBaseUrl = _pumpedBaseUrlOzServer;
+  static const pumperBaseUrl = _pumperBaseUrlPrd;
 }
