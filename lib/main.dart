@@ -38,7 +38,7 @@ import 'data/local/model/ui_settings.dart';
 GetIt getIt = GetIt.instance;
 // Set this variable to false when in release mode.
 bool enrichOffers = true;
-const appVersion = "36.IVI_OZ";
+const appVersion = "37.IVI_PRD";
 const getLocationWrapperInstanceName = 'geoLocationWrapper';
 const locationDataSourceInstanceName = 'locationDataSource';
 const underMaintenanceServiceName = 'underMaintenanceService';
