@@ -30,7 +30,7 @@ class SignedInUser {
 
   SignedInUser(this.isMockUser, {this.user});
 
-  Future<String> getToken() async {
+  Future<String?> getToken() async {
     if (!isMockUser && user != null) {
       return await user!.getIdToken();
     }

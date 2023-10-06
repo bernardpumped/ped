@@ -21,14 +21,14 @@ import 'package:pumped_end_device/data/remote/model/request/request.dart';
 class EndDeviceUpdateFuelStationFeatureRequest extends Request {
   final int fuelStationId;
   final String fuelStationSource;
-  final String oauthToken;
+  final String? oauthToken;
   final String oauthTokenSecret;
   final String identityProvider;
   final List<String> enabledFeatures;
   final List<String> disabledFeatures;
   EndDeviceUpdateFuelStationFeatureRequest(
       {uuid,
-        required this.oauthToken,
+        this.oauthToken,
         required this.oauthTokenSecret,
         required this.identityProvider,
         required this.fuelStationId,

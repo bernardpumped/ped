@@ -21,7 +21,7 @@ import 'package:pumped_end_device/data/remote/model/request/request.dart';
 class EndDeviceUpdateFuelStationRequest extends Request {
   final Map<String, dynamic> updatePathAndValues;
   final String identityProvider;
-  final String oauthToken;
+  final String? oauthToken;
   final String oauthTokenSecret;
   final int fuelStationId;
   final String fuelStationSource;
@@ -30,7 +30,7 @@ class EndDeviceUpdateFuelStationRequest extends Request {
       {uuid,
         required this.updatePathAndValues,
         required this.identityProvider,
-        required this.oauthToken,
+        this.oauthToken,
         required this.oauthTokenSecret,
         required this.fuelStationId,
         required this.fuelStationSource})

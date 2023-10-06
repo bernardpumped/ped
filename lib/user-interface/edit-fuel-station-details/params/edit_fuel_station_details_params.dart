@@ -25,11 +25,11 @@ class EditFuelStationDetailsParams {
   final bool editDetails;
   final bool editFeatures;
   final bool suggestEdit;
-  final String oauthToken;
+  final String? oauthToken;
   final String userId;
 
   EditFuelStationDetailsParams(
-      {required this.oauthToken,
+      {this.oauthToken,
       required this.userId,
       required this.fuelStation,
       this.editFuelPrices = false,

@@ -22,7 +22,7 @@ import 'package:pumped_end_device/user-interface/edit-fuel-station-details/data/
 class AlterFuelQuotesRequest extends Request {
   final int fuelStationId;
   final String fuelStationSource;
-  final String oauthToken;
+  final String? oauthToken;
   final String oauthTokenSecret;
   final String oauthValidatorType;
   final String identityProvider;
@@ -32,7 +32,7 @@ class AlterFuelQuotesRequest extends Request {
       {uuid,
       required this.fuelStationId,
       required this.fuelStationSource,
-      required this.oauthToken,
+      this.oauthToken,
       required this.oauthTokenSecret,
       required this.oauthValidatorType,
       required this.identityProvider,

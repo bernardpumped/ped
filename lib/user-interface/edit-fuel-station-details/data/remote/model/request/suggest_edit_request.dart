@@ -20,7 +20,7 @@ import 'package:pumped_end_device/data/remote/model/request/request.dart';
 
 class SuggestEditRequest extends Request {
   final String identityProvider;
-  final String oauthToken;
+  final String? oauthToken;
   final String oauthTokenSecret;
   final int fuelStationId;
   final String fuelStationSource;
@@ -29,7 +29,7 @@ class SuggestEditRequest extends Request {
   SuggestEditRequest(
       {uuid,
         required this.identityProvider,
-        required this.oauthToken,
+        this.oauthToken,
         required this.oauthTokenSecret,
         required this.fuelStationId,
         required this.fuelStationSource,

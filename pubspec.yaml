@@ -10,10 +10,10 @@ homepage: https://www.pumpedfuel.com/
 repository: https://github.com/bernardpumped/ped/tree/agl
 issue_tracker: https://github.com/bernardpumped/ped/issues
 documentation: https://github.com/bernardpumped/ped/tree/agl#readme
-version: 1.0.0+36
+version: 1.0.0+38
 
 environment:
-  sdk: '>=2.14.0 <=3.0.6'
+  sdk: '>=2.14.0 <=3.1.9'
 
 dependencies:
   flutter:
@@ -27,7 +27,7 @@ dependencies:
   flutter_svg: ^2.0.4
   fl_chart: ^0.61.0
   get_it: ^7.2.0
-  http: ^0.13.5
+  http: 1.0.0
   intl: ^0.17.0
   localstore: ^1.3.5
   flutter_secure_storage: ^8.0.0
@@ -37,12 +37,12 @@ dependencies:
   rate_my_app: ^1.1.4
 
 # plugins firebase (android and ios)
-  cloud_firestore: ^4.5.0
-  firebase_auth: ^4.4.0
-  firebase_core: ^2.9.0
-  flutter_facebook_auth: ^5.0.8
-  google_sign_in: ^6.1.0
-  twitter_login: ^4.3.1
+  cloud_firestore: ^4.8.4
+  firebase_auth: ^4.7.2
+  firebase_core: ^2.15.0
+  flutter_facebook_auth: ^6.0.0
+  google_sign_in: ^6.1.4
+  twitter_login: ^4.4.1
 
 # plugins general
   device_info_plus: ^8.1.0
