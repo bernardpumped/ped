@@ -22,7 +22,7 @@ import 'package:pumped_end_device/user-interface/edit-fuel-station-details/data/
 class AlterOperatingTimeRequest extends Request {
   final int fuelStationId;
   final String authValidatorType;
-  final String oauthToken;
+  final String? oauthToken;
   final String oauthTokenSecret;
   final List<OperatingTimeVo> operatingTimeVos;
   final String featureType;
@@ -33,7 +33,7 @@ class AlterOperatingTimeRequest extends Request {
       {uuid,
         required this.fuelStationId,
         required this.authValidatorType,
-        required this.oauthToken,
+        this.oauthToken,
         required this.oauthTokenSecret,
         required this.operatingTimeVos,
         required this.featureType,
