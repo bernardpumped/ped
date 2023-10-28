@@ -18,7 +18,7 @@
 
 import 'dart:async';
 
-import 'package:pumped_end_device/data/local/dao2/market_region_zone_config_dao.dart';
+import 'package:pumped_end_device/data/local/dao/market_region_zone_config_dao.dart';
 import 'package:pumped_end_device/data/local/location/location_data_source.dart';
 import 'package:pumped_end_device/data/local/location/location_service_subscription.dart';
 import 'package:pumped_end_device/data/local/model/market_region_zone_config.dart';

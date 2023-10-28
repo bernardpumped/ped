@@ -17,9 +17,9 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:pumped_end_device/data/local/dao2/favorite_fuel_stations_dao.dart';
-import 'package:pumped_end_device/data/local/dao2/hidden_result_dao.dart';
-import 'package:pumped_end_device/data/local/dao2/user_configuration_dao.dart';
+import 'package:pumped_end_device/data/local/dao/favorite_fuel_stations_dao.dart';
+import 'package:pumped_end_device/data/local/dao/hidden_result_dao.dart';
+import 'package:pumped_end_device/data/local/dao/user_configuration_dao.dart';
 import 'package:pumped_end_device/data/local/model/user_configuration.dart';
 import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
 import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
