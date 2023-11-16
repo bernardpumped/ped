@@ -33,7 +33,7 @@ class AboutScreen extends StatelessWidget {
     return Padding(
         padding: const EdgeInsets.only(top: 10),
         child: Text(text, style: Theme.of(context).textTheme.headlineSmall, textAlign: TextAlign.left,
-            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor));
+            textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor));
   }
 
   Widget _aboutContent(final BuildContext context) {
@@ -49,7 +49,7 @@ class AboutScreen extends StatelessWidget {
             Padding(
                 padding: const EdgeInsets.only(bottom: 5),
                 child: Text('About', style: Theme.of(context).textTheme.displayLarge, textAlign: TextAlign.center,
-                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
+                    textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
             Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,

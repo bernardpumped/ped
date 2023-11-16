@@ -31,6 +31,6 @@ class _PromotionsWidgetState extends State<PromotionsWidget> {
   @override
   Widget build ( BuildContext context ) {
     return Center(child: Text("Promotions",
-        textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),);
+        textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),);
   }
 }

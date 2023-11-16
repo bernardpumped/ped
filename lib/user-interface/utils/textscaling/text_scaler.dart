@@ -11,8 +11,8 @@ class _ScalingFactorBindingScope<T> extends InheritedWidget {
   }
 }
 
-class TextScaler<T> extends StatefulWidget {
-  const TextScaler({Key? key, required this.initialScaleFactor, required this.child}) : super(key: key);
+class PedTextScaler<T> extends StatefulWidget {
+  const PedTextScaler({Key? key, required this.initialScaleFactor, required this.child}) : super(key: key);
 
   final T initialScaleFactor;
   final Widget child;
@@ -31,7 +31,7 @@ class TextScaler<T> extends StatefulWidget {
   }
 }
 
-class TextScalerState<T> extends State<TextScaler<T>> {
+class TextScalerState<T> extends State<PedTextScaler<T>> {
   T? currentValue;
 
   @override

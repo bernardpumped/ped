@@ -33,13 +33,13 @@ class NoFuelPricesWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Text('No Fuel Prices', style: Theme.of(context).textTheme.displayMedium, textAlign: TextAlign.center,
-                  textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+                  textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
               Text("\n Click here if you'd appreciate this station providing accurate prices we'll let them know",
                   style: Theme.of(context).textTheme.headlineSmall, textAlign: TextAlign.center,
-                  textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+                  textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
               Text('\n Come back again soon.',
                   style: Theme.of(context).textTheme.headlineSmall, textAlign: TextAlign.center,
-                  textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
+                  textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)
             ]));
   }
 }

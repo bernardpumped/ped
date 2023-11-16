@@ -37,9 +37,9 @@ class _HideFuelStationWidgetState extends State<HideFuelStationWidget> {
               final bool isFavoriteFuelStation = snapshot.data!;
               return isFavoriteFuelStation ? _inEligibleStation() : _eligibleStation(context);
             } else if (snapshot.hasError) {
-              return Text('Error Loading', textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
+              return Text('Error Loading', textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor);
             } else {
-              return Text('Loading', textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
+              return Text('Loading', textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor);
             }
           })
     ]);
@@ -76,9 +76,9 @@ class _HideFuelStationWidgetState extends State<HideFuelStationWidget> {
                   });
             }
           } else if (snapshot.hasError) {
-            return Text('Error Loading', textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
+            return Text('Error Loading', textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor);
           } else {
-            return Text('Loading', textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
+            return Text('Loading', textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor);
           }
         });
   }

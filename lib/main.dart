@@ -38,7 +38,7 @@ import 'data/local/model/ui_settings.dart';
 GetIt getIt = GetIt.instance;
 // Set this variable to false when in release mode.
 bool enrichOffers = true;
-const appVersion = "38.IVI_LS_PRD";
+const appVersion = "39.IVI_LS_PRD";
 const getLocationWrapperInstanceName = 'geoLocationWrapper';
 const locationDataSourceInstanceName = 'locationDataSource';
 const underMaintenanceServiceName = 'underMaintenanceService';
@@ -79,7 +79,7 @@ class PumpedApp extends StatelessWidget {
     final themeNotifier = Provider.of<ThemeNotifier>(context);
     _registerBeansWithGetIt();
     LogUtil.debug("main", "Value of textScale found as ${themeNotifier.getTextScale()}");
-    return TextScaler(
+    return PedTextScaler(
       initialScaleFactor: TextScalingFactor(scaleFactor: themeNotifier.getTextScale()),
       child: MaterialApp(
           debugShowCheckedModeBanner: false,

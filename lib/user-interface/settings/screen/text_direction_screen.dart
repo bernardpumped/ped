@@ -50,7 +50,7 @@ class _TextDirectionScreenState extends State<TextDirectionScreen> {
                 const SizedBox(width: 10),
                 Expanded(
                   child: Text('Text Direction', style: Theme.of(context).textTheme.displayMedium, textAlign: TextAlign.left,
-                      textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+                      textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
                 )
               ])),
           Card(
@@ -78,6 +78,6 @@ class _TextDirectionScreenState extends State<TextDirectionScreen> {
           });
         },
         title: Text(_textDirection[value]!, style: Theme.of(context).textTheme.titleLarge,
-            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor));
+            textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor));
   }
 }
