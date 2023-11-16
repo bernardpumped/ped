@@ -65,7 +65,7 @@ class _ServerVersionWidgetState extends State<ServerVersionWidget> {
           }
           return ListTile(
               title: Text(displayText, style: Theme.of(context).textTheme.bodyLarge, textAlign: TextAlign.center,
-                  textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor));
+                  textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor));
         });
   }
 

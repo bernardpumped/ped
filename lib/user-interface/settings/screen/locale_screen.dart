@@ -66,7 +66,7 @@ class _LocaleScreenState extends State<LocaleScreen> {
                   const SizedBox(width: 10),
                   Expanded(
                     child: Text('Locale ', style: Theme.of(context).textTheme.displayMedium, textAlign: TextAlign.left,
-                        textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+                        textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
                   )
                 ])),
             Card(
@@ -99,6 +99,6 @@ class _LocaleScreenState extends State<LocaleScreen> {
           });
         },
         title: Text(_locales[value]!, style: Theme.of(context).textTheme.titleLarge,
-            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor));
+            textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor));
   }
 }

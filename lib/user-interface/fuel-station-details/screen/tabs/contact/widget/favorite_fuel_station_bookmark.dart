@@ -51,9 +51,9 @@ class _FavoriteFuelStationBookmarkState extends State<FavoriteFuelStationBookmar
             bool hidden = snapshot.data!;
             return hidden ? _inEligibleStation() : _eligibleStation();
           } else if (snapshot.hasError) {
-            return Text('Error Loading', textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
+            return Text('Error Loading', textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor);
           } else {
-            return Text('Loading', textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
+            return Text('Loading', textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor);
           }
         });
   }
@@ -132,9 +132,9 @@ class _FavoriteFuelStationBookmarkState extends State<FavoriteFuelStationBookmar
                         widget._onFavouriteStatusChange(); // This is to enable refresh of the home screen.
                       });
             } else if (snapshot.hasError) {
-              return Text('Error Loading', textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
+              return Text('Error Loading', textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor);
             } else {
-              return Text('Loading', textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
+              return Text('Loading', textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor);
             }
           })
     ]);

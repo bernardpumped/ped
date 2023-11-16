@@ -47,7 +47,7 @@ class _MockLocationSettingsScreenState extends State<MockLocationSettingsScreen>
                     const SizedBox(width: 10),
                     Expanded(
                       child: Text('Mock Location of Device',
-                          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor,
+                          textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor,
                           style: Theme.of(context).textTheme.displaySmall, textAlign: TextAlign.left)
                     )
                   ])),

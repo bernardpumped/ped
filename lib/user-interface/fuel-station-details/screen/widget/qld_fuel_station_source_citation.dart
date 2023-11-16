@@ -68,19 +68,19 @@ class QldFuelStationSourceCitation extends StatelessWidget {
           child: Text(_subTitle,
               maxLines: 2,
               textAlign: TextAlign.center, style: Theme.of(context).textTheme.headlineMedium,
-              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
+              textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
       Padding(
           padding: const EdgeInsets.only(bottom: 10),
           child: Text(_qldLicensePara1,
               maxLines: 8,
               textAlign: TextAlign.start, style: Theme.of(context).textTheme.titleSmall,
-              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
+              textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
       Padding(
           padding: const EdgeInsets.only(bottom: 10),
           child: Text(_qldLicensePara2,
               maxLines: 8,
               textAlign: TextAlign.start, style: Theme.of(context).textTheme.titleSmall,
-              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
+              textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
       Padding(padding: const EdgeInsets.only(bottom: 10), child: _getAdminContactMessage(context)),
       const Divider(height: 1),
       const SizedBox(height: 10),
@@ -92,7 +92,7 @@ class QldFuelStationSourceCitation extends StatelessWidget {
     return Text(_pumpedMessage,
         textAlign: TextAlign.start,
         style: Theme.of(context).textTheme.titleSmall!.copyWith(color: Theme.of(context).colorScheme.error),
-        textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
+        textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor);
   }
 
   Row _getOkActionButton(final BuildContext context) {

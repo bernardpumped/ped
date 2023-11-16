@@ -33,14 +33,14 @@ class NoPromotionsWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Text('No Current Offers', style: Theme.of(context).textTheme.displayMedium, textAlign: TextAlign.center,
-                  textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+                  textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
               Text(
                   "\n Click here if you'd appreciate this station providing more and better offers and we'll let them know",
                   style: Theme.of(context).textTheme.headlineSmall,
-                  textAlign: TextAlign.center, textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+                  textAlign: TextAlign.center, textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
               Text('\n Come back again soon.',
                   style: Theme.of(context).textTheme.titleLarge, textAlign: TextAlign.center,
-                  textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
+                  textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)
             ]));
   }
 }

@@ -137,7 +137,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       child: Container(
           decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
           child: Center(child: Text('Select a Settings', style: Theme.of(context).textTheme.displayMedium,
-              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor))),
+              textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor))),
     );
   }
 
@@ -153,7 +153,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 contentPadding: const EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
                 leading: const Icon(Icons.settings_outlined, size: 35),
                 title: Text("Customize Search", style: Theme.of(context).textTheme.headlineMedium,
-                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+                    textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
                 trailing: const Icon(Icons.chevron_right, size: 24))));
   }
 
@@ -169,7 +169,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 contentPadding: const EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
                 leading: const Icon(Icons.linear_scale_rounded, size: 35),
                 title: Text("Text Scaling", style: Theme.of(context).textTheme.headlineMedium,
-                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+                    textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
                 trailing: const Icon(Icons.chevron_right, size: 24))));
   }
 
@@ -185,7 +185,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 contentPadding: const EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
                 leading: const Icon(Icons.compare_outlined, size: 35),
                 title: Text("Theming", style: Theme.of(context).textTheme.headlineMedium,
-                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+                    textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
                 trailing: const Icon(Icons.chevron_right, size: 24))));
   }
 
@@ -201,7 +201,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 contentPadding: const EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
                 leading: const Icon(Icons.delete_outline, size: 35),
                 title: Text("Clear local cache", style: Theme.of(context).textTheme.headlineMedium,
-                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+                    textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
                 trailing: const Icon(Icons.chevron_right, size: 24))));
   }
 
@@ -217,7 +217,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 contentPadding: const EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
                 leading: const Icon(Icons.align_horizontal_left, size: 35),
                 title: Text("Text Direction", style: Theme.of(context).textTheme.headlineMedium,
-                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+                    textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
                 trailing: const Icon(Icons.chevron_right, size: 24))));
   }
 
@@ -233,7 +233,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 contentPadding: const EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
                 leading: const Icon(Icons.language, size: 35),
                 title: Text("Locale", style: Theme.of(context).textTheme.headlineMedium,
-                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+                    textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
                 trailing: const Icon(Icons.chevron_right, size: 24))));
   }
 
@@ -242,7 +242,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         padding: const EdgeInsets.only(top: 25),
         child: ListTile(
             title: Text("Pumped App Release - $appVersion",
-                textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor,
+                textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor,
                 style: Theme.of(context).textTheme.bodyLarge, textAlign: TextAlign.center)));
   }
 }

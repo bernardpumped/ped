@@ -48,11 +48,11 @@ class _DeveloperOptionsState extends State<DeveloperOptions> {
               } else if (snapShot.hasError) {
                 LogUtil.debug(_tag, 'Error found while loading UiSettings ${snapShot.error}');
                 return Text('Error Loading',
-                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor,
+                    textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor,
                     style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Theme.of(context).colorScheme.error));
               } else {
                 return Text('Loading', style: Theme.of(context).textTheme.titleMedium,
-                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
+                    textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor);
               }
             }));
   }
@@ -63,7 +63,7 @@ class _DeveloperOptionsState extends State<DeveloperOptions> {
           contentPadding: const EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
           leading: const Icon(Icons.developer_mode_outlined, size: 30),
           title: Text("Developer Options", style: Theme.of(context).textTheme.headlineMedium,
-              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+              textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
           trailing: Switch(
               value: uiSettings.developerOptions!,
               onChanged: (bool value) {
@@ -81,7 +81,7 @@ class _DeveloperOptionsState extends State<DeveloperOptions> {
                   contentPadding: const EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
                   leading: const Icon(Icons.push_pin_outlined, size: 30),
                   title: Text("Mock Location of Device", style: Theme.of(context).textTheme.headlineMedium,
-                      textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+                      textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
                   trailing: const Icon(Icons.chevron_right, size: 24))),
             )
           : const SizedBox(height: 0),
@@ -90,7 +90,7 @@ class _DeveloperOptionsState extends State<DeveloperOptions> {
           contentPadding: const EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
           leading: const Icon(Icons.local_offer_outlined, size: 30),
           title: Text("Enrich Offers", style: Theme.of(context).textTheme.headlineMedium,
-              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+              textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
           trailing: Switch(
               value: uiSettings.devOptionsEnrichOffers!,
               onChanged: (bool value) {

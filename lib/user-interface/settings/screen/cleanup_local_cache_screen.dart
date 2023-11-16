@@ -52,7 +52,7 @@ class _CleanupLocalCacheScreenState extends State<CleanupLocalCacheScreen> {
                 const SizedBox(width: 10),
                 Expanded(
                   child: Text('Clear Local Cache', style: Theme.of(context).textTheme.displaySmall, textAlign: TextAlign.left,
-                      overflow: TextOverflow.ellipsis, textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+                      overflow: TextOverflow.ellipsis, textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
                 )
               ])),
           Expanded(
@@ -117,10 +117,10 @@ class _CleanupLocalCacheScreenState extends State<CleanupLocalCacheScreen> {
             return AlertDialog(
                 shape:
                     RoundedRectangleBorder(borderRadius: BorderRadius.circular(10), side: const BorderSide(width: 0.2)),
-                title: Text("Cleaning data", textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+                title: Text("Cleaning data", textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
                 content: Row(children: [
                   Expanded(child: Text(msg, style: Theme.of(context).textTheme.titleLarge,
-                      textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
+                      textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
                   const RefreshProgressIndicator()
                 ]));
           });
@@ -211,11 +211,11 @@ class _CleanupLocalCacheScreenState extends State<CleanupLocalCacheScreen> {
             contentPadding: const EdgeInsets.all(10),
             leading: Icon(icon, size: 34),
             title: Text(title, style: Theme.of(context).textTheme.headlineSmall,
-                textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+                textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
             subtitle: Padding(
                 padding: const EdgeInsets.only(top: 5.0),
                 child: Text(subTitle, style: Theme.of(context).textTheme.bodySmall,
-                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
+                    textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
             trailing: Checkbox(value: checkBoxValue, onChanged: onChangeFunction)));
   }
 

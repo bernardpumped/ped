@@ -198,7 +198,7 @@ class _FloatButton extends StatelessWidget {
               const SizedBox(width: 3),
               Expanded(
                   child: Text(label,
-                      textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor,
+                      textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor,
                       style: Theme.of(context)
                           .textTheme
                           .labelLarge!

@@ -39,37 +39,37 @@ class _AddMockLocationWidgetState extends State<AddMockLocationWidget> {
             const SizedBox(width: 20),
             Expanded(
               child: Text('Add a Mock Location', style: Theme.of(context).textTheme.titleMedium,
-                  textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor))]),
+                  textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor))]),
           const SizedBox(height: 8),
           Row(children: [
             Expanded(flex: 1, child: Text('Address Line', style: Theme.of(context).textTheme.bodyLarge,
-                textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
+                textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
             Expanded(
                 flex: 1, child: _buildTextField(addressLineEditingController, 'Enter address line', 'add-address-line'))
           ]),
           Row(children: [
             Expanded(flex: 1, child: Text('City', style: Theme.of(context).textTheme.bodyLarge,
-                textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
+                textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
             Expanded(flex: 1, child: _buildTextField(cityEditingController, 'Enter city', 'add-city'))
           ]),
           Row(children: [
             Expanded(flex: 1, child: Text('State', style: Theme.of(context).textTheme.bodyLarge,
-                textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
+                textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
             Expanded(flex: 1, child: _buildTextField(stateEditingController, 'Enter state', 'add-state'))
           ]),
           Row(children: [
             Expanded(flex: 1, child: Text('Country', style: Theme.of(context).textTheme.bodyLarge,
-                textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
+                textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
             Expanded(flex: 1, child: _buildTextField(countryEditingController, 'Enter Country', 'add-country'))
           ]),
           Row(children: [
             Expanded(flex: 1, child: Text('Latitude', style: Theme.of(context).textTheme.bodyLarge,
-                textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
+                textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
             Expanded(flex: 1, child: _buildTextField(latitudeEditingController, 'Enter Latitude', 'add-latitude'))
           ]),
           Row(children: [
             Expanded(flex: 1, child: Text('Longitude', style: Theme.of(context).textTheme.bodyLarge,
-                textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
+                textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
             Expanded(flex: 1, child: _buildTextField(longitudeEditingController, 'Enter Longitude', 'add-longitude'))
           ]),
           Padding(

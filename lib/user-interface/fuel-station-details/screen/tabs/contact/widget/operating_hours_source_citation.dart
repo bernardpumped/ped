@@ -65,20 +65,20 @@ class OperatingHoursSourceCitation extends StatelessWidget {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
       Row(children: [
         Text(weekDay, style: Theme.of(context).textTheme.headlineMedium,
-            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+            textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
         const SizedBox(width: 10),
         Text(operatingTimeRange, style: Theme.of(context).textTheme.headlineMedium,
-            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
+            textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)
       ]),
       const SizedBox(height: 6),
       const Divider(height: 1),
       const SizedBox(height: 6),
       Text(sourceMessage, style: Theme.of(context).textTheme.headlineMedium,
-          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+          textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
       const SizedBox(height: 8),
       Text('Last Update Time ${_getPublishDateFormatted(_operatingHours.publishDate!)}',
           style: Theme.of(context).textTheme.titleSmall,
-          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+          textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
       const SizedBox(height: 8),
       const Divider(height: 1),
       const SizedBox(height: 8),
@@ -97,7 +97,7 @@ class OperatingHoursSourceCitation extends StatelessWidget {
     return Text(_pumpedMessage,
         textAlign: TextAlign.start,
         style: Theme.of(context).textTheme.titleSmall!.copyWith(color: Theme.of(context).colorScheme.error),
-        textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
+        textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor);
   }
 
   Widget _getOkActionButton(final BuildContext context) {

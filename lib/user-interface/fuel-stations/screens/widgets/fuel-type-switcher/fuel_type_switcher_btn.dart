@@ -42,7 +42,7 @@ class FuelTypeSwitcherButton extends StatelessWidget {
                   Icon(Icons.workspaces_outline, color: Theme.of(context).colorScheme.background, size: 25),
                   const SizedBox(width: 8),
                   Text(_txtToDisplay,
-                      textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor,
+                      textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor,
                       style: Theme.of(context).textTheme.titleLarge!.copyWith(color: Theme.of(context).colorScheme.background)),
                   const SizedBox(width: 8),
                   Icon(Icons.chevron_right, color: Theme.of(context).colorScheme.background, size: 25)

@@ -65,10 +65,10 @@ class _PinLocationWidgetState extends State<PinLocationWidget> {
             ]);
           } else if (snapshot.hasError) {
             return Text('Error Loading mock Locations', style: Theme.of(context).textTheme.titleMedium,
-                textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
+                textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor);
           } else {
             return Text('Loading mock Locations', style: Theme.of(context).textTheme.titleMedium,
-                textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
+                textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor);
           }
         });
   }
@@ -78,7 +78,7 @@ class _PinLocationWidgetState extends State<PinLocationWidget> {
         leading: const Icon(Icons.location_on_outlined, size: 30),
         title: Text(
             'Pinned : ${pinnedMockLocation.addressLine}, ${pinnedMockLocation.state}, ${pinnedMockLocation.country}',
-            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor,
+            textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor,
             style: Theme.of(context).textTheme.titleMedium));
   }
 
@@ -128,7 +128,7 @@ class _PinLocationWidgetState extends State<PinLocationWidget> {
         : 'Pin a Location';
     return ExpansionTile(
         title: Text(titleTxt, style: Theme.of(context).textTheme.titleMedium,
-            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+            textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
         leading: const Icon(Icons.location_on_outlined, size: 30),
         children: _getLocationRadioTiles(mockLocations));
   }
@@ -164,11 +164,11 @@ class _PinLocationWidgetState extends State<PinLocationWidget> {
           });
         },
         title: Text('${mockLocation.addressLine}, ${mockLocation.state}, ${mockLocation.country}',
-            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor,
+            textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor,
             style: Theme.of(context).textTheme.bodyLarge),
         subtitle: Text(
             'lat : ${mockLocation.latitude.toStringAsFixed(5)}, long : ${mockLocation.longitude.toStringAsFixed(5)}',
-            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor,
+            textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor,
             style: Theme.of(context).textTheme.bodyMedium));
   }
 }

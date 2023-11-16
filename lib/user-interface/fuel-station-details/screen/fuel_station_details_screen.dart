@@ -87,7 +87,7 @@ class _FuelStationDetailsScreenState extends State<FuelStationDetailsScreen> {
   }
 
   DefaultTabController _fuelStationDetailsView(final FuelStation fuelStation) {
-    double scaleFactorToUse = TextScaler.of<TextScalingFactor>(context)?.scaleFactor ?? 1;
+    double scaleFactorToUse = PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor ?? 1;
     // scaleFactorToUse = scaleFactorToUse > 1 ? scaleFactorToUse * 1.05 : scaleFactorToUse;
     return DefaultTabController(
         length: _tabs.length,
@@ -113,7 +113,7 @@ class _FuelStationDetailsScreenState extends State<FuelStationDetailsScreen> {
                         labelPadding: const EdgeInsets.only(left: 5, right: 5),
                         padding: const EdgeInsets.only(left: 8, right: 8, top: 8),
                         tabs: _tabs.map((tabName) {
-                          return Tab(child: Expanded(child: Text(tabName, textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor, overflow: TextOverflow.ellipsis,)));
+                          return Tab(child: Expanded(child: Text(tabName, textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor, overflow: TextOverflow.ellipsis,)));
                         }).toList())))
               ];
             },

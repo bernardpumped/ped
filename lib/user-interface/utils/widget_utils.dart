@@ -31,7 +31,7 @@ class WidgetUtils {
         padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
         decoration: BoxDecoration(borderRadius: BorderRadius.circular(25.0), color: Theme.of(context).primaryColor),
         child: Text(message,
-            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor,
+            textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor,
             style: Theme.of(context).textTheme.titleSmall!.copyWith(color: textColor), textAlign: TextAlign.center));
     fToast.removeQueuedCustomToasts();
     fToast.showToast(child: toast, gravity: gravity, toastDuration: const Duration(seconds: 3));
@@ -45,7 +45,7 @@ class WidgetUtils {
         padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
         decoration: BoxDecoration(borderRadius: BorderRadius.circular(25.0), color: Theme.of(context).primaryColorLight),
         child: Text(message,
-            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor,
+            textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor,
             style: Theme.of(context).textTheme.titleSmall!.copyWith(color: textColor), textAlign: TextAlign.center));
     fToast.removeQueuedCustomToasts();
     fToast.showToast(child: toast, gravity: ToastGravity.CENTER, toastDuration: const Duration(seconds: 3));
@@ -59,7 +59,7 @@ class WidgetUtils {
     var snackBar = SnackBar(
         backgroundColor: Theme.of(context).dialogBackgroundColor,
         content: Text(text, style: Theme.of(context).textTheme.titleSmall!.copyWith(color: textColor),
-            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+            textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
         duration: Duration(seconds: durationToFadeIn),
         behavior: SnackBarBehavior.floating,
         action: SnackBarAction(label: actionLabel, onPressed: onPressedFunction, textColor: actionColor));
@@ -86,7 +86,7 @@ class WidgetUtils {
                 padding: const EdgeInsets.all(10.0),
                 child: Row(children: [
                   Text(buttonText, style: Theme.of(context).textTheme.labelLarge!.copyWith(color: highLightColor),
-                      textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+                      textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
                   const SizedBox(width: 8),
                   iconData != null ? Icon(iconData, size: 24, color: highLightColor) : const SizedBox(width: 0)
                 ]))));

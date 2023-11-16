@@ -76,7 +76,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     Center(
                         child: Text('Your friendly \n neighbourhood fuel finder',
                             textAlign: TextAlign.center,
-                            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor,
+                            textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor,
                             style: Theme.of(context).textTheme.displayMedium!.copyWith(color: Colors.white))),
                     Container(width: 120, margin: const EdgeInsets.only(top: 40), child: const LinearProgressIndicator()),
                     const SizedBox(height: 100),
@@ -93,7 +93,7 @@ class _SplashScreenState extends State<SplashScreen> {
                           child: SizedBox(
                               width: 300,
                               child: Text('Detecting Location',
-                                  textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor,
+                                  textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor,
                                   style: Theme.of(context).textTheme.headlineSmall!.copyWith(color: Colors.white)))),
                       AnimatedOpacity(
                           opacity: _detectingLocationIconVisible ? 1.0 : 0.0,
@@ -114,7 +114,7 @@ class _SplashScreenState extends State<SplashScreen> {
                           child: SizedBox(
                               width: 300,
                               child: Text('Fetching Fuel Stations',
-                                  textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor,
+                                  textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor,
                                   style: Theme.of(context).textTheme.headlineSmall!.copyWith(color: Colors.white)))),
                       AnimatedOpacity(
                           opacity: _checkingPumpedAvailabilityTextVisible ? 1.0 : 0.0,

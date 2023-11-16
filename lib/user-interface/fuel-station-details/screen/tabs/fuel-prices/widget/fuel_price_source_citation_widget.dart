@@ -71,21 +71,21 @@ class FuelPriceSourceCitationWidget extends StatelessWidget {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: <Widget>[
       Row(children: [
         Text(fuelTypeName, style: Theme.of(context).textTheme.headlineMedium,
-            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+            textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
         const SizedBox(width: 10),
         Text(fuelQuote.quoteValue.toString(), style: Theme.of(context).textTheme.headlineMedium,
-            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
+            textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)
       ]),
       const SizedBox(height: 6),
       const Divider(height: 1),
       const SizedBox(height: 6),
       Text('Price Source ${_getFuelAuthorityQuotePublisher()}',
           style: Theme.of(context).textTheme.headlineMedium,
-          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+          textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
       const SizedBox(height: 8),
       Text('Price updated near realtime ${_getPublishDateFormatted(fuelQuote.publishDate!)}',
           style: Theme.of(context).textTheme.titleSmall,
-          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+          textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
       const SizedBox(height: 8),
       const Divider(height: 1),
       const SizedBox(height: 8),
@@ -99,20 +99,20 @@ class FuelPriceSourceCitationWidget extends StatelessWidget {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: <Widget>[
       Row(children: [
         Text(fuelTypeName, style: Theme.of(context).textTheme.headlineMedium,
-            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+            textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
         const SizedBox(width: 10),
         Text(fuelQuote.quoteValue.toString(), style: Theme.of(context).textTheme.headlineMedium,
-            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
+            textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)
       ]),
       const SizedBox(height: 6),
       const Divider(height: 1),
       const SizedBox(height: 6),
       Text('Fuel Price Crowd Sourced', style: Theme.of(context).textTheme.headlineMedium,
-          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+          textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
       const SizedBox(height: 8),
       Text('Price updated ${_getPublishDateFormatted(fuelQuote.publishDate!)}',
           style: Theme.of(context).textTheme.titleSmall,
-          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+          textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
       const SizedBox(height: 8),
       const Divider(height: 1),
       const SizedBox(height: 8),
@@ -186,7 +186,7 @@ class FuelPriceSourceCitationWidget extends StatelessWidget {
   Text _getTextForOtherFa(final BuildContext context) {
     return Text('If fuel price is incorrect please let us know',
         textAlign: TextAlign.start,
-        textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor,
+        textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor,
         style: Theme.of(context).textTheme.titleSmall!.copyWith(color: Theme.of(context).colorScheme.error));
   }
 

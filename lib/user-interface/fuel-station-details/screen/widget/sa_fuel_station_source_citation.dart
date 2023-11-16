@@ -56,15 +56,15 @@ class SaFuelStationSourceCitation extends StatelessWidget {
       Padding(
           padding: const EdgeInsets.only(bottom: 15),
           child: Text(_subTitle, textAlign: TextAlign.center, style: Theme.of(context).textTheme.headlineMedium,
-              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
+              textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
       Padding(
           padding: const EdgeInsets.only(bottom: 10),
           child: Text(_saLicensePara1, textAlign: TextAlign.start, style: Theme.of(context).textTheme.titleSmall,
-              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
+              textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
       Padding(
           padding: const EdgeInsets.only(bottom: 10),
           child: Text(_saLicensePara2, textAlign: TextAlign.start, style: Theme.of(context).textTheme.titleSmall,
-              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
+              textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
       Padding(padding: const EdgeInsets.only(bottom: 10), child: _getAdminContactMessage(context)),
       const Divider(height: 1),
       const SizedBox(height: 10),
@@ -75,7 +75,7 @@ class SaFuelStationSourceCitation extends StatelessWidget {
   Text _getAdminContactMessage(final BuildContext context) {
     return Text(_pumpedMessage,
         textAlign: TextAlign.start,
-        textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor,
+        textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor,
         style: Theme.of(context).textTheme.titleSmall!.copyWith(color: Theme.of(context).colorScheme.error));
   }
 

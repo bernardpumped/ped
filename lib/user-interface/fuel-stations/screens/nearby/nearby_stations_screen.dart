@@ -276,7 +276,7 @@ class _NearbyStationsScreenState extends State<NearbyStationsScreen> {
       child = Container(
           decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: Theme.of(context).colorScheme.background),
           child: Center(child: Text('Select a Fuel Station', style: Theme.of(context).textTheme.displayMedium,
-              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)));
+              textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)));
     }
     return Card(margin: const EdgeInsets.all(8), child: child);
   }
@@ -286,7 +286,7 @@ class _NearbyStationsScreenState extends State<NearbyStationsScreen> {
     if (!nearbyStations.locationSearchSuccessful) {
       final String locationErrorReason = nearbyStations.locationErrorReason ?? 'Unknown Location Error Reason';
       return Center(child: Text(locationErrorReason,
-          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor));
+          textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor));
     } else {
       _nearByFuelStations = nearbyStations.fuelStations ?? [];
       LogUtil.debug(_tag, 'Setting _nearByFuelStations variable');

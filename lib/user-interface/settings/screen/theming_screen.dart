@@ -52,7 +52,7 @@ class _ThemingScreenState extends State<ThemingScreen> {
                 const SizedBox(width: 10),
                 Expanded(
                   child: Text('Theme ', style: Theme.of(context).textTheme.displayMedium, textAlign: TextAlign.left,
-                      textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+                      textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
                 )
               ])),
           _getCard(),
@@ -122,11 +122,11 @@ class _ThemingScreenState extends State<ThemingScreen> {
               } else if (snapShot.hasError) {
                 LogUtil.debug(_tag, 'Error found while loading UiSettings ${snapShot.error}');
                 return Text('Error Loading',
-                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor,
+                    textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor,
                     style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Theme.of(context).colorScheme.error));
               } else {
                 return Text('Loading', style: Theme.of(context).textTheme.titleMedium,
-                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
+                    textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor);
               }
             }));
   }
@@ -144,7 +144,7 @@ class _ThemingScreenState extends State<ThemingScreen> {
           });
         },
         title: Text(UiThemes.themes[themeValue]!, style: Theme.of(context).textTheme.titleSmall,
-            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor));
+            textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor));
   }
 
   Future<UiSettings?>? getUiSettings() {
