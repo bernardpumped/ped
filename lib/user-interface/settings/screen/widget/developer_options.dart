@@ -17,7 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:pumped_end_device/data/local/dao2/ui_settings_dao.dart';
+import 'package:pumped_end_device/data/local/dao/ui_settings_dao.dart';
 import 'package:pumped_end_device/data/local/model/ui_settings.dart';
 import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
 import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';

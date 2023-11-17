@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pumped_end_device/data/local/dao2/user_configuration_dao.dart';
+import 'package:pumped_end_device/data/local/dao/user_configuration_dao.dart';
 import 'package:pumped_end_device/data/local/model/user_configuration.dart';
 import 'package:pumped_end_device/models/pumped/fuel_category.dart';
 import 'package:pumped_end_device/models/pumped/fuel_type.dart';

@@ -31,7 +31,6 @@ dependencies:
   fl_chart: ^0.64.0
   floating_action_bubble: ^1.1.4
   flutter_rating_bar: ^4.0.1
-  flutter_secure_storage: ^9.0.0
   flutter_signin_button: ^2.0.0
   flutter_svg: ^2.0.9
   get_it: ^7.2.0
