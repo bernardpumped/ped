@@ -21,7 +21,7 @@ import 'package:flutter/material.dart';
 class _ScalingFactorBindingScope<T> extends InheritedWidget {
   const _ScalingFactorBindingScope({Key? key, required this.scalingFactorBindingState, required Widget child})  : super(key: key, child: child);
 
-  final TextScalerState<T> scalingFactorBindingState;
+  final PedTextScalerState<T> scalingFactorBindingState;
 
   @override
   bool updateShouldNotify(final _ScalingFactorBindingScope old) {
@@ -29,14 +29,14 @@ class _ScalingFactorBindingScope<T> extends InheritedWidget {
   }
 }
 
-class TextScaler<T> extends StatefulWidget {
-  const TextScaler({Key? key, required this.initialScaleFactor, required this.child}) : super(key: key);
+class PedTextScaler<T> extends StatefulWidget {
+  const PedTextScaler({Key? key, required this.initialScaleFactor, required this.child}) : super(key: key);
 
   final T initialScaleFactor;
   final Widget child;
 
   @override
-  TextScalerState<T> createState() => TextScalerState<T>();
+  PedTextScalerState<T> createState() => PedTextScalerState<T>();
 
   static T? of<T>(BuildContext context) {
     final _ScalingFactorBindingScope<T>? scope = context.dependOnInheritedWidgetOfExactType<_ScalingFactorBindingScope<T>>();
@@ -49,7 +49,7 @@ class TextScaler<T> extends StatefulWidget {
   }
 }
 
-class TextScalerState<T> extends State<TextScaler<T>> {
+class PedTextScalerState<T> extends State<PedTextScaler<T>> {
   T? currentValue;
 
   @override

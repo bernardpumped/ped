@@ -119,7 +119,7 @@ class _ContactTabWidgetState extends State<ContactTabWidget> {
         maxLines: 2,
         overflow: TextOverflow.ellipsis,
         style: Theme.of(context).textTheme.titleSmall!.copyWith(height: 1.5),
-        textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
+        textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor);
   }
 
   Widget _getPhone(final FuelStationAddress fuelStationAddress) {
@@ -136,7 +136,7 @@ class _ContactTabWidgetState extends State<ContactTabWidget> {
     }
     if (DataUtils.isNotBlank(phoneN)) {
       return Text(phoneN!, style: Theme.of(context).textTheme.titleSmall,
-          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
+          textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor);
     } else {
       return const SizedBox(width: 0);
     }

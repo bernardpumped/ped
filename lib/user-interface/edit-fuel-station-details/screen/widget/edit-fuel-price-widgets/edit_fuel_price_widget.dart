@@ -106,7 +106,7 @@ class _EditFuelPriceWidgetState extends State<EditFuelPriceWidget> {
           const Icon(Icons.monetization_on_outlined, size: 30),
           const SizedBox(width: 10),
           Text('Update Fuel Prices', style: Theme.of(context).textTheme.headlineMedium,
-              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
+              textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)
         ]));
   }
 
@@ -117,12 +117,12 @@ class _EditFuelPriceWidgetState extends State<EditFuelPriceWidget> {
           if (snapshot.hasError) {
             LogUtil.debug(_tag, 'Error loading EditFuelPriceWidgetData ${snapshot.error}');
             return Center(child: Text('Error Loading fuel-types', style: Theme.of(context).textTheme.titleSmall,
-                textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor));
+                textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor));
           } else if (snapshot.hasData) {
             return Column(children: _editFuelTypePriceWidget(snapshot.data!));
           } else {
             return Center(child: Text('Loading', style: Theme.of(context).textTheme.titleSmall,
-                textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor));
+                textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor));
           }
         });
   }

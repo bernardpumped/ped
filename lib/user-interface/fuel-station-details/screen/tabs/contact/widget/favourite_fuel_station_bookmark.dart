@@ -62,9 +62,9 @@ class _FavouriteFuelStationBookmarkState extends State<FavouriteFuelStationBookm
                       widget._onFavouriteStatusChange(); // This is to enable refresh of the home screen.
                     });
             } else if (snapshot.hasError) {
-              return Text('Error Loading', textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
+              return Text('Error Loading', textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor);
             } else {
-              return Text('Loading', textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
+              return Text('Loading', textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor);
             }
           })
     ]);
@@ -82,7 +82,7 @@ class _FavouriteFuelStationBookmarkState extends State<FavouriteFuelStationBookm
               child: Icon(icon, color: Theme.of(context).colorScheme.background))),
       const SizedBox(height: 5),
       Text(text, style: Theme.of(context).textTheme.bodyMedium,
-          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
+          textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)
     ]);
   }
 

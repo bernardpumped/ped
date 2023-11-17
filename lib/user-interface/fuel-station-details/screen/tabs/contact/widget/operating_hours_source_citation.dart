@@ -59,20 +59,20 @@ class OperatingHoursSourceCitation extends StatelessWidget {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
       Row(children: [
         Text(weekDay, style: Theme.of(context).textTheme.headlineMedium,
-            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+            textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
         const SizedBox(width: 10),
         Text(operatingTimeRange, style: Theme.of(context).textTheme.headlineMedium,
-            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
+            textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)
       ]),
       const SizedBox(height: 12),
       const Divider(height: 1),
       const SizedBox(height: 6),
       Text(sourceMessage, style: Theme.of(context).textTheme.titleLarge,
-          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+          textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
       const SizedBox(height: 6),
       Text('Last Update Time ${_getPublishDateFormatted(_operatingHours.publishDate!)}',
           style: Theme.of(context).textTheme.bodyMedium,
-          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+          textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
       const SizedBox(height: 6),
       const Divider(height: 1),
       const SizedBox(height: 6),
@@ -91,7 +91,7 @@ class OperatingHoursSourceCitation extends StatelessWidget {
     return Text(_pumpedMessage,
         textAlign: TextAlign.start,
         style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: Theme.of(context).colorScheme.error),
-        textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
+        textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor);
   }
 
   Row _getOkActionButton(final BuildContext context) {
@@ -104,7 +104,7 @@ class OperatingHoursSourceCitation extends StatelessWidget {
               padding: const EdgeInsets.only(left: 15, right: 15),
               child:
                   Row(children: [const Icon(Icons.cancel_outlined, size: 24), const SizedBox(width: 10),
-                    Text('Cancel', textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)]))),
+                    Text('Cancel', textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)]))),
       const SizedBox(width: 10),
       _getNotificationWidget(),
     ]);

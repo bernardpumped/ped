@@ -73,7 +73,7 @@ class ExpandedHeaderWidget extends StatelessWidget {
     }
     fsName = fsName.toTitleCase();
     return Text(fsName, style: Theme.of(context).textTheme.titleMedium, overflow: TextOverflow.ellipsis, maxLines: 1,
-        textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
+        textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor);
   }
 
   Widget _getFuelAuthorityQuotePublisher(final FuelStation fuelStation, final BuildContext context) {
@@ -86,7 +86,7 @@ class ExpandedHeaderWidget extends StatelessWidget {
       if (publishers.isNotEmpty) {
         return Row(children: [
           Text('Fuel Price Source ${publishers[0]} ', style: Theme.of(context).textTheme.bodyLarge,
-              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+              textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
           _getFuelStationSourceCitationIcon(publishers, context, fuelStation),
         ]);
       }
@@ -126,11 +126,11 @@ class ExpandedHeaderWidget extends StatelessWidget {
   Widget _getDistanceWidget(final BuildContext context, final FuelStation fuelStation) {
     return Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
       Text('Petrol Station', style: Theme.of(context).textTheme.bodyLarge,
-          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+          textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
       const SizedBox(width: 10),
       const Icon(Icons.drive_eta, size: 20), // drive_eta icon
       Text(' ${DataUtils.toPrecision(fuelStation.distance, 2)} km', style: Theme.of(context).textTheme.bodyLarge,
-          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
+          textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)
     ]);
   }
 
@@ -140,7 +140,7 @@ class ExpandedHeaderWidget extends StatelessWidget {
             padding: const EdgeInsets.only(bottom: 3, left: 5),
             child: Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
               Text(' ${fuelStation.rating}', style: Theme.of(context).textTheme.bodyMedium,
-                  textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+                  textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
               const SizedBox(width: 3),
               RatingBarIndicator(
                   rating: fuelStation.rating!,

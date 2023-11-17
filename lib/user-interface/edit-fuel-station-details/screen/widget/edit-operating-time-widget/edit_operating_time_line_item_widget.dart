@@ -129,7 +129,7 @@ class _EditOperatingTimeLineItemWidgetStateNew extends State<EditOperatingTimeLi
               Row(children: <Widget>[
                 Expanded(
                     flex: 3, child: Text(widget.operatingHour.dayOfWeek, style: Theme.of(context).textTheme.titleSmall,
-                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
+                    textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
                 Expanded(
                     flex: 12,
                     child: Column(
@@ -152,7 +152,7 @@ class _EditOperatingTimeLineItemWidgetStateNew extends State<EditOperatingTimeLi
                         Text(_errorMessage,
                             textAlign: TextAlign.center,
                             style: Theme.of(context).textTheme.titleSmall!.copyWith(color: Theme.of(context).colorScheme.error),
-                              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+                              textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
                         const SizedBox(width: 30),
                         _getUndoButton()
                       ]))
@@ -174,7 +174,7 @@ class _EditOperatingTimeLineItemWidgetStateNew extends State<EditOperatingTimeLi
             child: Padding(
                 padding: const EdgeInsets.only(left: 15, right: 15),
                 child: Row(children: [const Icon(Icons.history, size: 24), const SizedBox(width: 10), Text('Undo',
-                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)])))
+                    textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)])))
         : const SizedBox(width: 0);
   }
 
@@ -182,7 +182,7 @@ class _EditOperatingTimeLineItemWidgetStateNew extends State<EditOperatingTimeLi
     return Row(mainAxisAlignment: MainAxisAlignment.start, mainAxisSize: MainAxisSize.max, children: [
       const SizedBox(width: 12),
       Text('Opens : ', style: Theme.of(context).textTheme.titleSmall,
-          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+          textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
       OperatingTimeWidget(
           _editable,
           widget.operatingHour.openingHrs,
@@ -197,7 +197,7 @@ class _EditOperatingTimeLineItemWidgetStateNew extends State<EditOperatingTimeLi
           updatedMins: widget.updatedOperatingHrs?.openingMins),
       const SizedBox(width: 15),
       Text('Closes : ', style: Theme.of(context).textTheme.titleSmall,
-          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+          textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
       OperatingTimeWidget(
           _editable,
           widget.operatingHour.closingHrs,
@@ -223,7 +223,7 @@ class _EditOperatingTimeLineItemWidgetStateNew extends State<EditOperatingTimeLi
                 flex: 2,
                 child: Text(DateTimeUtils.weekDayShortToLongName[widget.operatingHour.dayOfWeek]!,
                     style: Theme.of(context).textTheme.bodyLarge,
-                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
+                    textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
             Expanded(
                 flex: 2,
                 child: OperatingTimeWidget(
@@ -302,14 +302,14 @@ class _EditOperatingTimeLineItemWidgetStateNew extends State<EditOperatingTimeLi
               onChanged: _handleRadioValueChange,
             ),
             Text('Open 24 hrs', style: Theme.of(context).textTheme.titleSmall,
-                textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
+                textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)
           ])),
       SizedBox(
           height: 35,
           child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
             Radio(value: _closed, groupValue: _selectedValue, onChanged: _handleRadioValueChange),
             Text('Closed', style: Theme.of(context).textTheme.titleSmall,
-                textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
+                textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)
           ]))
     ]);
   }

@@ -69,7 +69,7 @@ class _EditFuelStationDetailsScreenState extends State<EditFuelStationDetailsScr
     } else if (params.suggestEdit) {
       return SuggestEditWidget(params, 250);
     }
-    return Text('Some Error Happened', textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
+    return Text('Some Error Happened', textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor);
   }
 
   undoFunction() {

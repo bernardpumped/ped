@@ -103,7 +103,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 contentPadding: const EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
                 leading: const Icon(Icons.settings_outlined, size: 30),
                 title: Text("Customize Search", style: Theme.of(context).textTheme.titleMedium,
-                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+                    textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
                 trailing: const Icon(Icons.chevron_right, size: 24))));
   }
 
@@ -115,7 +115,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 contentPadding: const EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
                 leading: const Icon(Icons.delete_outline, size: 30),
                 title: Text("Clear local cache", style: Theme.of(context).textTheme.titleMedium,
-                  textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+                  textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
                 trailing: const Icon(Icons.chevron_right, size: 24))));
   }
 
@@ -125,6 +125,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
         child: ListTile(
             title: Text("Pumped App Release - $appVersion",
                 style: Theme.of(context).textTheme.titleMedium, textAlign: TextAlign.center,
-                textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)));
+                textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)));
   }
 }

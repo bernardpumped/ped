@@ -117,7 +117,7 @@ class _CustomizeSearchSettingsScreenState extends State<CustomizeSearchSettingsS
             LogUtil.debug(_tag, '_getNumSearchResultsExpansionTile::error ${snapshot.error}');
             return Text('Error Loading Num Search Results Count',
                 style: Theme.of(context).textTheme.titleSmall!.copyWith(color: Theme.of(context).colorScheme.error),
-                textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
+                textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor);
           } else if (snapshot.hasData) {
             final DropDownValues<num> dropDownValues = snapshot.data!;
             _searchResultsCountSelectedValue = _searchResultsCountSelectedValue == _unselectedValDouble
@@ -125,17 +125,17 @@ class _CustomizeSearchSettingsScreenState extends State<CustomizeSearchSettingsS
                 : _searchResultsCountSelectedValue;
             return ExpansionTile(
                 title: Text('Number of Search Results', style: Theme.of(context).textTheme.titleMedium,
-                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+                    textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
                 subtitle: Text('$_searchResultsCountSelectedValue fuel stations around you',
                     style: Theme.of(context).textTheme.bodyMedium,
-                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+                    textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
                 leading: const Icon(Icons.format_list_numbered, size: 30),
                 children: dropDownValues.values.map<RadioListTile<num>>((num numVal) {
                   return RadioListTile<num>(
                       selected: numVal == _searchResultsCountSelectedValue,
                       value: numVal,
                       title: Text('${numVal.toString()} fuel stations', style: Theme.of(context).textTheme.titleSmall,
-                          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+                          textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
                       groupValue: _searchResultsCountSelectedValue,
                       onChanged: (newNumVal) {
                         setState(() {
@@ -149,7 +149,7 @@ class _CustomizeSearchSettingsScreenState extends State<CustomizeSearchSettingsS
                 }).toList());
           } else {
             return Text('Loading values for Num Search Results', style: Theme.of(context).textTheme.titleSmall,
-                textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
+                textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor);
           }
         });
   }
@@ -162,23 +162,23 @@ class _CustomizeSearchSettingsScreenState extends State<CustomizeSearchSettingsS
             LogUtil.debug(_tag, '_fuelCategoryDropdown _fuelCategoryDropdownValues error ${snapshot.error}');
             return Text('Error Loading Fuel Categories',
                 style: Theme.of(context).textTheme.titleSmall!.copyWith(color: Theme.of(context).colorScheme.error),
-                textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
+                textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor);
           } else if (snapshot.hasData) {
             final DropDownValues<FuelCategory> dropDownValues = snapshot.data!;
             if (dropDownValues.noDataFound) {
               return Text('No Fuel Categories Found',
                   style: Theme.of(context).textTheme.titleSmall!.copyWith(color: Theme.of(context).colorScheme.error),
-                  textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
+                  textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor);
             } else {
               _fuelCategorySelectedValue =
                   _fuelCategorySelectedValue ?? dropDownValues.values[dropDownValues.selectedIndex];
               return ExpansionTile(
                   title: Text('Fuel Category', style: Theme.of(context).textTheme.titleMedium,
-                      textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+                      textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
                   subtitle: _fuelCategorySelectedValue != null
                       ? Text('Fuel types from ${_fuelCategorySelectedValue!.categoryName}',
                           style: Theme.of(context).textTheme.bodyMedium,
-                          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
+                          textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)
                       : const SizedBox(width: 0),
                   leading: const Icon(Icons.category_outlined, size: 30),
                   children: dropDownValues.values.map<RadioListTile<FuelCategory>>((FuelCategory fuelCategory) {
@@ -186,7 +186,7 @@ class _CustomizeSearchSettingsScreenState extends State<CustomizeSearchSettingsS
                         selected: fuelCategory.categoryId == _fuelCategorySelectedValue?.categoryId,
                         value: fuelCategory,
                         title: Text(fuelCategory.categoryName, style: Theme.of(context).textTheme.titleSmall,
-                            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+                            textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
                         groupValue: _fuelCategorySelectedValue,
                         onChanged: (changedFuelType) {
                           setState(() {
@@ -203,7 +203,7 @@ class _CustomizeSearchSettingsScreenState extends State<CustomizeSearchSettingsS
             }
           } else {
             return Text('Loading Fuel Categories...', style: Theme.of(context).textTheme.titleSmall,
-                textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
+                textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor);
           }
         });
   }
@@ -216,22 +216,22 @@ class _CustomizeSearchSettingsScreenState extends State<CustomizeSearchSettingsS
             LogUtil.debug(_tag, '_getFuelTypesExpansionTile::error ${snapshot.error}');
             return Text('Error Loading Fuel Types',
                 style: Theme.of(context).textTheme.titleSmall!.copyWith(color: Theme.of(context).colorScheme.error),
-                textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
+                textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor);
           } else if (snapshot.hasData) {
             final DropDownValues<FuelType> dropDownValues = snapshot.data!;
             if (dropDownValues.noDataFound) {
               return Text('No Fuel Types found',
                   style: Theme.of(context).textTheme.titleSmall!.copyWith(color: Theme.of(context).colorScheme.error),
-                  textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
+                  textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor);
             } else {
               _fuelTypeSelectedValue = __fuelTypeSelectedValue(dropDownValues);
               return ExpansionTile(
                   title: Text('Fuel Types', style: Theme.of(context).textTheme.titleMedium,
-                      textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+                      textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
                   subtitle: _fuelTypeSelectedValue != null
                       ? Text('Filter results by ${_fuelTypeSelectedValue!.fuelName}',
                           style: Theme.of(context).textTheme.bodyMedium,
-                        textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
+                        textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)
                       : const SizedBox(width: 0),
                   leading: const Icon(Icons.class_outlined, size: 30),
                   children: dropDownValues.values.map<RadioListTile<FuelType>>((FuelType fuelType) {
@@ -239,7 +239,7 @@ class _CustomizeSearchSettingsScreenState extends State<CustomizeSearchSettingsS
                         selected: fuelType.fuelType == _fuelTypeSelectedValue?.fuelType,
                         value: fuelType,
                         title: Text(fuelType.fuelName, style: Theme.of(context).textTheme.titleSmall,
-                            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+                            textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
                         groupValue: _fuelTypeSelectedValue,
                         onChanged: (changedFuelType) {
                           setState(() {
@@ -254,7 +254,7 @@ class _CustomizeSearchSettingsScreenState extends State<CustomizeSearchSettingsS
             }
           } else {
             return Text('Loading Fuel Types...', style: Theme.of(context).textTheme.titleSmall,
-                textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
+                textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor);
           }
         });
   }
@@ -267,7 +267,7 @@ class _CustomizeSearchSettingsScreenState extends State<CustomizeSearchSettingsS
             LogUtil.debug(_tag, '_getSearchRadiusExpansionTile::error ${snapshot.error}');
             return Text('Error Loading Search Radius',
                 style: Theme.of(context).textTheme.titleSmall!.copyWith(color: Theme.of(context).colorScheme.error),
-                textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
+                textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor);
           } else if (snapshot.hasData) {
             final DropDownValues<num> dropDownValues = snapshot.data!;
             _searchRadiusSelectedValue = _searchRadiusSelectedValue == _unselectedValDouble
@@ -275,17 +275,17 @@ class _CustomizeSearchSettingsScreenState extends State<CustomizeSearchSettingsS
                 : _searchRadiusSelectedValue;
             return ExpansionTile(
                 title: Text('Search Radius', style: Theme.of(context).textTheme.titleMedium,
-                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+                    textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
                 subtitle: Text('Search $_searchRadiusSelectedValue Km Radius around you',
                     style: Theme.of(context).textTheme.bodyMedium,
-                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+                    textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
                 leading: const Icon(Icons.explore_outlined, size: 30),
                 children: dropDownValues.values.map<RadioListTile<num>>((num numVal) {
                   return RadioListTile<num>(
                       selected: numVal == _searchRadiusSelectedValue,
                       value: numVal,
                       title: Text('${numVal.toString()} Km Radius', style: Theme.of(context).textTheme.titleSmall,
-                          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+                          textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
                       groupValue: _searchRadiusSelectedValue,
                       onChanged: (newNumVal) {
                         setState(() {
@@ -299,7 +299,7 @@ class _CustomizeSearchSettingsScreenState extends State<CustomizeSearchSettingsS
                 }).toList());
           } else {
             return Text('Loading Search Radius...', style: Theme.of(context).textTheme.titleSmall,
-                textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
+                textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor);
           }
         });
   }
@@ -312,17 +312,17 @@ class _CustomizeSearchSettingsScreenState extends State<CustomizeSearchSettingsS
             LogUtil.debug(_tag, '_getSortOrderExpansionTile::error ${snapshot.error}');
             return Text('Error Loading Sort Order',
                 style: Theme.of(context).textTheme.titleSmall!.copyWith(color: Theme.of(context).colorScheme.error),
-                textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
+                textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor);
           } else if (snapshot.hasData) {
             final DropDownValues<SortOrder> dropDownValues = snapshot.data!;
             _sortOrderSelectedVal = _sortOrderSelectedVal ?? dropDownValues.values[dropDownValues.selectedIndex];
             return ExpansionTile(
                 title: Text('Result Sort Order', style: Theme.of(context).textTheme.titleMedium,
-                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+                    textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
                 subtitle: _sortOrderSelectedVal != null
                     ? Text('Prefer ${_sortOrderSelectedVal!.sortOrderDesc!}',
                       style: Theme.of(context).textTheme.bodyMedium,
-                      textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
+                      textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)
                     : const SizedBox(width: 0),
                 leading: const Icon(Icons.compare_outlined, size: 30),
                 children: dropDownValues.values.map<RadioListTile<SortOrder>>((SortOrder sortOrder) {
@@ -330,7 +330,7 @@ class _CustomizeSearchSettingsScreenState extends State<CustomizeSearchSettingsS
                       selected: sortOrder == _sortOrderSelectedVal,
                       value: sortOrder,
                       title: Text(sortOrder.sortOrderName!, style: Theme.of(context).textTheme.titleSmall,
-                          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+                          textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
                       groupValue: _sortOrderSelectedVal,
                       onChanged: (newSortOrder) {
                         setState(() {
@@ -344,7 +344,7 @@ class _CustomizeSearchSettingsScreenState extends State<CustomizeSearchSettingsS
                 }).toList());
           } else {
             return Text('Loading values for Sort Order...', style: Theme.of(context).textTheme.titleSmall,
-                textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
+                textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor);
           }
         });
   }
@@ -397,7 +397,7 @@ class _CustomizeSearchSettingsScreenState extends State<CustomizeSearchSettingsS
                   padding: const EdgeInsets.only(left: 15, right: 15),
                   child: Row(
                       children: [const Icon(Icons.save_alt_outlined, size: 24), const SizedBox(width: 10),
-                        Text('Save', textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)])))
+                        Text('Save', textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)])))
         ]));
   }
 
@@ -411,13 +411,13 @@ class _CustomizeSearchSettingsScreenState extends State<CustomizeSearchSettingsS
               LogUtil.debug(_tag, '_getVersionNumberRow::${snapshot.error}');
               return Text('Error loading the user settings version',
                   style: Theme.of(context).textTheme.labelSmall!.copyWith(color: Theme.of(context).colorScheme.error),
-                  textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
+                  textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor);
             } else if (snapshot.hasData) {
               _userSettingsVersion = snapshot.data;
               return Text('User Settings Version : $_userSettingsVersion', style: Theme.of(context).textTheme.bodySmall,
-                  textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
+                  textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor);
             } else {
-              return Text('Loading', textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
+              return Text('Loading', textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor);
             }
           })
     ]);

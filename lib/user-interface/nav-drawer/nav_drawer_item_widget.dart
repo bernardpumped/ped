@@ -64,7 +64,7 @@ class NavDrawerItemWidget extends StatelessWidget {
                 child: Padding(
                     padding: const EdgeInsets.only(left: 20),
                     child: Text(label, style: Theme.of(context).textTheme.titleSmall!.copyWith(color: color),
-                        textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor,
+                        textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor,
                     overflow: TextOverflow.ellipsis)),
               )
             ])));

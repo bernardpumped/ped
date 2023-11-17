@@ -90,14 +90,14 @@ class _FuelStationContextMenuState extends State<FuelStationContextMenu> {
                   child: ListTile(
                       leading: const Icon(Icons.visibility),
                       title: Text('Preview', style: Theme.of(context).textTheme.titleSmall,
-                          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor))),
+                          textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor))),
               PopupMenuItem<String>(
                   value: 'favourite',
                   child: ListTile(
                       leading: Icon(isFavourite ? Icons.heart_broken_outlined : Icons.favorite_border_outlined),
                       title: Text(isFavourite ? 'Unfavourite' : 'Favourite',
                           style: Theme.of(context).textTheme.titleSmall,
-                          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor))),
+                          textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor))),
               const PopupMenuDivider(),
               PopupMenuItem<String>(
                   value: 'hide',
@@ -105,7 +105,7 @@ class _FuelStationContextMenuState extends State<FuelStationContextMenu> {
                       leading: Icon(Icons.hide_source_outlined, color: Theme.of(context).colorScheme.error),
                       title: Text('Hide',
                           style: Theme.of(context).textTheme.titleSmall!.copyWith(color: Theme.of(context).colorScheme.error),
-                          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)))
+                          textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)))
             ]);
   }
 

@@ -194,7 +194,7 @@ class _FavouriteStationsScreenState extends State<FavouriteStationsScreen> {
   Widget _favoriteFuelStationWidget(final FavoriteFuelStations data) {
     if (!data.locationSearchSuccessful) {
       final String locationErrorReason = data.locationErrorReason ?? 'Unknown Location Error Reason';
-      return Center(child: Text(locationErrorReason, textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor));
+      return Center(child: Text(locationErrorReason, textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor));
     } else {
       _favouriteStations = data.fuelStations ?? [];
       if (_favouriteStations.isNotEmpty) {

@@ -55,7 +55,7 @@ class _TextLocaleMenuItemWidgetState extends State<TextLocaleMenuItemWidget> {
     return Card(
         child: ExpansionTile(
       title: Text("Locale - ${_locales[selectedLocale]}", style: Theme.of(context).textTheme.titleMedium,
-          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+          textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
       leading: const Icon(Icons.language, size: 30),
       children: [
         _getMenuItem(_systemLocale),
@@ -80,6 +80,6 @@ class _TextLocaleMenuItemWidgetState extends State<TextLocaleMenuItemWidget> {
           });
         },
         title: Text(_locales[value]!, style: Theme.of(context).textTheme.titleSmall,
-            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor));
+            textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor));
   }
 }

@@ -46,7 +46,7 @@ class _UpdateDistributionPieChartState extends State<UpdateDistributionPieChart>
                 padding: const EdgeInsets.all(8.0),
                 child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
                   Text('Successful Updates', style: Theme.of(context).textTheme.titleLarge,
-                      textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+                      textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
                   const SizedBox(height: 18),
                   Expanded(
                       child: AspectRatio(

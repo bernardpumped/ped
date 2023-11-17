@@ -47,7 +47,7 @@ class CollapsedHeaderWidget extends StatelessWidget {
                   child: Text(headerText,
                       style: Theme.of(context).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.w500),
                       overflow: TextOverflow.ellipsis,
-                      textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)))
+                      textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)))
         ]));
   }
 }

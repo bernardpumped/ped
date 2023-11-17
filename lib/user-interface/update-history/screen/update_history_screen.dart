@@ -106,7 +106,7 @@ class _UpdateHistoryScreenState extends State<UpdateHistoryScreen> {
             return Center(
                 child: Text('Error Loading',
                     style: Theme.of(context).textTheme.titleSmall!.copyWith(color: Theme.of(context).colorScheme.error),
-                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor));
+                    textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor));
           } else {
             return const Center(child: CircularProgressIndicator());
           }

@@ -96,7 +96,7 @@ class _EditOperatingTimeWidgetState extends State<EditOperatingTimeWidget> {
           const Icon(Icons.access_time_rounded, size: 30),
           const SizedBox(width: 10),
           Text('Update Operating Times', style: Theme.of(context).textTheme.headlineMedium,
-              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
+              textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)
         ]));
   }
 

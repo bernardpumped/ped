@@ -41,7 +41,7 @@ class _TextDirectionMenuItemWidgetState extends State<TextDirectionMenuItemWidge
     return Card(
         child: ExpansionTile(
             title: Text("Text Direction - ${_textDirection[selectedTextDirection]}",
-                style: Theme.of(context).textTheme.titleMedium, textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+                style: Theme.of(context).textTheme.titleMedium, textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
             leading: const Icon(Icons.align_horizontal_left, size: 30),
             children: [_getMenuItem(_basedOnLocale), _getMenuItem(_ltrDirection), _getMenuItem(_rtlDirection)]));
   }
@@ -56,6 +56,6 @@ class _TextDirectionMenuItemWidgetState extends State<TextDirectionMenuItemWidge
           });
         },
         title: Text(_textDirection[value]!, style: Theme.of(context).textTheme.titleSmall,
-            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor));
+            textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor));
   }
 }

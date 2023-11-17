@@ -45,7 +45,7 @@ class EmailNotificationWidget extends StatelessWidget {
             padding: const EdgeInsets.only(left: 15, right: 15),
             child:
             Row(children: [const Icon(Icons.email_outlined, size: 24), const SizedBox(width: 10),
-              Text('Email', textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)])));
+              Text('Email', textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)])));
   }
 
   void _sendEmail(final Function function) async {

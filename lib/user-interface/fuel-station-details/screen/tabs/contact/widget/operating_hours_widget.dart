@@ -60,12 +60,12 @@ class _OperatingHoursWidgetState extends State<OperatingHoursWidget> {
           if (snapshot.hasError) {
             LogUtil.debug(_tag, 'Error ${snapshot.error}');
             return Text('Error Loading Operating Hours', style: _errorStyle,
-                textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
+                textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor);
           } else if (snapshot.hasData) {
             final GetFuelStationOperatingHrsResponse data = snapshot.data!;
             if (data.responseCode != 'SUCCESS') {
               return ListTile(title: Text('Error Loading', style: _errorStyle,
-                  textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor));
+                  textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor));
             } else {
               final FuelStationOperatingHrs? fuelStationOperatingHrs = data.fuelStationOperatingHrs;
               widget.fuelStation.fuelStationOperatingHrs = fuelStationOperatingHrs;
@@ -95,7 +95,7 @@ class _OperatingHoursWidgetState extends State<OperatingHoursWidget> {
             return ListTile(
                 leading: const Icon(Icons.access_time, size: 30),
                 title: Text('Loading Operating Hours...', style: _loadingStyle,
-                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor));
+                    textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor));
           }
         });
   }
@@ -167,13 +167,13 @@ class _OperatingHoursWidgetState extends State<OperatingHoursWidget> {
         child: !_operatingHoursExpanded
             ? RichText(
                 textAlign: TextAlign.left,
-                textScaleFactor: TextScaler.of<TextScalingFactor>(context)!.scaleFactor,
+                textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)!.scaleFactor,
                 text: TextSpan(children: [
                   TextSpan(text: currentStatus, style: currentStatusStyle),
                   TextSpan(text: nextEventStatus, style: nextEventStyle)
                 ]))
             : Text(currentStatus, style: currentStatusStyle,
-                textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor));
+                textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor));
   }
 
   OperatingHours? _getOperatingHrsForDay(final List<OperatingHours> weeklyOperatingHrs, final String? currentWeekDay) {
@@ -225,9 +225,9 @@ class _OperatingHoursWidgetState extends State<OperatingHoursWidget> {
           padding: const EdgeInsets.only(left: 20, top: 15, bottom: 15, right: 20),
           child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
             Expanded(flex: 6, child: Text(weekDay, textAlign: TextAlign.start, style: _textStyle,
-                textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
+                textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
             Expanded(flex: 6, child: Text(operatingTimeRange, textAlign: TextAlign.start, style: _textStyle,
-                textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
+                textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
             Expanded(flex: 1, child: _getOperatingHoursSourceCitation(dailyOperatingHrs, weekDay, operatingTimeRange))
           ])));
       columnContent.add(const Divider(thickness: 1, height: 1));

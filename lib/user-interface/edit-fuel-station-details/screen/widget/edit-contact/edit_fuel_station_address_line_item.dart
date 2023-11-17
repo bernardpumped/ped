@@ -82,7 +82,7 @@ class _EditFuelStationAddressLineItemState extends State<EditFuelStationAddressL
                 child: Row(children: <Widget>[
                   Expanded(
                       flex: 1, child: Text(widget._addressComponentName, style: Theme.of(context).textTheme.titleSmall,
-                      textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
+                      textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
                   Expanded(
                       flex: 3,
                       child: Column(
@@ -131,7 +131,7 @@ class _EditFuelStationAddressLineItemState extends State<EditFuelStationAddressL
         duration: Duration(milliseconds: _errorMsgHeightChangeTime),
         child: Text(_errorMessage,
             style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Theme.of(context).colorScheme.error),
-            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor));
+            textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor));
   }
 
   Widget _getAddressComponentField(final TextField addressComponentTextField) {

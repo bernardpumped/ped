@@ -53,10 +53,10 @@ class _TextScalingMenuItemWidgetState extends State<TextScalingMenuItemWidget> {
               LogUtil.debug(_tag, 'Error found while loading UiSettings ${snapShot.error}');
               return Text('Error Loading',
                   style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Theme.of(context).colorScheme.error),
-                  textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
+                  textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor);
             } else {
               return Text('Loading', style: Theme.of(context).textTheme.titleMedium,
-                  textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
+                  textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor);
             }
           }
       )
@@ -67,7 +67,7 @@ class _TextScalingMenuItemWidgetState extends State<TextScalingMenuItemWidget> {
     return ExpansionTile(
         title: Text("Text Scale - ${TextScale.getTextScale(uiSettings.textScale!)}",
             style: Theme.of(context).textTheme.titleMedium,
-            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+            textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
         leading: const Icon(Icons.linear_scale_rounded, size: 30),
         children: [
           _getMenuItem(TextScale.systemTextScale, uiSettings),
@@ -88,17 +88,17 @@ class _TextScalingMenuItemWidgetState extends State<TextScalingMenuItemWidget> {
           uiSettings.textScale = newTextScale!;
           double textScaleValue = TextScale.getTextScaleValue(newTextScale) as double;
           UiSettingsDao.instance.insertUiSettings(uiSettings).whenComplete(() {
-            TextScaler.update(context, TextScalingFactor(scaleFactor: textScaleValue));
+            PedTextScaler.update(context, TextScalingFactor(scaleFactor: textScaleValue));
             LogUtil.debug(_tag, 'Inserted instance $newTextScale');
             if (mounted) {
               LogUtil.debug(_tag, 'Still mounted, calling setState');
               setState(() {});
             }
           });
-          TextScaler.update(context, TextScalingFactor(scaleFactor: textScaleValue));
+          PedTextScaler.update(context, TextScalingFactor(scaleFactor: textScaleValue));
         },
         title: Text(TextScale.getTextScale(textScale), style: Theme.of(context).textTheme.titleSmall,
-            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor));
+            textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor));
   }
 
   Future<UiSettings?>? _getUiSettings() {

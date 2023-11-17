@@ -94,7 +94,7 @@ class _DirectionsWidgetState extends State<DirectionsWidget> {
           }),
       const SizedBox(height: 5),
       Text('Directions', style: Theme.of(context).textTheme.bodyMedium,
-          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
+          textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)
     ]);
   }
 

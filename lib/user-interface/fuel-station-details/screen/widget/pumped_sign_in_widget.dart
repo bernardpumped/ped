@@ -79,7 +79,7 @@ class _PumpedSignInWidgetState extends State<PumpedSignInWidget> {
           }),
           const SizedBox(height: 6),
           ElevatedButton(
-              child: Text('Cancel', textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+              child: Text('Cancel', textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
               onPressed: () {
                 if (!signInProgress) {
                   widget.cancelButtonAction();

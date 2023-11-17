@@ -43,7 +43,7 @@ class EditActionButton extends StatelessWidget {
               child: Padding(
                   padding: const EdgeInsets.only(left: 15, right: 15),
                   child: Row(children: [const Icon(Icons.history, size: 24), const SizedBox(width: 10),
-                    Text('Undo', textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)])))),
+                    Text('Undo', textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)])))),
       const SizedBox(width: 20),
       AnimatedContainer(
           duration: const Duration(milliseconds: 200),
@@ -56,7 +56,7 @@ class EditActionButton extends StatelessWidget {
               child: Padding(
                   padding: const EdgeInsets.only(left: 15, right: 15),
                   child: Row(children: [const Icon(Icons.sync, size: 24), const SizedBox(width: 10),
-                    Text('Save', textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)]))))
+                    Text('Save', textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)]))))
     ]);
   }
 }
