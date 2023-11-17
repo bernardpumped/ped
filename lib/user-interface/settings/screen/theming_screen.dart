@@ -28,7 +28,7 @@ import 'package:pumped_end_device/util/theme_notifier.dart';
 import 'package:pumped_end_device/util/ui_themes.dart';
 
 class ThemingScreen extends StatefulWidget {
-  const ThemingScreen({Key? key}) : super(key: key);
+  const ThemingScreen({super.key});
 
   @override
   State<ThemingScreen> createState() => _ThemingScreenState();

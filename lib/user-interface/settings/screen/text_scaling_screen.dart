@@ -26,7 +26,7 @@ import 'package:pumped_end_device/util/log_util.dart';
 import 'package:pumped_end_device/util/text_scale.dart';
 
 class TextScalingScreen extends StatefulWidget {
-  const TextScalingScreen({Key? key}) : super(key: key);
+  const TextScalingScreen({super.key});
 
   @override
   State<TextScalingScreen> createState() => _TextScalingScreenState();

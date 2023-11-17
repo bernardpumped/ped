@@ -30,7 +30,7 @@ class FavoriteFuelStationBookmark extends StatefulWidget {
   final FuelStation _fuelStation;
   final Function _onFavouriteStatusChange;
 
-  const FavoriteFuelStationBookmark(this._fuelStation, this._onFavouriteStatusChange, {Key? key}) : super(key: key);
+  const FavoriteFuelStationBookmark(this._fuelStation, this._onFavouriteStatusChange, {super.key});
 
   @override
   State<FavoriteFuelStationBookmark> createState() => _FavoriteFuelStationBookmarkState();

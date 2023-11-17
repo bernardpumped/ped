@@ -36,7 +36,7 @@ import 'cleanup_local_cache_screen.dart';
 import 'customize_search_settings_screen.dart';
 
 class SettingsScreen extends StatefulWidget {
-  const SettingsScreen({Key? key}) : super(key: key);
+  const SettingsScreen({super.key});
 
   @override
   State<StatefulWidget> createState() {

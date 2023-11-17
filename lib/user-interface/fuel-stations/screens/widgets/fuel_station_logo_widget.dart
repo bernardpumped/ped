@@ -25,13 +25,12 @@ class FuelStationLogoWidget extends StatelessWidget {
   final double padding;
   final double borderRadius;
   const FuelStationLogoWidget(
-      {Key? key,
+      {super.key,
       required this.width,
       required this.height,
       required this.image,
       this.padding = 8,
-      this.borderRadius = 10})
-      : super(key: key);
+      this.borderRadius = 10});
 
   @override
   Widget build(final BuildContext context) {

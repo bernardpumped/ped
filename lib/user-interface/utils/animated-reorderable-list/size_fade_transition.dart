@@ -39,15 +39,14 @@ class SizeFadeTransition extends StatefulWidget {
   /// The child widget.
   final Widget? child;
   const SizeFadeTransition({
-    Key? key,
+    super.key,
     required this.animation,
     this.sizeFraction = 2 / 3,
     this.curve = Curves.linear,
     this.axis = Axis.vertical,
     this.axisAlignment = 0.0,
     this.child,
-  })  : assert(sizeFraction >= 0.0 && sizeFraction <= 1.0),
-        super(key: key);
+  })  : assert(sizeFraction >= 0.0 && sizeFraction <= 1.0);
 
   @override
   SizeFadeTransitionState createState() => SizeFadeTransitionState();

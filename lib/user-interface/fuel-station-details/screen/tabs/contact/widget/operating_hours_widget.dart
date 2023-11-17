@@ -34,8 +34,7 @@ import 'package:sprintf/sprintf.dart';
 class OperatingHoursWidget extends StatefulWidget {
   final Future<GetFuelStationOperatingHrsResponse>? operatingHrsResponseFuture;
   final FuelStation fuelStation;
-  const OperatingHoursWidget({Key? key, required this.operatingHrsResponseFuture, required this.fuelStation})
-      : super(key: key);
+  const OperatingHoursWidget({super.key, required this.operatingHrsResponseFuture, required this.fuelStation});
 
   @override
   State<OperatingHoursWidget> createState() => _OperatingHoursWidgetState();

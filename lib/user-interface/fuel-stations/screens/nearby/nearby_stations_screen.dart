@@ -49,7 +49,7 @@ import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
 class NearbyStationsScreen extends StatefulWidget {
-  const NearbyStationsScreen({Key? key}) : super(key: key);
+  const NearbyStationsScreen({super.key});
 
   @override
   State<StatefulWidget> createState() => _NearbyStationsScreenState();

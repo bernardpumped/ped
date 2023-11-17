@@ -25,7 +25,7 @@ import 'package:pumped_end_device/util/log_util.dart';
 
 class DeveloperOptions extends StatefulWidget {
   final Function() callback;
-  const DeveloperOptions({Key? key, required this.callback}) : super(key: key);
+  const DeveloperOptions({super.key, required this.callback});
 
   @override
   State<DeveloperOptions> createState() => _DeveloperOptionsState();

@@ -26,7 +26,7 @@ class NavDrawerWidget extends StatefulWidget {
   final double width;
   final PageController pageController;
 
-  const NavDrawerWidget({Key? key, required this.width, required this.pageController}) : super(key: key);
+  const NavDrawerWidget({super.key, required this.width, required this.pageController});
 
   @override
   State<NavDrawerWidget> createState() => _NavDrawerWidgetState();
