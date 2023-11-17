@@ -74,7 +74,7 @@ class _TextScalingScreenState extends State<TextScalingScreen> {
         future: _getUiSettings(),
         builder: (context, snapShot) {
           if (snapShot.hasData) {
-            UiSettings? uiSettings = snapShot.data as UiSettings?;
+            UiSettings? uiSettings = snapShot.data;
             if (uiSettings != null) {
               LogUtil.debug(_tag, 'Read UiSettings.textScale : ${uiSettings.textScale}');
               uiSettings.textScale ??= TextScale.systemTextScale;

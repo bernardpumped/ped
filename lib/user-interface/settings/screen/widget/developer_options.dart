@@ -41,7 +41,7 @@ class _DeveloperOptionsState extends State<DeveloperOptions> {
             future: _getUiSettings(),
             builder: (context, snapShot) {
               if (snapShot.hasData) {
-                UiSettings? uiSettings = snapShot.data as UiSettings?;
+                UiSettings? uiSettings = snapShot.data;
                 uiSettings ??= UiSettings(developerOptions: false, devOptionsEnrichOffers: false);
                 uiSettings.developerOptions ??= false;
                 return _getTileForDeveloperOptions(uiSettings);

@@ -166,11 +166,10 @@ class _OperatingHoursWidgetState extends State<OperatingHoursWidget> {
         child: !_operatingHoursExpanded
             ? RichText(
                 textAlign: TextAlign.left,
-                textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)!.scaleFactor,
                 text: TextSpan(children: [
                   TextSpan(text: currentStatus, style: currentStatusStyle),
                   TextSpan(text: nextEventStatus, style: nextEventStyle)
-                ]))
+                ]), textScaler: TextScaler.linear(PedTextScaler.of<TextScalingFactor>(context)!.scaleFactor))
             : Text(currentStatus, style: currentStatusStyle,
                 textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor));
   }
