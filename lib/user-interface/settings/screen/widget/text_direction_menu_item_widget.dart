@@ -21,7 +21,7 @@ import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.d
 import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 
 class TextDirectionMenuItemWidget extends StatefulWidget {
-  const TextDirectionMenuItemWidget({Key? key}) : super(key: key);
+  const TextDirectionMenuItemWidget({super.key});
 
   @override
   State<TextDirectionMenuItemWidget> createState() => _TextDirectionMenuItemWidgetState();

@@ -27,7 +27,7 @@ import 'package:pumped_end_device/util/log_util.dart';
 class UpdateTile extends StatelessWidget {
   static const _tag = 'UpdateTile';
   final UpdateTileData _updateTileData;
-  const UpdateTile(this._updateTileData, {Key? key}) : super(key: key);
+  const UpdateTile(this._updateTileData, {super.key});
 
   @override
   Widget build(final BuildContext context) {

@@ -27,7 +27,7 @@ import 'package:pumped_end_device/util/log_util.dart';
 
 class PinLocationWidget extends StatefulWidget {
   final Function() callback;
-  const PinLocationWidget({Key? key, required this.callback}) : super(key: key);
+  const PinLocationWidget({super.key, required this.callback});
 
   @override
   State<PinLocationWidget> createState() => _PinLocationWidgetState();

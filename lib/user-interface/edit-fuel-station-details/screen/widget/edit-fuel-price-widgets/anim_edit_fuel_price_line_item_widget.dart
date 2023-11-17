@@ -36,15 +36,14 @@ class AnimEditFuelPriceLineItemWidget extends StatefulWidget {
   final Function quoteChangeListener;
 
   const AnimEditFuelPriceLineItemWidget(
-      {Key? key,
+      {super.key,
       required this.isFaStation,
       required this.fuelQuote,
       required this.fuelName,
       this.fuelAuthorityPriceMetadata,
       required this.fuelPriceEditingController,
       required this.currencyValueFormat,
-      required this.quoteChangeListener})
-      : super(key: key);
+      required this.quoteChangeListener});
 
   @override
   State<StatefulWidget> createState() {

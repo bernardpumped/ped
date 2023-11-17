@@ -22,7 +22,6 @@ import 'package:pumped_end_device/user-interface/edit-fuel-station-details/data/
 class GetFuelAuthorityPriceMetaDataResponse extends Response {
   String authorityId;
   List<FuelAuthorityPriceMetadataVo> metadata;
-  GetFuelAuthorityPriceMetaDataResponse(final String responseCode, final String? responseDetails,
-      final Map<String, dynamic>? invalidArguments, final int responseEpoch, this.authorityId, this.metadata)
-      : super(responseCode, responseDetails, invalidArguments, responseEpoch);
+  GetFuelAuthorityPriceMetaDataResponse(super.responseCode, super.responseDetails,
+      super.invalidArguments, super.responseEpoch, this.authorityId, this.metadata);
 }

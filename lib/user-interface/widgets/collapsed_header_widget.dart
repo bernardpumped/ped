@@ -26,7 +26,7 @@ import 'package:pumped_end_device/util/data_utils.dart';
 class CollapsedHeaderWidget extends StatelessWidget {
   final FuelStation fuelStation;
 
-  const CollapsedHeaderWidget({Key? key, required this.fuelStation}) : super(key: key);
+  const CollapsedHeaderWidget({super.key, required this.fuelStation});
 
   @override
   Widget build(final BuildContext context) {

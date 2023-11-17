@@ -36,7 +36,7 @@ import 'package:pumped_end_device/util/log_util.dart';
 class CustomizeSearchSettingsScreen extends StatefulWidget {
   static const routeName = '/ped/settings/edit';
 
-  const CustomizeSearchSettingsScreen({Key? key}) : super(key: key);
+  const CustomizeSearchSettingsScreen({super.key});
 
   @override
   State<StatefulWidget> createState() {

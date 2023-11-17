@@ -24,9 +24,8 @@ import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_
 class PumpedAppBar extends StatefulWidget implements PreferredSizeWidget {
   final String title;
   final IconData? icon;
-  const PumpedAppBar({required this.title, this.icon, Key? key})
-      : preferredSize = const Size.fromHeight(kToolbarHeight),
-        super(key: key);
+  const PumpedAppBar({required this.title, this.icon, super.key})
+      : preferredSize = const Size.fromHeight(kToolbarHeight);
 
   @override
   final Size preferredSize;

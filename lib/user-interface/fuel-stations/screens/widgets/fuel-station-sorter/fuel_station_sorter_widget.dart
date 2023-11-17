@@ -3,7 +3,7 @@ import 'package:pumped_end_device/user-interface/fuel-stations/screens/widgets/f
 
 class FuelStationSorterWidget extends StatefulWidget {
   final Function parentUpdateFunction;
-  const FuelStationSorterWidget({Key? key, required this.parentUpdateFunction}) : super(key: key);
+  const FuelStationSorterWidget({super.key, required this.parentUpdateFunction});
 
   @override
   State<FuelStationSorterWidget> createState() => _FuelStationSorterWidgetState();

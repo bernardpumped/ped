@@ -36,7 +36,7 @@ import 'nav_drawer_item_widget.dart';
 class NavDrawerWidget extends StatefulWidget {
   static const _userImage = 'assets/images/ic_user.png';
 
-  const NavDrawerWidget({Key? key}) : super(key: key);
+  const NavDrawerWidget({super.key});
 
   @override
   State<NavDrawerWidget> createState() => _NavDrawerWidgetState();

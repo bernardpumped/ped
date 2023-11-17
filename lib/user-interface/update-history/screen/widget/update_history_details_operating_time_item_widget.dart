@@ -33,13 +33,12 @@ class UpdateHistoryDetailsOperatingTimeItemWidget extends StatelessWidget {
   final List<dynamic>? recordLevelException;
 
   const UpdateHistoryDetailsOperatingTimeItemWidget(
-      {Key? key,
+      {super.key,
       required this.valueType,
       this.originalValue,
       this.updateValue,
       this.serverExceptions,
-      this.recordLevelException})
-      : super(key: key);
+      this.recordLevelException});
 
   @override
   Widget build(final BuildContext context) {

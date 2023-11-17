@@ -29,7 +29,7 @@ class SendFeedbackScreen extends StatefulWidget {
   static const viewIcon = Icons.feedback_outlined;
   static const viewSelectedIcon = Icons.feedback;
 
-  const SendFeedbackScreen({Key? key}) : super(key: key);
+  const SendFeedbackScreen({super.key});
 
   @override
   State<SendFeedbackScreen> createState() => _SendFeedbackScreenState();

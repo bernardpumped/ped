@@ -25,12 +25,11 @@ class GetFuelStationsInRangeResponse extends Response {
   MarketRegionZoneConfiguration? marketRegionZoneConfiguration;
   final bool configChanged;
   GetFuelStationsInRangeResponse(
-      final String responseCode,
-      final String? responseDetails,
-      final Map<String, dynamic>? invalidArguments,
-      final int responseEpoch,
+      super.responseCode,
+      super.responseDetails,
+      super.invalidArguments,
+      super.responseEpoch,
       this.fuelStations,
       this.marketRegionZoneConfiguration,
-      this.configChanged)
-      : super(responseCode, responseDetails, invalidArguments, responseEpoch);
+      this.configChanged);
 }

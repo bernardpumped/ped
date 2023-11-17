@@ -42,7 +42,7 @@ class EditContactWidget extends StatefulWidget {
   final EditFuelStationDetailsParams _params;
   final double _heightHeaderWidget;
 
-  const EditContactWidget(this._params, this._heightHeaderWidget, {Key? key}) : super(key: key);
+  const EditContactWidget(this._params, this._heightHeaderWidget, {super.key});
 
   @override
   State<EditContactWidget> createState() => _EditContactWidgetState();

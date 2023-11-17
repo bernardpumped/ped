@@ -47,7 +47,7 @@ class EditFuelPriceWidget extends StatefulWidget {
   final EditFuelStationDetailsParams _params;
   final double _heightHeaderWidget;
 
-  const EditFuelPriceWidget(this._params, this._heightHeaderWidget, {Key? key}) : super(key: key);
+  const EditFuelPriceWidget(this._params, this._heightHeaderWidget, {super.key});
 
   @override
   State<EditFuelPriceWidget> createState() => _EditFuelPriceWidgetState();

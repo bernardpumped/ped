@@ -26,7 +26,7 @@ import 'package:pumped_end_device/util/log_util.dart';
 
 class DeleteMockLocation extends StatefulWidget {
   final Function() callback;
-  const DeleteMockLocation({Key? key, required this.callback}) : super(key: key);
+  const DeleteMockLocation({super.key, required this.callback});
 
   @override
   State<DeleteMockLocation> createState() => _DeleteMockLocationState();

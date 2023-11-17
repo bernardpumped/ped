@@ -19,7 +19,7 @@
 import 'package:flutter/material.dart';
 
 class _ScalingFactorBindingScope<T> extends InheritedWidget {
-  const _ScalingFactorBindingScope({Key? key, required this.scalingFactorBindingState, required Widget child})  : super(key: key, child: child);
+  const _ScalingFactorBindingScope({super.key, required this.scalingFactorBindingState, required super.child});
 
   final PedTextScalerState<T> scalingFactorBindingState;
 
@@ -30,7 +30,7 @@ class _ScalingFactorBindingScope<T> extends InheritedWidget {
 }
 
 class PedTextScaler<T> extends StatefulWidget {
-  const PedTextScaler({Key? key, required this.initialScaleFactor, required this.child}) : super(key: key);
+  const PedTextScaler({super.key, required this.initialScaleFactor, required this.child});
 
   final T initialScaleFactor;
   final Widget child;

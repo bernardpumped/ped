@@ -29,7 +29,7 @@ class HelpScreen extends StatefulWidget {
   static const viewIcon = Icons.help_outline_outlined;
   static const viewSelectedIcon = Icons.help;
 
-  const HelpScreen({Key? key}) : super(key: key);
+  const HelpScreen({super.key});
 
   @override
   State<HelpScreen> createState() => _HelpScreenState();

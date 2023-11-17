@@ -34,7 +34,7 @@ class FuelStationContextMenu extends StatefulWidget {
   final FuelStation fuelStation;
   final FuelType selectedFuelType;
 
-  const FuelStationContextMenu({Key? key, required this.fuelStation, required this.selectedFuelType}) : super(key: key);
+  const FuelStationContextMenu({super.key, required this.fuelStation, required this.selectedFuelType});
 
   @override
   State<FuelStationContextMenu> createState() => _FuelStationContextMenuState();

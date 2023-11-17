@@ -32,7 +32,7 @@ import 'package:pumped_end_device/util/app_theme.dart';
 class FuelPricesTabWidget extends StatefulWidget {
   final FuelStationDetailsParam _param;
 
-  const FuelPricesTabWidget(this._param, {Key? key}) : super(key: key);
+  const FuelPricesTabWidget(this._param, {super.key});
 
   @override
   State<FuelPricesTabWidget> createState() => _FuelPricesTabWidgetState();

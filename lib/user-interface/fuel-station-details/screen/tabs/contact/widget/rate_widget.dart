@@ -31,7 +31,7 @@ class RateWidget extends StatelessWidget {
 
   final FuelStationAddress address;
 
-  const RateWidget(this.address, {Key? key}) : super(key: key);
+  const RateWidget(this.address, {super.key});
 
   @override
   Widget build(final BuildContext context) {

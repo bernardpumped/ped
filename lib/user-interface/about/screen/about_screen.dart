@@ -28,7 +28,7 @@ class AboutScreen extends StatelessWidget {
   static const viewIcon = Icons.info_outline;
   static const viewSelectedIcon = Icons.info;
 
-  const AboutScreen({Key? key}) : super(key: key);
+  const AboutScreen({super.key});
 
   @override
   Widget build(final BuildContext context) {

@@ -20,10 +20,9 @@ import 'package:pumped_end_device/data/remote/model/response/response.dart';
 
 class GetBackendMetadataResponse extends Response {
   String? versionId;
-  GetBackendMetadataResponse(final String responseCode, final String? responseDetails,
-      final Map<String, dynamic>? invalidArguments, final int responseEpoch,
-      {this.versionId})
-      : super(responseCode, responseDetails, invalidArguments, responseEpoch);
+  GetBackendMetadataResponse(super.responseCode, super.responseDetails,
+      super.invalidArguments, super.responseEpoch,
+      {this.versionId});
 
   factory GetBackendMetadataResponse.fromJson(final Map<String, dynamic> json) {
     return GetBackendMetadataResponse(

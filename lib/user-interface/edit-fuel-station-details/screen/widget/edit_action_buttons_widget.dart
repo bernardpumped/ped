@@ -26,8 +26,7 @@ class EditActionButton extends StatelessWidget {
   final String tag;
   final Function undoButtonAction;
   final Function saveButtonAction;
-  const EditActionButton({required this.undoButtonAction, required this.saveButtonAction, required this.tag, Key? key})
-      : super(key: key);
+  const EditActionButton({required this.undoButtonAction, required this.saveButtonAction, required this.tag, super.key});
 
   @override
   Widget build(final BuildContext context) {

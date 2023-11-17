@@ -21,7 +21,7 @@ import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.d
 import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 
 class OffersWidget extends StatefulWidget {
-  const OffersWidget ( {Key? key} ) : super( key: key );
+  const OffersWidget ( {super.key} );
 
   @override
   State<OffersWidget> createState ( ) => _OffersWidgetState ( );

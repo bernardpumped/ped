@@ -33,8 +33,7 @@ class EditPhoneNumberLineItem extends StatefulWidget {
 
   const EditPhoneNumberLineItem(this._phoneNumberName, this._addressComponentType, this._phoneNumberValue,
       this._phoneEditingController, this._backendUpdateInProgress, this._onValueChangeListener,
-      {Key? key})
-      : super(key: key);
+      {super.key});
 
   @override
   State<EditPhoneNumberLineItem> createState() => _EditPhoneNumberLineItemState();

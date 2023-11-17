@@ -37,8 +37,7 @@ class FuelTypeSwitcherWidget extends StatefulWidget {
   final Function onChangeCallback;
 
   const FuelTypeSwitcherWidget(
-      {Key? key, required this.selectedFuelType, required this.selectedFuelCategory, required this.onChangeCallback})
-      : super(key: key);
+      {super.key, required this.selectedFuelType, required this.selectedFuelCategory, required this.onChangeCallback});
 
   @override
   State<FuelTypeSwitcherWidget> createState() => _FuelTypeSwitcherWidgetState();

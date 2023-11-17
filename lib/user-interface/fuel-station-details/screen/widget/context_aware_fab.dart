@@ -37,8 +37,7 @@ class ContextAwareFab extends StatefulWidget {
   final FuelStation _fuelStation;
   final int _selectedTab; // 0 -> Fuel Prices tab, 1 -> Offers tab, 2 - Contacts tab
 
-  const ContextAwareFab(this._fuelStation, this._selectedTab, this._updateFuelStationDetailsScreenForChange, {Key? key})
-      : super(key: key);
+  const ContextAwareFab(this._fuelStation, this._selectedTab, this._updateFuelStationDetailsScreenForChange, {super.key});
 
   @override
   State<ContextAwareFab> createState() => _ContextAwareFabState();

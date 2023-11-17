@@ -27,7 +27,7 @@ import 'package:pumped_end_device/util/theme_notifier.dart';
 import 'package:pumped_end_device/util/ui_themes.dart';
 
 class ThemeMenuItemWidget extends StatefulWidget {
-  const ThemeMenuItemWidget({Key? key}) : super(key: key);
+  const ThemeMenuItemWidget({super.key});
 
   @override
   State<ThemeMenuItemWidget> createState() => _ThemeMenuItemWidgetState();
@@ -44,7 +44,7 @@ class _ThemeMenuItemWidgetState extends State<ThemeMenuItemWidget> {
             builder: (context, snapShot) {
               // String? selectedTheme;
               if (snapShot.hasData) {
-                UiSettings? uiSettings = snapShot.data as UiSettings?;
+                UiSettings? uiSettings = snapShot.data;
                 if (uiSettings != null) {
                   LogUtil.debug(_tag, 'Read UiSettings : ${uiSettings.uiTheme}');
                   // if (uiSettings.uiTheme != null) {

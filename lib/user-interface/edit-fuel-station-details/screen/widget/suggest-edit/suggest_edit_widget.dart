@@ -40,7 +40,7 @@ class SuggestEditWidget extends StatefulWidget {
   final EditFuelStationDetailsParams _params;
   final double _heightHeaderWidget;
 
-  const SuggestEditWidget(this._params, this._heightHeaderWidget, {Key? key}) : super(key: key);
+  const SuggestEditWidget(this._params, this._heightHeaderWidget, {super.key});
 
   @override
   State<SuggestEditWidget> createState() => _SuggestEditWidgetState();

@@ -100,7 +100,7 @@ void main() async {
 
 class PumpedApp extends StatelessWidget {
   static const _tag = 'PumpedApp';
-  const PumpedApp({Key? key}) : super(key: key);
+  const PumpedApp({super.key});
 
   @override
   Widget build(final BuildContext context) {
