@@ -40,7 +40,7 @@ class WidgetUtils {
         decoration: BoxDecoration(borderRadius: BorderRadius.circular(15.0), color: color),
         child: Text(message,
             style: Theme.of(context).textTheme.titleSmall!.copyWith(color: textColor), textAlign: TextAlign.center,
-            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor));
+            textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor));
     fToast.removeQueuedCustomToasts();
     fToast.showToast(child: toast, gravity: ToastGravity.BOTTOM, toastDuration: const Duration(seconds: 3));
   }
@@ -54,7 +54,7 @@ class WidgetUtils {
         elevation: 2,
         backgroundColor: AppTheme.modalBottomSheetBg(context),
         content: Text(text, style: Theme.of(context).textTheme.titleSmall!.copyWith(color: textColor),
-            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+            textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
         duration: Duration(seconds: durationToFadeIn),
         behavior: SnackBarBehavior.fixed,
         action: SnackBarAction(label: actionLabel, onPressed: onPressedFunction, textColor: actionColor));

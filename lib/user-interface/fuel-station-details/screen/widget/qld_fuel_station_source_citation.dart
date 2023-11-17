@@ -57,15 +57,15 @@ class QldFuelStationSourceCitation extends StatelessWidget {
       Padding(
           padding: const EdgeInsets.only(top: 10, bottom: 10),
           child: Text(_subTitle, textAlign: TextAlign.center, style: Theme.of(context).textTheme.titleLarge,
-              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
+              textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
       Padding(
           padding: const EdgeInsets.only(bottom: 10),
           child: Text(_qldLicensePara1, textAlign: TextAlign.start, style: Theme.of(context).textTheme.bodyMedium,
-              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
+              textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
       Padding(
           padding: const EdgeInsets.only(bottom: 10),
           child: Text(_qldLicensePara2, textAlign: TextAlign.start, style: Theme.of(context).textTheme.bodyMedium,
-              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
+              textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
       Padding(padding: const EdgeInsets.only(bottom: 6), child: _getAdminContactMessage(context)),
       const Divider(height: 1),
       const SizedBox(height: 6),
@@ -77,7 +77,7 @@ class QldFuelStationSourceCitation extends StatelessWidget {
     return Text(_pumpedMessage,
         textAlign: TextAlign.start,
         style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: Theme.of(context).colorScheme.error),
-        textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
+        textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor);
   }
 
   Row _getOkActionButton(final BuildContext context) {
@@ -90,7 +90,7 @@ class QldFuelStationSourceCitation extends StatelessWidget {
               padding: const EdgeInsets.only(left: 15, right: 15),
               child:
                   Row(children: [const Icon(Icons.cancel_outlined, size: 24), const SizedBox(width: 10),
-                    Text('Cancel', textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)]))),
+                    Text('Cancel', textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)]))),
       const SizedBox(width: 10),
       _getNotificationWidget(),
     ]);

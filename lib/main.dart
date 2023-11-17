@@ -54,7 +54,7 @@ import 'firebase_options.dart';
 
 GetIt getIt = GetIt.instance;
 bool initializeRateMyApp = true;
-const appVersion = "38D.UI_PRD";
+const appVersion = "39.UI_PRD";
 const getLocationWrapperInstanceName = 'geoLocationWrapper';
 const platformWrapperInstanceName = 'platformWrapper';
 const locationDataSourceInstanceName = 'locationDataSource';
@@ -108,7 +108,7 @@ class PumpedApp extends StatelessWidget {
     _deviceInfo();
     _registerBeansWithGetIt();
     LogUtil.debug("main", "Value of textScale found as ${themeNotifier.getTextScale()}");
-    return TextScaler(
+    return PedTextScaler(
         initialScaleFactor: TextScalingFactor(scaleFactor: themeNotifier.getTextScale()),
         child: MaterialApp(
             debugShowCheckedModeBanner: false,

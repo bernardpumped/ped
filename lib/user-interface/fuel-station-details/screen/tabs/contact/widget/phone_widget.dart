@@ -48,7 +48,7 @@ class PhoneWidget extends StatelessWidget {
           }),
       const SizedBox(height: 5),
       Text('Call', style: Theme.of(context).textTheme.bodyMedium,
-          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
+          textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)
     ]);
   }
 

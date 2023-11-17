@@ -55,7 +55,7 @@ class RateWidget extends StatelessWidget {
           }),
       const SizedBox(height: 5),
       Text('Rate', style: Theme.of(context).textTheme.bodyMedium,
-          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
+          textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)
     ]);
   }
 

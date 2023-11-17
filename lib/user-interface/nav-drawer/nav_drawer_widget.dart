@@ -146,7 +146,7 @@ class _NavDrawerWidgetState extends State<NavDrawerWidget> {
           Padding(
               padding: const EdgeInsets.only(left: 20),
               child: Text('Fuel Finder', style: Theme.of(context).textTheme.displaySmall,
-                  textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor))
+                  textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor))
         ]));
   }
 
@@ -168,14 +168,14 @@ class _NavDrawerWidgetState extends State<NavDrawerWidget> {
                 padding: const EdgeInsets.only(left: 15.0),
                 child: Text(userDisplayName, style: Theme.of(context).textTheme.titleMedium,
                     overflow: TextOverflow.ellipsis,
-                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
+                    textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
               const SizedBox(height: 10),
               userEmail != null
                   ? Padding(
                     padding: const EdgeInsets.only(left: 15.0),
                     child: Text(userEmail, style: Theme.of(context).textTheme.labelSmall,
                         overflow: TextOverflow.ellipsis,
-                        textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor))
+                        textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor))
                   : const SizedBox(height: 0)
             ]),
           )

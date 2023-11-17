@@ -31,7 +31,7 @@ class FuelTypeSwitcherButton extends StatelessWidget {
         elevation: 5,
         avatar: const Icon(Icons.workspaces),
         label: Text(_txtToDisplay, overflow: TextOverflow.ellipsis,
-            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+            textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
         labelStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(color: Theme.of(context).colorScheme.background),
         labelPadding: const EdgeInsets.all(3),
         onDeleted: _trailingButtonAction,

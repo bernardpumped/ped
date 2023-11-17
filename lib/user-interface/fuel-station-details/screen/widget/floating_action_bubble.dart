@@ -83,7 +83,7 @@ class BubbleMenu extends StatelessWidget {
             child: Row(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.end, children: [
               Icon(item._icon, color: Theme.of(context).colorScheme.background),
               const SizedBox(width: 10),
-              Text(item._title, textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
+              Text(item._title, textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)
             ])));
   }
 }

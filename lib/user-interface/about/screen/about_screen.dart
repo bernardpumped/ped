@@ -75,6 +75,6 @@ class AboutScreen extends StatelessWidget {
     return Padding(
         padding: const EdgeInsets.only(top: 10),
         child: Text(text, style: Theme.of(context).textTheme.bodyLarge, textAlign: TextAlign.left,
-          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor));
+          textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor));
   }
 }

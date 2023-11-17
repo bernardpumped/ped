@@ -66,10 +66,10 @@ class _ThemeMenuItemWidgetState extends State<ThemeMenuItemWidget> {
                 LogUtil.debug(_tag, 'Error found while loading UiSettings ${snapShot.error}');
                 return Text('Error Loading',
                     style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Theme.of(context).colorScheme.error),
-                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
+                    textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor);
               } else {
                 return Text('Loading', style: Theme.of(context).textTheme.titleMedium,
-                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
+                    textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor);
               }
             }));
   }
@@ -77,7 +77,7 @@ class _ThemeMenuItemWidgetState extends State<ThemeMenuItemWidget> {
   _getExpansionTile(final UiSettings uiSettings) {
     return ExpansionTile(
         title: Text("Theme - ${UiThemes.themes[uiSettings.uiTheme]}", style: Theme.of(context).textTheme.titleMedium,
-            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+            textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
         leading: const Icon(Icons.compare_outlined, size: 30),
         children: [
           _getMenuItem(UiThemes.lightTheme, uiSettings),
@@ -105,7 +105,7 @@ class _ThemeMenuItemWidgetState extends State<ThemeMenuItemWidget> {
           });
         },
         title: Text(UiThemes.themes[themeValue]!, style: Theme.of(context).textTheme.titleSmall,
-            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor));
+            textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor));
   }
 
   Future<UiSettings?>? _getUiSettings() {

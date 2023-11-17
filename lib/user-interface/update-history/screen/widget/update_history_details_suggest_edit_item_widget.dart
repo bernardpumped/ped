@@ -45,7 +45,7 @@ class UpdateHistoryDetailsSuggestEditItemWidget extends StatelessWidget {
           Padding(
               padding: const EdgeInsets.only(top: 12, left: 20, right: 20),
               child: Text('Suggestion', style: Theme.of(context).textTheme.bodyLarge,
-                  textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
+                  textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
           Padding(
               padding: const EdgeInsets.only(top: 12, left: 20, right: 20),
               child: Text(updateValue,
@@ -53,14 +53,14 @@ class UpdateHistoryDetailsSuggestEditItemWidget extends StatelessWidget {
                   softWrap: true,
                   maxLines: 4,
                   overflow: TextOverflow.ellipsis,
-                  textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
+                  textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
           Padding(
               padding: const EdgeInsets.only(top: 12, left: 20, right: 20, bottom: 12),
               child: Row(children: <Widget>[
                 Expanded(flex: 1, child: Text('Status', style: Theme.of(context).textTheme.bodyLarge,
-                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
+                    textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
                 Expanded(flex: 1, child: Text(updateStatus, style: Theme.of(context).textTheme.bodyLarge,
-                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor))
+                    textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor))
               ]))
         ]));
   }

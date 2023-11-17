@@ -135,7 +135,7 @@ class _NearbyStationsScreenState extends State<NearbyStationsScreen> {
             actionsBuilder: (context, stars) {
               return [
                 TextButton(
-                    child: Text('Later', textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+                    child: Text('Later', textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
                     onPressed: () async {
                       await rateMyApp.callEvent(RateMyAppEventType.laterButtonPressed);
                       if (mounted) {
@@ -143,7 +143,7 @@ class _NearbyStationsScreenState extends State<NearbyStationsScreen> {
                       }
                     }),
                 TextButton(
-                    child: Text('OK', textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+                    child: Text('OK', textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
                     onPressed: () async {
                       LogUtil.debug(_tag, 'Thanks for the ${stars == null ? '0' : stars.round().toString()} star(s) !');
                       if (stars != null && stars > 0) {
@@ -332,7 +332,7 @@ class _NearbyStationsScreenState extends State<NearbyStationsScreen> {
     _userSettingsVersion = data.userSettingsVersion ?? 0;
     if (!data.locationSearchSuccessful) {
       final String locationErrorReason = data.locationErrorReason ?? 'Unknown Location Error Reason';
-      return Center(child: Text(locationErrorReason, textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor));
+      return Center(child: Text(locationErrorReason, textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor));
     } else {
       _nearByFuelStations = data.fuelStations ?? [];
       LogUtil.debug(_tag, 'Setting _nearByFuelStations variable');

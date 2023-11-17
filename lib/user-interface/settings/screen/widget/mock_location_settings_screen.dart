@@ -54,7 +54,7 @@ class _MockLocationSettingsScreenState extends State<MockLocationSettingsScreen>
                           child: Text('Mock Location of Device',
                               style: Theme.of(context).textTheme.displaySmall, textAlign: TextAlign.center,
                               overflow: TextOverflow.ellipsis,
-                              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
+                              textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)
                         )
                       ])),
                   Card(

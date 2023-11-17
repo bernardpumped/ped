@@ -44,7 +44,7 @@ class UpdateTile extends StatelessWidget {
               child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                 Text('${_updateTileData.updateType.updateTypeReadableName} updates',
                     style: Theme.of(context).textTheme.titleSmall,
-                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+                    textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
                 const Icon(Icons.more_horiz)
               ])),
           Padding(
@@ -58,9 +58,9 @@ class UpdateTile extends StatelessWidget {
                         child: Column(children: [
                           Text('${_updateTileData.success}',
                               style: Theme.of(context).textTheme.displaySmall!.copyWith(color: bgColor),
-                              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+                              textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
                           Text('Success', style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: bgColor),
-                              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
+                              textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)
                         ]))),
                 Card(
                     elevation: 2,
@@ -70,9 +70,9 @@ class UpdateTile extends StatelessWidget {
                         child: Column(children: [
                           Text('${_updateTileData.failure}',
                               style: Theme.of(context).textTheme.displaySmall!.copyWith(color: bgColor),
-                              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+                              textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
                           Text(' Failed  ', style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: bgColor),
-                              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
+                              textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)
                         ]))),
                 Card(
                     elevation: 2,
@@ -82,9 +82,9 @@ class UpdateTile extends StatelessWidget {
                         child: Column(children: [
                           Text('${_updateTileData.pending}',
                               style: Theme.of(context).textTheme.displaySmall!.copyWith(color: bgColor),
-                              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+                              textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
                           Text('Pending', style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: bgColor),
-                              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
+                              textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)
                         ])))
               ]))
         ])));

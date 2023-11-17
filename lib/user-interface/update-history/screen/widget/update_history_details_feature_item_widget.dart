@@ -52,17 +52,17 @@ class UpdateHistoryDetailsFeatureItemWidget extends StatelessWidget {
                     flex: 3,
                     child: Text(featureType,
                         overflow: TextOverflow.ellipsis, maxLines: 1, style: Theme.of(context).textTheme.bodyLarge,
-                        textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
+                        textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
                 Expanded(flex: 2, child: Text(addRemove, style: Theme.of(context).textTheme.bodyLarge,
-                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor))
+                    textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor))
               ])),
           Padding(
               padding: const EdgeInsets.only(top: 12, left: 20, right: 20, bottom: 12),
               child: Row(children: <Widget>[
                 Expanded(flex: 3, child: Text('Status', style: Theme.of(context).textTheme.bodyLarge,
-                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
+                    textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
                 Expanded(flex: 2, child: Text(updateStatus, style: Theme.of(context).textTheme.bodyLarge,
-                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor))
+                    textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor))
               ]))
         ]));
   }

@@ -31,6 +31,6 @@ class _OffersWidgetState extends State<OffersWidget> {
   @override
   Widget build (final BuildContext context) {
     return Center(child: Text("Offers",
-        textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor));
+        textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor));
   }
 }

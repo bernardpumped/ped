@@ -134,13 +134,13 @@ class _AnimEditFuelPriceLineItemWidgetState extends State<AnimEditFuelPriceLineI
                 _getFuelTypeQuoteValRow(fuelQuoteTextField),
                 AnimatedContainer(
                     padding: EdgeInsets.only(top: _hintHeight != _noFocusHintHeight ? 10 : 0),
-                    height: _hintHeight * (TextScaler.of<TextScalingFactor>(context)!.scaleFactor),
+                    height: _hintHeight * (PedTextScaler.of<TextScalingFactor>(context)!.scaleFactor),
                     duration: Duration(milliseconds: _durationMills),
                     child: Text(hintMessage,
                         style: _isItError
                             ? Theme.of(context).textTheme.bodySmall!.copyWith(color: Theme.of(context).colorScheme.error)
                             : Theme.of(context).textTheme.bodySmall,
-                        textAlign: TextAlign.center, textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor))
+                        textAlign: TextAlign.center, textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor))
               ])));
     }
   }
@@ -153,7 +153,7 @@ class _AnimEditFuelPriceLineItemWidgetState extends State<AnimEditFuelPriceLineI
               padding: const EdgeInsets.only(right: 5),
               child: Text(widget.fuelName, style: Theme.of(context).textTheme.titleSmall,
                   overflow: TextOverflow.ellipsis,
-                  textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),)),
+                  textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),)),
       Expanded(flex: 5, child: fuelQuoteWidget),
       Expanded(
           flex: 2,
@@ -272,7 +272,7 @@ class _AnimEditFuelPriceLineItemWidgetState extends State<AnimEditFuelPriceLineI
   Text _buildTextField(final FuelQuote fuelQuote) {
     return Text(fuelQuote.quoteValue != null ? fuelQuote.quoteValue.toString() : 'N/A',
         style: Theme.of(context).textTheme.titleSmall,
-        textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
+        textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor);
   }
 }
 

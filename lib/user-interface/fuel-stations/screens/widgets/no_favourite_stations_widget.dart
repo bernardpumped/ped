@@ -30,13 +30,13 @@ class NoFavouriteStationsWidget extends StatelessWidget {
         child: ListView(children: <Widget>[
           const SizedBox(height: 120),
           Text('No Favourites', style: Theme.of(context).textTheme.displayMedium, textAlign: TextAlign.center,
-              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+              textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
           const SizedBox(height: 20),
           Padding(
               padding: const EdgeInsets.only(left: 12, right: 12),
               child: RichText(
                   textAlign: TextAlign.center,
-                  textScaleFactor: TextScaler.of<TextScalingFactor>(context)!.scaleFactor,
+                  textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)!.scaleFactor,
                   text: TextSpan(children: [
                     TextSpan(text: "Tap on the favourite ", style: Theme.of(context).textTheme.bodyLarge),
                     const WidgetSpan(child: Icon(Icons.favorite, size: 20)),

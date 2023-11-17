@@ -45,11 +45,11 @@ class _PumpedAppBarState extends State<PumpedAppBar> {
         Icon(widget.icon, size: 30),
         const SizedBox(width: 10),
         Expanded(child: Text(title, style: Theme.of(context).textTheme.displayMedium, overflow: TextOverflow.ellipsis,
-            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor))
+            textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor))
       ]);
     } else {
       titleWidget = Text(title, style: Theme.of(context).textTheme.displayLarge,
-          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
+          textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor);
     }
     return AppBar(automaticallyImplyLeading: true, title: titleWidget);
   }

@@ -49,33 +49,33 @@ class UpdateHistoryDetailsAddressItemWidget extends StatelessWidget {
               padding: const EdgeInsets.only(top: 12, left: 20, right: 20),
               child: Row(children: <Widget>[
                 Expanded(flex: 1, child: Text('Address Component', style: Theme.of(context).textTheme.bodyLarge,
-                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
+                    textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
                 Expanded(flex: 1, child: Text(addressComponent, style: Theme.of(context).textTheme.bodyLarge,
-                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor))
+                    textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor))
               ])),
           Padding(
               padding: const EdgeInsets.only(top: 12, left: 20, right: 20),
               child: Row(children: <Widget>[
                 Expanded(flex: 1, child: Text('Old Address', style: Theme.of(context).textTheme.bodyLarge,
-                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
+                    textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
                 Expanded(flex: 1, child: Text(addressOriginalValue, style: Theme.of(context).textTheme.bodyLarge,
-                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor))
+                    textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor))
               ])),
           Padding(
               padding: const EdgeInsets.only(top: 12, left: 20, right: 20),
               child: Row(children: <Widget>[
                 Expanded(flex: 1, child: Text('New Address', style: Theme.of(context).textTheme.bodyLarge,
-                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
+                    textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
                 Expanded(flex: 1, child: Text(addressUpdatedValue, style: Theme.of(context).textTheme.bodyLarge,
-                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor))
+                    textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor))
               ])),
           Padding(
               padding: const EdgeInsets.only(top: 12, left: 20, right: 20, bottom: 12),
               child: Row(children: <Widget>[
                 Expanded(flex: 1, child: Text('Status', style: Theme.of(context).textTheme.bodyLarge,
-                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
+                    textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
                 Expanded(flex: 1, child: Text(addressUpdateResult, style: Theme.of(context).textTheme.bodyLarge,
-                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor))
+                    textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor))
               ]))
         ]));
   }

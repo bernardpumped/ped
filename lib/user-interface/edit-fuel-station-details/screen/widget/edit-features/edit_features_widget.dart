@@ -101,7 +101,7 @@ class _EditFeaturesWidgetState extends State<EditFeaturesWidget> {
           const Icon(Icons.flag_outlined, size: 30),
           const SizedBox(width: 10),
           Text('Update Features', style: Theme.of(context).textTheme.headlineMedium,
-              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
+              textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)
         ]));
   }
 
@@ -126,7 +126,7 @@ class _EditFeaturesWidgetState extends State<EditFeaturesWidget> {
         child: ListTile(
             leading: Icon(feature.icon, size: 30),
             title: Text(feature.featureName, style: Theme.of(context).textTheme.titleSmall,
-                textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+                textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
             trailing: featureCheckBox));
   }
 

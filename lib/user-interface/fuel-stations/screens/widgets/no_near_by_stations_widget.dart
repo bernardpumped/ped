@@ -30,13 +30,13 @@ class NoNearByStationsWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Text('No Nearby Stations', style: Theme.of(context).textTheme.displayMedium, textAlign: TextAlign.center,
-              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+              textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
           const SizedBox(height: 20),
           Padding(
             padding: const EdgeInsets.only(left: 12, right: 12),
             child: RichText(
                 textAlign: TextAlign.center,
-                textScaleFactor: TextScaler.of<TextScalingFactor>(context)!.scaleFactor,
+                textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)!.scaleFactor,
                 text: TextSpan(children: [
                   TextSpan(
                       text: "Sorry your neighbourhood not yet covered by Pumped. We have informed Pumped admin.\n",

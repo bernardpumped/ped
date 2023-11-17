@@ -102,18 +102,18 @@ class FuelStationListItemWidget extends StatelessWidget {
     return Text(
         '${fuelStation.fuelStationAddress.addressLine1}, ${fuelStation.fuelStationAddress.locality}'.toTitleCase(),
         style: Theme.of(context).textTheme.bodyLarge!.copyWith(overflow: TextOverflow.ellipsis),
-        maxLines: 1, textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
+        maxLines: 1, textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor);
   }
 
   Widget _getStationNameWidget(final BuildContext context) => Text(fuelStation.fuelStationName.toTitleCase(),
       style: Theme.of(context).textTheme.titleMedium!.copyWith(overflow: TextOverflow.ellipsis),
-      textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
+      textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor);
 
   Widget _getRatingWidget(final BuildContext context) {
     if (fuelStation.rating != null) {
       final Widget childWidget = Row(children: [
         Text(fuelStation.rating.toString(), style: Theme.of(context).textTheme.bodyMedium,
-            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+            textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
         const SizedBox(width: 2),
         const Icon(Icons.star, size: 15)
       ]);
@@ -133,7 +133,7 @@ class FuelStationListItemWidget extends StatelessWidget {
       distance = "$distanced km";
     }
     final child1 = Text(distance, style: Theme.of(context).textTheme.bodyMedium,
-        textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
+        textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor);
     return _getElevatedBoxSingleChild(context, child1);
   }
 
@@ -145,7 +145,7 @@ class FuelStationListItemWidget extends StatelessWidget {
           : AppTheme.stationCloseColor;
       final childWidget = Text(status, style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: widgetChipColor),
           overflow: TextOverflow.ellipsis,
-          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
+          textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor);
       return _getElevatedBoxSingleChild(context, childWidget);
     }
     return const SizedBox(width: 0);
@@ -154,14 +154,14 @@ class FuelStationListItemWidget extends StatelessWidget {
   Widget _getOffersWidget(final BuildContext context) {
     if (fuelStation.offers > 0 || fuelStation.services > 0) {
       final Widget child1 = Text('Offers', style: Theme.of(context).textTheme.labelSmall,
-          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
+          textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor);
       Widget? child2;
       if (fuelStation.offers > 0) {
         child2 = Row(children: [
           const Icon(Icons.shopping_cart, size: 20),
           const SizedBox(width: 5),
           Text(fuelStation.offers.toString(), style: Theme.of(context).textTheme.bodyLarge,
-              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
+              textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)
         ]);
       }
       const offersIcon = Icon(Icons.car_repair, size: 20);
@@ -171,7 +171,7 @@ class FuelStationListItemWidget extends StatelessWidget {
           offersIcon,
           const SizedBox(width: 5),
           Text(fuelStation.services.toString(), style: Theme.of(context).textTheme.bodyLarge,
-              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
+              textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)
         ]);
       }
       Widget rowOfChildren;
@@ -204,12 +204,12 @@ class FuelStationListItemWidget extends StatelessWidget {
   Widget _getPriceWithDetailsWidget(final BuildContext context, final FuelQuote? selectedFuelQuote) {
     if (selectedFuelQuote != null && selectedFuelQuote.quoteValue != null) {
       final Widget child1 = Text('Price', style: Theme.of(context).textTheme.labelSmall,
-          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
+          textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor);
       final Widget child2 = Row(children: <Widget>[
         Text("${selectedFuelQuote.quoteValue}", style: Theme.of(context).textTheme.bodyLarge,
-            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+            textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
         Text("￠", style: Theme.of(context).textTheme.labelSmall,
-            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
+            textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)
       ]);
       final Column priceColumn = Column(children: [child1, const SizedBox(height: 8), child2]);
 
@@ -223,9 +223,9 @@ class FuelStationListItemWidget extends StatelessWidget {
       }
 
       Widget child3 = Text('Last Update', style: Theme.of(context).textTheme.labelSmall,
-          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
+          textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor);
       Widget child4 = Text(publishDateString, style: Theme.of(context).textTheme.bodyLarge,
-          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor);
+          textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor);
       final Column pubDateColumn = Column(children: [child3, const SizedBox(height: 8), child4]);
       return Material(
           elevation: 1,

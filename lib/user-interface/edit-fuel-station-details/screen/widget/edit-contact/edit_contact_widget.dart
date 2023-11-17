@@ -116,7 +116,7 @@ class _EditContactWidgetState extends State<EditContactWidget> {
           const Icon(Icons.location_city, size: 30),
           const SizedBox(width: 10),
           Text('Update Contact Details', style: Theme.of(context).textTheme.headlineMedium,
-              textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
+              textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)
         ]));
   }
 

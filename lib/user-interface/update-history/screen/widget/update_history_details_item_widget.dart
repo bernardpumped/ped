@@ -64,12 +64,12 @@ class _UpdateHistoryDetailsItemWidgetState extends State<UpdateHistoryDetailsIte
                           Padding(
                               padding: const EdgeInsets.only(left: 20, bottom: 8),
                               child: Text(fuelStation, style: Theme.of(context).textTheme.titleSmall,
-                                  textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
+                                  textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
                           Padding(
                               padding: const EdgeInsets.only(left: 20, bottom: 5),
                               child: Text(updateDateFormatter.format(dateTime),
                                   style: Theme.of(context).textTheme.bodyLarge,
-                                  textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor))
+                                  textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor))
                         ])),
                     Expanded(flex: 2, child: updateStatusIconCode)
                   ]),

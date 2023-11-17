@@ -87,7 +87,7 @@ class _OperatingTimeWidgetState extends State<OperatingTimeWidget> {
             child: Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
               const SizedBox(width: 5),
               Text(selectedTime!, style: Theme.of(context).textTheme.bodyLarge,
-                  textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
+                  textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)
             ])));
   }
 

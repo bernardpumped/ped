@@ -57,7 +57,7 @@ class _CleanupLocalCacheScreenState extends State<CleanupLocalCacheScreen> {
                     const Icon(Icons.delete_outline, size: 30),
                     const SizedBox(width: 10),
                     Text('Clear Local Cache', style: Theme.of(context).textTheme.displaySmall, textAlign: TextAlign.center,
-                        textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
+                        textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)
                   ])),
               Expanded(
                   child: ListView(padding: const EdgeInsets.only(left: 10, right: 10, top: 10), children: <Widget>[
@@ -118,10 +118,10 @@ class _CleanupLocalCacheScreenState extends State<CleanupLocalCacheScreen> {
                                 return AlertDialog(
                                     shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(10), side: const BorderSide(width: 0.2)),
-                                    title: Text("Cleaning data", textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+                                    title: Text("Cleaning data", textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
                                     content: Row(children: [
                                       Expanded(child: Text(msg, style: Theme.of(context).textTheme.bodyLarge,
-                                          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
+                                          textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
                                       const RefreshProgressIndicator()
                                     ]));
                               });
@@ -145,7 +145,7 @@ class _CleanupLocalCacheScreenState extends State<CleanupLocalCacheScreen> {
                           child: Row(children: [
                             const Icon(Icons.delete_outline, size: 24),
                             const SizedBox(width: 10),
-                            Text('Clear Data', textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
+                            Text('Clear Data', textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)
                           ])))
                 ])
               ]))
@@ -235,11 +235,11 @@ class _CleanupLocalCacheScreenState extends State<CleanupLocalCacheScreen> {
             contentPadding: const EdgeInsets.all(10),
             leading: Icon(icon, size: 30),
             title: Text(title, style: Theme.of(context).textTheme.titleMedium,
-                textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+                textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
             subtitle: Padding(
                 padding: const EdgeInsets.only(top: 5.0),
                 child: Text(subTitle, style: Theme.of(context).textTheme.bodyMedium,
-                  textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
+                  textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
             trailing: Checkbox(value: checkBoxValue, onChanged: onChangeFunction)));
   }
 

@@ -41,7 +41,7 @@ class NotificationWidget extends StatelessWidget {
         child: Padding(
             padding: const EdgeInsets.only(left: 15, right: 15),
             child: Row(children: [const Icon(Icons.email_outlined, size: 24), const SizedBox(width: 10),
-              Text('Notify', textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)])));
+              Text('Notify', textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)])));
   }
 
   void _sendNotification(final Function function) async {

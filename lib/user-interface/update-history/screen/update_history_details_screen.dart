@@ -59,7 +59,7 @@ class UpdateHistoryDetailsScreen extends StatelessWidget {
       const SizedBox(width: 10),
       Text('${params.updateType.updateTypeReadableName} Updates',
           style: Theme.of(context).textTheme.titleLarge, textAlign: TextAlign.center,
-          textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)
+          textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)
     ]);
   }
 

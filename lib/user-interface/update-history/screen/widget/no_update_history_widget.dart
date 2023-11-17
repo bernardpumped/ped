@@ -15,16 +15,16 @@ class NoUpdateHistory extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Text('No Update History', style: Theme.of(context).textTheme.displayMedium, textAlign: TextAlign.center,
-                  textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+                  textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
               Text(
                   "\n Your updates to fuel prices, operating hours, features or suggestions appear here.",
                   style: Theme.of(context).textTheme.titleSmall,
                   textAlign: TextAlign.center,
-                  textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+                  textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
               Expanded(
                 child: Text('\n You have not updated any information and hence the empty page.',
                     style: Theme.of(context).textTheme.titleSmall, textAlign: TextAlign.center,
-                    textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor),
+                    textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
               )
             ]));
   }

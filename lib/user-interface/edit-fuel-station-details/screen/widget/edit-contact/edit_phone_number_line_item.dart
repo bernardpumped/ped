@@ -103,7 +103,7 @@ class _EditPhoneNumberLineItemState extends State<EditPhoneNumberLineItem> {
                 padding: const EdgeInsets.only(left: 30, right: 30, bottom: 15),
                 child: Row(children: <Widget>[
                   Expanded(flex: 1, child: Text(widget._phoneNumberName, style: Theme.of(context).textTheme.titleSmall,
-                      textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
+                      textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
                   Expanded(
                       flex: 3,
                       child: Column(
@@ -120,7 +120,7 @@ class _EditPhoneNumberLineItemState extends State<EditPhoneNumberLineItem> {
         duration: Duration(milliseconds: _errorMsgHeightChangeTime),
         child: Text(_errorMessage,
             style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Theme.of(context).colorScheme.error),
-            textScaleFactor: TextScaler.of<TextScalingFactor>(context)?.scaleFactor));
+            textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor));
   }
 
   Widget _getPhoneField(final TextField phoneTextField) {
