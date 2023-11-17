@@ -18,7 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:pumped_end_device/data/local/dao/ui_settings_dao.dart';
+import 'package:pumped_end_device/data/local/dao2/ui_settings_dao.dart';
 import 'package:pumped_end_device/data/local/model/ui_settings.dart';
 import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
 import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
@@ -28,7 +28,7 @@ import 'package:pumped_end_device/util/theme_notifier.dart';
 import 'package:pumped_end_device/util/ui_themes.dart';
 
 class ThemingScreen extends StatefulWidget {
-  const ThemingScreen({Key? key}) : super(key: key);
+  const ThemingScreen({super.key});
 
   @override
   State<ThemingScreen> createState() => _ThemingScreenState();
@@ -99,7 +99,7 @@ class _ThemingScreenState extends State<ThemingScreen> {
             future: getUiSettings(),
             builder: (context, snapShot) {
               if (snapShot.hasData) {
-                UiSettings? uiSettings = snapShot.data as UiSettings?;
+                UiSettings? uiSettings = snapShot.data;
                 if (uiSettings != null) {
                   LogUtil.debug(_tag, 'Read UiSettings : ${uiSettings.uiTheme}');
                   if (uiSettings.uiTheme != null) {

@@ -19,7 +19,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:pumped_end_device/data/local/dao/user_configuration_dao.dart';
+import 'package:pumped_end_device/data/local/dao2/user_configuration_dao.dart';
 import 'package:pumped_end_device/data/local/model/user_configuration.dart';
 import 'package:pumped_end_device/user-interface/settings/service/settings_service.dart';
 import 'package:pumped_end_device/user-interface/settings/model/dropdown_values.dart';
@@ -32,7 +32,7 @@ import 'package:pumped_end_device/models/quote_sort_order.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
 class CustomizeSearchSettingsScreen extends StatefulWidget {
-  const CustomizeSearchSettingsScreen({Key? key}) : super(key: key);
+  const CustomizeSearchSettingsScreen({super.key});
 
   @override
   State<StatefulWidget> createState() {

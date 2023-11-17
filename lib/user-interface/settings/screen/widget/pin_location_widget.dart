@@ -17,7 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:pumped_end_device/data/local/dao/mock_location_dao.dart';
+import 'package:pumped_end_device/data/local/dao2/mock_location_dao.dart';
 import 'package:pumped_end_device/data/local/model/mock_location.dart';
 import 'package:pumped_end_device/user-interface/fuel-stations/data/local/places.dart';
 import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
@@ -27,7 +27,7 @@ import 'package:pumped_end_device/util/log_util.dart';
 
 class PinLocationWidget extends StatefulWidget {
   final Function() callback;
-  const PinLocationWidget({Key? key, required this.callback}) : super(key: key);
+  const PinLocationWidget({super.key, required this.callback});
 
   @override
   State<PinLocationWidget> createState() => _PinLocationWidgetState();

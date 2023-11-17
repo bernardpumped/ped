@@ -16,9 +16,9 @@
  *     along with Pumped End Device.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'package:pumped_end_device/data/local/dao/favorite_fuel_stations_dao.dart';
-import 'package:pumped_end_device/data/local/dao/market_region_zone_config_dao.dart';
-import 'package:pumped_end_device/data/local/dao/ui_settings_dao.dart';
+import 'package:pumped_end_device/data/local/dao2/favorite_fuel_stations_dao.dart';
+import 'package:pumped_end_device/data/local/dao2/market_region_zone_config_dao.dart';
+import 'package:pumped_end_device/data/local/dao2/ui_settings_dao.dart';
 import 'package:pumped_end_device/data/local/location/geo_location_data.dart';
 import 'package:pumped_end_device/data/local/location/get_location_result.dart';
 import 'package:pumped_end_device/data/local/location/location_access_result_code.dart';

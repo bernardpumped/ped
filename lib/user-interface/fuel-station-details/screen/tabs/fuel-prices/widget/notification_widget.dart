@@ -26,7 +26,7 @@ class NotificationWidget extends StatelessWidget {
   static const _tag = 'NotificationWidget';
   final FuelStation fuelStation;
 
-  const NotificationWidget({Key? key, required this.fuelStation}) : super(key: key);
+  const NotificationWidget({super.key, required this.fuelStation});
 
   @override
   Widget build(final BuildContext context) {

@@ -36,8 +36,7 @@ class FuelStationDetailsScreen extends StatefulWidget {
   final FuelStation selectedFuelStation;
   final FuelType selectedFuelType;
 
-  const FuelStationDetailsScreen({Key? key, required this.selectedFuelStation, required this.selectedFuelType})
-      : super(key: key);
+  const FuelStationDetailsScreen({super.key, required this.selectedFuelStation, required this.selectedFuelType});
 
   @override
   State<FuelStationDetailsScreen> createState() => _FuelStationDetailsScreenState();

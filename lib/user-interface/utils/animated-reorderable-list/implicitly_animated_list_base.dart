@@ -64,7 +64,7 @@ abstract class ImplicitlyAnimatedListBase<W extends Widget, E extends Object>
   /// optimal performance.
   final bool? spawnIsolate;
   const ImplicitlyAnimatedListBase({
-    Key? key,
+    super.key,
     required this.items,
     required this.areItemsTheSame,
     required this.itemBuilder,
@@ -74,7 +74,7 @@ abstract class ImplicitlyAnimatedListBase<W extends Widget, E extends Object>
     required this.removeDuration,
     required this.updateDuration,
     required this.spawnIsolate,
-  }) : super(key: key);
+  });
 }
 
 abstract class ImplicitlyAnimatedListBaseState<W extends Widget,

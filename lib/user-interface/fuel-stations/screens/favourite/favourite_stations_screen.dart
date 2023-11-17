@@ -44,7 +44,7 @@ import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
 class FavouriteStationsScreen extends StatefulWidget {
-  const FavouriteStationsScreen({Key? key}) : super(key: key);
+  const FavouriteStationsScreen({super.key});
 
   @override
   State<FavouriteStationsScreen> createState() => _FavouriteStationsScreenState();

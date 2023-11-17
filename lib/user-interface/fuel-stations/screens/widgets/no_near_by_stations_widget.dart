@@ -21,7 +21,7 @@ import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.d
 import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 
 class NoNearByStationsWidget extends StatelessWidget {
-  const NoNearByStationsWidget({Key? key}) : super(key: key);
+  const NoNearByStationsWidget({super.key});
 
   @override
   Widget build(final BuildContext context) {
@@ -35,7 +35,6 @@ class NoNearByStationsWidget extends StatelessWidget {
           const SizedBox(height: 20),
           RichText(
               textAlign: TextAlign.center,
-              textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)!.scaleFactor,
               text: TextSpan(children: [
                 TextSpan(
                     text: "Sorry your neighbourhood not yet covered by Pumped. We have informed Pumped admin.\n",
@@ -47,7 +46,7 @@ class NoNearByStationsWidget extends StatelessWidget {
                 TextSpan(
                     text: " icon on side navigation bar, to customize search.",
                     style: Theme.of(context).textTheme.headlineSmall)
-              ]))
+              ]), textScaler: TextScaler.linear(PedTextScaler.of<TextScalingFactor>(context)!.scaleFactor))
         ]));
   }
 }

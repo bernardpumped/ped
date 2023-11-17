@@ -17,8 +17,8 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:pumped_end_device/data/local/dao/favorite_fuel_stations_dao.dart';
-import 'package:pumped_end_device/data/local/dao/hidden_result_dao.dart';
+import 'package:pumped_end_device/data/local/dao2/favorite_fuel_stations_dao.dart';
+import 'package:pumped_end_device/data/local/dao2/hidden_result_dao.dart';
 import 'package:pumped_end_device/data/local/model/favorite_fuel_station.dart';
 import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
 import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
@@ -30,7 +30,7 @@ class FavoriteFuelStationBookmark extends StatefulWidget {
   final FuelStation _fuelStation;
   final Function _onFavouriteStatusChange;
 
-  const FavoriteFuelStationBookmark(this._fuelStation, this._onFavouriteStatusChange, {Key? key}) : super(key: key);
+  const FavoriteFuelStationBookmark(this._fuelStation, this._onFavouriteStatusChange, {super.key});
 
   @override
   State<FavoriteFuelStationBookmark> createState() => _FavoriteFuelStationBookmarkState();

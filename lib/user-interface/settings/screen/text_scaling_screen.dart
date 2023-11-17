@@ -17,7 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:pumped_end_device/data/local/dao/ui_settings_dao.dart';
+import 'package:pumped_end_device/data/local/dao2/ui_settings_dao.dart';
 import 'package:pumped_end_device/data/local/model/ui_settings.dart';
 import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.dart';
 import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
@@ -26,7 +26,7 @@ import 'package:pumped_end_device/util/log_util.dart';
 import 'package:pumped_end_device/util/text_scale.dart';
 
 class TextScalingScreen extends StatefulWidget {
-  const TextScalingScreen({Key? key}) : super(key: key);
+  const TextScalingScreen({super.key});
 
   @override
   State<TextScalingScreen> createState() => _TextScalingScreenState();
@@ -74,7 +74,7 @@ class _TextScalingScreenState extends State<TextScalingScreen> {
         future: _getUiSettings(),
         builder: (context, snapShot) {
           if (snapShot.hasData) {
-            UiSettings? uiSettings = snapShot.data as UiSettings?;
+            UiSettings? uiSettings = snapShot.data;
             if (uiSettings != null) {
               LogUtil.debug(_tag, 'Read UiSettings.textScale : ${uiSettings.textScale}');
               uiSettings.textScale ??= TextScale.systemTextScale;

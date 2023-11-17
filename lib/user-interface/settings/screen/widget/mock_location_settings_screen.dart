@@ -25,7 +25,7 @@ import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_
 import 'package:pumped_end_device/util/log_util.dart';
 
 class MockLocationSettingsScreen extends StatefulWidget {
-  const MockLocationSettingsScreen({Key? key}) : super(key: key);
+  const MockLocationSettingsScreen({super.key});
 
   @override
   State<MockLocationSettingsScreen> createState() => _MockLocationSettingsScreenState();

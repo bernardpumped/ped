@@ -29,7 +29,7 @@ import 'package:pumped_end_device/util/data_utils.dart';
 
 class ActionBar extends StatefulWidget {
   final FuelStation fuelStation;
-  const ActionBar({Key? key, required this.fuelStation}) : super(key: key);
+  const ActionBar({super.key, required this.fuelStation});
 
   @override
   State<ActionBar> createState() => _ActionBarState();
