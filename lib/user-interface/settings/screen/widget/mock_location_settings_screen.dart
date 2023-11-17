@@ -28,7 +28,7 @@ import 'package:pumped_end_device/util/log_util.dart';
 
 class MockLocationSettingsScreen extends StatefulWidget {
   static const routeName = '/ped/settings/mocklocation';
-  const MockLocationSettingsScreen({Key? key}) : super(key: key);
+  const MockLocationSettingsScreen({super.key});
 
   @override
   State<MockLocationSettingsScreen> createState() => _MockLocationSettingsScreenState();

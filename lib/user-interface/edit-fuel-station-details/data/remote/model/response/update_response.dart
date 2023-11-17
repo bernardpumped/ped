@@ -28,16 +28,15 @@ class UpdateResponse extends Response {
   final Map<String, dynamic>? updateResult;
 
   UpdateResponse(
-      final String responseCode,
-      final String? responseDetails,
-      final Map<String, dynamic>? invalidArguments,
-      final int responseEpoch,
+      super.responseCode,
+      super.responseDetails,
+      super.invalidArguments,
+      super.responseEpoch,
       this.exceptionCodes,
       this.updateResult,
       this.fuelStationId,
       this.fuelStationSource,
       this.updateEpoch,
       this.uuid,
-      this.successfulUpdate)
-      : super(responseCode, responseDetails, invalidArguments, responseEpoch);
+      this.successfulUpdate);
 }

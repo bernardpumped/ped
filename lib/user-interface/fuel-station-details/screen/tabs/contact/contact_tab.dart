@@ -37,7 +37,7 @@ class ContactTabWidget extends StatefulWidget {
   final FuelStationDetailsParam _param;
   final Function onFavouriteStatusChange;
 
-  const ContactTabWidget(this._param, this.onFavouriteStatusChange, {Key? key}) : super(key: key);
+  const ContactTabWidget(this._param, this.onFavouriteStatusChange, {super.key});
 
   @override
   State<ContactTabWidget> createState() => _ContactTabWidgetState();

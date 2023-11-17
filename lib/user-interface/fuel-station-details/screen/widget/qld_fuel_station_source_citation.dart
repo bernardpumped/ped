@@ -45,7 +45,7 @@ class QldFuelStationSourceCitation extends StatelessWidget {
 
   final FuelStation fuelStation;
 
-  const QldFuelStationSourceCitation({Key? key, required this.fuelStation}) : super(key: key);
+  const QldFuelStationSourceCitation({super.key, required this.fuelStation});
 
   @override
   Widget build(BuildContext context) {

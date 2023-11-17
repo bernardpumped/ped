@@ -26,8 +26,7 @@ class Indicator extends StatelessWidget {
   final bool isSquare;
   final double size;
 
-  const Indicator({Key? key, required this.color, required this.text, required this.isSquare, this.size = 16})
-      : super(key: key);
+  const Indicator({super.key, required this.color, required this.text, required this.isSquare, this.size = 16});
 
   @override
   Widget build(BuildContext context) {

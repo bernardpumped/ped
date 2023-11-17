@@ -38,7 +38,7 @@ import 'package:pumped_end_device/util/log_util.dart';
 class FuelStationDetailsScreen extends StatefulWidget {
   static const routeName = '/ped/fuel-stations/details';
 
-  const FuelStationDetailsScreen({Key? key}) : super(key: key);
+  const FuelStationDetailsScreen({super.key});
 
   @override
   State<FuelStationDetailsScreen> createState() => _FuelStationDetailsScreenState();

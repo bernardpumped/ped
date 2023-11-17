@@ -21,7 +21,7 @@ import 'package:flutter/material.dart';
 class HorizontalScrollListWidget extends StatelessWidget {
   final List<String> _imageUrls;
 
-  const HorizontalScrollListWidget(this._imageUrls, {Key? key}) : super(key: key);
+  const HorizontalScrollListWidget(this._imageUrls, {super.key});
 
   @override
   Widget build(BuildContext context) {

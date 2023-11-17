@@ -32,7 +32,7 @@ import 'package:pumped_end_device/util/log_util.dart';
 class CleanupLocalCacheScreen extends StatefulWidget {
   static const routeName = '/ped/settings/clean-cache';
 
-  const CleanupLocalCacheScreen({Key? key}) : super(key: key);
+  const CleanupLocalCacheScreen({super.key});
 
   @override
   State<StatefulWidget> createState() {

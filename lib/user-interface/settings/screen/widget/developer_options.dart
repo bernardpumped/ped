@@ -25,7 +25,7 @@ import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_
 import 'package:pumped_end_device/util/log_util.dart';
 
 class DeveloperOptions extends StatefulWidget {
-  const DeveloperOptions({Key? key}) : super(key: key);
+  const DeveloperOptions({super.key});
 
   @override
   State<DeveloperOptions> createState() => _DeveloperOptionsState();
@@ -41,7 +41,7 @@ class _DeveloperOptionsState extends State<DeveloperOptions> {
             future: _getUiSettings(),
             builder: (context, snapShot) {
               if (snapShot.hasData) {
-                UiSettings? uiSettings = snapShot.data as UiSettings?;
+                UiSettings? uiSettings = snapShot.data;
                 uiSettings ??= UiSettings(developerOptions: false, devOptionsEnrichOffers: false);
                 uiSettings.developerOptions ??= false;
                 uiSettings.devOptionsEnrichOffers ??= false;

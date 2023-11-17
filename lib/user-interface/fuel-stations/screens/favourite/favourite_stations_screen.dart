@@ -49,7 +49,7 @@ class FavouriteStationsScreen extends StatefulWidget {
   static const viewIcon = Icons.favorite_outline;
   static const viewSelectedIcon = Icons.favorite;
 
-  const FavouriteStationsScreen({Key? key}) : super(key: key);
+  const FavouriteStationsScreen({super.key});
 
   @override
   State<FavouriteStationsScreen> createState() => _FavouriteStationsScreenState();

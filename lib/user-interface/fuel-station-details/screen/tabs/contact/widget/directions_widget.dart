@@ -36,7 +36,7 @@ class DirectionsWidget extends StatefulWidget {
   final double _dLat;
   final double _dLng;
   final LocationDataSource _locationDataSource;
-  const DirectionsWidget(this._dLat, this._dLng, this._locationDataSource, {Key? key}) : super(key: key);
+  const DirectionsWidget(this._dLat, this._dLng, this._locationDataSource, {super.key});
 
   @override
   State<DirectionsWidget> createState() => _DirectionsWidgetState();

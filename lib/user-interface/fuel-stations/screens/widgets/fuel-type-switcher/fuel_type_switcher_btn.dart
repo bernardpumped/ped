@@ -23,7 +23,7 @@ import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_
 class FuelTypeSwitcherButton extends StatelessWidget {
   final String _txtToDisplay;
   final Function() _trailingButtonAction;
-  const FuelTypeSwitcherButton(this._txtToDisplay, this._trailingButtonAction, {Key? key}) : super(key: key);
+  const FuelTypeSwitcherButton(this._txtToDisplay, this._trailingButtonAction, {super.key});
 
   @override
   Widget build(final BuildContext context) {

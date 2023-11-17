@@ -11,7 +11,7 @@ import 'package:uuid/uuid.dart';
 
 class AddMockLocationWidget extends StatefulWidget {
   final Function callback;
-  const AddMockLocationWidget({required this.callback, Key? key}) : super(key: key);
+  const AddMockLocationWidget({required this.callback, super.key});
 
   @override
   State<AddMockLocationWidget> createState() => _AddMockLocationWidgetState();

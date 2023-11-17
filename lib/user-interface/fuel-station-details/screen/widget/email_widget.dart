@@ -30,8 +30,7 @@ class EmailNotificationWidget extends StatelessWidget {
   final String sourceName;
 
   const EmailNotificationWidget(
-      {Key? key, required this.emailSubject, required this.emailBody, required this.sourceName})
-      : super(key: key);
+      {super.key, required this.emailSubject, required this.emailBody, required this.sourceName});
 
   @override
   Widget build(final BuildContext context) {

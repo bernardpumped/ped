@@ -30,7 +30,7 @@ import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_
 
 class UpdateHistoryDetailsItemWidget extends StatefulWidget {
   final UpdateHistory updateHistory;
-  const UpdateHistoryDetailsItemWidget(this.updateHistory, {Key? key}) : super(key: key);
+  const UpdateHistoryDetailsItemWidget(this.updateHistory, {super.key});
 
   @override
   State<UpdateHistoryDetailsItemWidget> createState() => _UpdateHistoryDetailsItemWidgetState();

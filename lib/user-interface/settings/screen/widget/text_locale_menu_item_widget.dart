@@ -21,7 +21,7 @@ import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.d
 import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 
 class TextLocaleMenuItemWidget extends StatefulWidget {
-  const TextLocaleMenuItemWidget({Key? key}) : super(key: key);
+  const TextLocaleMenuItemWidget({super.key});
 
   @override
   State<TextLocaleMenuItemWidget> createState() => _TextLocaleMenuItemWidgetState();

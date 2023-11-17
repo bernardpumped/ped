@@ -4,7 +4,7 @@ import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_
 
 class FloatingActionBubble extends AnimatedWidget {
   const FloatingActionBubble(
-      {Key? key,
+      {super.key,
       required this.items,
       required this.onPress,
       required Animation animation,
@@ -12,7 +12,7 @@ class FloatingActionBubble extends AnimatedWidget {
       this.iconData,
       this.animatedIconData})
       : assert((iconData == null && animatedIconData != null) || (iconData != null && animatedIconData == null)),
-        super(listenable: animation, key: key);
+        super(listenable: animation);
 
   final List<Bubble> items;
   final void Function() onPress;
@@ -69,7 +69,7 @@ class Bubble {
 }
 
 class BubbleMenu extends StatelessWidget {
-  const BubbleMenu(this.item, {Key? key}) : super(key: key);
+  const BubbleMenu(this.item, {super.key});
   final Bubble item;
 
   @override

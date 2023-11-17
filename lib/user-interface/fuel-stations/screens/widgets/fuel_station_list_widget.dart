@@ -35,8 +35,7 @@ class FuelStationListWidget extends StatefulWidget {
 
   const FuelStationListWidget(
       this._scrollController, this._fuelStations, this._selectedFuelType, this.sortOrder, this.fuelStationType,
-      {Key? key})
-      : super(key: key);
+      {super.key});
 
   @override
   State<StatefulWidget> createState() {

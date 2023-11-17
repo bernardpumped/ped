@@ -25,7 +25,7 @@ import 'package:pumped_end_device/util/log_util.dart';
 import 'package:pumped_end_device/util/text_scale.dart';
 
 class TextScalingMenuItemWidget extends StatefulWidget {
-  const TextScalingMenuItemWidget({Key? key}) : super(key: key);
+  const TextScalingMenuItemWidget({super.key});
 
   @override
   State<TextScalingMenuItemWidget> createState() => _TextScalingMenuItemWidgetState();
@@ -41,7 +41,7 @@ class _TextScalingMenuItemWidgetState extends State<TextScalingMenuItemWidget> {
           future: _getUiSettings(),
           builder: (context, snapShot) {
             if (snapShot.hasData) {
-              UiSettings? uiSettings = snapShot.data as UiSettings?;
+              UiSettings? uiSettings = snapShot.data;
               if (uiSettings != null) {
                 LogUtil.debug(_tag, 'Read UiSettings.textScale : ${uiSettings.textScale}');
                 uiSettings.textScale ??= TextScale.systemTextScale;

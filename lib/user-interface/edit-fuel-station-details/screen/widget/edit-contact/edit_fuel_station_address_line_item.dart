@@ -38,8 +38,7 @@ class EditFuelStationAddressLineItem extends StatefulWidget {
       this._addressComponentEditingController,
       this._backendUpdateInProgress,
       this._onValueChangeListener,
-      {Key? key})
-      : super(key: key);
+      {super.key});
 
   @override
   State<EditFuelStationAddressLineItem> createState() => _EditFuelStationAddressLineItemState();

@@ -29,13 +29,12 @@ class UpdateHistoryDetailsPriceItemWidget extends StatelessWidget {
   final List<dynamic> recordLevelExceptions;
 
   const UpdateHistoryDetailsPriceItemWidget(
-      {Key? key,
+      {super.key,
       required this.valueType,
       this.originalValue,
       this.updateValue,
       this.serverExceptions,
-      required this.recordLevelExceptions})
-      : super(key: key);
+      required this.recordLevelExceptions});
   @override
   Widget build(final BuildContext context) {
     final String fuelType = valueType;

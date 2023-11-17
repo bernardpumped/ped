@@ -41,7 +41,7 @@ class EditFeaturesWidget extends StatefulWidget {
   final EditFuelStationDetailsParams _params;
   final double _heightHeaderWidget;
 
-  const EditFeaturesWidget(this._params, this._heightHeaderWidget, {Key? key}) : super(key: key);
+  const EditFeaturesWidget(this._params, this._heightHeaderWidget, {super.key});
 
   @override
   State<EditFeaturesWidget> createState() => _EditFeaturesWidgetState();

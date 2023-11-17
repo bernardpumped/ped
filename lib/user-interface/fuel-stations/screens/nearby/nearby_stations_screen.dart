@@ -55,7 +55,7 @@ class NearbyStationsScreen extends StatefulWidget {
   static const viewLabel = 'Nearby Fuel Stations';
   static const viewIcon = Icons.near_me_outlined;
   static const viewSelectedIcon = Icons.near_me;
-  const NearbyStationsScreen({Key? key}) : super(key: key);
+  const NearbyStationsScreen({super.key});
 
   @override
   State<StatefulWidget> createState() => _NearbyStationsScreenState();

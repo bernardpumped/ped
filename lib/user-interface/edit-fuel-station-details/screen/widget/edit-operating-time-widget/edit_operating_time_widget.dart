@@ -48,7 +48,7 @@ class EditOperatingTimeWidget extends StatefulWidget {
   final EditFuelStationDetailsParams _params;
   final double _heightHeaderWidget;
 
-  const EditOperatingTimeWidget(this._params, this._heightHeaderWidget, {Key? key}) : super(key: key);
+  const EditOperatingTimeWidget(this._params, this._heightHeaderWidget, {super.key});
 
   @override
   State<EditOperatingTimeWidget> createState() => _EditOperatingTimeWidgetState();

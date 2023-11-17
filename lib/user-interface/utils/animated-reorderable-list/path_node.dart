@@ -39,14 +39,10 @@ abstract class PathNode {
 
 class Snake extends PathNode {
   Snake(
-      int originIndex,
-      int revisedIndex,
-      PathNode? previousNode,
-      ) : super(
-    originIndex,
-    revisedIndex,
-    previousNode,
-  );
+      super.originIndex,
+      super.revisedIndex,
+      super.previousNode,
+      );
 
   @override
   bool get isSnake => true;

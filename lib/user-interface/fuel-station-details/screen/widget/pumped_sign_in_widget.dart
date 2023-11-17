@@ -31,7 +31,7 @@ import 'package:pumped_end_device/util/log_util.dart';
 class PumpedSignInWidget extends StatefulWidget {
   static const _tag = 'PumpedSignInWidget';
   final Function cancelButtonAction;
-  const PumpedSignInWidget({Key? key, required this.cancelButtonAction}) : super(key: key);
+  const PumpedSignInWidget({super.key, required this.cancelButtonAction});
 
   @override
   State<PumpedSignInWidget> createState() => _PumpedSignInWidgetState();

@@ -39,8 +39,7 @@ class FuelStationListItemWidget extends StatelessWidget {
   final Function parentRefresh;
 
   const FuelStationListItemWidget(
-      {Key? key, required this.fuelStation, required this.selectedFuelType, required this.parentRefresh})
-      : super(key: key);
+      {super.key, required this.fuelStation, required this.selectedFuelType, required this.parentRefresh});
 
   @override
   Widget build(final BuildContext context) {

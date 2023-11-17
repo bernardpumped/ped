@@ -32,14 +32,13 @@ class NavDrawerItemWidget extends StatelessWidget {
   final bool selected;
 
   const NavDrawerItemWidget(
-      {Key? key,
+      {super.key,
       required this.itemIndex,
       required this.label,
       required this.icon,
       required this.selectedStateIcon,
       required this.callback,
-      required this.selected})
-      : super(key: key);
+      required this.selected});
 
   @override
   Widget build(final BuildContext context) {

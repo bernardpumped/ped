@@ -37,8 +37,7 @@ class EditOperatingTimeLineItemWidget extends StatefulWidget {
 
   const EditOperatingTimeLineItemWidget(this.isFaStation, this.operatingHour, this.updatedOperatingHrs,
       this.undoOperatingTimeChange, this.onOperatingTimeRangeChanged, this.backendUpdateInProgress,
-      {Key? key})
-      : super(key: key);
+      {super.key});
 
   @override
   State<EditOperatingTimeLineItemWidget> createState() => _EditOperatingTimeLineItemWidgetStateNew();

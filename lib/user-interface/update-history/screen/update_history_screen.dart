@@ -40,7 +40,7 @@ class UpdateHistoryScreen extends StatefulWidget {
   static const viewIcon = Icons.update_outlined;
   static const viewSelectedIcon = Icons.update;
 
-  const UpdateHistoryScreen({Key? key}) : super(key: key);
+  const UpdateHistoryScreen({super.key});
 
   @override
   State<StatefulWidget> createState() {

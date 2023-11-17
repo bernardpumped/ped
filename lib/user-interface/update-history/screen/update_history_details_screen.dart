@@ -26,7 +26,7 @@ import 'package:pumped_end_device/user-interface/widgets/pumped_app_bar.dart';
 
 class UpdateHistoryDetailsScreen extends StatelessWidget {
   static const routeName = '/ped/edit-history/details';
-  const UpdateHistoryDetailsScreen({Key? key}) : super(key: key);
+  const UpdateHistoryDetailsScreen({super.key});
 
   @override
   Widget build(final BuildContext context) {

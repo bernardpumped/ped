@@ -26,7 +26,7 @@ import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_
 
 class UpdateDistributionPieChart extends StatefulWidget {
   final Map<UpdateType, double> _data;
-  const UpdateDistributionPieChart(this._data, {Key? key}) : super(key: key);
+  const UpdateDistributionPieChart(this._data, {super.key});
 
   @override
   State<UpdateDistributionPieChart> createState() => _UpdateDistributionPieChartState();

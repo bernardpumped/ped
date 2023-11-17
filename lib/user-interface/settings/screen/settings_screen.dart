@@ -41,7 +41,7 @@ class SettingsScreen extends StatefulWidget {
   static const viewIcon = Icons.settings_outlined;
   static const viewSelectedIcon = Icons.settings;
 
-  const SettingsScreen({Key? key}) : super(key: key);
+  const SettingsScreen({super.key});
 
   @override
   State<StatefulWidget> createState() {

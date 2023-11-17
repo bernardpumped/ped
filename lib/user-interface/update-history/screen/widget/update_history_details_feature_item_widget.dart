@@ -28,13 +28,12 @@ class UpdateHistoryDetailsFeatureItemWidget extends StatelessWidget {
   final List<dynamic>? recordLevelExceptions;
 
   const UpdateHistoryDetailsFeatureItemWidget(
-      {Key? key,
+      {super.key,
       required this.valueType,
       this.originalValue,
       this.updateValue,
       this.serverExceptions,
-      this.recordLevelExceptions})
-      : super(key: key);
+      this.recordLevelExceptions});
 
   @override
   Widget build(final BuildContext context) {

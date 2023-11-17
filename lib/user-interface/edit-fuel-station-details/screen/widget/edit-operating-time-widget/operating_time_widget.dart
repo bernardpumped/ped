@@ -40,8 +40,7 @@ class OperatingTimeWidget extends StatefulWidget {
 
   OperatingTimeWidget(this.editable, this.hours, this.mins, this.source, this.status, this.onOperatingTimeRangeChanged,
       this.timeType, this.dayOfWeek, this.backendUpdateInProgress,
-      {Key? key, this.updatedHrs, this.updatedMins})
-      : super(key: key);
+      {super.key, this.updatedHrs, this.updatedMins});
   @override
   State<OperatingTimeWidget> createState() => _OperatingTimeWidgetState();
 }
