@@ -11,7 +11,7 @@ const double drawerWidth = 60;
 class PedBasePageView extends StatefulWidget {
   static const routeName = '/ped/base-page-view';
 
-  const PedBasePageView({Key? key}) : super(key: key);
+  const PedBasePageView({super.key});
 
   @override
   State<PedBasePageView> createState() => _PedBasePageViewState();

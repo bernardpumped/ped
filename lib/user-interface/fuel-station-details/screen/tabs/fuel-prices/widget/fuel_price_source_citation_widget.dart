@@ -36,8 +36,7 @@ class FuelPriceSourceCitationWidget extends StatelessWidget {
   final FuelStation fuelStation;
   final String fuelTypeName;
 
-  const FuelPriceSourceCitationWidget(this.fuelQuote, this.fuelStation, this.fuelTypeName, {Key? key})
-      : super(key: key);
+  const FuelPriceSourceCitationWidget(this.fuelQuote, this.fuelStation, this.fuelTypeName, {super.key});
 
   @override
   Widget build(final BuildContext context) {

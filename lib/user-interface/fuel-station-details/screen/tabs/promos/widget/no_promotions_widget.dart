@@ -21,7 +21,7 @@ import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.d
 import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 
 class NoPromotionsWidget extends StatelessWidget {
-  const NoPromotionsWidget({Key? key}) : super(key: key);
+  const NoPromotionsWidget({super.key});
 
   @override
   Widget build(final BuildContext context) {

@@ -36,7 +36,7 @@ class SaFuelStationSourceCitation extends StatelessWidget {
 
   static const _pumpedMessage = 'If fuel price is incorrect please let us know';
 
-  const SaFuelStationSourceCitation({Key? key}) : super(key: key);
+  const SaFuelStationSourceCitation({super.key});
 
   @override
   Widget build(BuildContext context) {

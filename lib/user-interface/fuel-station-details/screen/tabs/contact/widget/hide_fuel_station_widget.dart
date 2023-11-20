@@ -13,7 +13,7 @@ class HideFuelStationWidget extends StatefulWidget {
   final FuelStation _fuelStation;
   final Function _onHideStatusChange;
 
-  const HideFuelStationWidget(this._fuelStation, this._onHideStatusChange, {Key? key}) : super(key: key);
+  const HideFuelStationWidget(this._fuelStation, this._onHideStatusChange, {super.key});
 
   @override
   State<HideFuelStationWidget> createState() => _HideFuelStationWidgetState();

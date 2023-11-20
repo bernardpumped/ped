@@ -123,7 +123,7 @@ class ImplicitlyAnimatedList<E extends Object> extends StatelessWidget {
   /// Creates a Flutter ListView that implicitly animates between the changes
   /// of two lists.
   const ImplicitlyAnimatedList({
-    Key? key,
+    super.key,
     required this.items,
     required this.itemBuilder,
     required this.areItemsTheSame,
@@ -140,7 +140,7 @@ class ImplicitlyAnimatedList<E extends Object> extends StatelessWidget {
     this.physics,
     this.shrinkWrap = false,
     this.padding,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -197,28 +197,17 @@ class SliverImplicitlyAnimatedList<E extends Object>
   /// a new isolate has to be spawned or not for optimal performance.
   /// {@endtemplate}
   const SliverImplicitlyAnimatedList({
-    Key? key,
-    required List<E> items,
-    required AnimatedItemBuilderCust<Widget, E> itemBuilder,
-    required ItemDiffUtil<E> areItemsTheSame,
-    RemovedItemBuilder<Widget, E>? removeItemBuilder,
-    UpdatedItemBuilder<Widget, E>? updateItemBuilder,
-    Duration insertDuration = const Duration(milliseconds: 500),
-    Duration removeDuration = const Duration(milliseconds: 500),
-    Duration updateDuration = const Duration(milliseconds: 500),
-    bool? spawnIsolate,
-  }) : super(
-    key: key,
-    items: items,
-    itemBuilder: itemBuilder,
-    areItemsTheSame: areItemsTheSame,
-    removeItemBuilder: removeItemBuilder,
-    updateItemBuilder: updateItemBuilder,
-    insertDuration: insertDuration,
-    removeDuration: removeDuration,
-    updateDuration: updateDuration,
-    spawnIsolate: spawnIsolate,
-  );
+    super.key,
+    required super.items,
+    required super.itemBuilder,
+    required super.areItemsTheSame,
+    super.removeItemBuilder,
+    super.updateItemBuilder,
+    super.insertDuration = const Duration(milliseconds: 500),
+    super.removeDuration = const Duration(milliseconds: 500),
+    super.updateDuration = const Duration(milliseconds: 500),
+    super.spawnIsolate,
+  });
 
   @override
   SliverImplicitlyAnimatedListState<E> createState() =>

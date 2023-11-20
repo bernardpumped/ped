@@ -29,7 +29,7 @@ import 'package:pumped_end_device/util/log_util.dart';
 import 'package:uuid/uuid.dart';
 
 class ServerVersionWidget extends StatefulWidget {
-  const ServerVersionWidget({Key? key}) : super(key: key);
+  const ServerVersionWidget({super.key});
 
   @override
   State<ServerVersionWidget> createState() => _ServerVersionWidgetState();

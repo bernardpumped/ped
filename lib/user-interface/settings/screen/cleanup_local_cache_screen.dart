@@ -27,7 +27,7 @@ import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/util/log_util.dart';
 
 class CleanupLocalCacheScreen extends StatefulWidget {
-  const CleanupLocalCacheScreen({Key? key}) : super(key: key);
+  const CleanupLocalCacheScreen({super.key});
 
   @override
   State<StatefulWidget> createState() {

@@ -34,8 +34,7 @@ class OperatingHoursSourceCitation extends StatelessWidget {
   final String operatingTimeRange;
 
   const OperatingHoursSourceCitation(this._operatingHours, this._fuelStation, this.weekDay, this.operatingTimeRange,
-      {Key? key})
-      : super(key: key);
+      {super.key});
 
   @override
   Widget build(final BuildContext context) {

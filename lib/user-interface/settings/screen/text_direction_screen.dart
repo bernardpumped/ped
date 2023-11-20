@@ -22,7 +22,7 @@ import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 
 class TextDirectionScreen extends StatefulWidget {
-  const TextDirectionScreen({Key? key}) : super(key: key);
+  const TextDirectionScreen({super.key});
 
   @override
   State<TextDirectionScreen> createState() => _TextDirectionScreenState();

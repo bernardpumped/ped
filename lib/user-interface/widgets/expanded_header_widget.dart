@@ -30,7 +30,7 @@ import 'package:pumped_end_device/util/data_utils.dart';
 class ExpandedHeaderWidget extends StatelessWidget {
   final FuelStation fuelStation;
   final bool showPriceSource;
-  const ExpandedHeaderWidget({Key? key, required this.fuelStation, this.showPriceSource = true}) : super(key: key);
+  const ExpandedHeaderWidget({super.key, required this.fuelStation, this.showPriceSource = true});
 
   @override
   Widget build(final BuildContext context) {

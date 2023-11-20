@@ -22,7 +22,7 @@ import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 
 class LocaleScreen extends StatefulWidget {
-  const LocaleScreen({Key? key}) : super(key: key);
+  const LocaleScreen({super.key});
 
   @override
   State<LocaleScreen> createState() => _LocaleScreenState();

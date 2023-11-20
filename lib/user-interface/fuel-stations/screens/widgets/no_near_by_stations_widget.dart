@@ -21,7 +21,7 @@ import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.d
 import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 
 class NoNearByStationsWidget extends StatelessWidget {
-  const NoNearByStationsWidget({Key? key}) : super(key: key);
+  const NoNearByStationsWidget({super.key});
 
   @override
   Widget build(final BuildContext context) {

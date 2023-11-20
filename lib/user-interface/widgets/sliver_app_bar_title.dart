@@ -20,7 +20,7 @@ import 'package:flutter/material.dart';
 
 class SliverAppBarTitle extends StatefulWidget {
   final Widget child;
-  const SliverAppBarTitle({Key? key, required this.child}) : super(key: key);
+  const SliverAppBarTitle({super.key, required this.child});
 
   @override
   State<StatefulWidget> createState() {

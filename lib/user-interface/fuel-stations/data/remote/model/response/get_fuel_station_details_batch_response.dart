@@ -22,7 +22,6 @@ import 'package:pumped_end_device/models/pumped/fuel_station.dart';
 class GetFuelStationDetailsBatchResponse extends Response {
   final List<FuelStation> fuelStations;
 
-  GetFuelStationDetailsBatchResponse(final String responseCode, final String? responseDetails,
-      final Map<String, dynamic>? invalidArguments, final int responseEpoch, this.fuelStations)
-      : super(responseCode, responseDetails, invalidArguments, responseEpoch);
+  GetFuelStationDetailsBatchResponse(super.responseCode, super.responseDetails,
+      super.invalidArguments, super.responseEpoch, this.fuelStations);
 }

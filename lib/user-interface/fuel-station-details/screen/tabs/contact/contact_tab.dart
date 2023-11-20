@@ -34,7 +34,7 @@ import 'package:uuid/uuid.dart';
 class ContactTabWidget extends StatefulWidget {
   final FuelStation _fuelStation;
 
-  const ContactTabWidget(this._fuelStation, {Key? key}) : super(key: key);
+  const ContactTabWidget(this._fuelStation, {super.key});
 
   @override
   State<ContactTabWidget> createState() => _ContactTabWidgetState();

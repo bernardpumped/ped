@@ -33,7 +33,7 @@ class FuelPricesTabWidget extends StatefulWidget {
   final FuelStation _fuelStation;
   final FuelType _selectedFuelType;
 
-  const FuelPricesTabWidget(this._fuelStation, this._selectedFuelType, {Key? key}) : super(key: key);
+  const FuelPricesTabWidget(this._fuelStation, this._selectedFuelType, {super.key});
 
   @override
   State<FuelPricesTabWidget> createState() => _FuelPricesTabWidgetState();
