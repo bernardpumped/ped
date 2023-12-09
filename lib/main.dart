@@ -54,7 +54,7 @@ import 'firebase_options.dart';
 
 GetIt getIt = GetIt.instance;
 bool initializeRateMyApp = true;
-const appVersion = "39.UI_PRD";
+const appVersion = "40.UI_PRD";
 const getLocationWrapperInstanceName = 'geoLocationWrapper';
 const platformWrapperInstanceName = 'platformWrapper';
 const locationDataSourceInstanceName = 'locationDataSource';
@@ -72,7 +72,7 @@ final RateMyApp rateMyApp = RateMyApp(
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // if (Firebase.apps.isEmpty) {
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform, name: 'PED-Mobile');
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   // } else {
   //   Firebase.app();
   // }

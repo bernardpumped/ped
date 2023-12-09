@@ -28,6 +28,7 @@ import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaler.d
 import 'package:pumped_end_device/user-interface/utils/textscaling/text_scaling_factor.dart';
 import 'package:pumped_end_device/user-interface/utils/widget_utils.dart';
 import 'package:pumped_end_device/util/app_theme.dart';
+import 'package:pumped_end_device/util/log_util.dart';
 
 class FuelPricesTabWidget extends StatefulWidget {
   final FuelStationDetailsParam _param;
@@ -185,7 +186,7 @@ class _FuelPricesTabWidgetState extends State<FuelPricesTabWidget> {
   }
 
   String _getPublishDateFormatted(final int publishDateSeconds) {
-    final int publishDateMilliseconds = publishDateSeconds * 1000;
+    final int publishDateMilliseconds = publishDateSeconds * 1000 * 1000;
     final DateTime publishDateTime = DateTime.fromMillisecondsSinceEpoch(publishDateMilliseconds);
     return formatter.format(publishDateTime);
   }

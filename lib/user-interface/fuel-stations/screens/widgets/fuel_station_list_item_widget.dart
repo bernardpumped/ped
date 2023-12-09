@@ -211,8 +211,7 @@ class FuelStationListItemWidget extends StatelessWidget {
             textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)
       ]);
       final Column priceColumn = Column(children: [child1, const SizedBox(height: 8), child2]);
-
-      DateTime publishDate = DateTime.fromMillisecondsSinceEpoch(selectedFuelQuote.publishDate! * 1000);
+      DateTime publishDate = DateTime.fromMillisecondsSinceEpoch(selectedFuelQuote.publishDate! * 1000 * 1000);
       DateTime curDate = DateTime.now();
       String publishDateString;
       if (publishDate.year != curDate.year) {
