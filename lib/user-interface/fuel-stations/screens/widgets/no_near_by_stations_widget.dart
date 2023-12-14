@@ -36,6 +36,7 @@ class NoNearByStationsWidget extends StatelessWidget {
             padding: const EdgeInsets.only(left: 12, right: 12),
             child: RichText(
                 textAlign: TextAlign.center,
+                textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)!.scaleFactor,
                 text: TextSpan(children: [
                   TextSpan(
                       text: "Sorry your neighbourhood not yet covered by Pumped. We have informed Pumped admin.\n",
@@ -46,7 +47,7 @@ class NoNearByStationsWidget extends StatelessWidget {
                   const WidgetSpan(child: Icon(Icons.settings, size: 24)),
                   TextSpan(
                       text: " icon in the navigation bar, to customize search.", style: Theme.of(context).textTheme.bodyLarge)
-                ]), textScaler: TextScaler.linear(PedTextScaler.of<TextScalingFactor>(context)!.scaleFactor)),
+                ])),
           )
         ]);
   }

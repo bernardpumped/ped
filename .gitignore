@@ -39,8 +39,6 @@ android/app/src/main/*
 android/app/src/profile/*
 !android/app/src/profile/AndroidManifest.xml
 !android/AndroidManifest.xml
-!android/app/google-services.json
-
 build
 !ios/
 ios/*
