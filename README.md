@@ -1,4 +1,4 @@
-# Flutter Pumped End Device - PED
+# Flutter Pumped End Device - PED UI
 
 PED is a developer demo that showcases the features and facilities of fuel stations, along with real-time fuel prices throughout Australia. We plan to include station promotions and offers soon, and have incorporated EV Charging stations within our platform, but they are yet to be displayed. We’ve received requests to expand overseas and are seeking the right opportunity for this expansion. Our ultimate goal is to integrate PED as an In-Vehicle Infotainment (IVI) app to facilitate seamless vehicle adoption. 
  
@@ -22,7 +22,7 @@ This branch, specifically designed for portrait orientation on Android and iPhon
  - linux not supported on this branch
 
 
-If new to flutter see [full PED documentation](https://github.com/bernardcraddock/pumped_end_device/blob/bernardcraddock_ui/documentation/FULL-README.md) else do following  
+If new to flutter see [full PED documentation](https://github.com/bernardpumped/ped/blob/main/documentation/FULL-README.md) else do following  
 where android flavors are debugApp, releaseApp and playStoreApp and iOS arriving shortly 
 
 ```
