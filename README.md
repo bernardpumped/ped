@@ -29,7 +29,7 @@ This branch, specifically designed for IVI landscape orientation, does not inclu
 
 - Tested with
 
-  - https://github.com/meta-flutter/workspace-automation
+  - https://github.com/meta-flutter/workspace-automation - wip
 
 ### Installation
 
