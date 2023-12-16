@@ -106,7 +106,7 @@ class FirebaseService {
       }
       if (platformSupport.contains(twitterIdProvider)) {
         _twitterLogin = TwitterLogin(
-            apiKey: "xxLd8ZjPi0pMNiRJBoQSbAvmu", apiSecretKey: "92sJytaR9p3XidD6qBh0DjXkGIocJ6hf1ULYnjrrKXr3Ew7964", redirectURI: "twittersdk://");
+            apiKey: "YOUR_Twitter_apiKey", apiSecretKey: "YOUR_Twitter_apiSecretKey", redirectURI: "twittersdk://");
       }
     } else {
       LogUtil.debug(_tag, 'Platform does not yet support firebase');
@@ -209,7 +209,7 @@ class FirebaseService {
   Future<Resource> _signInWithTwitterInternal() async {
     try {
       LogUtil.debug(_tag, '_signInWithTwitterInternal::attempting');
-      final result = await _twitterLogin.login();
+      final result = await _twitterLogin.loginV2();
       LogUtil.debug(_tag, '_signInWithTwitterInternal::LoginResult received ${result.authToken} ${result.errorMessage}');
       switch (result.status) {
         case TwitterLoginStatus.loggedIn:
