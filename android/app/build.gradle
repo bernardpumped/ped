@@ -1,5 +1,5 @@
 def localProperties = new Properties()
-def localPropertiesFile = rootProject.file('YOUR_local.properties')
+def localPropertiesFile = rootProject.file('local.properties')
 if (localPropertiesFile.exists()) {
     localPropertiesFile.withReader('UTF-8') { reader ->
         localProperties.load(reader)
@@ -30,7 +30,7 @@ apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 def keystoreProperties = new Properties()
-def keystorePropertiesFile = rootProject.file('YOUR_key.properties')
+def keystorePropertiesFile = rootProject.file('key.properties')
 if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
@@ -67,20 +67,20 @@ android {
 
     signingConfigs {
         debug {
-            storeFile keystoreProperties['YOUR_debug_storeFile'] ? file(System.getProperty("user.home") + keystoreProperties['YOUR_debug_storeFile']) : null
+            storeFile keystoreProperties['debug_storeFile'] ? file(System.getProperty("user.home") + keystoreProperties['debug_storeFile']) : null
             storePassword keystoreProperties['debug_storePassword']
         }
         release {
-            keyAlias keystoreProperties['YOUR_release_keyAlias']
-            keyPassword keystoreProperties['YOUR_release_keyPassword']
-            storeFile keystoreProperties['YOUR_release_storeFile'] ? file(keystoreProperties['YOUR_release_storeFile']) : null
-            storePassword keystoreProperties['YOUR_release_storePassword']
+            keyAlias keystoreProperties['release_keyAlias']
+            keyPassword keystoreProperties['release_keyPassword']
+            storeFile keystoreProperties['release_storeFile'] ? file(keystoreProperties['release_storeFile']) : null
+            storePassword keystoreProperties['release_storePassword']
         }
         playStore {
-            keyAlias keystoreProperties['YOUR_playStore_keyAlias']
-            keyPassword keystoreProperties['YOUR_playStore_keyPassword']
-            storeFile keystoreProperties['YOUR_playStore_storeFile'] ? file(keystoreProperties['YOUR_playStore_storeFile']) : null
-            storePassword keystoreProperties['YOUR_playStore_storePassword']
+            keyAlias keystoreProperties['playStore_keyAlias']
+            keyPassword keystoreProperties['playStore_keyPassword']
+            storeFile keystoreProperties['playStore_storeFile'] ? file(keystoreProperties['playStore_storeFile']) : null
+            storePassword keystoreProperties['playStore_storePassword']
         }
     }
 

@@ -39,6 +39,7 @@ class PumpedSignInWidget extends StatefulWidget {
 
 class _PumpedSignInWidgetState extends State<PumpedSignInWidget> {
   static const _tag = 'PumpedSignInWidget';
+  static const _showButtons = true;
   bool signInProgress = false;
   @override
   Widget build(final BuildContext context) {
@@ -62,21 +63,21 @@ class _PumpedSignInWidgetState extends State<PumpedSignInWidget> {
             _signInUsingIdProvider(context, FirebaseService.googleIdProvider);
           }),
           const SizedBox(height: 6),
-          SignInButton(Buttons.Facebook, onPressed: () {
+          _showButtons ? SignInButton(Buttons.Facebook, onPressed: () {
             setState(() {
               signInProgress = true;
             });
             LogUtil.debug(PumpedSignInWidget._tag, 'Facebook SignInIn clicked');
             _signInUsingIdProvider(context, FirebaseService.facebookIdProvider);
-          }),
+          }) :
           const SizedBox(height: 6),
-          SignInButton(Buttons.Twitter, onPressed: () {
+          _showButtons ? SignInButton(Buttons.Twitter, onPressed: () {
             setState(() {
               signInProgress = true;
             });
             LogUtil.debug(PumpedSignInWidget._tag, 'Twitter SignInIn clicked');
             _signInUsingIdProvider(context, FirebaseService.twitterIdProvider);
-          }),
+          }) :
           const SizedBox(height: 6),
           ElevatedButton(
               child: Text('Cancel', textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
