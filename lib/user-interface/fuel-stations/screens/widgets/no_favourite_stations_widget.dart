@@ -33,6 +33,7 @@ class NoFavouriteStationsWidget extends StatelessWidget {
               textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor),
           const SizedBox(height: 20),
           Text.rich(
+              textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)!.scaleFactor,
               TextSpan(children: [
                 TextSpan(text: "Tap on the favourite ", style: Theme.of(context).textTheme.headlineSmall),
                 const WidgetSpan(child: Icon(Icons.favorite_outline, size: 24)),

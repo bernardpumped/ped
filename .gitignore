@@ -38,6 +38,22 @@ android/app/src/main/*
 !android/app/src/profile/
 android/app/src/profile/*
 !android/app/src/profile/AndroidManifest.xml
+
+android/app/build.gradle.orig
+android/app/google-services.json.orig
+android/key.properties.orig
+android/pumped.keystore.orig
+android/pumped-play-deployment.keystore.orig
+android/pumped-play-upload.keystore.orig
+
+android/app/build.gradle.android
+android/app/google-services.json.android
+android/key.properties.android
+android/pumped.keystore.android
+android/pumped-play-deployment.keystore.android
+android/pumped-play-upload.keystore.android
+
+
 !android/AndroidManifest.xml
 build
 !ios/
@@ -65,6 +81,8 @@ lib/models/.DS_Store
 lib/data/remote/pumped_end_point-prd.dart
 lib/firebase_options-prd.dart
 lib/firebase_options-null.dart
+lib/firebase_options.dart.orig
+lib/firebase_options.dart.android
 
 linux/
 web/

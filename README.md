@@ -5,7 +5,9 @@ We plan to include station promotions and offers soon, and have incorporated EV 
 We’ve received requests to expand overseas and are seeking the right opportunity for this expansion.
 Our ultimate goal is to integrate PED as an In-Vehicle Infotainment (IVI) app to facilitate seamless vehicle adoption.
 
-This branch, specifically designed for IVI landscape orientation, does not include Backend-as-a-Service (BaaS) or Social Media Platforms, as these integrations will be dependent on the vehicle manufacturer.
+This branch, specifically designed for IVI landscape orientation
+  - Won't build android in current state switch to main for android 
+  - Does not include Backend-as-a-Service (BaaS) or Social Media Platforms, as these integrations will be dependent on the vehicle manufacturer.
 
 
 - Tested on
@@ -19,7 +21,6 @@ This branch, specifically designed for IVI landscape orientation, does not inclu
 - Tested Against
 
   - web
-  - android
   - ios
   - linux-desktop
   - custom-devices - wip
@@ -42,5 +43,6 @@ If new to flutter see [full PED documentation](https://github.com/bernardpumped/
     git clone https://github.com/bernardpumped/ped -b [ agl | ivi_* ]
     flutter create .
     flutter pub get
+    flutter build [ linux | web ]
     flutter run
 ```
