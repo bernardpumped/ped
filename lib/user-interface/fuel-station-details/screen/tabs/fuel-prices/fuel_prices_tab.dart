@@ -183,7 +183,7 @@ class _FuelPricesTabWidgetState extends State<FuelPricesTabWidget> {
   }
 
   String _getPublishDateFormatted(final int publishDateSeconds) {
-    final int publishDateMilliseconds = publishDateSeconds * 1000;
+    final int publishDateMilliseconds = publishDateSeconds * 1000 * 1000;
     final DateTime publishDateTime = DateTime.fromMillisecondsSinceEpoch(publishDateMilliseconds);
     return formatter.format(publishDateTime);
   }

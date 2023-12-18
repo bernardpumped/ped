@@ -48,11 +48,13 @@ class GetFuelStationOperatingHrsResponseParser extends ResponseParser<GetFuelSta
     if (detailsVoJson != null) {
       final Map<String, dynamic>? operatingTimeJson = detailsVoJson['operatingTimeVoMap'];
       if (operatingTimeJson != null) {
-        final List<dynamic> fuelFullOperatingTimes = operatingTimeJson['FUEL-FILL'];
-        for (final Map<String, dynamic> jsonVal in fuelFullOperatingTimes) {
-          final OperatingHours? operatingHours = OperatingHoursResponseParseUtils.getOperatingHours(jsonVal, null);
-          if (operatingHours != null) {
-            weeklyOperatingHrs.add(operatingHours);
+        final List<dynamic>? fuelFullOperatingTimes = operatingTimeJson['FUEL-FILL'];
+        if (fuelFullOperatingTimes != null) {
+          for (final Map<String, dynamic> jsonVal in fuelFullOperatingTimes) {
+            final OperatingHours? operatingHours = OperatingHoursResponseParseUtils.getOperatingHours(jsonVal, null);
+            if (operatingHours != null) {
+              weeklyOperatingHrs.add(operatingHours);
+            }
           }
         }
       }
