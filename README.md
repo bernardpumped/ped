@@ -42,5 +42,6 @@ If new to flutter see [full PED documentation](https://github.com/bernardpumped/
     git clone https://github.com/bernardpumped/ped -b [ agl | ivi_* ]
     flutter create .
     flutter pub get
+    flutter build [ linux | web ]
     flutter run
 ```
