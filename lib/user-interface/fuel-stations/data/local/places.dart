@@ -21,9 +21,9 @@ class Places {
   static const aliceNt = AddressWithLatLng('Alice', 'NT', 'AU', -23.697520759443588, 133.88077494292193);
 
   static const cairnsQld = AddressWithLatLng('Cairns', 'QLD', 'AU', -16.920402103185594, 145.77076826785253);
-  static const fishBurnerBrisbane = AddressWithLatLng('Fish Burner, Brisbane', 'QLD', 'AU', -27.3818631, 152.7130121);
+  static const fishBurnerBrisbane = AddressWithLatLng('Brisbane', 'QLD', 'AU',-27.46770439765351, 153.02375977185081);
 
-  static const fishBurnerSydney = AddressWithLatLng('Fish Burner, Sydney', 'NSW', 'AU', -33.865107, 151.205282);
+  static const fishBurnerSydney = AddressWithLatLng('Fish Burners, Sydney', 'NSW', 'AU', -33.865107, 151.205282);
   static const brokenHillNsw = AddressWithLatLng('Broken Hill', 'NSW', 'AU', -31.946815023852825, 141.46797474949523);
 
   // fuel stations with no prices

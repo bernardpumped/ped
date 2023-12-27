@@ -46,7 +46,13 @@ class NoNearByStationsWidget extends StatelessWidget {
                       style: Theme.of(context).textTheme.bodyLarge),
                   const WidgetSpan(child: Icon(Icons.settings, size: 24)),
                   TextSpan(
-                      text: " icon in the navigation bar, to customize search.", style: Theme.of(context).textTheme.bodyLarge)
+                      text: " icon in the navigation bar, to customize search.\n",
+                      style: Theme.of(context).textTheme.bodyLarge),
+                  TextSpan(
+                      text: "\nIf you're a developer, please navigate to settings and enable 'Developer Options'. "
+                          "You can then simulate a location by using 'Device Location mocking'. If you're unfamiliar "
+                          "with Australia we recommend using the 'Pin a Location' feature for this purpose",
+                      style: Theme.of(context).textTheme.bodyLarge)
                 ])),
           )
         ]);
