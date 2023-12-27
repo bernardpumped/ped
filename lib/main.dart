@@ -54,7 +54,7 @@ import 'firebase_options.dart';
 
 GetIt getIt = GetIt.instance;
 bool initializeRateMyApp = true;
-const appVersion = "44.UI_PRD";
+const appVersion = "47.UI_PRD";
 const getLocationWrapperInstanceName = 'geoLocationWrapper';
 const platformWrapperInstanceName = 'platformWrapper';
 const locationDataSourceInstanceName = 'locationDataSource';
