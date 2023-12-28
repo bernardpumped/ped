@@ -64,7 +64,10 @@ ios/Runner.xcworkspace/
 ios/Runner/AppDelegate.swift
 ios/Runner/Base.lproj/
 ios/Runner/Runner-Bridging-Header.h
+ios/Runner/GeneratedPluginRegistrant.h
+ios/Runner/GeneratedPluginRegistrant.m
 ios/RunnerTests/
+ios/Runner/Assets.xcassets/LaunchImage.imageset
 
 !ios/Runner/GoogleService-Info.plist
 !ios/Runner/Info-Debug.plist
