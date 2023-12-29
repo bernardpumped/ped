@@ -1,16 +1,22 @@
-# Flutter Pumped End Device - PED IVI
+# Pumped End Device - PED IVI
 
-PED is a developer demo that showcases the features and facilities of fuel stations, along with real-time fuel prices throughout Australia. 
-We plan to include station promotions and offers soon, and have incorporated EV Charging stations within our platform, but they are yet to be displayed.
-We’ve received requests to expand overseas and are seeking the right opportunity for this expansion.
-Our ultimate goal is to integrate PED as an In-Vehicle Infotainment (IVI) app to facilitate seamless vehicle adoption.
+Pumped Fuel is an amalgamation of three pivotal projects aimed at bridging the gap between motorists and retail merchants. Our initial focus is on fuel stations,
+where we strive to provide drivers with the most affordable fuel prices, nearest locations, exceptional service, immaculate restrooms, and the finest coffee,
+among other amenities. We are swiftly expanding our services to include EV Charging, Auto Service & Stores.
 
-This branch, specifically designed for IVI landscape orientation
-  - Won't build android in current state switch to main for android 
-  - Does not include Backend-as-a-Service (BaaS) or Social Media Platforms, as these integrations will be dependent on the vehicle manufacturer.
+Our long-term goal is to foster a symbiotic relationship between the Automotive and Retail industries through the use of Generative AI.
+Our forthcoming In-Vehicle Infotainment (IVI) journey concierge is a testament to this vision. For instance, if you’re en route to Westfield,
+our platform will be able to assist you in finding outlets that offer shoes to complement your new dress.
+
+The PED project, which is the end device of the trio, is engineered to accommodate both mobile phones and IVI, promoting seamless vehicle integration.
+
+This branch is specifically designed for IVI landscape orientation and has the following restrictions/features
+
+- Location services, we currently use [Geolocator](https://pub.dev/packages/geolocator), which does not support Linux. We will soon rectify this by adding [geoclue](https://pub.dev/packages/geoclue) for Linux. In the interim, if running PED on Platform.isLinux or kIsWeb, we mock your location to Sydney Australia. You can subsequently change in Settings\ Developer Options\ Device Location mocking\ Pin a Location
+- Supports Secure Storage
 
 
-- Tested on
+### Tested on
 
   - Ubuntu 20 (x86_64 arm64)
   - Ubuntu 22 (x86_64)
@@ -18,31 +24,32 @@ This branch, specifically designed for IVI landscape orientation
   - Windows 10 (x86_64)
   - MacOS 13-14 (x86_64 arm64)
 
-- Tested Against
+### Tested Against
 
-  - web
-  - ios
+  - web - chrome all platforms
+  - ios - device & simulator macOS
   - linux-desktop
-  - custom-devices - wip
+  - [Meta Flutter Workspace Automation](https://github.com/meta-flutter/workspace-automation)
   - Apple CarPlay - wip
   - [Android Autmotive](https://source.android.com/docs/automotive/start/what_automotive) - pending
   - [Automotive Grade Linux](https://www.automotivelinux.org) - pending
-
-- Tested with
-
-  - https://github.com/meta-flutter/workspace-automation - wip
+  
 
 ### Installation
-
-[linux](https://docs.flutter.dev/get-started/install/linux)
-
-If new to flutter see [full PED documentation](https://github.com/bernardpumped/ped/blob/main/documentation/FULL-README.md) else do following  
+  - Linux 
+    - [Secure Storage](https://blog.logrocket.com/securing-local-storage-flutter/#linux-configuration)
+    - [Flutter linux](https://docs.flutter.dev/get-started/install/linux)
+  - macOS
+    - [macOS](https://docs.flutter.dev/get-started/install/macos)
+  -  Android
+     - Currently broken fix imminent, in interim switch to main for android
+  - If you're new to flutter see [full PED documentation](https://github.com/bernardpumped/ped/blob/main/documentation/FULL-README.md) else do following
 
 ```
     cd <your flutter workspace>
-    git clone https://github.com/bernardpumped/ped -b [ agl | ivi_* ]
+    git clone https://github.com/bernardpumped/ped -b < agl | ivi_* >
     flutter create .
     flutter pub get
-    flutter build [ linux | web ]
+    flutter build < linux | web | ios >
     flutter run
 ```
