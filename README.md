@@ -37,12 +37,19 @@ This branch is specifically designed for IVI landscape orientation and has the f
 
 ### Installation
   - Linux 
-    - [Secure Storage](https://blog.logrocket.com/securing-local-storage-flutter/#linux-configuration)
-    - [Flutter linux](https://docs.flutter.dev/get-started/install/linux)
+    - General [Securing Local Storage Flutter](https://blog.logrocket.com/securing-local-storage-flutter/#linux-configuration) info
+    - Libsecret required for flutter_secure_storage
+      - Debian/Ubunut :- $ sudo apt-get install libsecret-1-dev
+      - Fedora/Centos :- $ sudo dnf install libsecret-devel jsoncpp-devel
+
+    - Note within [Flutter linux](https://docs.flutter.dev/get-started/install/linux) - "prerequisites" following are distro dependant
+      - Debian/Ubuntu :- $ sudo apt-get install libglu1-mesa libgtk-3-dev liblzma-dev libstdc++-12-dev
+      - Fedora/Centos :- $ sudo dnf install mesa-libGLU gtk3-devel xz-devel 
+ 
   - macOS
     - [macOS](https://docs.flutter.dev/get-started/install/macos)
   -  Android
-     - Currently broken fix imminent, in interim switch to main for android
+     - Currently broken fix WIP, in interim switch to main for android
   - If you're new to flutter see [full PED documentation](https://github.com/bernardpumped/ped/blob/main/documentation/FULL-README.md) else do following
 
 ```
