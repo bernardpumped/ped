@@ -16,4 +16,15 @@
  *     along with Pumped End Device.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-enum LocationInitResultCode { locationServiceDisabled, permissionDenied, success, notFound, failure }
+enum LocationInitResultCode {
+  locationServiceDisabled(value : 'Location Service Disabled'),
+  permissionDenied(value: 'Location Permission Denied'),
+  permissionDeniedForEver(value: 'Location Permission Denied Forever'),
+  success(value: 'Location Found'),
+  notFound(value: 'Location Not Found'),
+  failure(value: 'Failure Detecting Location');
+
+  const LocationInitResultCode({required this.value});
+
+  final String value;
+}

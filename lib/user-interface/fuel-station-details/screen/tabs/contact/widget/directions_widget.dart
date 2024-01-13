@@ -69,6 +69,9 @@ class _DirectionsWidgetState extends State<DirectionsWidget> {
               case LocationInitResultCode.permissionDenied:
                 WidgetUtils.buildSnackBar(context, 'Location Permission denied', 2, '', () {});
                 break;
+              case LocationInitResultCode.permissionDeniedForEver:
+                WidgetUtils.buildSnackBar(context, 'Location Permission denied for ever', 2, '', () {});
+                break;
               case LocationInitResultCode.notFound:
                 WidgetUtils.buildSnackBar(context, 'Location Not Found', 2, '', () {});
                 break;

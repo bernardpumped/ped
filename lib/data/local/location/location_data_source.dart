@@ -22,6 +22,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:pumped_end_device/data/local/dao2/mock_location_dao.dart';
 import 'package:pumped_end_device/data/local/dao2/ui_settings_dao.dart';
 import 'package:pumped_end_device/data/local/location/geo_location_wrapper.dart';
+import 'package:pumped_end_device/data/local/location_utils.dart';
 import 'package:pumped_end_device/data/local/model/mock_location.dart';
 import 'package:pumped_end_device/data/local/model/ui_settings.dart';
 import 'package:pumped_end_device/util/log_util.dart';
@@ -60,15 +61,17 @@ class LocationDataSource {
     }
 
     LocationPermission permission = await _geoLocationWrapper.checkPermission();
+    LogUtil.debug(_tag, '1. Location permission value is : $permission');
     if (permission == LocationPermission.denied) {
       permission = await _geoLocationWrapper.requestPermission();
+      LogUtil.debug(_tag, '2. Location permission value is : $permission');
       if (permission == LocationPermission.denied) {
         return Future.value(GetLocationResult(LocationInitResultCode.permissionDenied, null));
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
-      return Future.value(GetLocationResult(LocationInitResultCode.permissionDenied, null));
+      return Future.value(GetLocationResult(LocationInitResultCode.permissionDeniedForEver, null));
     }
 
     try {

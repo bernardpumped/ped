@@ -42,7 +42,8 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   static const _tag = 'SplashScreen';
   final UnderMaintenanceService underMaintenanceService = getIt.get(instanceName: underMaintenanceServiceName);
-
+  final linearProgressIndicator = const LinearProgressIndicator(color: Colors.white, backgroundColor: Colors.indigo);
+  LocationInitResultCode? locationInitResultCode;
   bool _locationDetectionTriggered = false;
   bool _checkingPumpedAvailabilityTextVisible = false;
   bool _checkingPumpedAvailabilityIconVisible = false;
@@ -78,10 +79,18 @@ class _SplashScreenState extends State<SplashScreen> {
                           textAlign: TextAlign.center,
                           style: Theme.of(context).textTheme.displayMedium!.copyWith(color: Colors.white),
                           textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
-                  Container(
+                  locationInitResultCode == null || locationInitResultCode == LocationInitResultCode.success ?
+                    Container(
                       width: 120,
                       margin: const EdgeInsets.only(top: 40),
-                      child: const LinearProgressIndicator(color: Colors.white, backgroundColor: Colors.indigo)),
+                      child: linearProgressIndicator)
+                  : Container(
+                      width: 350,
+                      margin: const EdgeInsets.only(top: 40),
+                      alignment: Alignment.center,
+                      child: Text(locationInitResultCode!.value,
+                          style: const TextStyle(fontSize: 16, color: Colors.white),
+                          textScaleFactor: PedTextScaler.of<TextScalingFactor>(context)?.scaleFactor)),
                   const SizedBox(height: 100),
                   Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
                     AnimatedOpacity(
@@ -141,16 +150,7 @@ class _SplashScreenState extends State<SplashScreen> {
       if (isUnderMaintenance) {
         final String underMaintenanceMsg = underMaintenanceR.underMaintenanceMessage;
         ScaffoldMessenger.of(context)
-            .showSnackBar(WidgetUtils.buildSnackBar(context, underMaintenanceMsg, 12 * 60 * 60 * 30, 'Exit', () {
-          if (Platform.isIOS) {
-            // Apple does not like  this, as it is against their Human Interface Guidelines.
-            exit(0);
-          } else if (Platform.isAndroid) {
-            SystemNavigator.pop();
-          } else {
-            // Not sure if SystemNavigator.pop(); would work for other platforms
-          }
-        }));
+            .showSnackBar(WidgetUtils.buildSnackBar(context, underMaintenanceMsg, 12 * 60 * 60 * 30, 'Exit', _exitMethod));
       } else {
         LogUtil.debug(_tag, 'Backend is not under maintenance.');
         _getLocation();
@@ -161,34 +161,63 @@ class _SplashScreenState extends State<SplashScreen> {
     });
   }
 
+  _exitMethod() {
+    if (Platform.isIOS) {
+      // Apple does not like  this, as it is against their Human Interface Guidelines.
+      exit(0);
+    } else if (Platform.isAndroid) {
+      SystemNavigator.pop();
+    } else {
+      // Not sure if SystemNavigator.pop(); would work for other platforms
+    }
+  }
+
   void _getLocationFromOnDeviceLocationService() {
     final Future<GetLocationResult> getLocationDataFuture =
         getIt.get<LocationDataSource>(instanceName: locationDataSourceInstanceName).getLocationData();
     getLocationDataFuture.then((locationResult) {
-      final LocationInitResultCode code = locationResult.locationInitResultCode;
-      switch (code) {
+      setState(() {
+        locationInitResultCode = locationResult.locationInitResultCode;
+      });
+      switch (locationInitResultCode!) {
         case LocationInitResultCode.locationServiceDisabled:
           ScaffoldMessenger.of(context)
-              .showSnackBar(WidgetUtils.buildSnackBar(context, 'Location Service is disabled', 2, '', () {}));
+              .showSnackBar(WidgetUtils.buildSnackBar(context, 'Location Service is disabled. '
+              'Access to your location is mandatory to display fuel stations nearby', 86400, 'Exit',
+              _exitMethod, isDismissable: false));
           break;
         case LocationInitResultCode.permissionDenied:
           ScaffoldMessenger.of(context)
-              .showSnackBar(WidgetUtils.buildSnackBar(context, 'Location Service is disabled', 2, '', () {}));
+              .showSnackBar(WidgetUtils.buildSnackBar(context, 'Location Permission is denied. '
+              'Access to your location is mandatory to display fuel stations nearby', 86400, 'Exit',
+              _exitMethod, isDismissable: false));
+          break;
+        case LocationInitResultCode.permissionDeniedForEver:
+          ScaffoldMessenger.of(context)
+              .showSnackBar(WidgetUtils.buildSnackBar(context, 'Location Permission is denied forever. '
+              'Access to your location is mandatory to display fuel stations nearby', 86400, 'Exit',
+              _exitMethod, isDismissable: false));
           break;
         case LocationInitResultCode.notFound:
-          WidgetUtils.buildSnackBar(context, 'Location Not Found', 2, '', () {});
+          ScaffoldMessenger.of(context)
+              .showSnackBar(WidgetUtils.buildSnackBar(context, 'Location Not Found. '
+              'Access to your location is mandatory to display fuel stations nearby', 86400, 'Exit',
+              _exitMethod, isDismissable: false));
           break;
         case LocationInitResultCode.failure:
-          WidgetUtils.buildSnackBar(context, 'Location Failure', 2, '', () {});
+          ScaffoldMessenger.of(context)
+              .showSnackBar(WidgetUtils.buildSnackBar(context, 'Location Failure. '
+              'Access to your location is mandatory to display fuel stations nearby', 86400, 'Exit',
+              _exitMethod, isDismissable: false));
           break;
         case LocationInitResultCode.success:
-          _takeActionOnLocation(locationResult);
+          _takeActionOnLocationSuccess(locationResult);
           break;
       }
     });
   }
 
-  void _takeActionOnLocation(final GetLocationResult locationResult) {
+  void _takeActionOnLocationSuccess(final GetLocationResult locationResult) {
     final Future<GeoLocationData>? locationDataFuture = locationResult.geoLocationData;
     if (locationDataFuture != null) {
       locationDataFuture.then((locationData) {
