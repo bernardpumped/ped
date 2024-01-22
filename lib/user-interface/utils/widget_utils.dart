@@ -47,10 +47,11 @@ class WidgetUtils {
 
   static SnackBar buildSnackBar(final BuildContext context, final String text, final int durationToFadeIn,
       final String actionLabel, final Function() onPressedFunction,
-      {final bool isError = false}) {
+      {final bool isError = false, final bool isDismissable = true}) {
     final textColor = isError ? Theme.of(context).colorScheme.error : Theme.of(context).colorScheme.secondary;
     final actionColor = isError ? Theme.of(context).colorScheme.error : Theme.of(context).colorScheme.primary;
     var snackBar = SnackBar(
+        dismissDirection: !isDismissable ? DismissDirection.none : DismissDirection.down,
         elevation: 2,
         backgroundColor: AppTheme.modalBottomSheetBg(context),
         content: Text(text, style: Theme.of(context).textTheme.titleSmall!.copyWith(color: textColor),
