@@ -1,6 +1,7 @@
 # Pumped End Device - PED IVI_secure
 
-This branch specifically designed for IVI landscape orientation includes secure storage, is our foundation branch, that being our last common branch before forking for embedded platform specifics of which we're considering [AGL](https://www.automotivelinux.org/) and [SOAFEE](https://www.soafee.io/) in addition to CarPlay and Android Automotive.
+This branch specifically designed for IVI landscape orientation includes secure storage, and is our common foundation branch, before forking for embedded platforms of which we're considering [AGL](https://www.automotivelinux.org/) and [SOAFEE](https://www.soafee.io/) in addition to CarPlay and Android Automotive.  
+
 it has the following restrictions/features
 
 - Location services, we currently use [Geolocator](https://pub.dev/packages/geolocator), which does not support Linux. We will soon rectify this by adding [geoclue](https://pub.dev/packages/geoclue) for Linux. In the interim, if running PED on Platform.isLinux or kIsWeb, we mock your location to Sydney Australia. You can subsequently change in Settings\ Developer Options\ Device Location mocking\ Pin a Location
@@ -42,7 +43,6 @@ it has the following restrictions/features
     - [macOS](https://docs.flutter.dev/get-started/install/macos)
   -  Android
      - Currently broken fix WIP, in interim switch to main for android
-  - If you're new to flutter see [full PED documentation](https://github.com/bernardpumped/ped/blob/main/documentation/FULL-README.md) else do following
 
 ```
     cd <your flutter workspace>
