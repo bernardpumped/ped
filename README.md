@@ -1,12 +1,11 @@
 # Pumped End Device - PED UI
 
-Pumped Fuel is an amalgamation of three pivotal projects aimed at bridging the gap between motorists and retail merchants. Our initial focus is on fuel stations, 
-where we strive to provide drivers with the most affordable fuel prices, nearest locations, exceptional service, immaculate restrooms, and the finest coffee, 
-among other amenities. We are swiftly expanding our services to include EV Charging, Auto Service & Stores.  
+Pumped Fuel is an amalgamation of three pivotal projects aimed at bridging the gap between motorists and retail merchants. Our initial focus is on fuel stations,
+where we strive to provide drivers with the most affordable fuel prices, nearest locations, exceptional service, immaculate restrooms, and the finest coffee,
+among other amenities. We will next be extending our system to include EV Charging, Auto Service & Spare parts.
 
-Our long-term goal is to foster a symbiotic relationship between the Automotive and Retail industries through the use of Generative AI. 
-Our forthcoming In-Vehicle Infotainment (IVI) journey concierge is a testament to this vision. For instance, if you’re en route to Westfield, 
-our platform will be able to assist you in finding outlets that offer shoes to complement your new dress.  
+Our long-term goal is to foster a symbiotic relationship between the Automotive and Retail industries through the use of Generative AI.
+Our forthcoming In-Vehicle Infotainment (IVI) journey concierge is a testament to this [vision](https://ped-recordings.s3.ap-southeast-2.amazonaws.com/AIRetailConciergeVideo-02.mp4)
 
 The PED project, which is the end device of the trio, is engineered to accommodate both mobile phones and IVI, promoting seamless vehicle integration. 
  
