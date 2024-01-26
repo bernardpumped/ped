@@ -41,7 +41,6 @@ This branch is currently identical to ivi_secure_storage but will soon diverge a
     - [macOS](https://docs.flutter.dev/get-started/install/macos)
   -  Android
      - Currently broken fix WIP, in interim switch to main for android
-  - If you're new to flutter see [full PED documentation](https://github.com/bernardpumped/ped/blob/main/documentation/FULL-README.md) else do following
 
 ```
     cd <your flutter workspace>
