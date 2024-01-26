@@ -1,6 +1,6 @@
-# Pumped End Device - PED IVI_secure
+# Pumped End Device - PED AGL 
 
-This branch is specifically designed for IVI landscape orientation and includes secure storage it has the following restrictions/features
+This branch is currently identical to ivi_secure_storage but will soon diverge as is earmarked for [Automotive Grade Linux](https://www.automotivelinux.org/) a yocto project
 
 - Location services, we currently use [Geolocator](https://pub.dev/packages/geolocator), which does not support Linux. We will soon rectify this by adding [geoclue](https://pub.dev/packages/geoclue) for Linux. In the interim, if running PED on Platform.isLinux or kIsWeb, we mock your location to Sydney Australia. You can subsequently change in Settings\ Developer Options\ Device Location mocking\ Pin a Location
 - Supports Secure Storage
