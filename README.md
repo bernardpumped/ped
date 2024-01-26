@@ -13,7 +13,9 @@ This "main" branch is specifically designed for portrait orientation on Android 
 Incidentally [meta-flutter](https://github.com/meta-flutter/meta-flutter) made changes to permit Linux and showed at CES 2024, time permiting I'll make those changes here.
 
 Important  
-each branch has differences that over time will diverge significantly therefore review the specific branch README you're interested in, as following is main specific. Also if you're new to flutter you may wish to review [full PED documentation](https://github.com/bernardpumped/ped/blob/main/documentation/FULL-README.md)  
+each branch has differences that over time will diverge significantly therefore if you're interested in one of the other branches you must navigate to it then open that specific branch README  
+
+The following is main specific. Also if you're new to flutter you may wish to review [full PED documentation](https://github.com/bernardpumped/ped/blob/main/documentation/FULL-README.md)  
 
 Lastly although our aspirations is to cover the world we'll do so one country at a time starting with Oz therefore if you reside outside of Australia once app is built when launching you'll see message "No Nearby Station" at which time follow this clip to [mock your location](https://ped-recordings.s3.ap-southeast-2.amazonaws.com/iphone15-Sim-NoNearbyStations.mp4)  
 
