@@ -1,6 +1,6 @@
 # Pumped End Device - PED IVI_secure
 
-This branch specifically designed for IVI landscape orientation includes secure storage, and is our common foundation branch, before forking for embedded platforms of which we're considering [AGL](https://www.automotivelinux.org/) and [SOAFEE](https://www.soafee.io/) in addition to CarPlay and Android Automotive.  
+This branch specifically designed for IVI landscape orientation includes secure storage, and is our common foundation branch, before forking for embedded platforms of which we're considering [AGL](https://www.automotivelinux.org/), [SOAFEE](https://www.soafee.io/) in addition to CarPlay and Android Automotive.  
 
 it has the following restrictions/features
 
