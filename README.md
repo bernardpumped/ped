@@ -1,6 +1,7 @@
 # Pumped End Device - PED IVI_secure
 
-This branch is specifically designed for IVI landscape orientation and includes secure storage it has the following restrictions/features
+This branch specifically designed for IVI landscape orientation includes secure storage, is our foundation branch, that being our last common branch before forking for embedded platform specifics of which we're considering [AGL](https://www.automotivelinux.org/) and [SOAFEE](https://www.soafee.io/) in addition to CarPlay and Android Automotive.
+it has the following restrictions/features
 
 - Location services, we currently use [Geolocator](https://pub.dev/packages/geolocator), which does not support Linux. We will soon rectify this by adding [geoclue](https://pub.dev/packages/geoclue) for Linux. In the interim, if running PED on Platform.isLinux or kIsWeb, we mock your location to Sydney Australia. You can subsequently change in Settings\ Developer Options\ Device Location mocking\ Pin a Location
 - Supports Secure Storage
