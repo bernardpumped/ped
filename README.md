@@ -1,19 +1,21 @@
-# Pumped End Device - PED UI
+# Pumped End Device - PED UI main
 
 Pumped Fuel is an amalgamation of three pivotal projects aimed at bridging the gap between motorists and retail merchants. Our initial focus is on fuel stations,
 where we strive to provide drivers with the most affordable fuel prices, nearest locations, exceptional service, immaculate restrooms, and the finest coffee,
-among other amenities. We will next be extending our system to include EV Charging, Auto Service & Spare parts.
+among other amenities. We're next extending for EV Charging, Auto Service & Spare parts.
 
-Our long-term goal is to foster a symbiotic relationship between the Automotive and Retail industries through the use of Generative AI.
-Our forthcoming In-Vehicle Infotainment (IVI) journey concierge is a testament to this [vision](https://ped-recordings.s3.ap-southeast-2.amazonaws.com/AIRetailConciergeVideo-02.mp4)
+Our goal is to foster a symbiotic relationship between the Automotive and Retail industries through the use of Generative AI.
+Our forthcoming 4th project In-Vehicle Infotainment (IVI) journey concierge is a testament to this [vision](https://ped-recordings.s3.ap-southeast-2.amazonaws.com/AIRetailConciergeVideo-02.mp4)
 
-The PED project, which is the end device of the trio, is engineered to accommodate both mobile phones and IVI, promoting seamless vehicle integration. 
- 
-This particular branch is specifically designed for portrait orientation on Android and iPhone. It includes integrations with Firebase and various social media platforms.
-To build this branch, you will need to supply your own API keys. 
+PED this project, is the end device of the consortium, and engineered to accommodate both mobile phones and a differing array of In-vehicle Infotainment (IVI) systems, promoting seamless vehicle integration.  
 
-This branch was never meant to run on linux however [meta-flutter](https://github.com/meta-flutter/meta-flutter), [Workspace-automation](https://github.com/meta-flutter/workspace-automation)
-managed it internally, therefore time permitting I'll make changes public 
+This "main" branch is specifically designed for portrait orientation on Android and iPhone. It includes integrations with Firebase and various social media platforms that you need to supply your own API keys to build.  
+Incidentally [meta-flutter](https://github.com/meta-flutter/meta-flutter) made changes to permit Linux and showed at CES 2024, time permiting I'll make those changes here.
+
+Important  
+each branch has differences that over time will diverge significantly therefore review the specific branch README you're interested in, as following is main specific. Also if you're new to flutter you may wish to review [full PED documentation](https://github.com/bernardpumped/ped/blob/main/documentation/FULL-README.md)  
+
+Lastly although our aspirations is to cover the world we'll do so one country at a time starting with Oz therefore if you reside outside of Australia once app is built when launching you'll see message "No Nearby Station" at which time follow this clip to [mock your location](https://ped-recordings.s3.ap-southeast-2.amazonaws.com/iphone15-Sim-NoNearbyStations.mp4)  
 
 
 - Tested on
@@ -23,7 +25,7 @@ managed it internally, therefore time permitting I'll make changes public
     
 - Tested Against
   - android
-  - ios
+  - iOS
   - [Workspace-automation](https://github.com/meta-flutter/workspace-automation) desktop-auto - wip
 
 ### Installation
@@ -33,23 +35,24 @@ managed it internally, therefore time permitting I'll make changes public
  - linux see [Workspace-automation](https://github.com/meta-flutter/workspace-automation) - wip
 
 
-If new to flutter see [full PED documentation](https://github.com/bernardpumped/ped/blob/main/documentation/FULL-README.md) else do following 
-where flavors are debugApp, releaseApp and playStoreApp 
-
 ```
     cd <your flutter workspace>
     git clone https://github.com/bernardpumped/ped -b < main | next_main >
     flutter create .
     flutter pub get
- 
+
+build
+android flavors debugApp, releaseApp and playStoreApp 
     flutter build appbundle --flavor <flavorApp>
     flutter build apk --flavor <flavorApp>
 
-ios flavors not yet implmented
+iOS flavors not yet implemented
     flutter build ios
     flutter build ipa
     flutter run -d [ <emulator> | <simulator> ]
 
-All platforms
+Linux to be confirmed
+
+Run all platforms
     flutter run -d <device> --<release> 
 ```
