@@ -1,15 +1,7 @@
-# Pumped End Device - PED IVI
+# Pumped End Device - PED IVI_localstore
 
-Pumped Fuel is an amalgamation of three pivotal projects aimed at bridging the gap between motorists and retail merchants. Our initial focus is on fuel stations,
-where we strive to provide drivers with the most affordable fuel prices, nearest locations, exceptional service, immaculate restrooms, and the finest coffee,
-among other amenities. We will next be extending our system to include EV Charging, Auto Service & Spare parts.
-
-Our long-term goal is to foster a symbiotic relationship between the Automotive and Retail industries through the use of Generative AI.
-Our forthcoming In-Vehicle Infotainment (IVI) journey concierge is a testament to this [vision](https://ped-recordings.s3.ap-southeast-2.amazonaws.com/AIRetailConciergeVideo-02.mp4)
-
-The PED project, which is the end device of the trio, is engineered to accommodate both mobile phones and IVI, promoting seamless vehicle integration.
-
-This branch is temporary only and specifically designed for IVI landscape orientation and has the following restrictions/features
+This branch is temporary and specifically designed for IVI landscape orientation and has the following restrictions/features.  
+It is temporary in the sense storage is non-secure, and therefore somewhat easier to implement as a test-case on embedded cutom-devices   
 
 - Location services, we currently use [Geolocator](https://pub.dev/packages/geolocator), which does not support Linux. We will soon rectify this by adding [geoclue](https://pub.dev/packages/geoclue) for Linux. In the interim, if running PED on Platform.isLinux or kIsWeb, we mock your location to Sydney Australia. You can subsequently change in Settings\ Developer Options\ Device Location mocking\ Pin a Location
 - Does not Support Secure Storage
