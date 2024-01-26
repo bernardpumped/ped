@@ -1,7 +1,8 @@
 # Pumped End Device - PED IVI_localstore
 
-This branch is temporary and specifically designed for IVI landscape orientation and has the following restrictions/features.  
-It is temporary in the sense storage is non-secure, and therefore somewhat easier to implement as a test-case on embedded cutom-devices   
+This branch is designed for IVI landscape orientation and has the following restrictions/features  
+It is for IVI testing only of new feature and data storage is non-secure  
+
 
 - Location services, we currently use [Geolocator](https://pub.dev/packages/geolocator), which does not support Linux. We will soon rectify this by adding [geoclue](https://pub.dev/packages/geoclue) for Linux. In the interim, if running PED on Platform.isLinux or kIsWeb, we mock your location to Sydney Australia. You can subsequently change in Settings\ Developer Options\ Device Location mocking\ Pin a Location
 - Does not Support Secure Storage
@@ -34,8 +35,7 @@ It is temporary in the sense storage is non-secure, and therefore somewhat easie
     - [macOS](https://docs.flutter.dev/get-started/install/macos)
   -  Android
      - Currently broken fix imminent, in interim switch to main for android
-  - If you're new to flutter see [full PED documentation](https://github.com/bernardpumped/ped/blob/main/documentation/FULL-README.md) else do following
-
+ 
 ```
     cd <your flutter workspace>
     git clone https://github.com/bernardpumped/ped -b < agl | ivi_* >
