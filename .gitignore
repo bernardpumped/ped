@@ -72,7 +72,7 @@ ios/Runner/Assets.xcassets/LaunchImage.imageset
 !ios/Runner/GoogleService-Info.plist
 !ios/Runner/Info-Debug.plist
 !ios/Runner/Info.plist*
-!ios/Runner/Assets.xcassets/AppIcon.appiconset
+ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App*.png
 .metadata
 .packages
 *.iml
