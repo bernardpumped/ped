@@ -51,10 +51,9 @@ android flavors debugApp, releaseApp and playStoreApp
 iOS flavors not yet implemented
     flutter build ios
     flutter build ipa
-    flutter run -d [ <emulator> | <simulator> ]
-
-Linux to be confirmed
+   
+Linux build to be confirmed
 
 Run all platforms
-    flutter run -d <device> --<release> 
+    flutter run -d [ <device> | <emulator> | <simulator> ] --<release> 
 ```
